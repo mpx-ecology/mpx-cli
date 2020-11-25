@@ -1,12 +1,11 @@
 {
   "name": "@mpxjs/cli",
-  "version": "0.0.1",
+  "version": "3.0.0-alpha.0",
   "description": "",
   "main": "index.js",
   "bin": {
     "mpx": "bin/mpx.js"
   },
-  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",

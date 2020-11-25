@@ -2,5 +2,5 @@
   "packages": [
     "packages/vue-cli-*"
   ],
-  "version": "independent"
+  "version": "0.0.0"
 }
