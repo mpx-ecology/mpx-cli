@@ -1,4 +1,3 @@
-const applyWebConfig = require('./config')
 const registerServeCommand = require('./commands/serveWeb')
 const registerBuildCommand = require('./commands/buildWeb')
 
