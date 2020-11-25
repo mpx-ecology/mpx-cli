@@ -14,7 +14,7 @@ const plugins = {
     [`${prefix}-plugin-mode`]: {}
   },
   transWeb: {
-    [`${prefix}-to-web`]: {}
+    [`${prefix}-web`]: {}
   },
   needUnitTest: {
     [`${prefix}-unit-test`]: {}

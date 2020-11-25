@@ -1,5 +1,5 @@
 {
-  "name": "vue-cli-plugin-mpx-to-web",
+  "name": "vue-cli-plugin-mpx-web",
   "version": "0.0.1-alpha.0",
   "description": "wx to web plugin for mpx-cli",
   "main": "index.js",
@@ -8,5 +8,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "gitHead": "587c21c88942bce8282e71c84f88a1e647a31249"
 }

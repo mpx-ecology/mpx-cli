@@ -51,12 +51,6 @@ module.exports = [
   //     '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
   //   default: false
   // },
-  // {
-  //   name: 'babel7Support',
-  //   message: '是否需要使用Babel7？',
-  //   type: 'confirm',
-  //   default: true
-  // },
   {
     name: 'needEslint',
     type: 'confirm',
