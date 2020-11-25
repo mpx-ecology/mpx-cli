@@ -1,0 +1,12 @@
+{
+  "name": "vue-cli-plugin-mpx-eslint",
+  "version": "0.0.1",
+  "description": "eslint plugin for mpx-cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

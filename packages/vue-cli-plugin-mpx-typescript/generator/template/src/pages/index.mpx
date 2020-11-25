@@ -1,0 +1,13 @@
+<template>
+  <helloworld></helloworld>
+</template>
+
+<script lang="ts" src="./index.ts"></script>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "helloworld": "../components/helloworld"
+    }
+  }
+</script>

@@ -1,0 +1,21 @@
+{
+  "name": "@mpxjs/cli",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "mpx": "bin/mpx.js"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/cli": "^4.5.8",
+    "execa": "^4.1.0",
+    "shelljs": "^0.8.4"
+  },
+  "engines": {
+    "node": ">=8.9"
+  }
+}
