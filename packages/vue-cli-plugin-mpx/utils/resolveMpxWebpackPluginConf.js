@@ -1,5 +1,5 @@
 module.exports = function(api, options = {}) {
-  const mpxWebpackPluginOptions =
+  const mpxPluginConf =
     (options.pluginOptions &&
     options.pluginOptions.mpx &&
     options.pluginOptions.mpx.plugin) || {}
@@ -57,6 +57,11 @@ module.exports = function(api, options = {}) {
     //   }
     // }
   }
-  // TODO: 优化不同的传参类型
-  return Object.assign({}, defaultConf, mpxWebpackPluginOptions)
+
+  if (typeof mpxPluginConf === 'function') {
+    mpxPluginConf(defaultConf)
+    return defaultConf
+  } else {
+    return Object.assign({}, defaultConf, mpxPluginConf)
+  }
 }
