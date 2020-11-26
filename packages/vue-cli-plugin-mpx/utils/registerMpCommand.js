@@ -54,7 +54,9 @@ module.exports = function registerMpCommand(api, options, command) {
       )
 
       baseWebpackConfig = merge(baseWebpackConfig.toConfig(), resolveVueConfigWebpackConfig(api, options))
-      transformMpxEntry(api, options, baseWebpackConfig, false)
+
+      const isWeb = false
+      transformMpxEntry(api, options, baseWebpackConfig, isWeb)
 
       if (!isWatching) {
         webpack(baseWebpackConfig, webpackCallback)

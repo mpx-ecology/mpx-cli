@@ -8,9 +8,10 @@ const {
 
 module.exports = function (api, options = {}) {
   api.chainWebpack((webpackConfig) => {
-    applyBaseMpxConfig(api, options, webpackConfig, 'web')
+    applyBaseMpxConfig(api, options, webpackConfig)
     // TODO: vue.config.js 多入口的场景配置
-    transformMpxEntry(api, options, webpackConfig, true)
+    const isWeb = true
+    transformMpxEntry(api, options, webpackConfig, isWeb)
 
     const mpxLoader = resolveMpxLoader(api, options)
     webpackConfig.module

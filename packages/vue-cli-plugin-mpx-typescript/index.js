@@ -1,4 +1,4 @@
-module.exports = function(api, options, webpackConfig) {
+module.exports = function(api, options) {
   api.chainWebpack(webpackConfig => {
     webpackConfig.module
     .rule('ts')
