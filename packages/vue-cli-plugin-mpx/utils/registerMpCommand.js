@@ -15,14 +15,14 @@ module.exports = function registerMpCommand(api, options, command) {
       '--wx': 'compile for wx platform',
       '--ali': 'compile for ali platform',
       '--watch': 'compile in watch mode',
-      '--production': 'compile in webpack production mode'
+      '--production': 'compile in webpack production mode',
+      '--report': 'generate report.html to help analyze bundle content'
     }
   }, function(args) {
     const srcMode =
       options.pluginOptions &&
       options.pluginOptions.mpx &&
       options.pluginOptions.mpx.srcMode
-    const isCompileProd = !!args.production
     const isWatching = !!args.watch
     const webpackCallback = resolveWebpackCompileCallback(isWatching)
 
@@ -50,8 +50,7 @@ module.exports = function registerMpCommand(api, options, command) {
         options,
         baseWebpackConfig,
         mode,
-        isWatching,
-        isCompileProd
+        args
       )
 
       baseWebpackConfig = merge(baseWebpackConfig.toConfig(), resolveVueConfigWebpackConfig(api, options))

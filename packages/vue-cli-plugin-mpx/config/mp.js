@@ -1,5 +1,6 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const webpack = require('webpack')
 const applyBaseMpxConfig = require('./base')
 const resolveMpxLoader = require('../utils/resolveMpxLoader')
@@ -10,13 +11,14 @@ module.exports = function (
   options = {},
   webpackConfig,
   mode,
-  isWatching,
-  isCompileProd
+  args
 ) {
   const srcMode =
     options.pluginOptions &&
     options.pluginOptions.mpx &&
     options.pluginOptions.mpx.srcMode
+  const isWatching = !!args.watch
+  const isCompileProd = !!args.production
 
   applyBaseMpxConfig(api, options, webpackConfig)
 
@@ -62,6 +64,10 @@ module.exports = function (
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])
+
+  if (args.report) {
+    webpackConfig.plugin('bundle-analyzer-plugin').use(BundleAnalyzerPlugin, [{}])
+  }
 
   return webpackConfig
 }
