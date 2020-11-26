@@ -1,6 +1,8 @@
 const rm = require('rimraf')
 const webpack = require('webpack')
+const merge = require('webpack-merge')
 const transformMpxEntry = require('./transformMpxEntry')
+const resolveVueConfigWebpackConfig = require('./resolveVueConfigWebpackConfig')
 const applyMpWebpackConfig = require('../config/mp')
 const supportedModes = require('../config/supportedModes')
 const { chalk, logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
@@ -35,8 +37,9 @@ module.exports = function registerMpCommand(api, options, command) {
       clearDist(api.resolve(`dist/${mode}/*`))
 
       let baseWebpackConfig = api.resolveChainableWebpackConfig()
-      baseWebpackConfig.plugins.clear()
+      resetCliServiceWebpackConf(baseWebpackConfig)
 
+      // 加载 vue-cli-plugin-mpx-* 相关插件
       if (api.hasPlugin('mpx-dll')) {
         const { addDllConf } = require('vue-cli-plugin-mpx-dll')
         addDllConf(api, options, baseWebpackConfig, mode)
@@ -51,10 +54,7 @@ module.exports = function registerMpCommand(api, options, command) {
         isCompileProd
       )
 
-      // TODO: 待确认
-      baseWebpackConfig.optimization.clear()
-      baseWebpackConfig.optimization.minimizers.clear()
-      baseWebpackConfig = baseWebpackConfig.toConfig()
+      baseWebpackConfig = merge(baseWebpackConfig.toConfig(), resolveVueConfigWebpackConfig(api, options))
       transformMpxEntry(api, options, baseWebpackConfig, false)
 
       if (!isWatching) {
@@ -64,6 +64,12 @@ module.exports = function registerMpCommand(api, options, command) {
       }
     })
   })
+}
+
+function resetCliServiceWebpackConf(webpackConfig) {
+  webpackConfig.plugins && webpackConfig.plugins.clear()
+  webpackConfig.optimization && webpackConfig.optimization.clear();
+  webpackConfig.optimization && webpackConfig.optimization.minimizers && webpackConfig.optimization.minimizers.clear();
 }
 
 function clearDist(distPath) {

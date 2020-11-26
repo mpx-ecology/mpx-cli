@@ -3,5 +3,10 @@
   "private": true,
   "devDependencies": {
     "lerna": "^3.22.1"
+  },
+  "prettier": {
+    "semi": false,
+    "trailingComma": "none",
+    "singleQuote": true
   }
 }

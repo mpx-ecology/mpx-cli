@@ -1,5 +1,3 @@
-
-
 module.exports = function(api, options = {}) {
   const mpxWebpackPluginOptions =
     (options.pluginOptions &&
