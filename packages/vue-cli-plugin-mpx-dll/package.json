@@ -20,6 +20,5 @@
   "devDependencies": {
     "webpack": "^4.0.0",
     "vue-cli-plugin-mpx": "*"
-  },
-  "gitHead": "587c21c88942bce8282e71c84f88a1e647a31249"
+  }
 }
