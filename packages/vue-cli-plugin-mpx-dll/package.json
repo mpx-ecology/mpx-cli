@@ -10,7 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "copy-webpack-plugin": "^5.1.2"
+    "copy-webpack-plugin": "^5.1.2",
+    "webpack-merge": "^4.1.2"
+  },
+  "peerDependencies": {
+    "webpack": "^4.0.0",
+    "vue-cli-plugin-mpx": "*"
+  },
+  "devDependencies": {
+    "webpack": "^4.0.0",
+    "vue-cli-plugin-mpx": "*"
   },
   "gitHead": "587c21c88942bce8282e71c84f88a1e647a31249"
 }

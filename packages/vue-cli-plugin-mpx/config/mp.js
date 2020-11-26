@@ -28,7 +28,7 @@ module.exports = function (
     .loader(mpxLoader.loader)
     .options(mpxLoader.options)
 
-  // webpackConfig.performance.hints(false)
+  webpackConfig.performance.hints(false)
   webpackConfig.devtool(isWatching ? 'source-map' : false)
   webpackConfig.mode(isCompileProd ? 'production' : 'none')
 
