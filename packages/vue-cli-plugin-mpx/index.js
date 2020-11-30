@@ -6,7 +6,6 @@ module.exports = function (api, options) {
   })
 }
 
-module.exports.applyBaseMpxConfig = require('./config/base')
 module.exports.transformMpxEntry = require('./utils/transformMpxEntry')
 module.exports.resolveMpxLoader = require('./utils/resolveMpxLoader')
 module.exports.resolveMpxWebpackPluginConf = require('./utils/resolveMpxWebpackPluginConf')
