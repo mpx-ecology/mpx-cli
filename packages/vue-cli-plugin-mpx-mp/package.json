@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-plugin-mpx-mp",
-  "version": "0.0.2-alpha.0",
+  "version": "0.0.3-alpha.0",
   "description": "mp mpx plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@mpxjs/webpack-plugin": "^2.6.22",
-    "webpack": "^4.0.0",
-    "vue-cli-plugin-mpx": "*"
+    "vue-cli-plugin-mpx": "*",
+    "webpack": "^4.0.0"
   },
   "keywords": [],
   "author": "",
