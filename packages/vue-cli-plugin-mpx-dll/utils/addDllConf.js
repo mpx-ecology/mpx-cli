@@ -14,7 +14,7 @@ module.exports = function addDllConf(
   if (!dllConf) {
     return
   }
-  const dllManifests = getDllManifests(api)
+  const dllManifests = getDllManifests(api, mode)
 
   dllManifests
     .filter((manifest) => {
@@ -29,16 +29,20 @@ module.exports = function addDllConf(
             manifest: manifest.content
           }
         ])
-      webpackConfig
-        .plugin('copy-webpack-plugin-for-dll')
-        .use(CopyWebpackPlugin, [
-          [
-            {
-              context: path.join(dllConf.path, 'lib'),
-              from: manifest.content.name,
-              to: manifest.content.name
-            }
-          ]
-        ])
+
+      // 注意：小程序部分的 Dll 直接 copy 至 dist 目录，web 侧的 Dll 不做处理，这个需要开发者单独去部署这个 Dll 文件
+      if (mode === 'mp') {
+        webpackConfig
+          .plugin('copy-webpack-plugin-for-dll')
+          .use(CopyWebpackPlugin, [
+            [
+              {
+                context: path.join(dllConf.path, `${mode}/lib`),
+                from: manifest.content.name,
+                to: manifest.content.name
+              }
+            ]
+          ])
+      }
     })
 }

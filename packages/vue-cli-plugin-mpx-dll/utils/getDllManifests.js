@@ -3,18 +3,19 @@ const path = require('path')
 const resolveDllConf = require('./resolveDllConf')
 const { supportedModes } = require('vue-cli-plugin-mpx')
 
-module.exports = function getDllManifests(api) {
+module.exports = function getDllManifests(api, mode) {
   const dllConf = resolveDllConf(api)
   if (!dllConf) {
     return
   }
   const result = []
-  if (fs.existsSync(dllConf.path)) {
-    const files = fs.readdirSync(dllConf.path)
+  const basePath = path.resolve(dllConf.path, mode)
+  if (fs.existsSync(basePath)) {
+    const files = fs.readdirSync(basePath)
     files.forEach((file) => {
       if (/\.manifest\.json$/.test(file)) {
         const content = JSON.parse(
-          fs.readFileSync(path.join(dllConf.path, file), 'utf8')
+          fs.readFileSync(path.join(basePath, file), 'utf8')
         )
         const filename = path.basename(content.name)
         const modeReg = new RegExp(`^(${supportedModes.join('|')})\\.`)

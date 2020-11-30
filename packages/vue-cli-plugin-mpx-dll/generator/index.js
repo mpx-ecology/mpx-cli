@@ -1,7 +1,8 @@
 module.exports = function(api, options) {
   api.extendPackage({
     scripts: {
-      'build:dll': 'vue-cli-service build:dll'
+      'build:dll:mp': 'mpx-cli-service build:dll --mp',
+      'build:dll:web': 'mpx-cli-service build:dll --web'
     }
   })
 

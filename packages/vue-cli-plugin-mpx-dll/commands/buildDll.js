@@ -5,44 +5,69 @@ const normalizeArr = require('../utils/normalizeArr')
 const resolveDllConf = require('../utils/resolveDllConf')
 const path = require('path')
 
-const dllName = '[name].[chunkHash].dll.js'
-const manifestName = '[chunkHash].manifest.json'
+const dllName = '[name]_[chunkHash:7]'
+const manifestName = '[chunkHash:7].manifest.json'
 
 const webpackCfgs = []
 
-module.exports = function(api, options) {
-  api.registerCommand('build:dll', function() {
-    const dllConf = resolveDllConf(api, options)
-    if (!dllConf) {
-      return
-    }
-    normalizeArr(dllConf.groups).forEach((item) => {
-      const entries = getDllEntries(item.cacheGroups, item.modes)
-      if (Object.keys(entries).length) {
-        webpackCfgs.push(merge({
-          entry: entries,
-          output: {
-            path: dllConf.path,
-            filename: path.join('lib', dllName),
-            libraryTarget: 'commonjs2'
-          },
-          mode: 'production',
-          plugins: [
-            new webpack.DllPlugin({
-              path: path.join(dllConf.path, manifestName),
-              name: dllName,
-              format: item.format,
-              entryOnly: item.entryOnly,
-              type: 'commonjs2',
-              context: dllConf.context
-            })
-          ]
-        }, item.webpackCfg))
+module.exports = function (api, options) {
+  api.registerCommand(
+    'build:dll',
+    {
+      '--mp': 'build dll for mp',
+      '--web': 'build dll for web'
+    },
+    function (args) {
+      const dllConf = resolveDllConf(api, options)
+      if (!dllConf) {
+        return
       }
-    })
+      let mode = ''
+      if (args.mp) {
+        mode = 'mp'
+      } else if (args.web) {
+        mode = 'web'
+      }
+      const basePath = path.resolve(dllConf.path, mode)
+      normalizeArr(dllConf.groups).forEach((item) => {
+        const entries = getDllEntries(item.cacheGroups, item.modes)
+        if (Object.keys(entries).length) {
+          let baseConf = {
+            entry: entries,
+            output: {
+              path: basePath,
+              filename: path.join('lib', `${dllName}.js`)
+            },
+            mode: 'production',
+            plugins: []
+          }
+          let dllPlugin = {
+            path: path.join(basePath, manifestName),
+            format: item.format || true,
+            entryOnly: item.entryOnly || true,
+            context: dllConf.context
+          }
+          if (args.mp) {
+            baseConf.output.libraryTarget = 'commonjs2'
+            dllPlugin.type = 'commonjs2'
+            dllPlugin.name = `${dllName}.js`
+          }
+          if (args.web) {
+            baseConf.output.library = dllName
+            dllPlugin.name = dllName
+          }
 
-    webpack(webpackCfgs[0], function(err) {
-      if (err) console.log(err)
-    })
-  })
+          baseConf.plugins.push(new webpack.DllPlugin(dllPlugin))
+
+          webpackCfgs.push(
+            merge(baseConf, item.webpackCfg)
+          )
+        }
+      })
+
+      webpack(webpackCfgs[0], function (err) {
+        if (err) console.log(err)
+      })
+    }
+  )
 }

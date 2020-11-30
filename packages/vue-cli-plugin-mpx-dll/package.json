@@ -15,10 +15,12 @@
   },
   "peerDependencies": {
     "vue-cli-plugin-mpx": "*",
-    "webpack": "^4.0.0"
+    "webpack": "^4.0.0",
+    "@mpxjs/webpack-plugin": "^2.6.22"
   },
   "devDependencies": {
     "vue-cli-plugin-mpx": "*",
-    "webpack": "^4.0.0"
+    "webpack": "^4.0.0",
+    "@mpxjs/webpack-plugin": "^2.6.22"
   }
 }

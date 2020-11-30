@@ -3,7 +3,8 @@ const addDllConf = require('./utils/addDllConf')
 
 module.exports = function (api, options) {
   api.chainWebpack(webpackConfig => {
-    addDllConf(api, options, webpackConfig, 'web')
+    const mode = process.env.MPX_CLI_MODE
+    addDllConf(api, options, webpackConfig, mode)
   })
 
   registerCommand(api, options)
