@@ -33,6 +33,7 @@ module.exports = function registerMpCommand(api, options, command) {
 
       let baseWebpackConfig = api.resolveChainableWebpackConfig()
 
+      // 根据不同 mode 修改小程序构建的 webpack 配置
       applyMpWebpackConfig(api, options, baseWebpackConfig, args, srcMode, mode)
       // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
       baseWebpackConfig = api.resolveWebpackConfig(baseWebpackConfig)

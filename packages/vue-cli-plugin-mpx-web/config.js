@@ -1,6 +1,5 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const {
-  applyBaseMpxConfig,
   transformMpxEntry,
   resolveMpxLoader,
   resolveMpxWebpackPluginConf
@@ -8,7 +7,6 @@ const {
 
 module.exports = function (api, options = {}) {
   api.chainWebpack((webpackConfig) => {
-    applyBaseMpxConfig(api, options, webpackConfig)
     // TODO: vue.config.js 多入口的场景配置
     const isWeb = true
     transformMpxEntry(api, options, webpackConfig, isWeb)

@@ -22,9 +22,9 @@ module.exports = function(api, options) {
   if (options.cross) {
     api.extendPackage({
       scripts: {
-        'watch:cross': 'MPX_CLI_MODE=mp vue-cli-service serve:mp --watch --wx --ali',
-        'build:cross:dev': 'MPX_CLI_MODE=mp vue-cli-service build:mp --wx --ali',
-        'build:cross': 'MPX_CLI_MODE=mp vue-cli-service build:mp --wx --ali --production'
+        'watch:cross': 'MPX_CLI_MODE=mp mpx-cli-service serve:mp --watch --wx --ali',
+        'build:cross:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali',
+        'build:cross': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --production'
       }
     })
   }
@@ -44,9 +44,9 @@ module.exports = function(api, options) {
 
   api.extendPackage({
     scripts: {
-      'watch:mp': 'MPX_CLI_MODE=mp vue-cli-service serve:mp --watch',
-      'build:mp': 'MPX_CLI_MODE=mp vue-cli-service build:mp --production',
-      'build:mp:dev': 'MPX_CLI_MODE=mp vue-cli-service build:mp'
+      'watch:mp': 'MPX_CLI_MODE=mp mpx-cli-service serve:mp --watch',
+      'build:mp': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --production',
+      'build:mp:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp'
     },
     dependencies: {
       '@mpxjs/api-proxy': '^2.5.10',
