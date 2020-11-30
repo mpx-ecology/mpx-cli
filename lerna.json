@@ -1,6 +1,7 @@
 {
   "packages": [
-    "packages/vue-cli-*"
+    "packages/vue-cli-*",
+    "packages/mpx-cli-service"
   ],
   "version": "0.0.2-alpha.0"
 }
