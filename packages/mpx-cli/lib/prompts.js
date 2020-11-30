@@ -21,58 +21,25 @@ module.exports = [
     type: 'confirm',
     default: false
   },
-  {
-    name: 'cloudFunc',
-    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
-    message: '是否需要使用小程序云开发能力',
-    type: 'confirm',
-    default: false
-  },
-  {
-    name: 'isPlugin',
-    when: ({ srcMode, cross, cloudFunc }) => srcMode === 'wx' && cross === false && cloudFunc === false,
-    type: 'confirm',
-    message:
-      '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
-    default: false
-  },
   // {
   //   name: 'cloudFunc',
-  //   when: ({ mode, cross }) => mode === 'wx' && cross === false,
+  //   when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
   //   message: '是否需要使用小程序云开发能力',
   //   type: 'confirm',
   //   default: false
   // },
   // {
   //   name: 'isPlugin',
-  //   when: ({ mode, cross, cloudFunc }) => mode === 'wx' && cross === false && cloudFunc === false,
+  //   when: ({ srcMode, cross, cloudFunc }) => srcMode === 'wx' && cross === false && cloudFunc === false,
   //   type: 'confirm',
   //   message:
   //     '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
   //   default: false
   // },
   {
-    name: 'needEslint',
-    type: 'confirm',
-    message: '是否需要ESlint',
-    default: true
-  },
-  {
     name: 'needTs',
     type: 'confirm',
     message: '是否需要typescript',
-    default: false
-  },
-  {
-    name: 'needDll',
-    type: 'confirm',
-    message: '是否需要配置Dll',
-    default: false
-  },
-  {
-    name: 'needUnitTest',
-    type: 'confirm',
-    message: '是否需要单元测试',
     default: false
   },
   {

@@ -16,9 +16,6 @@ const { p, preset, i, inlinePreset } = minimist(args)
 if (args[0] === 'create' && !p && !preset && !i && !inlinePreset) {
   const name = args[1]
   inquirer.prompt(prompts).then(answers => {
-    if (answers.needEslint) {
-      Object.assign(builtInPreset.plugins, plugins.needEslint)
-    }
     if (answers.needTs) {
       Object.assign(builtInPreset.plugins, plugins.tsSupport)
     }
@@ -30,12 +27,6 @@ if (args[0] === 'create' && !p && !preset && !i && !inlinePreset) {
     }
     if (answers.transWeb) {
       Object.assign(builtInPreset.plugins, plugins.transWeb)
-    }
-    if (answers.needUnitTest) {
-      Object.assign(builtInPreset.plugins, plugins.needUnitTest)
-    }
-    if (answers.needDll) {
-      Object.assign(builtInPreset.plugins, plugins.needDll)
     }
     // TODO: 添加其他 prompt 插件配置
 

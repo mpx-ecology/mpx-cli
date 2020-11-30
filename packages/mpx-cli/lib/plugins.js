@@ -1,9 +1,6 @@
 const prefix = 'vue-cli-plugin-mpx'
 
 const plugins = {
-  needEslint: {
-    [`${prefix}-eslint`]: {}
-  },
   tsSupport: {
     [`${prefix}-typescript`]: {}
   },
@@ -15,12 +12,6 @@ const plugins = {
   },
   transWeb: {
     [`${prefix}-web`]: {}
-  },
-  needUnitTest: {
-    [`${prefix}-unit-test`]: {}
-  },
-  needDll: {
-    [`${prefix}-dll`]: {}
   }
   // TODO: 添加其他插件配置
 }
