@@ -1,10 +1,7 @@
 const rm = require('rimraf')
 const webpack = require('webpack')
-const merge = require('webpack-merge')
-const transformMpxEntry = require('./transformMpxEntry')
-const resolveVueConfigWebpackConfig = require('./resolveVueConfigWebpackConfig')
-const applyMpWebpackConfig = require('../config/mp')
-const supportedModes = require('../config/supportedModes')
+const { transformMpxEntry, supportedModes } = require('vue-cli-plugin-mpx')
+const applyMpWebpackConfig = require('../config')
 const { chalk, logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 
 module.exports = function registerMpCommand(api, options, command) {
@@ -23,8 +20,6 @@ module.exports = function registerMpCommand(api, options, command) {
       options.pluginOptions &&
       options.pluginOptions.mpx &&
       options.pluginOptions.mpx.srcMode
-    const isWatching = !!args.watch
-    const webpackCallback = resolveWebpackCompileCallback(isWatching)
 
     let modes = supportedModes.filter(mode => !!args[mode])
     if (modes.length === 0) {
@@ -37,27 +32,16 @@ module.exports = function registerMpCommand(api, options, command) {
       clearDist(api.resolve(`dist/${mode}/*`))
 
       let baseWebpackConfig = api.resolveChainableWebpackConfig()
-      resetCliServiceWebpackConf(baseWebpackConfig)
 
-      // 加载 vue-cli-plugin-mpx-* 相关插件
-      if (api.hasPlugin('mpx-dll')) {
-        const { addDllConf } = require('vue-cli-plugin-mpx-dll')
-        addDllConf(api, options, baseWebpackConfig, mode)
-      }
-
-      applyMpWebpackConfig(
-        api,
-        options,
-        baseWebpackConfig,
-        mode,
-        args
-      )
-
-      baseWebpackConfig = merge(baseWebpackConfig.toConfig(), resolveVueConfigWebpackConfig(api, options))
+      applyMpWebpackConfig(api, options, baseWebpackConfig, args, srcMode, mode)
+      // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
+      baseWebpackConfig = api.resolveWebpackConfig(baseWebpackConfig)
 
       const isWeb = false
       transformMpxEntry(api, options, baseWebpackConfig, isWeb)
 
+      const isWatching = !!args.watch
+      const webpackCallback = resolveWebpackCompileCallback(isWatching)
       if (!isWatching) {
         webpack(baseWebpackConfig, webpackCallback)
       } else {
@@ -65,12 +49,6 @@ module.exports = function registerMpCommand(api, options, command) {
       }
     })
   })
-}
-
-function resetCliServiceWebpackConf(webpackConfig) {
-  webpackConfig.plugins && webpackConfig.plugins.clear()
-  webpackConfig.optimization && webpackConfig.optimization.clear();
-  webpackConfig.optimization && webpackConfig.optimization.minimizers && webpackConfig.optimization.minimizers.clear();
 }
 
 function clearDist(distPath) {

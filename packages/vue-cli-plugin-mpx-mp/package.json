@@ -1,23 +1,28 @@
 {
-  "name": "vue-cli-plugin-mpx",
+  "name": "vue-cli-plugin-mpx-mp",
   "version": "0.0.2-alpha.0",
-  "description": "base mpx plugin for mpx-cli",
+  "description": "mp mpx plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^4.5.6",
+    "copy-webpack-plugin": "^5.0.3",
+    "rimraf": "^2.6.2",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-chain": "^6.4.0",
     "webpack-merge": "^4.1.2"
   },
   "peerDependencies": {
     "@mpxjs/webpack-plugin": "^2.6.22",
+    "vue-cli-plugin-mpx": "*",
     "webpack": "^4.0.0"
   },
   "devDependencies": {
     "@mpxjs/webpack-plugin": "^2.6.22",
-    "webpack": "^4.0.0"
+    "webpack": "^4.0.0",
+    "vue-cli-plugin-mpx": "*"
   },
   "keywords": [],
   "author": "",

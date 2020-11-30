@@ -1,12 +1,12 @@
-const registerCommand = require('./utils/registerMpCommand')
+const applyBaseMpxConfig = require('./config/base')
 
 module.exports = function (api, options) {
-  registerCommand(api, options, 'serve:mp')
-  registerCommand(api, options, 'build:mp')
+  api.chainWebpack(webpackConfig => {
+    applyBaseMpxConfig(api, options, webpackConfig)
+  })
 }
 
 module.exports.applyBaseMpxConfig = require('./config/base')
-module.exports.applyPluginsMpxConfig = require('./config/plugins')
 module.exports.transformMpxEntry = require('./utils/transformMpxEntry')
 module.exports.resolveMpxLoader = require('./utils/resolveMpxLoader')
 module.exports.resolveMpxWebpackPluginConf = require('./utils/resolveMpxWebpackPluginConf')
