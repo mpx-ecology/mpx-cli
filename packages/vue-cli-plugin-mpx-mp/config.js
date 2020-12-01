@@ -29,7 +29,7 @@ module.exports = function (
     }
   ])
 
-  webpackConfig.plugin('mpx-copy-webpack-plugin').use(CopyWebpackPlugin, [
+  webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
     [
       {
         context: api.resolve(`static/${mode}`),

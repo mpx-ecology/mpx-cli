@@ -1,9 +1,11 @@
 {
   <%_ if (cloudFunc) {_%>
+  "miniprogramRoot": "miniprogram",
   "cloudfunctionRoot": "functions",
   "compileType": "miniprogram",
   <%_ } _%>
   <%_ if (isPlugin) {_%>
+  "miniprogramRoot": "miniprogram",
   "pluginRoot": "plugin",
   "compileType": "plugin",
   <%_ } _%>

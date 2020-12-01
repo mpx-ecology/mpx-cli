@@ -17,5 +17,9 @@ mpx create <project-name>
 ### 本地开发调试
 
 ```javascript
-npm run watch:mp
+npm run watch:mp // 小程序
+
+npm run watch:cross // 跨平台小程序
+
+npm run watch:web // web
 ```
