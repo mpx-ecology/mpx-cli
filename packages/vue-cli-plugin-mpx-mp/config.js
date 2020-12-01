@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('vue-cli-plugin-mpx')
+const path = require('path')
 
 module.exports = function (
   api,
@@ -15,11 +16,23 @@ module.exports = function (
   const isWatching = !!args.watch
   const isCompileProd = !!args.production
 
+  let outputDist = `dist/${mode}`
+  let subDir = ''
+  if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
+    try {
+      const projectConfigJson = require(api.resolve(
+        'static/wx/project.config.json'
+      ))
+      outputDist = path.join(outputDist, projectConfigJson.miniprogramRoot)
+      subDir = projectConfigJson.cloudfunctionRoot || projectConfigJson.pluginRoot
+    } catch (e) {}
+  }
+
   webpackConfig.devtool(isWatching ? 'source-map' : false)
   webpackConfig.mode(isCompileProd ? 'production' : 'none')
 
   webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
-  webpackConfig.output.path(api.resolve(`dist/${mode}`))
+  webpackConfig.output.path(api.resolve(outputDist))
 
   webpackConfig.plugin('define-plugin').use(webpack.DefinePlugin, [
     {
@@ -34,7 +47,7 @@ module.exports = function (
       {
         context: api.resolve(`static/${mode}`),
         from: '**/*',
-        to: ''
+        to: subDir ? '..' : ''
       }
     ]
   ])

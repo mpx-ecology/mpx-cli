@@ -2,6 +2,7 @@
 module.exports = function transformMpxEntry(api, options = {}, webpackConfig, isWeb) {
   // 通过 cli 生成的默认的入口文件
   let basePath = 'src/app.mpx'
+
   if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
     try {
       const projectConfigJson = require(api.resolve('static/wx/project.config.json'))
