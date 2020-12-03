@@ -41,6 +41,8 @@ if (args[0] === 'create' && !p && !preset && !i && !inlinePreset) {
 
     // 添加 inlinePreset
     args.splice(1, 0, '-i', JSON.stringify(builtInPreset))
+    // 去掉 @vue/cli 创建项目成功后的提示
+    args.push('--skipGetStarted')
     doVueCli()
   })
 } else {
