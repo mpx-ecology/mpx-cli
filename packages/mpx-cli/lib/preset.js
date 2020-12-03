@@ -4,6 +4,6 @@ module.exports = {
     'mpx-cli-service': {},
     'vue-cli-plugin-mpx': {},
     'vue-cli-plugin-mpx-mp': {},
-    'vue-cli-plugin-eslint': {}
+    'vue-cli-plugin-mpx-eslint': {}
   }
 }
