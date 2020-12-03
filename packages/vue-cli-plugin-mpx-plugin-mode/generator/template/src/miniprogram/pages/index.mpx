@@ -1,6 +1,6 @@
 <template>
   <view>
-    hello Mpx
+    <list></list>
   </view>
 </template>
 
@@ -17,6 +17,8 @@
 
 <script type="application/json">
   {
-    "usingComponents": {}
+    "usingComponents": {
+      "list": "plugin://myPlugin/list"
+    }
   }
 </script>

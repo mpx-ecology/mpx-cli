@@ -21,21 +21,21 @@ module.exports = [
     type: 'confirm',
     default: false
   },
-  // {
-  //   name: 'cloudFunc',
-  //   when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
-  //   message: '是否需要使用小程序云开发能力',
-  //   type: 'confirm',
-  //   default: false
-  // },
-  // {
-  //   name: 'isPlugin',
-  //   when: ({ srcMode, cross, cloudFunc }) => srcMode === 'wx' && cross === false && cloudFunc === false,
-  //   type: 'confirm',
-  //   message:
-  //     '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
-  //   default: false
-  // },
+  {
+    name: 'cloudFunc',
+    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
+    message: '是否需要使用小程序云开发能力',
+    type: 'confirm',
+    default: false
+  },
+  {
+    name: 'isPlugin',
+    when: ({ srcMode, cross, cloudFunc }) => srcMode === 'wx' && cross === false && cloudFunc === false,
+    type: 'confirm',
+    message:
+      '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
+    default: false
+  },
   {
     name: 'needTs',
     type: 'confirm',

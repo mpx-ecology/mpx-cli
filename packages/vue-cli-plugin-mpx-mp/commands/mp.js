@@ -1,7 +1,9 @@
 const rm = require('rimraf')
+const merge = require('webpack-merge')
 const webpack = require('webpack')
 const { transformMpxEntry, supportedModes } = require('vue-cli-plugin-mpx')
 const applyMpWebpackConfig = require('../config')
+const applyMpPluginWebpackConfig = require('../pluginMode')
 const { chalk, logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 
 module.exports = function registerMpCommand(api, options, command) {
@@ -28,6 +30,8 @@ module.exports = function registerMpCommand(api, options, command) {
 
     logWithSpinner('⚓', 'Building...')
 
+    let webpackConfigs = []
+    // 小程序业务代码构建配置
     modes.map(mode => {
       clearDist(api.resolve(`dist/${mode}/*`))
 
@@ -41,14 +45,23 @@ module.exports = function registerMpCommand(api, options, command) {
       const isWeb = false
       transformMpxEntry(api, options, baseWebpackConfig, isWeb)
 
-      const isWatching = !!args.watch
-      const webpackCallback = resolveWebpackCompileCallback(isWatching)
-      if (!isWatching) {
-        webpack(baseWebpackConfig, webpackCallback)
-      } else {
-        webpack(baseWebpackConfig).watch({}, webpackCallback)
-      }
+      webpackConfigs.push(baseWebpackConfig)
     })
+
+    // 小程序插件构建配置
+    if (api.hasPlugin('mpx-plugin-mode')) {
+      const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
+      applyMpPluginWebpackConfig(api, options, mpxPluginWebpackConfig)
+      webpackConfigs.push(mpxPluginWebpackConfig)
+    }
+
+    const isWatching = !!args.watch
+    const webpackCallback = resolveWebpackCompileCallback(isWatching)
+    if (!isWatching) {
+      webpack(webpackConfigs, webpackCallback)
+    } else {
+      webpack(webpackConfigs).watch({}, webpackCallback)
+    }
   })
 }
 

@@ -13,7 +13,13 @@
   {
     "pages": [
       "./pages/index"
-    ]
+    ],
+    "plugins": {
+      "myPlugin": {
+        "version": "dev",
+        "provider": "<%= appid %>"
+      }
+    }
   }
 </script>
 

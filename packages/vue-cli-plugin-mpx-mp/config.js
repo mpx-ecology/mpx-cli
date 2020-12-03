@@ -28,6 +28,7 @@ module.exports = function (
     } catch (e) {}
   }
 
+  webpackConfig.name(`${mode}-compiler`)
   webpackConfig.devtool(isWatching ? 'source-map' : false)
   webpackConfig.mode(isCompileProd ? 'production' : 'none')
 
