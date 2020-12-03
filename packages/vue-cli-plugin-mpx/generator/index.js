@@ -14,8 +14,8 @@ module.exports = function(api, options) {
     return files
   })
 
-  // 删除 @vue/cli-service 默认生成的文件后再重新生成 mpx 初始化文件
-  if (!options.needTs) {
+  // ts、cloud-func、plugin-mode 3个插件都有各自独立的模板 generator，所以不需要在这里单独生成
+  if (!options.needTs && !options.cloudFunc && !options.isPlugin) {
     require('./src')(api)
   }
 
