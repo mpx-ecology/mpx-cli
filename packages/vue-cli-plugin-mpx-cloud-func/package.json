@@ -1,7 +1,7 @@
 {
   "name": "vue-cli-plugin-mpx-cloud-func",
   "version": "0.0.5-alpha.0",
-  "description": "",
+  "description": "mp cloud func plugin for mpx",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
