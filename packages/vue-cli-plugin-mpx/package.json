@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-plugin-mpx",
-  "version": "0.0.5-alpha.0",
+  "version": "1.0.0",
   "description": "base mpx plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
