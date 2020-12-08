@@ -62,31 +62,31 @@ module.exports = {
 
 注：`yes` 表示在对应环境支持配置，`no` 表示在对应环境不支持配置。
 
-| 字段 | web | 小程序 |
-| -- | -- | -- |
-| publicPath | yes | no |
-| outputDir | yes | no |
-| assetsDir | yes | no |
-| indexPath | yes | no |
-| filenameHashing | yes | no |
-| pages | yes | no |
-| lintOnSave | no | no |
-| runtimeCompiler | yes | no |
-| transpileDependencies | yes | yes |
-| productionSourceMap | yes | no |
-| crossorigin | yes | no |
-| integrity | yes | no |
-| configureWebpack | yes | yes |
-| chainWebpack | yes | yes |
-| css.requireModuleExtension | yes | no |
-| css.extract | yes | no |
-| css.sourceMap | yes | no |
-| css.loaderOptions | yes | no |
-| devServer | yes | no |
-| devServer.proxy | yes | no |
-| parallel | yes | no |
-| pwa | yes | no |
-| pluginOptions | yes | yes |
+| 字段 | web | 小程序 | 备注 |
+| -- | -- | -- | -- |
+| publicPath | yes | no | - |
+| outputDir | no | no | `dist`目录作为输出目录 |
+| assetsDir | yes | no | - |
+| indexPath | yes | no | - |
+| filenameHashing | yes | no | - |
+| pages | yes | no | - |
+| lintOnSave | no | no | - |
+| runtimeCompiler | yes | no | - |
+| transpileDependencies | yes | yes | - |
+| productionSourceMap | yes | no | 未来会支持 |
+| crossorigin | yes | no | - |
+| integrity | yes | no | - |
+| configureWebpack | yes | yes | - |
+| chainWebpack | yes | yes | - |
+| css.requireModuleExtension | yes | no | - |
+| css.extract | yes | no | - |
+| css.sourceMap | yes | no | 未来会支持 |
+| css.loaderOptions | yes | no | 未来会支持 |
+| devServer | yes | no | - |
+| devServer.proxy | yes | no | - |
+| parallel | yes | no | - |
+| pwa | yes | no | - |
+| pluginOptions | yes | yes | - |
 
 ### 有关 webpack 构建配置
 
@@ -129,3 +129,13 @@ module.exports = {
   }
 }
 ```
+
+### 其他官方插件
+
+* `vue-cli-plugin-mpx-unit-test`
+
+`mpx` 单元测试插件，具体参见[文档](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-unit-test)
+
+* `vue-cli-plugin-mpx-dll`
+
+`mpx dll` 插件，具体参见[文档](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-dll)
