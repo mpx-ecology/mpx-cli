@@ -1,20 +1,20 @@
-## @mpxjs/cli@next
+# @mpxjs/cli@next
 
 基于 [`@vue/cli`](https://cli.vuejs.org/) 开发的 mpx 脚手架。
 
-### 安装
+## 安装
 
 ```javascript
 npm i @mpxjs/cli@next -g
 ```
 
-### 创建项目
+## 创建项目
 
 ```javascript
 mpx create <project-name>
 ```
 
-### 本地开发调试
+## 本地开发调试
 
 ```javascript
 npm run watch:mp // 小程序
@@ -24,9 +24,9 @@ npm run watch:cross // 跨平台小程序
 npm run watch:web // web
 ```
 
-### Some Tips:
+## Some Tips:
 
-#### css 预编译处理器
+### css 预编译处理器
 
 通过 `mpx-cli` 初始化的项目内置 `stylus` 作为 `css` 的预编译处理器。
 
@@ -40,9 +40,11 @@ npm install -D sass-loader sass
 npm install -D less-loader less
 ```
 
-#### 编译构建配置
+### 编译构建配置
 
-新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `vue.config.js` 来进行管理，在 `vue.config.js` 当中 `pluginOptions.mpx` 进行相关的配置：
+新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `vue.config.js` 来进行管理。
+
+有关 `mpx` 相关的 webpack 插件、loader 等在 `vue.config.js` 当中 `pluginOptions.mpx` 进行相关的配置：
 
 ```javascript
 module.exports = {
@@ -55,8 +57,6 @@ module.exports = {
   }
 }
 ```
-
-#### vue.config.js 配置
 
 以下表格为 `vue.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli官方配置](https://cli.vuejs.org/config/#configuration-reference)：
 
@@ -88,7 +88,7 @@ module.exports = {
 | pwa | yes | no |
 | pluginOptions | yes | yes |
 
-#### 有关 webpack 构建配置
+### 有关 webpack 构建配置
 
 可通过 `vue.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
 
