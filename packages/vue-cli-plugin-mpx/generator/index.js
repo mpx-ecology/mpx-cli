@@ -54,7 +54,6 @@ module.exports = function(api, options) {
     },
     devDependencies: {
       '@mpxjs/webpack-plugin': '^2.6.22',
-      'extract-text-webpack-plugin': '^3.0.2',
       'vue-router': '^3.1.3',
       'vue-template-compiler': '^2.6.10',
       'style-loader': '^1.0.1',
