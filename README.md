@@ -40,7 +40,7 @@ npm install -D sass-loader sass
 npm install -D less-loader less
 ```
 
-### 编译构建配置
+### mpx 编译构建配置
 
 新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `vue.config.js` 来进行管理。
 
@@ -92,7 +92,7 @@ module.exports = {
 | pwa | yes | no | - |
 | pluginOptions | yes | yes | - |
 
-### 有关 webpack 构建配置
+### 其他 webpack 构建配置
 
 可通过 `vue.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
 
