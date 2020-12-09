@@ -58,6 +58,10 @@ module.exports = {
 }
 ```
 
+注：通过 `@mpxjs/cli` 初始化的项目提供了开箱即用的配置(在[插件内部](https://github.com/mpx-ecology/mpx-cli/blob/master/packages/vue-cli-plugin-mpx/utils/resolveMpxWebpackPluginConf.js#L6-L59)设置了默认的配置)，如果开发过程中有一些其他的配置需求，参见 [mpx 官方文档](https://www.mpxjs.cn/api/compile.html#mpxwebpackplugin-options)。
+
+### vue.config.js 配置说明
+
 以下表格为 `vue.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli官方配置](https://cli.vuejs.org/config/#configuration-reference)：
 
 注：`yes` 表示在对应环境支持配置，`no` 表示在对应环境不支持配置。
