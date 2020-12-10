@@ -11,7 +11,7 @@ npm i @mpxjs/cli@next -g
 ## 创建项目
 
 ```javascript
-mpx create <project-name>
+mpx create your-project-name --registry=https://registry.npm.taobao.org
 ```
 
 ## 本地开发调试
