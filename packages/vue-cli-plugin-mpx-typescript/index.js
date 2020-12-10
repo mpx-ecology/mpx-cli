@@ -9,5 +9,4 @@ module.exports = function(api, options) {
     .use('ts-loader')
     .loader('ts-loader')
   })
-  // TODO: 插件项目类型的 webpack typescript 配置
 }

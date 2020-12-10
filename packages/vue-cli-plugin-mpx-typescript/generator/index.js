@@ -9,6 +9,7 @@ module.exports = function(api, options) {
   })
 
   if (!options.cloudFunc && !options.isPlugin) {
-    api.render('./template', options)
+    api.render('./template-src', options)
   }
+  api.render('./template-tsconfig')
 }
