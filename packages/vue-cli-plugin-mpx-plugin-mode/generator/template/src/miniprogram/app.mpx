@@ -6,6 +6,7 @@
 
   createApp({
     onLaunch () {
+      //
     }
   })
 </script>
