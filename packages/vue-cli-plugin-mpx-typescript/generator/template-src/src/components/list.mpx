@@ -1,6 +1,6 @@
 <template>
   <view class="list">
-    <view wx:for="{{listData}}" wx:key="index">{{item}}</view>
+    this is mpx project
   </view>
 </template>
 
