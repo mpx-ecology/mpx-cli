@@ -2,6 +2,8 @@
 
 基于 [`@vue/cli`](https://cli.vuejs.org/) 开发的 mpx 脚手架。
 
+## Stage: Beta
+
 ## 安装
 
 ```javascript
