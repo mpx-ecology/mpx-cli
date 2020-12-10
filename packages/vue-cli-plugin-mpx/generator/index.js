@@ -1,5 +1,6 @@
 module.exports = function(api, options) {
   require('./base')(api, options)
+  require('./static')(api, options)
 
   // 删除 @vue/cli-service 默认生成的文件内容
   api.render(function(files) {
