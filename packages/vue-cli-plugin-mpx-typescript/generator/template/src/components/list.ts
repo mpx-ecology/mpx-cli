@@ -2,6 +2,6 @@ import { createComponent } from '@mpxjs/core'
 
 createComponent({
   data: {
-    msg: 'hello world'
+    listData: ['手机', '电视', '电脑']
   }
 })

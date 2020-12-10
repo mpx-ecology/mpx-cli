@@ -1,14 +1,4 @@
-<script>
-  import mpx, { createApp } from '@mpxjs/core'
-  import apiProxy from '@mpxjs/api-proxy'
-
-  mpx.use(apiProxy, { usePromise: true })
-
-  createApp({
-    onLaunch () {
-    }
-  })
-</script>
+<script lang="ts" src="./app.ts"></script>
 
 <style>
   /*此处编写全局样式*/

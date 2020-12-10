@@ -1,3 +1,7 @@
 module.exports = function(api, options) {
-  api.render('./template', options)
+  options = Object.assign({
+    appid: 'touristappid'
+  }, options)
+
+  api.render(options.needTs ? './template-typescript' : './template', options)
 }

@@ -1,5 +1,7 @@
 <template>
-  <list></list>
+  <view>
+    this mpx cloud app
+  </view>
 </template>
 
 <script lang="ts" src="./index.ts"></script>
@@ -7,7 +9,6 @@
 <script type="application/json">
   {
     "usingComponents": {
-      "list": "../components/list"
     }
   }
 </script>

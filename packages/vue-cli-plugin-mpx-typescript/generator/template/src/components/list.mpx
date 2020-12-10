@@ -1,10 +1,10 @@
 <template>
   <view class="list">
-    <view>{{msg}}</view>
+    <view wx:for="{{listData}}" wx:key="index">{{item}}</view>
   </view>
 </template>
 
-<script lang="ts" src="./helloworld.ts"></script>
+<script lang="ts" src="./list.ts"></script>
 
 <style lang="stylus">
   .list

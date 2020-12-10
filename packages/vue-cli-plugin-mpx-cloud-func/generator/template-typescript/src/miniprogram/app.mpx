@@ -1,14 +1,4 @@
-<script>
-  import mpx, { createApp } from '@mpxjs/core'
-  import apiProxy from '@mpxjs/api-proxy'
-
-  mpx.use(apiProxy, { usePromise: true })
-
-  createApp({
-    onLaunch () {
-    }
-  })
-</script>
+<script lang="ts" src="./app.ts"></script>
 
 <style>
   /*此处编写全局样式*/
@@ -18,14 +8,7 @@
   {
     "pages": [
       "./pages/index"
-    ],
-    "plugins": {
-      "myPlugin": {
-        "version": "dev",
-        "provider": "<%= appid %>"
-      }
-    }
-  }
+    ]  }
 </script>
 
 <!--也可以通过以下形式用js输出json，便于书写注释和使用条件编译-->
