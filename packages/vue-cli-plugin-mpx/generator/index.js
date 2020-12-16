@@ -15,6 +15,14 @@ module.exports = function(api, options) {
     return files
   })
 
+  // 删除 @vue/cli-service 内置的 npm script
+  api.extendPackage((pkg) => {
+    delete pkg.scripts.serve
+    delete pkg.scripts.build
+    delete pkg.browserslist
+    return pkg
+  })
+
   // ts、cloud-func、plugin-mode 3个插件都有各自独立的模板 generator，所以不需要在这里单独生成
   if (!options.needTs && !options.cloudFunc && !options.isPlugin) {
     require('./src')(api)
@@ -61,20 +69,14 @@ module.exports = function(api, options) {
       '@babel/core': '^7.10.4',
       '@babel/plugin-transform-runtime': '^7.10.4',
       '@babel/preset-env': '^7.10.4',
-      '@babel/runtime-corejs3': '^7.10.4',
+      '@babel/runtime': '^7.10.4', // https://babeljs.io/docs/en/babel-plugin-transform-runtime#corejs
+      'core-js': '^3.8.1',
       'babel-loader': '^8.1.0',
       'css-loader': '^0.28.11',
       'file-loader': '^1.1.11',
       path: '^0.12.7',
       'url-loader': '^1.0.1'
-    }
-  })
-
-  // 删除 @vue/cli-service 内置的 npm script
-  api.extendPackage((pkg) => {
-    delete pkg.scripts.serve
-    delete pkg.scripts.build
-    delete pkg.browserslist
-    return pkg
+    },
+    browserslist: 'ios >= 8, chrome >= 47'
   })
 }
