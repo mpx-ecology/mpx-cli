@@ -15,3 +15,5 @@ module.exports.defaultModes = {
   'serve:web': 'development',
   'build:web': 'production'
 }
+
+module.exports.platform = 'web'

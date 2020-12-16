@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { semver, error } = require('@vue/cli-shared-utils')
+const filterPluginsByPlatform = require('../utils/filterPlugins')
 const requiredVersion = require('../package.json').engines.node
 
 if (!semver.satisfies(process.version, requiredVersion, { includePrerelease: true })) {
@@ -17,20 +18,16 @@ const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
 const setPluginsToSkip = service.setPluginsToSkip.bind(service)
 service.setPluginsToSkip = function(args) {
   setPluginsToSkip(args)
-  let builtInPlugins = []
-  if (process.env.MPX_CLI_MODE !== 'web') {
-    builtInPlugins = [
+  let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
+  // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉
+  if (process.env.MPX_CLI_MODE === 'mp') {
+    plugins = plugins.concat([
       'built-in:config/base',
-      'built-in:config/app',
-      'vue-cli-plugin-mpx-web'
-    ]
-  } else {
-    builtInPlugins = [
-      'vue-cli-plugin-mpx-mp'
-    ]
+      'built-in:config/app'
+    ])
   }
 
-  builtInPlugins.forEach(plugin => {
+  plugins.forEach(plugin => {
     this.pluginsToSkip.add(plugin)
   })
 }

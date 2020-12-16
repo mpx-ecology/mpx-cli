@@ -23,3 +23,5 @@ module.exports.defaultModes = {
   'serve:mp': 'none',
   'build:mp': 'production'
 }
+
+module.exports.platform = 'mp'
