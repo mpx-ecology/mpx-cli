@@ -1,4 +1,4 @@
-const prefix = 'vue-cli-plugin-mpx'
+const prefix = '@mpxjs/vue-cli-plugin-mpx'
 
 const plugins = {
   tsSupport: {

@@ -3,5 +3,5 @@
     "packages/vue-cli-*",
     "packages/mpx-cli-service"
   ],
-  "version": "1.1.2"
+  "version": "1.0.0"
 }

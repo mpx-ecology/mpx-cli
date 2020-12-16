@@ -1,5 +1,5 @@
 {
-  "name": "vue-cli-plugin-mpx-eslint",
+  "name": "@mpxjs/vue-cli-plugin-mpx-eslint",
   "version": "1.0.0",
   "description": "eslint plugin for mpx-cli",
   "main": "index.js",

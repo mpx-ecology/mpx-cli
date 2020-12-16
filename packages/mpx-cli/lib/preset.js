@@ -1,9 +1,9 @@
 module.exports = {
   cssPreprocessor: 'stylus',
   plugins: {
-    'mpx-cli-service': {},
-    'vue-cli-plugin-mpx': {},
-    'vue-cli-plugin-mpx-mp': {},
-    'vue-cli-plugin-mpx-eslint': {}
+    '@mpxjs/mpx-cli-service': {},
+    '@mpxjs/vue-cli-plugin-mpx': {},
+    '@mpxjs/vue-cli-plugin-mpx-mp': {},
+    '@mpxjs/vue-cli-plugin-mpx-eslint': {}
   }
 }

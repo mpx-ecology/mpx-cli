@@ -142,10 +142,10 @@ module.exports = {
 
 ### 其他官方插件
 
-* `vue-cli-plugin-mpx-unit-test`
+* `@mpxjs/vue-cli-plugin-mpx-unit-test`
 
 `mpx` 单元测试插件，具体参见[文档](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-unit-test)
 
-* `vue-cli-plugin-mpx-dll`
+* `@mpxjs/vue-cli-plugin-mpx-dll`
 
 `mpx dll` 插件，具体参见[文档](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-dll)

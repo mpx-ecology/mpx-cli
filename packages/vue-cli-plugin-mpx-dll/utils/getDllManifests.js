@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const resolveDllConf = require('./resolveDllConf')
-const { supportedModes } = require('vue-cli-plugin-mpx')
+const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 
 module.exports = function getDllManifests(api, mode) {
   const dllConf = resolveDllConf(api)

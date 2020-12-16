@@ -1,11 +1,11 @@
-# vue-cli-plugin-mpx-unit-test
+# @mpxjs/vue-cli-plugin-mpx-unit-test
 
 `mpx` 单元测试插件
 
 ## 安装
 
 ```javascript
-mpx add vue-cli-plugin-mpx-unit-test
+mpx add @mpxjs/vue-cli-plugin-mpx-unit-test
 ```
 
 ## 使用

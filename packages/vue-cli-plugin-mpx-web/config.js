@@ -3,7 +3,7 @@ const {
   transformMpxEntry,
   resolveMpxLoader,
   resolveMpxWebpackPluginConf
-} = require('vue-cli-plugin-mpx')
+} = require('@mpxjs/vue-cli-plugin-mpx')
 
 module.exports = function (api, options = {}) {
   api.chainWebpack((webpackConfig) => {

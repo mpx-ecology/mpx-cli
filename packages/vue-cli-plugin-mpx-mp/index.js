@@ -1,5 +1,5 @@
 const registerCommand = require('./commands/mp')
-const { resolveMpxLoader } = require('vue-cli-plugin-mpx')
+const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 
 module.exports = function (api, options) {
   api.chainWebpack(webpackConfig => {

@@ -1,7 +1,7 @@
 const rm = require('rimraf')
 const merge = require('webpack-merge')
 const webpack = require('webpack')
-const { transformMpxEntry, supportedModes } = require('vue-cli-plugin-mpx')
+const { transformMpxEntry, supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const applyMpWebpackConfig = require('../config')
 const applyMpPluginWebpackConfig = require('../pluginMode')
 const { chalk, logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
