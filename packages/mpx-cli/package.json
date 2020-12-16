@@ -8,7 +8,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache",
   "dependencies": {
     "@vue/cli": "^4.5.8",
     "execa": "^4.1.0",
