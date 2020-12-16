@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-mp",
-  "version": "1.1.2",
+  "version": "1.0.0-beta.1",
   "description": "mp mpx plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -15,13 +15,13 @@
     "webpack-merge": "^4.1.2"
   },
   "peerDependencies": {
-    "@mpxjs/webpack-plugin": "^2.6.22",
     "@mpxjs/vue-cli-plugin-mpx": "*",
+    "@mpxjs/webpack-plugin": "^2.6.22",
     "webpack": "^4.0.0"
   },
   "devDependencies": {
+    "@mpxjs/vue-cli-plugin-mpx": "^1.0.0-beta.1",
     "@mpxjs/webpack-plugin": "^2.6.22",
-    "@mpxjs/vue-cli-plugin-mpx": "*",
     "webpack": "^4.0.0"
   },
   "keywords": [],
