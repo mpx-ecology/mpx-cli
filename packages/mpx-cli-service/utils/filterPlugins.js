@@ -2,6 +2,8 @@ const { isPlugin, resolvePkg } = require('@vue/cli-shared-utils')
 
 const isMpxPlugin = pkg => /mpx-/.test(pkg)
 
+const PLATFORM_ALL = 'all'
+
 module.exports = function filterPluginsByPlatform(platform) {
   const pkg = resolvePkg(process.cwd())
   const mpxPlugins = Object.keys(pkg.devDependencies || {})
@@ -23,7 +25,7 @@ module.exports = function filterPluginsByPlatform(platform) {
       try {
         const { platform: _platform } = require(plugin)
 
-        if (_platform && _platform !== platform) {
+        if (_platform && _platform !== PLATFORM_ALL && _platform !== platform) {
           res.push(plugin)
         }
       } catch (e) {}
