@@ -1,4 +1,4 @@
-# 如何去开发一个 mpx 项目的 vue-cli-plugin
+# 如何开发一个 mpx 项目的 vue-cli-plugin
 
 对于 `mpx` 项目而言，例如要增加 `loader` 配置、`plugin` 插件等等，都可以在 `vue.config.js` 当中完成：
 
