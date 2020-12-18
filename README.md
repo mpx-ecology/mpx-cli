@@ -152,4 +152,4 @@ module.exports = {
 
 ## 如何一个 mpx 项目的 vue-cli-plugin
 
-具体请参阅文档
+具体请参阅[文档](https://github.com/mpx-ecology/mpx-cli/blob/master/PLUGIN_GUIDE.md)
