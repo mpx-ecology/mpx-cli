@@ -16,5 +16,9 @@
   },
   "engines": {
     "node": ">=8.9"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }
