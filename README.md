@@ -150,6 +150,6 @@ module.exports = {
 
 `mpx dll` 插件，具体参见[文档](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-dll)
 
-## 如何一个 mpx 项目的 vue-cli-plugin
+## 如何开发一个 mpx 项目的 vue-cli-plugin
 
 具体请参阅[文档](https://github.com/mpx-ecology/mpx-cli/blob/master/PLUGIN_GUIDE.md)
