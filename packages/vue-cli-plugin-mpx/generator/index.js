@@ -1,6 +1,7 @@
 module.exports = function(api, options) {
   require('./base')(api, options)
   require('./static')(api, options)
+  require('./babel')(api, options)
 
   // 删除 @vue/cli-service 默认生成的文件内容
   api.render(function(files) {
@@ -66,12 +67,6 @@ module.exports = function(api, options) {
       'vue-router': '^3.1.3',
       'vue-template-compiler': '^2.6.10',
       'style-loader': '^1.0.1',
-      '@babel/core': '^7.10.4',
-      '@babel/plugin-transform-runtime': '^7.10.4',
-      '@babel/preset-env': '^7.10.4',
-      '@babel/runtime': '^7.10.4', // https://babeljs.io/docs/en/babel-plugin-transform-runtime#corejs
-      'core-js': '^3.8.1',
-      'babel-loader': '^8.1.0',
       'css-loader': '^0.28.11',
       'file-loader': '^1.1.11',
       path: '^0.12.7',

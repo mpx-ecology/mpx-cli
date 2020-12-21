@@ -4,17 +4,17 @@
       "@babel/preset-env",
       {
         "modules": false,
-        "shippedProposals": true,
-        "useBuiltIns": "usage",
-        "corejs": {
-          "version": 3
-        }
+        "shippedProposals": true
       }
     ]
   ],
   "plugins": [
     [
-      "@babel/transform-runtime"
+      "@babel/transform-runtime",
+      {
+        "corejs": 3,
+        "version": "^7.10.4"
+      }
     ]
   ],
   "env": {
