@@ -35,11 +35,10 @@ module.exports = function (api, options = {}) {
         })
       )
 
-    // 对于 svg 交给 mpx-url-loader 处理，去掉 vue-cli 内置的 file-loader
+    // 对于 svg 交给 mpx-url-loader 处理，去掉 vue-cli 配置的 svg 规则
     webpackConfig.module
-    .rule('svg')
-    .uses
-    .delete('file-loader')
+    .rules
+    .delete('svg')
 
     webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
       {
