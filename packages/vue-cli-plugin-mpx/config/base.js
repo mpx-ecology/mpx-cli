@@ -31,6 +31,7 @@ module.exports = function (api, options, webpackConfig) {
     .test(/\.js$/)
     .include
       .add(filepath => transpileDepRegex && transpileDepRegex.test(filepath))
+      .add(filepath => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
       .add(api.resolve('src'))
       .add(api.resolve('node_modules/@mpxjs'))
       .add(api.resolve('test'))
