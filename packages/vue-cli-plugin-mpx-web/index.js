@@ -3,7 +3,9 @@ const registerBuildCommand = require('./commands/buildWeb')
 const applyWebConfig = require('./config')
 
 module.exports = function(api, options) {
-  options.outputDir = 'dist/web'
+  if (options.outputDir === 'dist') {
+    options.outputDir = 'dist/web'
+  }
 
   applyWebConfig(api, options)
 
