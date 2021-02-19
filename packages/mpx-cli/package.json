@@ -12,6 +12,7 @@
   "dependencies": {
     "@vue/cli": "^4.5.8",
     "execa": "^4.1.0",
+    "lodash.merge": "^4.6.2",
     "shelljs": "^0.8.4"
   },
   "engines": {
