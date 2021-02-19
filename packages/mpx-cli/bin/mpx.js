@@ -22,7 +22,7 @@ const args = process.argv.slice(2)
 const parsedArgs = minimist(args)
 
 async function resolvePreset(args = {}) {
-  const { p, preset, i, inlinePreset } = args
+  const { p, preset, i, inlinePreset, c, clone } = args
   let res = {}
   let cliPreset = {}
   if (p || preset) {
@@ -33,7 +33,7 @@ async function resolvePreset(args = {}) {
     } else if (cliPreset.includes('/')) {
       try {
         log(`Fetching remote preset ${chalk.cyan(cliPreset)}...`)
-        res = await loadRemotePreset(cliPreset, true) // TODO: clone 参数的获取
+        res = await loadRemotePreset(cliPreset, c || clone)
       } catch (e) {
         error(`Failed fetching remote preset ${chalk.cyan(cliPreset)}:`)
         throw e
