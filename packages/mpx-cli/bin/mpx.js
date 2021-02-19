@@ -103,7 +103,6 @@ async function hookForCreateCli() {
   const mergedPreset = merge(mpxBuiltInPreset, cliPreset)
 
   cmd.push('-i', JSON.stringify(mergedPreset))
-  console.log(cmd)
   doVueCli(cmd)
 }
 
