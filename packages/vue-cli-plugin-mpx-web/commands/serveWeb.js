@@ -1,7 +1,7 @@
 module.exports = function(api, options) {
   const { serve } = api.service.commands
 
-  api.registerCommand('serve:web', function (...args) {
-    serve.fn(...args)
+  api.registerCommand('serve:web', async function (...args) {
+    return serve.fn(...args)
   })
 }
