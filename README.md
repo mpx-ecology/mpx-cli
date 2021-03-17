@@ -59,15 +59,15 @@ module.exports = {
       // 传入 @mpxjs/webpack-plugin loader 当中的配置信息
       // 具体可参考文档：https://www.mpxjs.cn/api/compile.html#mpxwebpackplugin-loader
       loader: {},
-    },
-    // 提供图片资源处理简单操作
-    // 具体配置参考 https://mpxjs.cn/guide/advance/image-process.html#%E5%9B%BE%E5%83%8F%E8%B5%84%E6%BA%90%E5%BC%95%E5%85%A5%E6%9C%89%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F
-    urlLoader: {
-        name: 'img/[name][hash].[ext]',
-        publicPath: '',
-        publicPathScope: '',
-        limit: 10
+      // 提供图片资源处理简单操作
+      // 具体配置参考 https://mpxjs.cn/guide/advance/image-process.html#%E5%9B%BE%E5%83%8F%E8%B5%84%E6%BA%90%E5%BC%95%E5%85%A5%E6%9C%89%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F
+      urlLoader: {
+          name: 'img/[name][hash].[ext]',
+          publicPath: '',
+          publicPathScope: '',
+          limit: 10
       }
+    }
   }
 }
 ```
