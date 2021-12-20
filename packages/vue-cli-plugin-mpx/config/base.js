@@ -29,7 +29,7 @@ module.exports = function (api, options, webpackConfig) {
     .loader(mpxUrlLoader.loader)
     .options(mpxUrlLoader.options)
 
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
+  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
   webpackConfig.module
     .rule('js')
     .test(/\.js$/)

@@ -2,8 +2,12 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "publish": "lerna publish from-package"
+    "publish": "lerna publish from-package",
+    "test": "rm -rf test && node packages/mpx-cli/bin/mpx.js create test"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "lerna": "^3.22.1"
   },

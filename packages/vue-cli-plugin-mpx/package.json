@@ -8,17 +8,17 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^4.5.6",
-    "webpack-chain": "^6.4.0",
-    "webpack-merge": "^4.1.2"
+    "webpack-chain": "^6.5.1",
+    "webpack-merge": "^5.8.0"
   },
   "peerDependencies": {
-    "@mpxjs/webpack-plugin": "^2.6.22",
+    "@mpxjs/webpack-plugin": "^2.7.0-beta.14",
     "autoprefixer": "*",
-    "webpack": "^4.0.0"
+    "webpack": "^5.48.0"
   },
   "devDependencies": {
-    "@mpxjs/webpack-plugin": "^2.6.22",
-    "webpack": "^4.0.0"
+    "@mpxjs/webpack-plugin": "^2.7.0-beta.14",
+    "webpack": "^5.48.0"
   },
   "keywords": [],
   "author": "",

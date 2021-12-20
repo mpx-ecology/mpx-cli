@@ -8,21 +8,21 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^4.5.6",
-    "copy-webpack-plugin": "^5.0.3",
+    "copy-webpack-plugin": "^10.2.0",
     "rimraf": "^2.6.2",
-    "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-chain": "^6.4.0",
-    "webpack-merge": "^4.1.2"
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-chain": "^6.5.1",
+    "webpack-merge": "^5.8.0"
   },
   "peerDependencies": {
     "@mpxjs/vue-cli-plugin-mpx": "*",
-    "@mpxjs/webpack-plugin": "^2.6.22",
-    "webpack": "^4.0.0"
+    "@mpxjs/webpack-plugin": "^2.7.0-beta.14",
+    "webpack": "^5.48.0"
   },
   "devDependencies": {
     "@mpxjs/vue-cli-plugin-mpx": "^1.0.0-beta.4",
-    "@mpxjs/webpack-plugin": "^2.6.22",
-    "webpack": "^4.0.0"
+    "@mpxjs/webpack-plugin": "^2.7.0-beta.14",
+    "webpack": "^5.48.0"
   },
   "keywords": [],
   "author": "",

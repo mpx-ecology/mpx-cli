@@ -1,12 +1,8 @@
 module.exports = function (api, options = {}) {
   api.extendPackage({
-    scripts: {
-      lint: 'eslint --ext .js,.mpx src/'
-    },
     devDependencies: {
-      'eslint-loader': '^2.1.1',
-      'babel-eslint': '^10.0.1',
-      eslint: '^6.0.0',
+      'eslint-webpack-plugin': '^3.1.1',
+      eslint: '^7.0.0',
       'eslint-config-babel': '^8.0.2',
       'eslint-config-standard': '^12.0.0',
       'eslint-friendly-formatter': '^4.0.1',
@@ -18,9 +14,5 @@ module.exports = function (api, options = {}) {
       'eslint-plugin-promise': '^4.0.1',
       'eslint-plugin-standard': '^4.0.0'
     }
-  })
-
-  api.render('./template', {
-    needTs: !!options.needTs
   })
 }

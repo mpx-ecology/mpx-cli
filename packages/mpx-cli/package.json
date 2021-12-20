@@ -10,7 +10,7 @@
   "author": "",
   "license": "Apache",
   "dependencies": {
-    "@vue/cli": "^4.5.8",
+    "@vue/cli": "^5.0.0-rc.1",
     "execa": "^4.1.0",
     "lodash.merge": "^4.6.2",
     "shelljs": "^0.8.4"
