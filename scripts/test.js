@@ -40,12 +40,10 @@ async function removeDir(dir) {
 }
 
 async function invokeVueCliPlugin(pluginName, projectRoot) {
-  console.log(
-    await execa('vue', ['invoke', pluginName], {
-      stdio: 'inherit',
-      cwd: projectRoot
-    })
-  )
+  await execa('vue', ['invoke', pluginName], {
+    stdio: 'inherit',
+    cwd: projectRoot
+  })
 }
 
 async function install(plugin, projectRoot) {
