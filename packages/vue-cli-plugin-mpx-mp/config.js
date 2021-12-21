@@ -44,6 +44,7 @@ module.exports = function (
     }
   ])
 
+  // TODO: 路径问题
   webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
     {
       patterns: [

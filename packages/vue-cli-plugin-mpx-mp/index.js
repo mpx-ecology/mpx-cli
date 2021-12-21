@@ -28,6 +28,19 @@ module.exports = function (api, options) {
       .test(/\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
       .use('wxss')
       .loader('css-loader')
+
+    webpackConfig.module.rule('stylus').clear()
+
+    webpackConfig.module
+      .rule('stylus')
+      .test(/\.styl(us)?$/)
+      .use('css-loader')
+      .loader('css-loader')
+      .end()
+      .use('stylus-loader')
+      .loader('stylus-loader')
+
+    // TODO vue-cli stylus/scss/less 处理删掉
   })
 
   registerCommand(api, options, 'serve:mp')
