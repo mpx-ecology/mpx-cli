@@ -7,10 +7,10 @@ async function run(project) {
   const cwd = process.cwd()
   const resolvePackages = (p = '') => path.join(cwd, 'packages', p)
   const packages = glob.sync('*', { cwd: resolvePackages() })
-  // await removeDir(project)
-  // await execa('node', ['packages/mpx-cli/bin/mpx.js', 'create', project], {
-  //   stdio: 'inherit'
-  // })
+  await removeDir(project)
+  await execa('node', ['packages/mpx-cli/bin/mpx.js', 'create', project], {
+    stdio: 'inherit'
+  })
   const projectRoot = path.join(cwd, project)
   const resolveProject = (dir = '') => path.join(projectRoot, dir)
   const installedPackages = glob.sync('*', {
@@ -42,7 +42,6 @@ async function removeDir(dir) {
 
 async function invokeVueCliPlugin(pluginName, projectRoot) {
   await execa('vue', ['invoke', pluginName], {
-    stdio: 'inherit',
     cwd: projectRoot
   })
 }
