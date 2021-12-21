@@ -28,13 +28,6 @@ module.exports = function (api, options) {
       .test(/\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
       .use('wxss')
       .loader('css-loader')
-
-    webpackConfig.module
-      .rule('stylus')
-      .test(/\.styl(us)?$/)
-      .use('stylus')
-      .loader('css-loader')
-      .loader('stylus-loader')
   })
 
   registerCommand(api, options, 'serve:mp')
