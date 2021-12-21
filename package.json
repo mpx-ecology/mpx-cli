@@ -3,13 +3,16 @@
   "private": true,
   "scripts": {
     "publish": "lerna publish from-package",
-    "test": "rm -rf test && node packages/mpx-cli/bin/mpx.js create test"
+    "test": "node ./scripts/test.js"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "execa": "^5.0.0",
+    "glob": "^7.2.0",
+    "lerna": "^3.22.1",
+    "ora": "^5.0.1"
   },
   "prettier": {
     "semi": false,
