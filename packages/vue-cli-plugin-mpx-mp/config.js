@@ -64,18 +64,6 @@ module.exports = function (
     }
   ])
 
-  webpackConfig.module
-    .rule('wxml')
-    .test(/\.wxml$/)
-    .use('wxml')
-    .loader(MpxWebpackPlugin.wxmlLoader().loader)
-
-  webpackConfig.module
-    .rule('json')
-    .test(/\.json$/)
-    .resourceQuery(/asScript/)
-    .type('javascript/auto')
-
   if (args.report) {
     webpackConfig
       .plugin('bundle-analyzer-plugin')

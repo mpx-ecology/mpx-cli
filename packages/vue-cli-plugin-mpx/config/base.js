@@ -4,7 +4,7 @@ module.exports = function (api, options, webpackConfig) {
   webpackConfig.module
     .rule('json')
     .test(/\.json$/)
-    .resourceQuery(/__component/)
+    .resourceQuery(/__component|asScript/)
     .type('javascript/auto')
 
   webpackConfig.module
@@ -50,6 +50,15 @@ module.exports = function (api, options, webpackConfig) {
     .add('.js')
 
   webpackConfig.resolve.modules.add('node_modules')
+
+  webpackConfig.config.cache({
+    type: 'filesystem',
+    buildDependencies: {
+      build: [api.resolve('build/')],
+      config: [api.resolve('config/')]
+    },
+    cacheDirectory: api.resolve('.cache/')
+  })
 }
 
 function genTranspileDepRegex(transpileDependencies) {
