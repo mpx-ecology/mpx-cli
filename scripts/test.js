@@ -25,15 +25,15 @@ async function run(project) {
       const absolutePackage = resolvePackages(installedPackage)
       const packagePkg = require(path.join(absolutePackage, 'package.json'))
       const packageName = packagePkg.name
-      spinner.text = `install ${packageName}`
+      spinner.text = `Installing ${packageName}`
       await install(absolutePackage, projectRoot)
       if (installedPackage.startsWith('vue-cli-plugin')) {
-        spinner.text = `invoke ${packageName}`
+        spinner.text = `Invoking ${packageName}`
         await invokeVueCliPlugin(packageName, projectRoot)
       }
     }
   }
-  spinner.succeed('done')
+  spinner.succeed()
 }
 
 async function removeDir(dir) {
