@@ -60,7 +60,6 @@ module.exports = function (
     {
       mode,
       srcMode,
-      forceDisableBuiltInLoader: true,
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])
