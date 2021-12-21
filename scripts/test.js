@@ -33,6 +33,7 @@ async function run(project) {
       }
     }
   }
+  spinner.succeed('done')
 }
 
 async function removeDir(dir) {
