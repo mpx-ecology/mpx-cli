@@ -44,10 +44,11 @@ module.exports = function (api, options, webpackConfig) {
       .loader('babel-loader')
 
   webpackConfig.resolve.extensions
-    .add('.mpx')
     .add('.wxml')
     .add('.ts')
     .add('.js')
+
+  webpackConfig.resolve.extensions.prepend('.mpx')
 
   webpackConfig.resolve.modules.add('node_modules')
 
