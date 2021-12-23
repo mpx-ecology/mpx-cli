@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
+const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 
 module.exports = function (
   api,
@@ -65,6 +66,38 @@ module.exports = function (
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])
+
+  const mpxLoader = resolveMpxLoader(api, options)
+
+  webpackConfig.module
+    .rule('mpx')
+    .test(/\.mpx$/)
+    .use('mpx-loader')
+    .loader(mpxLoader.loader)
+    .options(mpxLoader.options)
+
+  webpackConfig.module
+    .rule('wxml')
+    .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
+    .use('wxml')
+    .loader('html-loader')
+
+  webpackConfig.module
+    .rule('wxss')
+    .test(/\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
+    .use('wxss')
+    .loader('css-loader')
+
+  webpackConfig.module.rule('stylus').oneOfs.delete('normal')
+
+  webpackConfig.module
+    .rule('stylus')
+    .test(/\.styl(us)?$/)
+    .use('css-loader')
+    .loader('css-loader')
+    .end()
+    .use('stylus-loader')
+    .loader('stylus-loader')
 
   if (args.report) {
     webpackConfig
