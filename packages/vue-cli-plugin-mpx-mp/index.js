@@ -29,7 +29,7 @@ module.exports = function (api, options) {
       .use('wxss')
       .loader('css-loader')
 
-    webpackConfig.module.rule('stylus').clear()
+    webpackConfig.module.rule('stylus').oneOfs.delete('normal')
 
     webpackConfig.module
       .rule('stylus')
@@ -39,8 +39,6 @@ module.exports = function (api, options) {
       .end()
       .use('stylus-loader')
       .loader('stylus-loader')
-
-    // TODO vue-cli stylus/scss/less 处理删掉
   })
 
   registerCommand(api, options, 'serve:mp')
