@@ -43,7 +43,6 @@ module.exports = function (api, options = {}) {
     webpackConfig.module
       .rule('stylus')
       .oneOf('normal')
-      .test(/\.styl(us)?$/)
       .use('vue-style-loader')
       .loader('vue-style-loader')
       .end()
@@ -59,7 +58,6 @@ module.exports = function (api, options = {}) {
     webpackConfig.module
       .rule('css')
       .oneOf('normal')
-      .test(/\.css$/)
       .use('vue-style-loader')
       .loader('vue-style-loader')
       .end()
