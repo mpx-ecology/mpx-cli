@@ -14,12 +14,12 @@ module.exports = function (api, options = {}) {
     webpackConfig.module
       .rule('mpx')
       .test(/\.mpx$/)
-        .use('vue-loader')
-          .loader('vue-loader')
-          .end()
-        .use('mpx-loader')
-          .loader(mpxLoader.loader)
-          .options(mpxLoader.options)
+      .use('vue-loader')
+      .loader('vue-loader')
+      .end()
+      .use('mpx-loader')
+      .loader(mpxLoader.loader)
+      .options(mpxLoader.options)
 
     // 直接更新 vue-cli-service 内部的 vue-loader options 配置
     webpackConfig.module
@@ -36,9 +36,34 @@ module.exports = function (api, options = {}) {
       )
 
     // 对于 svg 交给 mpx-url-loader 处理，去掉 vue-cli 配置的 svg 规则
+    webpackConfig.module.rules.delete('svg')
+
+    webpackConfig.module.rule('stylus').oneOfs.delete('normal')
+
     webpackConfig.module
-    .rules
-    .delete('svg')
+      .rule('stylus')
+      .test(/\.styl(us)?$/)
+      .use('vue-loader')
+      .loader('vue-loader')
+      .end()
+      .use('css-loader')
+      .loader('css-loader')
+      .end()
+      .use('stylus-loader')
+      .loader('stylus-loader')
+      .end()
+
+    webpackConfig.module.rule('css').oneOfs.delete('normal')
+
+    webpackConfig.module
+      .rule('css')
+      .test(/\.styl(us)?$/)
+      .use('vue-loader')
+      .loader('vue-loader')
+      .end()
+      .use('css-loader')
+      .loader('css-loader')
+      .end()
 
     webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
       {
