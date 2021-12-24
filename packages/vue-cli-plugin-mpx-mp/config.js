@@ -92,12 +92,48 @@ module.exports = function (
 
   webpackConfig.module
     .rule('stylus')
-    .test(/\.styl(us)?$/)
+    .oneOf('normal')
     .use('css-loader')
     .loader('css-loader')
     .end()
     .use('stylus-loader')
     .loader('stylus-loader')
+    .options({
+      'resolve url': true
+    })
+
+  webpackConfig.module.rule('less').oneOfs.delete('normal')
+
+  webpackConfig.module
+    .rule('less')
+    .oneOf('normal')
+    .use('css-loader')
+    .loader('css-loader')
+    .end()
+    .use('less-loader')
+    .loader('less-loader')
+
+  webpackConfig.module.rule('sass').oneOfs.delete('normal')
+
+  webpackConfig.module
+    .rule('sass')
+    .oneOf('normal')
+    .use('css-loader')
+    .loader('css-loader')
+    .end()
+    .use('sass-loader')
+    .loader('sass-loader')
+
+  webpackConfig.module.rule('scss').oneOfs.delete('normal')
+
+  webpackConfig.module
+    .rule('scss')
+    .oneOf('normal')
+    .use('css-loader')
+    .loader('css-loader')
+    .end()
+    .use('sass-loader')
+    .loader('sass-loader')
 
   if (args.report) {
     webpackConfig
