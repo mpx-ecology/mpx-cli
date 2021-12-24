@@ -65,6 +65,21 @@ module.exports = function (api, options = {}) {
       .loader('stylus-loader')
       .end()
 
+    webpackConfig.module.rule('less').oneOfs.delete('normal')
+
+    webpackConfig.module
+      .rule('less')
+      .oneOf('normal')
+      .use('vue-style-loader')
+      .loader('vue-style-loader')
+      .end()
+      .use('css-loader')
+      .loader('css-loader')
+      .end()
+      .use('less-loader')
+      .loader('stylus-loader')
+      .end()
+
     webpackConfig.module.rule('sass').oneOfs.delete('normal')
 
     webpackConfig.module
