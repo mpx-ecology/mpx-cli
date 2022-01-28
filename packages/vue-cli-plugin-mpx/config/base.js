@@ -58,10 +58,7 @@ module.exports = function (api, options, webpackConfig) {
   webpackConfig.resolve.modules.add('node_modules')
 
   webpackConfig.cache({
-    type: 'filesystem',
-    buildDependencies: {
-      config: [api.resolve('config/')]
-    },
+    type: 'filesystem'
   })
 }
 
