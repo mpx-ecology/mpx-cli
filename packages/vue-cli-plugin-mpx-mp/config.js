@@ -104,7 +104,7 @@ module.exports = function (
     .use('stylus-loader')
     .loader('stylus-loader')
     .options({
-      'resolve url': true
+      resolveURL: true
     })
 
   webpackConfig.module.rule('less').oneOfs.delete('normal')
