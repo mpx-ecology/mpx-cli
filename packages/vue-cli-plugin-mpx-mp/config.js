@@ -80,21 +80,21 @@ module.exports = function (
     .rule('wxml')
     .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
     .use('wxml')
-    .loader('html-loader')
+    .loader(MpxWebpackPlugin.wxmlLoader())
 
   webpackConfig.module
     .rule('wxss')
     .test(/\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
     .use('wxss')
-    .loader('css-loader')
+    .loader(MpxWebpackPlugin.wxssLoader())
 
   webpackConfig.module.rule('stylus').oneOfs.delete('normal')
 
   webpackConfig.module
     .rule('stylus')
     .oneOf('normal')
-    .use('css-loader')
-    .loader('css-loader')
+    .use('mpx-wxss-loader')
+    .loader(MpxWebpackPlugin.wxssLoader())
     .end()
     .use('stylus-loader')
     .loader('stylus-loader')
@@ -107,8 +107,8 @@ module.exports = function (
   webpackConfig.module
     .rule('less')
     .oneOf('normal')
-    .use('css-loader')
-    .loader('css-loader')
+    .use('mpx-wxss-loader')
+    .loader(MpxWebpackPlugin.wxssLoader())
     .end()
     .use('less-loader')
     .loader('less-loader')
@@ -118,8 +118,8 @@ module.exports = function (
   webpackConfig.module
     .rule('sass')
     .oneOf('normal')
-    .use('css-loader')
-    .loader('css-loader')
+    .use('mpx-wxss-loader')
+    .loader(MpxWebpackPlugin.wxssLoader())
     .end()
     .use('sass-loader')
     .loader('sass-loader')
@@ -129,8 +129,8 @@ module.exports = function (
   webpackConfig.module
     .rule('scss')
     .oneOf('normal')
-    .use('css-loader')
-    .loader('css-loader')
+    .use('mpx-wxss-loader')
+    .loader(MpxWebpackPlugin.wxssLoader())
     .end()
     .use('sass-loader')
     .loader('sass-loader')
