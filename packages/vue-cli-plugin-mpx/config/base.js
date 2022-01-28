@@ -59,9 +59,9 @@ module.exports = function (api, options, webpackConfig) {
 
   webpackConfig.cache({
     type: 'filesystem',
-    // TODO: 调整
-    buildDependencies: {},
-    cacheDirectory: api.resolve('.cache/')
+    buildDependencies: {
+      config: [api.resolve('config/')]
+    },
   })
 }
 
