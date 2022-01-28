@@ -4,7 +4,6 @@ const { webpack } = require('webpack')
 
 module.exports = function (api, options) {
   api.chainWebpack((webpackConfig) => {
-    webpackConfig.cache(true)
     webpackConfig.performance.hints(false)
   })
 
