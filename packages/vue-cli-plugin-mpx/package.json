@@ -12,12 +12,12 @@
     "webpack-merge": "^5.8.0"
   },
   "peerDependencies": {
-    "@mpxjs/webpack-plugin": "^2.7.0-beta.14",
+    "@mpxjs/webpack-plugin": "^2.7.0",
     "autoprefixer": "*",
     "webpack": "^5.48.0"
   },
   "devDependencies": {
-    "@mpxjs/webpack-plugin": "^2.7.0-beta.14",
+    "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
   },
   "keywords": [],
