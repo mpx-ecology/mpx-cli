@@ -34,24 +34,24 @@ module.exports = function (api, options, webpackConfig) {
     .loader(mpxUrlLoader.loader)
     .options(mpxUrlLoader.options)
 
-  const transpileDepRegex = genTranspileDepRegex(
-    options.transpileDependencies || []
-  )
+  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
   webpackConfig.module
     .rule('js')
     .test(/\.js$/)
-    .include.add(
-      (filepath) => transpileDepRegex && transpileDepRegex.test(filepath)
-    )
-    .add((filepath) => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
-    .add(api.resolve('src'))
-    .add(api.resolve('node_modules/@mpxjs'))
-    .add(api.resolve('test'))
-    .end()
+    .include
+      .add(filepath => transpileDepRegex && transpileDepRegex.test(filepath))
+      .add(filepath => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
+      .add(api.resolve('src'))
+      .add(api.resolve('node_modules/@mpxjs'))
+      .add(api.resolve('test'))
+        .end()
     .use('babel-loader')
-    .loader('babel-loader')
+      .loader('babel-loader')
 
-  webpackConfig.resolve.extensions.add('.wxml').add('.ts').add('.js')
+  webpackConfig.resolve.extensions
+    .add('.wxml')
+    .add('.ts')
+    .add('.js')
 
   webpackConfig.resolve.extensions.prepend('.mpx')
 
