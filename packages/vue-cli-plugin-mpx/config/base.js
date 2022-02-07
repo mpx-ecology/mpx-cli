@@ -58,7 +58,10 @@ module.exports = function (api, options, webpackConfig) {
   webpackConfig.resolve.modules.add('node_modules')
 
   webpackConfig.cache({
-    type: 'filesystem'
+    type: 'filesystem',
+    buildDependencies: {
+      config: [api.resolve('vue.config.js')]
+    }
   })
 }
 
