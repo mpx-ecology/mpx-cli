@@ -4,7 +4,7 @@ module.exports = function (api, options, webpackConfig) {
   webpackConfig.module
     .rule('json')
     .test(/\.json$/)
-    .resourceQuery(/__component|asScript/)
+    .resourceQuery(/asScript/)
     .type('javascript/auto')
 
   webpackConfig.module
