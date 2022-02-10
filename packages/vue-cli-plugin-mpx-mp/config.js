@@ -4,7 +4,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
-const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 
 module.exports = function (
   api,
@@ -45,7 +44,6 @@ module.exports = function (
     }
   ])
 
-  // TODO: 路径问题
   webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
     {
       patterns: [
@@ -65,84 +63,6 @@ module.exports = function (
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])
-
-  const mpxLoader = resolveMpxLoader(api, options)
-  const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
-  const wxssLoader = MpxWebpackPlugin.wxssLoader()
-
-  webpackConfig.module
-    .rule('mpx')
-    .test(/\.mpx$/)
-    .use('mpx-loader')
-    .loader(mpxLoader.loader)
-    .options(mpxLoader.options)
-
-  webpackConfig.module
-    .rule('wxml')
-    .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
-    .use('wxml')
-    .loader(wxmlLoader.loader)
-    .options(wxmlLoader.options)
-
-  webpackConfig.module
-    .rule('wxss')
-    .test(/\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
-    .use('wxss')
-    .loader(wxssLoader.loader)
-    .options(wxssLoader.options)
-
-  webpackConfig.module.rule('stylus').oneOfs.delete('normal')
-
-  webpackConfig.module
-    .rule('stylus')
-    .oneOf('normal')
-    .use('mpx-wxss-loader')
-    .loader(wxssLoader.loader)
-    .options(wxssLoader.options)
-    .end()
-    .use('stylus-loader')
-    .loader('stylus-loader')
-    .options({
-      stylusOptions:{
-        resolveUrl: true
-      }
-    })
-
-  webpackConfig.module.rule('less').oneOfs.delete('normal')
-
-  webpackConfig.module
-    .rule('less')
-    .oneOf('normal')
-    .use('mpx-wxss-loader')
-    .loader(wxssLoader.loader)
-    .options(wxssLoader.options)
-    .end()
-    .use('less-loader')
-    .loader('less-loader')
-
-  webpackConfig.module.rule('sass').oneOfs.delete('normal')
-
-  webpackConfig.module
-    .rule('sass')
-    .oneOf('normal')
-    .use('mpx-wxss-loader')
-    .loader(wxssLoader.loader)
-    .options(wxssLoader.options)
-    .end()
-    .use('sass-loader')
-    .loader('sass-loader')
-
-  webpackConfig.module.rule('scss').oneOfs.delete('normal')
-
-  webpackConfig.module
-    .rule('scss')
-    .oneOf('normal')
-    .use('mpx-wxss-loader')
-    .loader(wxssLoader.loader)
-    .options(wxssLoader.options)
-    .end()
-    .use('sass-loader')
-    .loader('sass-loader')
 
   if (args.report) {
     webpackConfig

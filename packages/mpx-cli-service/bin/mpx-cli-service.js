@@ -23,7 +23,8 @@ service.setPluginsToSkip = function(args) {
   if (process.env.MPX_CLI_MODE === 'mp') {
     plugins = plugins.concat([
       'built-in:config/base',
-      'built-in:config/app'
+      'built-in:config/app',
+      'built-in:config/css'
     ])
   }
 
