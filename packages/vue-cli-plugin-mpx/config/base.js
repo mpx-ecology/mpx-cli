@@ -18,7 +18,12 @@ module.exports = function (api, options, webpackConfig) {
   let imgLoaderConfig = {
     name: 'img/[name][hash].[ext]'
   }
-  if (options && options.pluginOptions && options.pluginOptions.mpx && options.pluginOptions.mpx.urlLoader) {
+  if (
+    options &&
+    options.pluginOptions &&
+    options.pluginOptions.mpx &&
+    options.pluginOptions.mpx.urlLoader
+  ) {
     imgLoaderConfig = options.pluginOptions.mpx.urlLoader
   }
   const mpxUrlLoader = MpxWebpackPlugin.urlLoader(imgLoaderConfig)
@@ -29,7 +34,7 @@ module.exports = function (api, options, webpackConfig) {
     .loader(mpxUrlLoader.loader)
     .options(mpxUrlLoader.options)
 
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
+  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
   webpackConfig.module
     .rule('js')
     .test(/\.js$/)
@@ -50,6 +55,13 @@ module.exports = function (api, options, webpackConfig) {
     .add('.js')
 
   webpackConfig.resolve.modules.add('node_modules')
+
+  webpackConfig.cache({
+    type: 'filesystem',
+    buildDependencies: {
+      config: [api.resolve('vue.config.js')]
+    }
+  })
 }
 
 function genTranspileDepRegex(transpileDependencies) {

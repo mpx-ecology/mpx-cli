@@ -24,7 +24,8 @@ module.exports = function (
         'static/wx/project.config.json'
       ))
       outputDist = path.join(outputDist, projectConfigJson.miniprogramRoot)
-      subDir = projectConfigJson.cloudfunctionRoot || projectConfigJson.pluginRoot
+      subDir =
+        projectConfigJson.cloudfunctionRoot || projectConfigJson.pluginRoot
     } catch (e) {}
   }
 
@@ -44,13 +45,15 @@ module.exports = function (
   ])
 
   webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
-    [
-      {
-        context: api.resolve(`static/${mode}`),
-        from: '**/*',
-        to: subDir ? '..' : ''
-      }
-    ]
+    {
+      patterns: [
+        {
+          context: api.resolve(`static/${mode}`),
+          from: '**/*',
+          to: subDir ? '..' : ''
+        }
+      ]
+    }
   ])
 
   webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
