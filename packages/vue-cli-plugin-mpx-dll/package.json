@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-dll",
-  "version": "1.0.0-beta.4",
+  "version": "1.1.0-beta.1",
   "description": "webpack dll for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "webpack": "^5.48.0"
   },
   "devDependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "^1.0.0-beta.4",
+    "@mpxjs/vue-cli-plugin-mpx": "^1.1.0-beta.1",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
   },
