@@ -60,11 +60,11 @@ module.exports = function(api, options) {
       'build:mp:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp'
     },
     dependencies: {
-      '@mpxjs/api-proxy': '^2.5.10',
-      '@mpxjs/core': '^2.6.22'
+      '@mpxjs/api-proxy': '^2.7.0',
+      '@mpxjs/core': '^2.7.0'
     },
     devDependencies: {
-      '@mpxjs/webpack-plugin': '^2.6.22',
+      "@mpxjs/webpack-plugin": "^2.7.0",
       'vue-router': '^3.1.3',
       'vue-template-compiler': '^2.6.10',
       'style-loader': '^1.0.1',
