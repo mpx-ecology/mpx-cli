@@ -1,6 +1,5 @@
 const registerCommand = require('./commands/mp')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
-const { webpack } = require('webpack')
 const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 
 module.exports = function (api, options) {
