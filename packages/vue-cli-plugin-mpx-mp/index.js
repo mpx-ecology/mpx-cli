@@ -43,11 +43,7 @@ module.exports = function (api, options) {
     }
 
     createCSSRule('wxss', /\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
-    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', {
-      stylusOptions: {
-        resolveURL: true
-      }
-    })
+    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader')
     createCSSRule('less', /\.less$/, 'less-loader')
     createCSSRule('sass', /\.sass$/, 'sass-loader')
     createCSSRule('scss', /\.scss$/)
