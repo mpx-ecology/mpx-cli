@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "copy-webpack-plugin": "^10.2.0",
+    "copy-webpack-plugin": "^9.1.0",
     "webpack-merge": "^5.8.0"
   },
   "peerDependencies": {
