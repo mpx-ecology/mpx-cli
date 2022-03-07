@@ -14,16 +14,18 @@ if (!semver.satisfies(process.version, requiredVersion, { includePrerelease: tru
 
 const Service = require('@vue/cli-service/lib/Service')
 const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
+const rawArgv = process.argv.slice(2)
 
 const setPluginsToSkip = service.setPluginsToSkip.bind(service)
 service.setPluginsToSkip = function(args) {
-  setPluginsToSkip(args)
+  setPluginsToSkip(args, rawArgv)
   let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
   // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉
   if (process.env.MPX_CLI_MODE === 'mp') {
     plugins = plugins.concat([
       'built-in:config/base',
-      'built-in:config/app'
+      'built-in:config/app',
+      'built-in:config/css'
     ])
   }
 
@@ -32,7 +34,6 @@ service.setPluginsToSkip = function(args) {
   })
 }
 
-const rawArgv = process.argv.slice(2)
 const args = require('minimist')(rawArgv, {
   boolean: [
     // build

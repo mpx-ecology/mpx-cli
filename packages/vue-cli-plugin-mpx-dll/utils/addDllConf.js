@@ -34,15 +34,15 @@ module.exports = function addDllConf(
       if (mode === 'mp') {
         webpackConfig
           .plugin('copy-webpack-plugin-for-dll')
-          .use(CopyWebpackPlugin, [
-            [
+          .use(CopyWebpackPlugin, [{
+            patterns: [
               {
                 context: path.join(dllConf.path, `${mode}/lib`),
                 from: manifest.content.name,
                 to: manifest.content.name
               }
             ]
-          ])
+          }])
       }
     })
 }
