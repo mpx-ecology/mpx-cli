@@ -5,6 +5,7 @@ module.exports = function (api, options = {}) {
     },
     devDependencies: {
       'eslint-webpack-plugin': '^3.1.1',
+      'babel-eslint': '^10.0.1',
       eslint: '^7.0.0',
       'eslint-config-babel': '^8.0.2',
       'eslint-config-standard': '^12.0.0',
