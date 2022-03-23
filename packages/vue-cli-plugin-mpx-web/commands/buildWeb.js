@@ -30,7 +30,7 @@ module.exports = function (api, options) {
   }
 
   api.registerCommand('build:web', async function (args, ...p) {
-    if (args.module === undefined) {
+    if (args.module || args.module === undefined) {
       await legacyBuild({ ...args }, ...p)
       await moduleBuild({ ...args }, ...p)
     } else {
