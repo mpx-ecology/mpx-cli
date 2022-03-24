@@ -10,6 +10,27 @@ module.exports = function (api, options) {
     const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
     const wxssLoader = MpxWebpackPlugin.wxssLoader()
 
+    let imgLoaderConfig = {
+      name: 'img/[name][hash].[ext]'
+    }
+    if (
+      options &&
+      options.pluginOptions &&
+      options.pluginOptions.mpx &&
+      options.pluginOptions.mpx.urlLoader
+    ) {
+      imgLoaderConfig = options.pluginOptions.mpx.urlLoader
+    }
+    const mpxUrlLoader = MpxWebpackPlugin.urlLoader(imgLoaderConfig)
+
+    webpackConfig.module.rules.delete('images')
+    webpackConfig.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif|svg)$/)
+      .use('mpx-url-loader')
+      .loader(mpxUrlLoader.loader)
+      .options(mpxUrlLoader.options)
+
     webpackConfig.module
       .rule('mpx')
       .test(/\.mpx$/)
