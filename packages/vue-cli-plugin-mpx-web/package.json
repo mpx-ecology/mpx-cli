@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-web",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "wx to web plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "@mpxjs/vue-cli-plugin-mpx": "*"
   },
   "devDependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "^1.2.0",
+    "@mpxjs/vue-cli-plugin-mpx": "^1.2.4",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
   },
