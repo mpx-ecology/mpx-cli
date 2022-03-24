@@ -14,26 +14,6 @@ module.exports = function (api, options, webpackConfig) {
     .use('mpx-wxs-pre-loader')
     .loader(MpxWebpackPlugin.wxsPreLoader().loader)
 
-  webpackConfig.module.rules.delete('images')
-  let imgLoaderConfig = {
-    name: 'img/[name][hash].[ext]'
-  }
-  if (
-    options &&
-    options.pluginOptions &&
-    options.pluginOptions.mpx &&
-    options.pluginOptions.mpx.urlLoader
-  ) {
-    imgLoaderConfig = options.pluginOptions.mpx.urlLoader
-  }
-  const mpxUrlLoader = MpxWebpackPlugin.urlLoader(imgLoaderConfig)
-  webpackConfig.module
-    .rule('images')
-    .test(/\.(png|jpe?g|gif|svg)$/)
-    .use('mpx-url-loader')
-    .loader(mpxUrlLoader.loader)
-    .options(mpxUrlLoader.options)
-
   const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
   webpackConfig.module
     .rule('js')
