@@ -3,7 +3,7 @@
 const path = require('path')
 const execa = require('execa')
 const minimist = require('minimist')
-const vueCliBinPath = path.resolve(__dirname, '../node_modules/.bin/vue')
+const vueCliBinPath = require.resolve('@vue/cli/bin/vue')
 const builtInPreset = require('../lib/preset')
 const inquirer = require('inquirer')
 const prompts = require('../lib/prompts')
