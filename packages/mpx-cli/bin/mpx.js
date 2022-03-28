@@ -21,7 +21,7 @@ const merge = require('lodash.merge')
 const args = process.argv.slice(2)
 const parsedArgs = minimist(args)
 
-async function resolvePreset(args = {}) {
+async function resolvePreset (args = {}) {
   const { p, preset, i, inlinePreset, c, clone } = args
   let res = {}
   let cliPreset = {}
@@ -45,15 +45,15 @@ async function resolvePreset(args = {}) {
     try {
       res = JSON.parse(cliPreset)
     } catch (e) {
-      error(`CLI inline preset is not valid JSON: ${cliPreset}`);
+      error(`CLI inline preset is not valid JSON: ${cliPreset}`)
       exit(1)
     }
   }
   return res
 }
 
-async function resolvePrompts(name, builtInPreset) {
-  return new Promise(function(resolve) {
+async function resolvePrompts (name, builtInPreset) {
+  return new Promise(function (resolve) {
     inquirer.prompt(prompts).then(answers => {
       if (answers.needTs) {
         Object.assign(builtInPreset.plugins, plugins.tsSupport)
@@ -70,9 +70,9 @@ async function resolvePrompts(name, builtInPreset) {
       // TODO: 添加其他 prompt 插件配置
 
       // 各插件共享 answers 配置
-      Object.keys(builtInPreset.plugins).forEach(function(key) {
-        let plugin = builtInPreset.plugins[key]
-        plugin = Object.assign(plugin, {
+      Object.keys(builtInPreset.plugins).forEach(function (key) {
+        const plugin = builtInPreset.plugins[key]
+        Object.assign(plugin, {
           ...answers,
           name
         })
@@ -83,10 +83,10 @@ async function resolvePrompts(name, builtInPreset) {
   })
 }
 
-function regenCmd() {
+function regenCmd () {
   const cmd = [...parsedArgs._, '--skipGetStarted']
   const ignoreKey = ['_', 'p', 'preset', 'i', 'inlinePreset']
-  Object.keys(parsedArgs).map((key = '') => {
+  Object.keys(parsedArgs).forEach((key = '') => {
     if (key && !ignoreKey.includes(key)) {
       cmd.push(key.length > 1 ? `--${key}` : `-${key}`)
       cmd.push(parsedArgs[key])
@@ -95,9 +95,9 @@ function regenCmd() {
   return cmd
 }
 
-async function hookForCreateCli() {
+async function hookForCreateCli () {
   const name = args[1]
-  let cmd = regenCmd()
+  const cmd = regenCmd()
   const mpxBuiltInPreset = await resolvePrompts(name, builtInPreset)
   const cliPreset = await resolvePreset(parsedArgs)
   const mergedPreset = merge(mpxBuiltInPreset, cliPreset)
@@ -113,7 +113,7 @@ if (args[0] === 'create') {
   doVueCli(args)
 }
 
-function doVueCli(args) {
+function doVueCli (args) {
   execa(
     'node',
     [

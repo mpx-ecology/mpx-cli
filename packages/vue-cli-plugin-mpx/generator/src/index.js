@@ -1,3 +1,3 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.render('./template')
 }

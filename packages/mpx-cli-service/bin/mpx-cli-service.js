@@ -17,7 +17,7 @@ const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
 const rawArgv = process.argv.slice(2)
 
 const setPluginsToSkip = service.setPluginsToSkip.bind(service)
-service.setPluginsToSkip = function(args) {
+service.setPluginsToSkip = function (args) {
   setPluginsToSkip(args, rawArgv)
   let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
   // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉

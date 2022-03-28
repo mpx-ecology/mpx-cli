@@ -45,7 +45,7 @@ module.exports = function (api, options) {
       .loader(wxmlLoader.loader)
       .options(wxmlLoader.options)
 
-    function createCSSRule(rule, test, loader, loaderOptions) {
+    function createCSSRule (rule, test, loader, loaderOptions) {
       let chain = webpackConfig.module
         .rule(rule)
         .test(test)

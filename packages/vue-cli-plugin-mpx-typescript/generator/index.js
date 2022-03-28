@@ -1,4 +1,4 @@
-module.exports = function(api, options) {
+module.exports = function (api, options) {
   api.extendPackage({
     devDependencies: {
       'ts-loader': '^9.0.0',

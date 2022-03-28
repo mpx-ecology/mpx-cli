@@ -1,4 +1,4 @@
-module.exports = function(api, options) {
+module.exports = function (api, options) {
   options = Object.assign({
     appid: 'touristappid'
   }, options)

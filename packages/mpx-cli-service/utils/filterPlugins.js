@@ -4,7 +4,7 @@ const isMpxPlugin = pkg => /mpx-/.test(pkg)
 
 const PLATFORM_ALL = 'all'
 
-module.exports = function filterPluginsByPlatform(platform) {
+module.exports = function filterPluginsByPlatform (platform) {
   const pkg = resolvePkg(process.cwd())
   const mpxPlugins = Object.keys(pkg.devDependencies || {})
     .concat(Object.keys(pkg.dependencies || {}))
@@ -13,7 +13,7 @@ module.exports = function filterPluginsByPlatform(platform) {
 
   return tryLoadMpxPlugin(mpxPlugins)
 
-  function tryLoadMpxPlugin(name) {
+  function tryLoadMpxPlugin (name) {
     const res = []
     let arr = []
     if (typeof name === 'string') {
@@ -21,7 +21,7 @@ module.exports = function filterPluginsByPlatform(platform) {
     } else if (Array.isArray(name)) {
       arr = name
     }
-    arr.map(plugin => {
+    arr.forEach(plugin => {
       try {
         const { platform: _platform } = require(plugin)
 
