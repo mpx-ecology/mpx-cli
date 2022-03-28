@@ -9,7 +9,7 @@ const applyMpWebpackConfig = require('../config')
 const applyMpPluginWebpackConfig = require('../pluginMode')
 const { chalk, logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 
-module.exports = function registerMpCommand(api, options, command) {
+module.exports = function registerMpCommand (api, options, command) {
   api.registerCommand(
     command,
     {
@@ -36,9 +36,9 @@ module.exports = function registerMpCommand(api, options, command) {
 
       logWithSpinner('⚓', 'Building...')
 
-      let webpackConfigs = []
+      const webpackConfigs = []
       // 小程序业务代码构建配置
-      modes.map((mode) => {
+      modes.forEach((mode) => {
         clearDist(api.resolve(`dist/${mode}/*`))
 
         let baseWebpackConfig = api.resolveChainableWebpackConfig()
@@ -79,7 +79,7 @@ module.exports = function registerMpCommand(api, options, command) {
   )
 }
 
-function clearDist(distPath) {
+function clearDist (distPath) {
   try {
     rm.sync(distPath)
   } catch (e) {
@@ -90,7 +90,7 @@ function clearDist(distPath) {
   }
 }
 
-function resolveWebpackCompileCallback(isWatchMode) {
+function resolveWebpackCompileCallback (isWatchMode) {
   return function (err, stats) {
     stopSpinner()
     if (err) return console.error(err)

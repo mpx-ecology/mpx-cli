@@ -1,7 +1,7 @@
 const Config = require('webpack-chain')
 const merge = require('webpack-merge')
 
-module.exports = function resolveVueConfigWebpackConfig(api, options) {
+module.exports = function resolveVueConfigWebpackConfig (api, options) {
   let config = new Config()
   let vueConfWebpackChainFn
   let vueConfWebpackConfigureFn

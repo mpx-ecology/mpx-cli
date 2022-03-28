@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
-module.exports = function addDllConf(
+module.exports = function addDllConf (
   api,
   options,
   webpackConfig,
@@ -20,7 +20,7 @@ module.exports = function addDllConf(
     .filter((manifest) => {
       return manifest.mode === mode || !manifest.mode
     })
-    .map((manifest) => {
+    .forEach((manifest) => {
       webpackConfig
         .plugin('dll-reference-plugin')
         .use(webpack.DllReferencePlugin, [

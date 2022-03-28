@@ -1,10 +1,10 @@
 const path = require('path')
 
-function resolveSrc(file) {
+function resolveSrc (file) {
   return path.resolve(__dirname, '../src', file || '')
 }
 
-function resolve(file) {
+function resolve (file) {
   return path.resolve(__dirname, '..', file || '')
 }
 

@@ -1,7 +1,7 @@
 module.exports = function (api, options) {
   const { build } = api.service.commands
 
-  async function legacyBuild(args, ...p) {
+  async function legacyBuild (args, ...p) {
     process.env.VUE_CLI_MODERN_BUILD = false
     process.env.VUE_CLI_MODERN_MODE = true
     await build.fn(
@@ -15,7 +15,7 @@ module.exports = function (api, options) {
     )
   }
 
-  async function moduleBuild(args, ...p) {
+  async function moduleBuild (args, ...p) {
     process.env.VUE_CLI_MODERN_BUILD = true
     process.env.VUE_CLI_MODERN_MODE = true
     await build.fn(

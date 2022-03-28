@@ -1,11 +1,11 @@
-module.exports = function(api, options) {
+module.exports = function (api, options) {
   require('./base')(api, options)
   require('./static')(api, options)
   require('./babel')(api, options)
   require('./readme')(api, options)
 
   // 删除 @vue/cli-service 默认生成的文件内容
-  api.render(function(files) {
+  api.render(function (files) {
     Object.keys(files).forEach(key => {
       if (key.includes('src')) {
         delete files[key]
@@ -47,7 +47,7 @@ module.exports = function(api, options) {
         mpx: {
           srcMode: options.srcMode,
           plugin: {},
-          loader: {},
+          loader: {}
         }
       }
     }
@@ -64,7 +64,7 @@ module.exports = function(api, options) {
       '@mpxjs/core': '^2.7.0'
     },
     devDependencies: {
-      "@mpxjs/webpack-plugin": "^2.7.0",
+      '@mpxjs/webpack-plugin': '^2.7.0',
       'vue-router': '^3.1.3',
       'vue-template-compiler': '^2.6.10',
       'style-loader': '^1.0.1',

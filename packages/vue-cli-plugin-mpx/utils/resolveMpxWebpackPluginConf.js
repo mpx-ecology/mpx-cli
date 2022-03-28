@@ -1,4 +1,4 @@
-module.exports = function(api, options = {}) {
+module.exports = function (api, options = {}) {
   const mpxPluginConf =
     (options.pluginOptions &&
     options.pluginOptions.mpx &&

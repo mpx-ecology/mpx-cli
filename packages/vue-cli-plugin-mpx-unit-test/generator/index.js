@@ -1,4 +1,4 @@
-module.exports = function(api) {
+module.exports = function (api) {
   // TODO: build 命令的执行
   api.extendPackage({
     scripts: {

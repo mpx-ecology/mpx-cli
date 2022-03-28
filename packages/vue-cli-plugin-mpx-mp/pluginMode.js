@@ -1,13 +1,13 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 
-module.exports = function(api, options, webpackConfig) {
+module.exports = function (api, options, webpackConfig) {
   let pluginRoot = ''
   try {
     const projectConfigJson = require(api.resolve(
       'static/wx/project.config.json'
     ))
     pluginRoot = projectConfigJson.pluginRoot
-  } catch(e) {}
+  } catch (e) {}
 
   webpackConfig.entry = {
     plugin: api.resolve(`src/${pluginRoot}/plugin.json`)

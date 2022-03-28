@@ -1,4 +1,4 @@
-module.exports = function(api, options) {
+module.exports = function (api, options) {
   api.extendPackage({
     scripts: {
       'build:dll:mp': 'mpx-cli-service build:dll --mp',

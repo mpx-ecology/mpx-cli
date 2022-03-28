@@ -32,7 +32,7 @@ module.exports = function (api, options) {
       normalizeArr(dllConf.groups).forEach((item) => {
         const entries = getDllEntries(item.cacheGroups, item.modes)
         if (Object.keys(entries).length) {
-          let baseConf = {
+          const baseConf = {
             entry: entries,
             output: {
               path: basePath,
@@ -41,7 +41,7 @@ module.exports = function (api, options) {
             mode: 'production',
             plugins: []
           }
-          let dllPlugin = {
+          const dllPlugin = {
             path: path.join(basePath, manifestName),
             format: item.format || true,
             entryOnly: item.entryOnly || true,

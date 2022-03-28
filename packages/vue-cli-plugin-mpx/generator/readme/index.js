@@ -1,4 +1,4 @@
-module.exports = function(api, options) {
+module.exports = function (api, options) {
   api.render('./template', {
     ...options,
     pkgName: (api.generator.pkg && api.generator.pkg.name) || 'mpx-project',

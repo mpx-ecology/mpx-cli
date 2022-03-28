@@ -1,4 +1,4 @@
-module.exports = function(api, options) {
+module.exports = function (api, options) {
   api.render('./template', options)
   api.extendPackage({
     scripts: {
