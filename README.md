@@ -9,17 +9,16 @@
   - [mpx-cli 插件](#mpx-cli-插件)
 - [基础](#基础)
   - [创建项目](#创建项目)
-  - [CLI 服务](#cli-服务)
+  - [CLI服务](#CLI服务)
     - [使用命令](#使用命令)
     - [构建多目标](#构建多目标)
 - [开发](#开发)
   - [css相关](#css相关)
     - [css预编译](#css预编译)
     - [postcss](#postcss)
-  - [wxml相关](#wxml相关)
-    - [wxml预编译](#wxml预编译)
+  - [template相关](#template相关)
   - [webpack相关](#webpack相关)
-    - [mpx编译构建配置](#mpx编译构建配置)
+    - [mpx 编译构建配置](#mpx编译构建配置)
     - [根据不同的构建目标配置](#根据不同的构建目标配置)
   - [配置](#配置)
   - [开发插件](#开发插件)
@@ -58,7 +57,7 @@ npm i @mpxjs/cli@next -g
 
 - mpx-cli create project-name
 
-### CLI 服务
+### CLI服务
 
 #### 使用命令
 
@@ -99,7 +98,7 @@ npm install -D less-loader less
 
 创建`postcss.config.js`即可
 
-也可以使用 mpx 配置[postcssInlineConfig](https://www.mpxjs.cn/api/compile.html#postcssinlineconfig)的方式.
+也可以使用`mpx`配置[postcssInlineConfig](https://www.mpxjs.cn/api/compile.html#postcssinlineconfig)的方式.
 
 ```js
 // postcss.config.js
@@ -113,12 +112,28 @@ module.exports = {
 }
 ```
 
-### wxml相关
+### template相关
 
-#### wxml预编译
+可以使用任何模板语言来编译template，只需要在template上添加lang属性
 
-pug 模板语言等
+```html
+<template lang="pug"></template>
+```
 
+然后在`vue.config.js`配置该语言的`loader`
+
+```js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module.rule('pug')
+      .test(/\.pug$/)
+      .use('pug-html-loader')
+      .loader('pug-html-loader')
+      .end()
+  }
+}
+```
 ### webpack相关
 
 #### mpx编译构建配置
