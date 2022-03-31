@@ -1,14 +1,21 @@
-const registerCommand = require('./commands/mp')
+const webpack = require('webpack')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const minimist = require('minimist')
+const registerCommand = require('./commands/mp')
 
 module.exports = function (api, options) {
+  const args = minimist(process.argv.slice(2))
+
   api.chainWebpack((webpackConfig) => {
     webpackConfig.performance.hints(false)
 
     const mpxLoader = resolveMpxLoader(api, options)
     const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
     const wxssLoader = MpxWebpackPlugin.wxssLoader()
+    const isWatching = !!args.watch
+    const isCompileProd = !!args.production
 
     let imgLoaderConfig = {
       name: 'img/[name][hash].[ext]'
@@ -41,7 +48,7 @@ module.exports = function (api, options) {
     webpackConfig.module
       .rule('wxml')
       .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
-      .use('wxml')
+      .use('mpx-wxml-loader')
       .loader(wxmlLoader.loader)
       .options(wxmlLoader.options)
 
@@ -68,6 +75,25 @@ module.exports = function (api, options) {
     createCSSRule('less', /\.less$/, 'less-loader')
     createCSSRule('sass', /\.sass$/, 'sass-loader')
     createCSSRule('scss', /\.scss$/)
+
+    webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
+
+    webpackConfig.devtool(isWatching ? 'source-map' : false)
+    webpackConfig.mode(isCompileProd ? 'production' : 'none')
+
+    webpackConfig.plugin('define-plugin').use(webpack.DefinePlugin, [
+      {
+        'process.env': {
+          NODE_ENV: isWatching ? '"development"' : '"production"'
+        }
+      }
+    ])
+
+    if (args.report) {
+      webpackConfig
+        .plugin('bundle-analyzer-plugin')
+        .use(BundleAnalyzerPlugin, [{}])
+    }
   })
 
   registerCommand(api, options, 'serve:mp')

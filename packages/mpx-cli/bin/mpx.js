@@ -1,127 +1,93 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodeF
+const program = require('commander')
+const { doVueCli } = require('../utils')
 
-const path = require('path')
-const execa = require('execa')
-const minimist = require('minimist')
-const vueCliBinPath = require.resolve('@vue/cli/bin/vue')
-const builtInPreset = require('../lib/preset')
-const inquirer = require('inquirer')
-const prompts = require('../lib/prompts')
-const plugins = require('../lib/plugins')
-const loadRemotePreset = require('@vue/cli/lib/util/loadRemotePreset')
-const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
-const {
-  chalk,
-  exit,
-  error,
-  log
-} = require('@vue/cli-shared-utils')
-const merge = require('lodash.merge')
+program
+  .version(`@mpx/cli ${require('../package').version}`)
+  .usage('<command> [options]')
 
-const args = process.argv.slice(2)
-const parsedArgs = minimist(args)
-
-async function resolvePreset (args = {}) {
-  const { p, preset, i, inlinePreset, c, clone } = args
-  let res = {}
-  let cliPreset = {}
-  if (p || preset) {
-    // mpx create foo --preset bar
-    cliPreset = p || preset
-    if (cliPreset.endsWith('.json') || /^\./.test(cliPreset) || path.isAbsolute(cliPreset)) {
-      res = await loadLocalPreset(path.resolve(cliPreset))
-    } else if (cliPreset.includes('/')) {
-      try {
-        log(`Fetching remote preset ${chalk.cyan(cliPreset)}...`)
-        res = await loadRemotePreset(cliPreset, c || clone)
-      } catch (e) {
-        error(`Failed fetching remote preset ${chalk.cyan(cliPreset)}:`)
-        throw e
-      }
-    }
-  } else if (i || inlinePreset) {
-    // mpx create foo --inlinePreset {...}
-    cliPreset = i || inlinePreset
-    try {
-      res = JSON.parse(cliPreset)
-    } catch (e) {
-      error(`CLI inline preset is not valid JSON: ${cliPreset}`)
-      exit(1)
-    }
-  }
-  return res
-}
-
-async function resolvePrompts (name, builtInPreset) {
-  return new Promise(function (resolve) {
-    inquirer.prompt(prompts).then(answers => {
-      if (answers.needTs) {
-        Object.assign(builtInPreset.plugins, plugins.tsSupport)
-      }
-      if (answers.cloudFunc) {
-        Object.assign(builtInPreset.plugins, plugins.cloudFunc)
-      }
-      if (answers.isPlugin) {
-        Object.assign(builtInPreset.plugins, plugins.isPlugin)
-      }
-      if (answers.transWeb) {
-        Object.assign(builtInPreset.plugins, plugins.transWeb)
-      }
-      // TODO: 添加其他 prompt 插件配置
-
-      // 各插件共享 answers 配置
-      Object.keys(builtInPreset.plugins).forEach(function (key) {
-        const plugin = builtInPreset.plugins[key]
-        Object.assign(plugin, {
-          ...answers,
-          name
-        })
-      })
-
-      resolve(builtInPreset)
-    })
-  })
-}
-
-function regenCmd () {
-  const cmd = [...parsedArgs._, '--skipGetStarted']
-  const ignoreKey = ['_', 'p', 'preset', 'i', 'inlinePreset']
-  Object.keys(parsedArgs).forEach((key = '') => {
-    if (key && !ignoreKey.includes(key)) {
-      cmd.push(key.length > 1 ? `--${key}` : `-${key}`)
-      cmd.push(parsedArgs[key])
-    }
-  })
-  return cmd
-}
-
-async function hookForCreateCli () {
-  const name = args[1]
-  const cmd = regenCmd()
-  const mpxBuiltInPreset = await resolvePrompts(name, builtInPreset)
-  const cliPreset = await resolvePreset(parsedArgs)
-  const mergedPreset = merge(mpxBuiltInPreset, cliPreset)
-
-  cmd.push('-i', JSON.stringify(mergedPreset))
-  doVueCli(cmd)
-}
-
-// hook for create cli
-if (args[0] === 'create') {
-  hookForCreateCli()
-} else {
-  doVueCli(args)
-}
-
-function doVueCli (args) {
-  execa(
-    'node',
-    [
-      vueCliBinPath,
-      ...args
-    ],
-    {
-      stdio: 'inherit'
-    }
+program.command('create <app-name>')
+  .description('create a new project powered by mpx-cli-service')
+  .option(
+    '-p, --preset <presetName>',
+    'Skip prompts and use saved or remote preset'
   )
-}
+  .option('-d, --default', 'Skip prompts and use default preset')
+  .option(
+    '-i, --inlinePreset <json>',
+    'Skip prompts and use inline JSON string as preset'
+  )
+  .option(
+    '-m, --packageManager <command>',
+    'Use specified npm client when installing dependencies'
+  )
+  .option(
+    '-r, --registry <url>',
+    'Use specified npm registry when installing dependencies (only for npm)'
+  )
+  .option(
+    '-g, --git [message]',
+    'Force git initialization with initial commit message'
+  )
+  .option('-n, --no-git', 'Skip git initialization')
+  .option('-f, --force', 'Overwrite target directory if it exists')
+  .option('--merge', 'Merge target directory if it exists')
+  .option('-c, --clone', 'Use git clone when fetching remote preset')
+  .option('-x, --proxy <proxyUrl>', 'Use specified proxy when creating project')
+  .option('-b, --bare', 'Scaffold project without beginner instructions')
+  .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
+  .action(async () => {
+    require('../lib/create')()
+  })
+
+program
+  .command('add <plugin> [pluginOptions]')
+  .description('install a plugin and invoke its generator in an already created project')
+  .option('--registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
+  .allowUnknownOption()
+  .action((plugin) => {
+    doVueCli(process.argv.slice(2))
+  })
+
+program
+  .command('invoke <plugin> [pluginOptions]')
+  .description('invoke the generator of a plugin in an already created project')
+  .option('--registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
+  .allowUnknownOption()
+  .action(() => {
+    doVueCli(process.argv.slice(2))
+  })
+
+program
+  .command('inspect [paths...]')
+  .description('inspect the webpack config in a project with mpx-cli-service')
+  .option('--mode <mode>')
+  .option('--rule <ruleName>', 'inspect a specific module rule')
+  .option('--plugin <pluginName>', 'inspect a specific plugin')
+  .option('--rules', 'list all module rule names')
+  .option('--plugins', 'list all plugin names')
+  .option('-v --verbose', 'Show full function definitions in output')
+  .action((paths, options) => {
+    require('../lib/inspect')()
+  })
+
+program
+  .command('config [value]')
+  .description('inspect and modify the config')
+  .option('-g, --get <path>', 'get value from option')
+  .option('-s, --set <path> <value>', 'set option value')
+  .option('-d, --delete <path>', 'delete option from config')
+  .option('-e, --edit', 'open config with default editor')
+  .option('--json', 'outputs JSON result only')
+  .action((value, options) => {
+    doVueCli(process.argv.slice(2))
+  })
+
+program
+  .command('info')
+  .description('print debugging information about your environment')
+  .action((cmd) => {
+    require('../lib/info')()
+  })
+
+program.parse(process.argv)
