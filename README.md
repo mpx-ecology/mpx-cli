@@ -3,34 +3,27 @@
 基于 [`@vue/cli`](https://cli.vuejs.org/) 开发的 mpx 脚手架。
 
 - [@mpxjs/cli@next](#mpxjsclinext)
-  - [安装](#安装)
-  - [使用](#使用)
-  - [介绍](#介绍)
+  - [安装](#%E5%AE%89%E8%A3%85)
+  - [使用](#%E4%BD%BF%E7%94%A8)
+  - [介绍](#%E4%BB%8B%E7%BB%8D)
     - [mpx-cli](#mpx-cli)
     - [mpx-cli-service](#mpx-cli-service)
-    - [mpx-cli 插件](#mpx-cli-插件)
-  - [基础](#基础)
-    - [CLI 服务](#cli-服务)
-      - [使用命令](#使用命令)
+    - [mpx-cli 插件](#mpx-cli-%E6%8F%92%E4%BB%B6)
+  - [基础](#%E5%9F%BA%E7%A1%80)
+    - [CLI 服务](#cli-%E6%9C%8D%E5%8A%A1)
+      - [使用命令](#%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4)
       - [build:mp/serve:mp](#buildmpservemp)
-- [构建小程序，默认微信](#构建小程序默认微信)
-- [构建小程序，默认微信](#构建小程序默认微信)
       - [build:web/serve:web](#buildwebserveweb)
-- [构建web](#构建web)
-- [构建web](#构建web)
-  - [开发](#开发)
-    - [css 相关](#css-相关)
-      - [css 预编译](#css-预编译)
-- [Sass](#sass)
-- [Sass](#sass)
-- [Less](#less)
+  - [开发](#%E5%BC%80%E5%8F%91)
+    - [css 相关](#css-%E7%9B%B8%E5%85%B3)
+      - [css 预编译](#css-%E9%A2%84%E7%BC%96%E8%AF%91)
       - [postcss](#postcss)
-    - [template 相关](#template-相关)
-    - [webpack 相关](#webpack-相关)
-      - [mpx 编译构建配置](#mpx-编译构建配置)
-      - [根据不同的构建目标配置](#根据不同的构建目标配置)
-    - [配置](#配置)
-    - [开发插件](#开发插件)
+    - [template 相关](#template-%E7%9B%B8%E5%85%B3)
+    - [webpack 相关](#webpack-%E7%9B%B8%E5%85%B3)
+      - [mpx 编译构建配置](#mpx-%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE)
+      - [根据不同的构建目标配置](#%E6%A0%B9%E6%8D%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E6%9E%84%E5%BB%BA%E7%9B%AE%E6%A0%87%E9%85%8D%E7%BD%AE)
+    - [配置](#%E9%85%8D%E7%BD%AE)
+    - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
 
 ## 安装
 
@@ -101,8 +94,7 @@ npm run build:mp
 MPX_CLI_MODE=mp npx mpx-cli-service build:mp
 ```
 
-
-> 请注意必须添加MPX_CLI_MODE，它标识了构建方式，mp 代表构建小程序，web 代表构建 web
+> 请注意必须添加 MPX_CLI_MODE，它标识了构建方式，mp 代表构建小程序，web 代表构建 web
 
 #### build:mp/serve:mp
 
