@@ -2,26 +2,35 @@
 
 基于 [`@vue/cli`](https://cli.vuejs.org/) 开发的 mpx 脚手架。
 
-- [安装](#安装)
-- [介绍](#介绍)
-  - [mpx-cli](#mpx-cli)
-  - [mpx-cli-service](#mpx-cli-service)
-  - [mpx-cli 插件](#mpx-cli-插件)
-- [基础](#基础)
-  - [创建项目](#创建项目)
-  - [CLI 服务](#CLI服务)
-    - [使用命令](#使用命令)
-    - [构建多目标](#构建多目标)
-- [开发](#开发)
-  - [css 相关](#css相关)
-    - [css 预编译](#css预编译)
-    - [postcss](#postcss)
-  - [template 相关](#template相关)
-  - [webpack 相关](#webpack相关)
-    - [mpx 编译构建配置](#mpx编译构建配置)
-    - [根据不同的构建目标配置](#根据不同的构建目标配置)
-  - [配置](#配置)
-  - [开发插件](#开发插件)
+- [@mpxjs/cli@next](#mpxjsclinext)
+  - [安装](#安装)
+  - [使用](#使用)
+  - [介绍](#介绍)
+    - [mpx-cli](#mpx-cli)
+    - [mpx-cli-service](#mpx-cli-service)
+    - [mpx-cli 插件](#mpx-cli-插件)
+  - [基础](#基础)
+    - [CLI 服务](#cli-服务)
+      - [使用命令](#使用命令)
+      - [build:mp/serve:mp](#buildmpservemp)
+- [构建小程序，默认微信](#构建小程序默认微信)
+- [构建小程序，默认微信](#构建小程序默认微信)
+      - [build:web/serve:web](#buildwebserveweb)
+- [构建web](#构建web)
+- [构建web](#构建web)
+  - [开发](#开发)
+    - [css 相关](#css-相关)
+      - [css 预编译](#css-预编译)
+- [Sass](#sass)
+- [Sass](#sass)
+- [Less](#less)
+      - [postcss](#postcss)
+    - [template 相关](#template-相关)
+    - [webpack 相关](#webpack-相关)
+      - [mpx 编译构建配置](#mpx-编译构建配置)
+      - [根据不同的构建目标配置](#根据不同的构建目标配置)
+    - [配置](#配置)
+    - [开发插件](#开发插件)
 
 ## 安装
 
@@ -37,7 +46,7 @@ cd project-name
 npm run build:mp
 ```
 
-### 相关命令
+相关命令
 
 - watch:mp 开发微信小程序
 - build:mp 构建微信小程序
