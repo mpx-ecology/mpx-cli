@@ -9,15 +9,15 @@
   - [mpx-cli 插件](#mpx-cli-插件)
 - [基础](#基础)
   - [创建项目](#创建项目)
-  - [CLI服务](#CLI服务)
+  - [CLI 服务](#CLI服务)
     - [使用命令](#使用命令)
     - [构建多目标](#构建多目标)
 - [开发](#开发)
-  - [css相关](#css相关)
-    - [css预编译](#css预编译)
+  - [css 相关](#css相关)
+    - [css 预编译](#css预编译)
     - [postcss](#postcss)
-  - [template相关](#template相关)
-  - [webpack相关](#webpack相关)
+  - [template 相关](#template相关)
+  - [webpack 相关](#webpack相关)
     - [mpx 编译构建配置](#mpx编译构建配置)
     - [根据不同的构建目标配置](#根据不同的构建目标配置)
   - [配置](#配置)
@@ -28,6 +28,23 @@
 ```sh
 npm i @mpxjs/cli@next -g
 ```
+
+## 使用
+
+```sh
+mpx create project-name
+cd project-name
+npm run build:mp
+```
+
+### 相关命令
+
+- watch:mp 开发微信小程序
+- build:mp 构建微信小程序
+- watch:cross 开发多目标小程序
+- build:cross 构建多目标小程序
+- watch:web 开发 web
+- build:web 构建 web
 
 ## 介绍
 
@@ -53,31 +70,48 @@ npm i @mpxjs/cli@next -g
 
 ## 基础
 
-### 创建项目
-
-```sh
-mpx-cli create project-name
-```
-
-### CLI服务
+### CLI 服务
 
 #### 使用命令
+
+`@mpxjs/mpx-cli-service` 安装了 `mpx-cli-service`的命令来提供服务。
+默认情况下,我们可以直接使用`npm`来运行已经创建好的命令。
+
+```json
+{
+  "scripts": {
+    "build:mp": "MPX_CLI_MODE=mp mpx-cli-service build:mp",
+    "watch:mp": "vue-cli-service mpx-cli-service serve:mp"
+  }
+}
+```
+
+或者也可以使用`npx`来运行`mpx-cli-service`命令
+
+```sh
+MPX_CLI_MODE=mp npx mpx-cli-service build:mp
+```
+
+
+> 请注意必须添加MPX_CLI_MODE，它标识了构建方式，mp 代表构建小程序，web 代表构建 web
+
+#### build:mp/serve:mp
+
+```sh
+用法：MPX_CLI_MODE=mp mpx-cli-service build:mp/serve:mp [options]
+
+选项:
+
+  --wx         编译到微信小程序
+  --ali        编译到阿里小程序
+  --watch      开发模式
+  --production 生成模式
+  --report     生成包分析报告
+```
 
 ```sh
 # 构建小程序，默认微信
 MPX_CLI_MODE=mp mpx-cli-service build:mp
-```
-
-```sh
-# 构建web
-MPX_CLI_MODE=web mpx-cli-service build:web
-```
-
-> MPX_CLI_MODE 标识了构建方式，mp代表构建小程序，web代表构建web
-#### 小程序构建多目标
-
-```sh
-MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --swan
 ```
 
 **目前支持的模式**
@@ -88,11 +122,34 @@ MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --swan
 - qq QQ
 - tt 抖音
 
+#### build:web/serve:web
+
+```sh
+用法：mpx-cli-service build:web/serve:web [options] [entry|pattern]
+
+选项：
+
+  --mode        指定环境模式 (默认值：production)
+  --dest        指定输出目录 (默认值：dist)
+  --modern      面向现代浏览器带自动回退地构建应用
+  --target      app | lib | wc | wc-async (默认值：app)
+  --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
+  --no-clean    在构建项目之前不清除目标目录的内容
+  --report      生成 report.html 以帮助分析包内容
+  --report-json 生成 report.json 以帮助分析包内容
+  --watch       监听文件变化
+```
+
+```sh
+# 构建web
+MPX_CLI_MODE=web mpx-cli-service build:web
+```
+
 ## 开发
 
-### css相关
+### css 相关
 
-#### css预编译
+#### css 预编译
 
 通过 `mpx-cli` 初始化的项目内置 `stylus` 作为 `css` 的预编译处理器。
 
@@ -124,9 +181,9 @@ module.exports = {
 }
 ```
 
-### template相关
+### template 相关
 
-可以使用任何模板语言来编译template，只需要在template上添加lang属性
+可以使用任何模板语言来编译 template，只需要在 template 上添加 lang 属性
 
 ```html
 <template lang="pug"></template>
@@ -137,8 +194,9 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
-    config.module.rule('pug')
+  chainWebpack: (config) => {
+    config.module
+      .rule('pug')
       .test(/\.pug$/)
       .use('pug-html-loader')
       .loader('pug-html-loader')
@@ -146,9 +204,10 @@ module.exports = {
   }
 }
 ```
-### webpack相关
 
-#### mpx编译构建配置
+### webpack 相关
+
+#### mpx 编译构建配置
 
 新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `vue.config.js` 来进行管理。
 
