@@ -42,31 +42,43 @@ npm i @mpxjs/cli@next -g
 ### mpx-cli 插件
 
 - [vue-cli-plugin-mpx](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx) mpx 项目基础配置
-- [vue-cli-plugin-mpx-plugin-eslint](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-plugin-eslint) eslint 配置
+- [vue-cli-plugin-mpx-plugin-eslint](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-eslint) eslint 配置
 - [vue-cli-plugin-mpx-cloud-func](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-cloud-func)
 - [vue-cli-plugin-mpx-dll](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-dll) dll 配置
 - [vue-cli-plugin-mpx-mp](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-mp) 小程序配置
 - [vue-cli-plugin-mpx-web](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-web) web 配置
 - [vue-cli-plugin-mpx-unit-test](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-unit-test) 单元测试配置
-- [vue-cli-plugin-mpx-plugin-mode](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mode) 小程序插件配置
+- [vue-cli-plugin-mpx-plugin-mode](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-plugin-mode) 小程序插件配置
 - [vue-cli-plugin-mpx-typescript](https://github.com/mpx-ecology/mpx-cli/tree/master/packages/vue-cli-plugin-mpx-typescript) ts 配置
 
 ## 基础
 
 ### 创建项目
 
-- mpx-cli create project-name
+```sh
+mpx-cli create project-name
+```
 
 ### CLI服务
 
 #### 使用命令
 
-- MPX_CLI_MODE=mp mpx-cli-service build:mp
-- MPX_CLI_MODE=web mpx-cli-service build:web
+```sh
+# 构建小程序，默认微信
+MPX_CLI_MODE=mp mpx-cli-service build:mp
+```
 
-#### 构建多目标
+```sh
+# 构建web
+MPX_CLI_MODE=web mpx-cli-service build:web
+```
 
-- MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --swan
+> MPX_CLI_MODE 标识了构建方式，mp代表构建小程序，web代表构建web
+#### 小程序构建多目标
+
+```sh
+MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --swan
+```
 
 **目前支持的模式**
 
