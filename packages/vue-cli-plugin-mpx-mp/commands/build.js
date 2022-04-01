@@ -23,7 +23,7 @@ module.exports = function registerMpBuildCommand (api, options) {
       description: 'mp production',
       usage: 'mpx-cli-service build:mp',
       options: {
-        '--target': 'compile for wx platform',
+        '--target': `compile for target platform, support ${supportedModes}`,
         '--watch': 'compile in watch mode',
         '--report': 'generate report.html to help analyze bundle content'
       }

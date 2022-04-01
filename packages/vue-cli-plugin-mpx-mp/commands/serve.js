@@ -8,7 +8,6 @@ const { logWithSpinner } = require('@vue/cli-shared-utils')
 const applyMpWebpackConfig = require('../config')
 const resolveMpBaseWebpackConfig = require('../base')
 const applyMpPluginWebpackConfig = require('../pluginMode')
-
 const {
   resolveWebpackCompileCallback,
   clearDist,
@@ -23,7 +22,7 @@ module.exports = function registerMpCommand (api, options) {
       description: 'mp development',
       usage: 'mpx-cli-service serve:mp',
       options: {
-        '--target': 'compile for wx platform'
+        '--target': `compile for target platform, support ${supportedModes}`
       }
     },
     function (args) {

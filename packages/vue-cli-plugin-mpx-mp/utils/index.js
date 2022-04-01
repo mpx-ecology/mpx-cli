@@ -38,24 +38,11 @@ module.exports.resolveWebpackCompileCallback =
     return function (err, stats) {
       stopSpinner()
       if (err) return console.error(err)
-
-      if (Array.isArray(stats.stats)) {
-        stats.stats.forEach((item) => {
-          console.log(item.compilation.name + '打包结果：')
-          process.stdout.write(
-            item.toString({
-              colors: true,
-              modules: false,
-              children: false,
-              chunks: false,
-              chunkModules: false,
-              entrypoints: false
-            }) + '\n\n'
-          )
-        })
-      } else {
+      const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
+      statsArr.forEach((item) => {
+        console.log(item.compilation.name + '打包结果：')
         process.stdout.write(
-          stats.toString({
+          item.toString({
             colors: true,
             modules: false,
             children: false,
@@ -64,7 +51,7 @@ module.exports.resolveWebpackCompileCallback =
             entrypoints: false
           }) + '\n\n'
         )
-      }
+      })
 
       if (!isWatchMode && stats.hasErrors()) {
         console.log(chalk.red('  Build failed with errors.\n'))
