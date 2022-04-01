@@ -1,4 +1,4 @@
-#!/usr/bin/env nodeF
+#!/usr/bin/env node
 const program = require('commander')
 const { doVueCli } = require('../utils')
 
