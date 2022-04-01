@@ -15,25 +15,6 @@ if (!semver.satisfies(process.version, requiredVersion, { includePrerelease: tru
 const Service = require('@vue/cli-service/lib/Service')
 const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
 const rawArgv = process.argv.slice(2)
-
-const setPluginsToSkip = service.setPluginsToSkip.bind(service)
-service.setPluginsToSkip = function (args) {
-  setPluginsToSkip(args, rawArgv)
-  let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
-  // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉
-  if (process.env.MPX_CLI_MODE === 'mp') {
-    plugins = plugins.concat([
-      'built-in:config/base',
-      'built-in:config/app',
-      'built-in:config/css'
-    ])
-  }
-
-  plugins.forEach(plugin => {
-    this.pluginsToSkip.add(plugin)
-  })
-}
-
 const args = require('minimist')(rawArgv, {
   boolean: [
     // build
@@ -51,6 +32,25 @@ const args = require('minimist')(rawArgv, {
   ]
 })
 const command = args._[0]
+
+const setPluginsToSkip = service.setPluginsToSkip.bind(service)
+service.setPluginsToSkip = function (args) {
+  process.env.MPX_CLI_MODE = command.split(':')[1] || 'wx'
+  setPluginsToSkip(args, rawArgv)
+  let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
+  // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉
+  if (process.env.MPX_CLI_MODE === 'mp') {
+    plugins = plugins.concat([
+      'built-in:config/base',
+      'built-in:config/app',
+      'built-in:config/css'
+    ])
+  }
+
+  plugins.forEach(plugin => {
+    this.pluginsToSkip.add(plugin)
+  })
+}
 
 service.run(command, args, rawArgv).catch(err => {
   error(err)

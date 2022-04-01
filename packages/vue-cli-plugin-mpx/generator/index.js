@@ -33,9 +33,8 @@ module.exports = function (api, options) {
   if (options.cross) {
     api.extendPackage({
       scripts: {
-        'watch:cross': 'MPX_CLI_MODE=mp mpx-cli-service serve:mp --watch --wx --ali',
-        'build:cross:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali',
-        'build:cross': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --production'
+        'serve:cross': 'mpx-cli-service serve:mp --targets=wx,ali',
+        'build:cross': 'mpx-cli-service build:mp --targets=wx,ali'
       }
     })
   }
@@ -55,9 +54,8 @@ module.exports = function (api, options) {
 
   api.extendPackage({
     scripts: {
-      'watch:mp': 'MPX_CLI_MODE=mp mpx-cli-service serve:mp --watch',
-      'build:mp': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --production',
-      'build:mp:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp'
+      'serve:mp': 'mpx-cli-service serve:mp',
+      'build:mp': 'mpx-cli-service build:mp'
     },
     dependencies: {
       '@mpxjs/api-proxy': '^2.7.0',
