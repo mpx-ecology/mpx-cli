@@ -32,10 +32,10 @@ const args = require('minimist')(rawArgv, {
   ]
 })
 const command = args._[0]
+process.env.MPX_CLI_MODE = command.split(':')[1] || 'mp'
 
 const setPluginsToSkip = service.setPluginsToSkip.bind(service)
 service.setPluginsToSkip = function (args) {
-  process.env.MPX_CLI_MODE = command.split(':')[1] || 'mp'
   setPluginsToSkip(args, rawArgv)
   let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
   // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉
