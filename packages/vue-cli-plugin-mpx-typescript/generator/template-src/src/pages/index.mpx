@@ -2,7 +2,15 @@
   <list></list>
 </template>
 
-<script lang="ts" src="./index.ts"></script>
+<script lang="ts">
+import { createPage } from '@mpxjs/core'
+
+createPage({
+  onLoad () {
+    //
+  }
+})
+</script>
 
 <script type="application/json">
   {
