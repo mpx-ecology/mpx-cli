@@ -2,15 +2,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
-
-module.exports = function (
-  api,
-  options = {},
-  webpackConfig,
-  args,
-  srcMode,
-  mode
-) {
+const { getMpxPluginOptions } = require('./utils')
+module.exports = function (api, options = {}, webpackConfig, mode) {
+  const mpxOptions = getMpxPluginOptions(options)
   let outputDist = `dist/${mode}`
   let subDir = ''
 
@@ -44,7 +38,7 @@ module.exports = function (
   webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
     {
       mode,
-      srcMode,
+      srcMode: mpxOptions.srcMode,
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])

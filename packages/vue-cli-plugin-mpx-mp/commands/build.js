@@ -1,4 +1,3 @@
-const merge = require('webpack-merge')
 const webpack = require('webpack')
 const {
   transformMpxEntry,
@@ -8,12 +7,11 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
 const applyMpWebpackConfig = require('../config')
 const resolveMpBaseWebpackConfig = require('../base')
-const applyMpPluginWebpackConfig = require('../pluginMode')
 const {
   resolveWebpackCompileCallback,
   clearDist,
-  getMpxPluginOptions,
-  intersection
+  getTargets,
+  addMpPluginWebpackConfig
 } = require('../utils')
 
 module.exports = function registerMpBuildCommand (api, options) {
@@ -30,12 +28,8 @@ module.exports = function registerMpBuildCommand (api, options) {
     },
     function (args) {
       const isWatching = !!args.watch
-      const mpxOptions = getMpxPluginOptions(options)
       const mode = api.service.mode
-      const srcMode = mpxOptions.srcMode
-      args.targets = args.targets || srcMode
-      const inputTargets = args.targets.split(',')
-      const targets = intersection(supportedModes, inputTargets)
+      const targets = getTargets(args, options)
 
       logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
       // 小程序业务代码构建配置
@@ -52,14 +46,7 @@ module.exports = function registerMpBuildCommand (api, options) {
         }
         baseWebpackConfig.devtool(isWatching ? 'source-map' : false)
         // 根据不同 mode 修改小程序构建的 webpack 配置
-        applyMpWebpackConfig(
-          api,
-          options,
-          baseWebpackConfig,
-          args,
-          srcMode,
-          mode
-        )
+        applyMpWebpackConfig(api, options, baseWebpackConfig, mode)
         // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
         const webpackConfig = api.resolveWebpackConfig(baseWebpackConfig)
         transformMpxEntry(api, options, webpackConfig, false)
@@ -68,9 +55,7 @@ module.exports = function registerMpBuildCommand (api, options) {
 
       // 小程序插件构建配置
       if (api.hasPlugin('mpx-plugin-mode')) {
-        const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
-        applyMpPluginWebpackConfig(api, options, mpxPluginWebpackConfig)
-        webpackConfigs.push(mpxPluginWebpackConfig)
+        addMpPluginWebpackConfig(api, options, webpackConfigs)
       }
 
       const webpackCallback = resolveWebpackCompileCallback(isWatching)
