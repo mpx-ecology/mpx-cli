@@ -29,7 +29,7 @@ function getMpxPluginOptions (options) {
  */
 function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)
-  args.targets = args.targets || mpxOptions.srcMode
+  args.targets = args.targets || mpxOptions.srcMode || supportedModes[0]
   const inputTargets = args.targets.split(',')
   return intersection(supportedModes, inputTargets)
 }
