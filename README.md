@@ -82,8 +82,8 @@ npm run build:mp
 ```json
 {
   "scripts": {
-    "build:mp": "MPX_CLI_MODE=mp mpx-cli-service build:mp",
-    "watch:mp": "vue-cli-service mpx-cli-service serve:mp"
+    "build:mp": "mpx-cli-service build:mp",
+    "watch:mp": "mpx-cli-service serve:mp"
   }
 }
 ```
@@ -91,31 +91,28 @@ npm run build:mp
 或者也可以使用`npx`来运行`mpx-cli-service`命令
 
 ```sh
-MPX_CLI_MODE=mp npx mpx-cli-service build:mp
+npx mpx-cli-service build:mp
 ```
-
-> 请注意必须添加 MPX_CLI_MODE，它标识了构建方式，mp 代表构建小程序，web 代表构建 web
 
 #### build:mp/serve:mp
 
 ```sh
-用法：MPX_CLI_MODE=mp mpx-cli-service build:mp/serve:mp [options]
+用法：mpx-cli-service build:mp/serve:mp [options]
 
 选项:
 
-  --wx         编译到微信小程序
-  --ali        编译到阿里小程序
-  --watch      开发模式
-  --production 生成模式
+  --targets    编译到小程序目标(默认值: wx)
+  --mode       指定环境模式 (默认值：production)
+  --watch      监听文件变化
   --report     生成包分析报告
 ```
 
 ```sh
 # 构建小程序，默认微信
-MPX_CLI_MODE=mp mpx-cli-service build:mp
+mpx-cli-service build:mp --targets=wx,ali
 ```
 
-**目前支持的模式**
+**目前支持的目标**
 
 - wx 微信
 - ali 阿里
@@ -143,7 +140,7 @@ MPX_CLI_MODE=mp mpx-cli-service build:mp
 
 ```sh
 # 构建web
-MPX_CLI_MODE=web mpx-cli-service build:web
+mpx-cli-service build:web
 ```
 
 ## 开发
@@ -245,8 +242,7 @@ module.exports = {
 
 可根据构建平台和开发环境进行选择性的配置，在构建过程中暴露出来的环境变量包括：
 
-- `MPX_CLI_MODE`： `mp` | `web`
-
+- `MPX_CLI_MODE`: `和targets相同`
 - `NODE_ENV`：`development` | `production`
 
 ```javascript
