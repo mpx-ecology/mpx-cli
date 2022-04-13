@@ -26,16 +26,14 @@ function getMpxPluginOptions (options) {
  */
 function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)
-  args.targets =
-    args.targets ||
-    getTargetsInline(args) ||
-    mpxOptions.srcMode ||
-    supportedModes[0]
-  const inputTargets = args.targets.split(',')
-  return intersection(supportedModes, inputTargets)
+  const defaultTargets = mpxOptions.srcMode || supportedModes[0]
+  const inputTargets = args.targets
+    ? args.targets.split(',')
+    : getInlineTargets(args)
+  return intersection(supportedModes, inputTargets || defaultTargets)
 }
 
-function getTargetsInline (args) {
+function getInlineTargets (args) {
   return intersection(Object.keys(args), supportedModes)
 }
 
