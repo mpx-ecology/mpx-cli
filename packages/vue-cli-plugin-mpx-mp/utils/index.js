@@ -2,7 +2,10 @@ const rm = require('rimraf')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { transformMpxEntry } = require('@mpxjs/vue-cli-plugin-mpx')
 const applyMpPluginWebpackConfig = require('../pluginMode')
+const applyMpWebpackConfig = require('../config')
+const resolveMpBaseWebpackConfig = require('../base')
 
 /**
  * 取数组交集
@@ -88,6 +91,25 @@ function addMpPluginWebpackConfig (api, options, webpackConfigs) {
   webpackConfigs.push(mpxPluginWebpackConfig)
 }
 
+function genWebpackConfigByTarget (api, options, target, process) {
+  const baseWebpackConfig = resolveMpBaseWebpackConfig(api, options)
+  process && process(baseWebpackConfig)
+  // 根据不同 mode 修改小程序构建的 webpack 配置
+  applyMpWebpackConfig(api, options, baseWebpackConfig, target)
+  // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
+  const webpackConfig = api.resolveWebpackConfig(baseWebpackConfig)
+  transformMpxEntry(api, options, webpackConfig, false)
+  return webpackConfig
+}
+
+function genWebpackConfigByTargets (api, options, targets, process) {
+  return targets.map((target) => {
+    return genWebpackConfigByTarget(api, options, target, process)
+  })
+}
+
+module.exports.genWebpackConfigByTarget = genWebpackConfigByTarget
+module.exports.genWebpackConfigByTargets = genWebpackConfigByTargets
 module.exports.getTargets = getTargets
 module.exports.clearDist = clearDist
 module.exports.resolveWebpackCompileCallback = resolveWebpackCompileCallback

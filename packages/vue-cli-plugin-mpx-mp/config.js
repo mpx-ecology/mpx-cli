@@ -1,11 +1,12 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
 const { getMpxPluginOptions } = require('./utils')
-module.exports = function (api, options = {}, webpackConfig, mode) {
+module.exports = function (api, options = {}, webpackConfig, target) {
   const mpxOptions = getMpxPluginOptions(options)
-  let outputDist = `dist/${mode}`
+  let outputDist = `dist/${target}`
   let subDir = ''
 
   if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
@@ -19,7 +20,7 @@ module.exports = function (api, options = {}, webpackConfig, mode) {
     } catch (e) {}
   }
 
-  webpackConfig.name(`${mode}-compiler`)
+  webpackConfig.name(`${target}-compiler`)
 
   webpackConfig.output.path(api.resolve(outputDist))
 
@@ -27,17 +28,20 @@ module.exports = function (api, options = {}, webpackConfig, mode) {
     {
       patterns: [
         {
-          context: api.resolve(`static/${mode}`),
+          context: api.resolve(`static/${target}`),
           from: '**/*',
-          to: subDir ? '..' : ''
+          to: subDir ? '..' : '',
+          noErrorOnMissing: true
         }
       ]
     }
   ])
 
+  webpackConfig.plugin('mpx-clean-webpack-plugin').use(CleanWebpackPlugin, [])
+
   webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
     {
-      mode,
+      target,
       srcMode: mpxOptions.srcMode,
       ...resolveMpxWebpackPluginConf(api, options)
     }
