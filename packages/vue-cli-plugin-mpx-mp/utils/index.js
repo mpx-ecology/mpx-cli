@@ -28,9 +28,10 @@ function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)
   const defaultTargets = [mpxOptions.srcMode || supportedModes[0]]
   const inputTargets = args.targets
-    ? intersection(supportedModes, args.targets.split(','))
-    : intersection(supportedModes, Object.keys(args))
-  return inputTargets.length ? inputTargets : defaultTargets
+    ? args.targets.split(',')
+    : Object.keys(args)
+  const targets = intersection(supportedModes, inputTargets)
+  return targets.length ? targets : defaultTargets
 }
 
 /**
