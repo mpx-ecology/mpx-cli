@@ -1,11 +1,11 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
+const { getTargets } = require('../utils/index')
 const {
-  getTargets,
   resolveWebpackConfigByTargets,
   runWebpack
-} = require('../utils')
+} = require('../utils/webpack')
 
 module.exports = function registerMpBuildCommand (api, options) {
   api.registerCommand(

@@ -1,10 +1,10 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
+const { getTargets } = require('../utils/index')
 const {
-  getTargets,
   resolveWebpackConfigByTargets,
   runWebpack
-} = require('../utils')
+} = require('../utils/webpack')
 
 module.exports = function registerMpCommand (api, options) {
   api.registerCommand(
