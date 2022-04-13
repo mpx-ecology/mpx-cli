@@ -72,8 +72,16 @@ function resolveWebpackConfigByTargets (api, options, targets, process) {
   return webpackConfigs
 }
 
+function processWebpackConfig (config) {
+  const configs = Array.isArray(config) ? config : [config]
+  configs.forEach((v) => {
+    v.output.clean = true
+  })
+}
+
 function runWebpack (config, watch) {
   const webpackCallback = resolveWebpackCompileCallback(watch)
+  processWebpackConfig(config)
   if (!watch) {
     webpack(config, webpackCallback)
   } else {
