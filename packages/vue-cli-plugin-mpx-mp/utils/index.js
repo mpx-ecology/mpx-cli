@@ -1,4 +1,3 @@
-const rm = require('rimraf')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 
 /**
@@ -34,22 +33,6 @@ function getTargets (args, options) {
   return targets.length ? targets : defaultTargets
 }
 
-/**
- * 清除文件
- * @param {string} distPath
- */
-function clearDist (distPath) {
-  try {
-    rm.sync(distPath)
-  } catch (e) {
-    console.error(e)
-    console.log(
-      '\n\n删除dist文件夹遇到了一些问题，如果遇到问题请手工删除dist重来\n\n'
-    )
-  }
-}
-
 module.exports.getTargets = getTargets
-module.exports.clearDist = clearDist
 module.exports.intersection = intersection
 module.exports.getMpxPluginOptions = getMpxPluginOptions
