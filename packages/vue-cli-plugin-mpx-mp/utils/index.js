@@ -26,9 +26,17 @@ function getMpxPluginOptions (options) {
  */
 function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)
-  args.targets = args.targets || mpxOptions.srcMode || supportedModes[0]
+  args.targets =
+    args.targets ||
+    getTargetsInline(args) ||
+    mpxOptions.srcMode ||
+    supportedModes[0]
   const inputTargets = args.targets.split(',')
   return intersection(supportedModes, inputTargets)
+}
+
+function getTargetsInline (args) {
+  return intersection(Object.keys(args), supportedModes)
 }
 
 /**
