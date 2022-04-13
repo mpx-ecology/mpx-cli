@@ -1,11 +1,9 @@
-const webpack = require('webpack')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
 const {
-  resolveWebpackCompileCallback,
   getTargets,
-  addMpPluginWebpackConfig,
-  genWebpackConfigByTargets
+  resolveWebpackConfigByTargets,
+  runWebpack
 } = require('../utils')
 
 module.exports = function registerMpCommand (api, options) {
@@ -24,7 +22,7 @@ module.exports = function registerMpCommand (api, options) {
 
       logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
       // 小程序业务代码构建配置
-      const webpackConfigs = genWebpackConfigByTargets(
+      const webpackConfigs = resolveWebpackConfigByTargets(
         api,
         options,
         targets,
@@ -32,11 +30,7 @@ module.exports = function registerMpCommand (api, options) {
           webpacConfig.devtool('source-map')
         }
       )
-      // 小程序插件构建配置
-      if (api.hasPlugin('mpx-plugin-mode')) {
-        addMpPluginWebpackConfig(api, options, webpackConfigs)
-      }
-      webpack(webpackConfigs).watch({}, resolveWebpackCompileCallback(true))
+      runWebpack(webpackConfigs, true)
     }
   )
 }

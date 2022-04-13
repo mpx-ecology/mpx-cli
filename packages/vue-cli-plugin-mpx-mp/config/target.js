@@ -4,7 +4,7 @@ const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
 const { getMpxPluginOptions } = require('./utils')
-module.exports = function (api, options = {}, webpackConfig, target) {
+module.exports = function resolveTargetConfig (api, options = {}, webpackConfig, target) {
   const mpxOptions = getMpxPluginOptions(options)
   let outputDist = `dist/${target}`
   let subDir = ''

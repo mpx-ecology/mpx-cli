@@ -1,11 +1,12 @@
 const rm = require('rimraf')
+const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { transformMpxEntry } = require('@mpxjs/vue-cli-plugin-mpx')
 const applyMpPluginWebpackConfig = require('../pluginMode')
-const applyMpWebpackConfig = require('../config')
-const resolveMpBaseWebpackConfig = require('../base')
+const resolveTargetConfig = require('../config/target')
+const resolveMpBaseWebpackConfig = require('../config/base')
 
 /**
  * 取数组交集
@@ -91,25 +92,45 @@ function addMpPluginWebpackConfig (api, options, webpackConfigs) {
   webpackConfigs.push(mpxPluginWebpackConfig)
 }
 
-function genWebpackConfigByTarget (api, options, target, process) {
+function resolveWebpackConfigByTarget (
+  api,
+  options,
+  target,
+  resolveCustomConfig
+) {
   const baseWebpackConfig = resolveMpBaseWebpackConfig(api, options)
-  process && process(baseWebpackConfig)
+  resolveCustomConfig && resolveCustomConfig(baseWebpackConfig)
   // 根据不同 mode 修改小程序构建的 webpack 配置
-  applyMpWebpackConfig(api, options, baseWebpackConfig, target)
+  resolveTargetConfig(api, options, baseWebpackConfig, target)
   // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
   const webpackConfig = api.resolveWebpackConfig(baseWebpackConfig)
   transformMpxEntry(api, options, webpackConfig, false)
   return webpackConfig
 }
 
-function genWebpackConfigByTargets (api, options, targets, process) {
-  return targets.map((target) => {
-    return genWebpackConfigByTarget(api, options, target, process)
+function resolveWebpackConfigByTargets (api, options, targets, process) {
+  const webpackConfigs = targets.map((target) => {
+    return resolveWebpackConfigByTarget(api, options, target, process)
   })
+  // 小程序插件构建配置
+  if (api.hasPlugin('mpx-plugin-mode')) {
+    addMpPluginWebpackConfig(api, options, webpackConfigs)
+  }
+  return webpackConfigs
 }
 
-module.exports.genWebpackConfigByTarget = genWebpackConfigByTarget
-module.exports.genWebpackConfigByTargets = genWebpackConfigByTargets
+function runWebpack (config, watch) {
+  const webpackCallback = resolveWebpackCompileCallback(watch)
+  if (!watch) {
+    webpack(config, webpackCallback)
+  } else {
+    webpack(config).watch({}, webpackCallback)
+  }
+}
+
+module.exports.runWebpack = runWebpack
+module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
+module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
 module.exports.getTargets = getTargets
 module.exports.clearDist = clearDist
 module.exports.resolveWebpackCompileCallback = resolveWebpackCompileCallback

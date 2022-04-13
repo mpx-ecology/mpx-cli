@@ -1,12 +1,10 @@
-const webpack = require('webpack')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
 const {
-  resolveWebpackCompileCallback,
   getTargets,
-  addMpPluginWebpackConfig,
-  genWebpackConfigByTargets
+  resolveWebpackConfigByTargets,
+  runWebpack
 } = require('../utils')
 
 module.exports = function registerMpBuildCommand (api, options) {
@@ -28,7 +26,7 @@ module.exports = function registerMpBuildCommand (api, options) {
 
       logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
       // 小程序业务代码构建配置
-      const webpackConfigs = genWebpackConfigByTargets(
+      const webpackConfigs = resolveWebpackConfigByTargets(
         api,
         options,
         targets,
@@ -44,16 +42,7 @@ module.exports = function registerMpBuildCommand (api, options) {
           webpackConfig.devtool(isWatching ? 'source-map' : false)
         }
       )
-      // 小程序插件构建配置
-      if (api.hasPlugin('mpx-plugin-mode')) {
-        addMpPluginWebpackConfig(api, options, webpackConfigs)
-      }
-      const webpackCallback = resolveWebpackCompileCallback(isWatching)
-      if (!isWatching) {
-        webpack(webpackConfigs, webpackCallback)
-      } else {
-        webpack(webpackConfigs).watch({}, webpackCallback)
-      }
+      runWebpack(webpackConfigs, isWatching)
     }
   )
 }
