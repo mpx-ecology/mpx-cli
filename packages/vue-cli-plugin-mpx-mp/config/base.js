@@ -3,6 +3,12 @@ const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 const webpack = require('webpack')
 const { getMpxPluginOptions } = require('../utils')
 
+/**
+ * 基础配置
+ * @param {*} api
+ * @param {*} options
+ * @returns
+ */
 module.exports = function resolveMpBaseWebpackConfig (api, options) {
   const webpackConfig = api.resolveChainableWebpackConfig()
 

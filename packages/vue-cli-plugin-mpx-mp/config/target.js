@@ -1,10 +1,16 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
 const { getMpxPluginOptions } = require('../utils')
 
+/**
+ * target相关配置
+ * @param {*} api
+ * @param {*} options
+ * @param {*} webpackConfig
+ * @param {*} target
+ */
 module.exports = function resolveTargetConfig (
   api,
   options = {},
@@ -42,8 +48,6 @@ module.exports = function resolveTargetConfig (
       ]
     }
   ])
-
-  webpackConfig.plugin('mpx-clean-webpack-plugin').use(CleanWebpackPlugin, [])
 
   webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
     {

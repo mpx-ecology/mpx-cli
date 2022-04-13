@@ -1,5 +1,11 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 
+/**
+ * 插件配置
+ * @param {*} api
+ * @param {*} options
+ * @param {*} webpackConfig
+ */
 module.exports = function resolvePluginWebpackConfig (api, options, webpackConfig) {
   let pluginRoot = ''
   try {
