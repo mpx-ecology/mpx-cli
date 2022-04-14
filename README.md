@@ -22,7 +22,7 @@
       - [postcss](#postcss)
     - [template 相关](#template-%E7%9B%B8%E5%85%B3)
   - [配置](#%E9%85%8D%E7%BD%AE)
-  - [vue.config.js](#vueconfigjs)
+    - [vue.config.js](#vueconfigjs)
   - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
   - [cli相关介绍](#cli%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D)
     - [mpx-cli](#mpx-cli)
@@ -262,7 +262,7 @@ module.exports = {
 
 ## 配置
 
-## vue.config.js
+### vue.config.js
 
 以下表格为 `vue.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli官方配置](https://cli.vuejs.org/config/#configuration-reference)：
 
