@@ -21,7 +21,7 @@ module.exports = function inspect (paths, args) {
   if (fs.existsSync(binPath)) {
     execa('node', [
       binPath,
-      'inspect',
+      `inspect:${process.env.MPX_CLI_MODE}`,
       ...(args.mode ? ['--mode', args.mode] : []),
       ...(args.rule ? ['--rule', args.rule] : []),
       ...(args.plugin ? ['--plugin', args.plugin] : []),
