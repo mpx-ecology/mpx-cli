@@ -7,7 +7,7 @@ const {
   runWebpack
 } = require('../utils/webpack')
 
-module.exports = function registerMpBuildCommand (api, options) {
+module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(
     'build:mp',
     {

@@ -1,9 +1,11 @@
-const registerMpBuildCommand = require('./commands/build')
-const registerMpServeCommand = require('./commands/serve')
+const registerBuildCommand = require('./commands/build')
+const registerServeCommand = require('./commands/serve')
+const registerInspectCommand = require('./commands/inspect')
 
 module.exports = function (api, options) {
-  registerMpBuildCommand(api, options)
-  registerMpServeCommand(api, options)
+  registerBuildCommand(api, options)
+  registerServeCommand(api, options)
+  registerInspectCommand(api, options)
 }
 
 module.exports.defaultModes = {

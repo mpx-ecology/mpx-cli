@@ -4,7 +4,7 @@ const { highlight } = require('cli-highlight')
 const { getTargets } = require('../utils/index')
 const { resolveWebpackConfigByTargets } = require('../utils/webpack')
 
-module.exports = function registerMpBuildCommand (api, options) {
+module.exports = function registerInspectCommand (api, options) {
   api.registerCommand(
     'inspect:mp',
     {

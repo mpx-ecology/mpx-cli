@@ -6,7 +6,7 @@ const {
   runWebpack
 } = require('../utils/webpack')
 
-module.exports = function registerMpCommand (api, options) {
+module.exports = function registerServeCommand (api, options) {
   api.registerCommand(
     'serve:mp',
     {
