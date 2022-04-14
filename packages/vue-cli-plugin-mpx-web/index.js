@@ -1,6 +1,6 @@
 const registerServeCommand = require('./commands/serve')
 const registerBuildCommand = require('./commands/build')
-const registerInspectCommand = require('./commands/build')
+const registerInspectCommand = require('./commands/inspect')
 const applyWebConfig = require('./config')
 
 module.exports = function (api, options) {
