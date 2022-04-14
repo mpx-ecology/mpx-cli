@@ -9,10 +9,10 @@ module.exports = function inspect (paths, args, mode) {
   try {
     servicePath = resolve.sync('@mpxjs/mpx-cli-service', { basedir: cwd })
   } catch (e) {
-    const { error } = require('@vue/cli-shared-utils')
+    const { error } = require('@mpxjs/cli-shared-utils')
     error(
       'Failed to locate @mpxjs/mpx-cli-service.\n' +
-      'Note that `vue inspect` is an alias of `vue-cli-service inspect`\n' +
+      'Note that `mpx inspect` is an alias of `@mpxjs/mpx-cli-service inspect`\n' +
       'and can only be used in a project where @mpxjs/mpx-cli-service is locally installed.'
     )
     process.exit(1)
