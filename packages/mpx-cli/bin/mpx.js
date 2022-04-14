@@ -59,7 +59,7 @@ program
   })
 
 program
-  .command('inspect [paths...]')
+  .command('inspect:mp [paths...]')
   .description('inspect the webpack config in a project with mpx-cli-service')
   .option('--mode <mode>')
   .option('--rule <ruleName>', 'inspect a specific module rule')
@@ -68,7 +68,20 @@ program
   .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
   .action((paths, options) => {
-    require('../lib/inspect')()
+    require('../lib/inspect')(paths, options, 'mp')
+  })
+
+program
+  .command('inspect:web [paths...]')
+  .description('inspect the webpack config in a project with mpx-cli-service')
+  .option('--mode <mode>')
+  .option('--rule <ruleName>', 'inspect a specific module rule')
+  .option('--plugin <pluginName>', 'inspect a specific plugin')
+  .option('--rules', 'list all module rule names')
+  .option('--plugins', 'list all plugin names')
+  .option('-v --verbose', 'Show full function definitions in output')
+  .action((paths, options) => {
+    require('../lib/inspect')(paths, options, 'web')
   })
 
 program
