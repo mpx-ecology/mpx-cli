@@ -136,7 +136,7 @@ mpx-cli-service build:web
 ```
 
 ```sh
-# 构建web
+# 开发web
 mpx-cli-service serve:web
 ```
 
