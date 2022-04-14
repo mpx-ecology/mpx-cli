@@ -42,14 +42,14 @@ npm i @mpxjs/cli@next -g
 ```sh
 mpx create project-name
 cd project-name
-npm run build:mp
+npm run build
 ```
 
 相关命令
 
-- watch:mp 开发小程序
-- build:mp 构建小程序
-- watch:web 开发 web
+- serve 开发小程序
+- build 构建小程序
+- serve:web 开发 web
 - build:web 构建 web
 
 ## 基础
@@ -100,7 +100,7 @@ mpx-cli-service serve:mp --targets=wx,ali
 #### build:web
 
 ```sh
-用法：mpx-cli-service build:web/serve:web [options] [entry|pattern]
+用法：mpx-cli-service build:web [options] [entry|pattern]
 
 选项：
 
@@ -314,6 +314,14 @@ module.exports = {
 ```
 
 ## 开发插件
+
+一个 CLI 插件是一个 npm 包，它能够为 `MPX CLI` 创建的项目添加额外的功能，这些功能包括：
+
+- 修改项目的 webpack 配置
+- 添加新的`mpx-cli-service`命令
+- 扩展 package.json
+- 在项目中创建新文件、或者修改老文件。
+- 提示用户选择一个特定的选项
 
 [开发插件](https://github.com/mpx-ecology/mpx-cli/tree/master/PLUGIN_GUIDE.md)
 
