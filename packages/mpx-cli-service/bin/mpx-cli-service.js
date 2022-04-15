@@ -12,7 +12,7 @@ if (!semver.satisfies(process.version, requiredVersion, { includePrerelease: tru
   process.exit(1)
 }
 
-const Service = require('@vue/cli-service/lib/Service')
+const Service = require('../lib/Service')
 const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
 const rawArgv = process.argv.slice(2)
 const args = require('minimist')(rawArgv, {
