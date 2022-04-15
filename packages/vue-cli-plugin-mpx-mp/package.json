@@ -7,21 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^5.0.4",
     "copy-webpack-plugin": "^9.1.0",
-    "webpack-bundle-analyzer": "^4.5.0",
-    "webpack-chain": "^6.5.1",
-    "webpack-merge": "^5.8.0"
+    "webpack-bundle-analyzer": "^4.5.0"
   },
   "peerDependencies": {
     "@mpxjs/vue-cli-plugin-mpx": "*",
     "@mpxjs/webpack-plugin": "^2.7.0",
-    "webpack": "^5.48.0"
-  },
-  "devDependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "^1.2.4",
-    "@mpxjs/webpack-plugin": "^2.7.0",
-    "webpack": "^5.48.0"
+    "@vue/cli-shared-utils": "^5.0.4",
+    "webpack": "^5.48.0",
+    "webpack-chain": "^6.5.1",
+    "webpack-merge": "^5.8.0"
   },
   "keywords": [],
   "author": "",
