@@ -17,6 +17,7 @@
     - [webpack 相关](#webpack-%E7%9B%B8%E5%85%B3)
       - [mpx 编译构建配置](#mpx-%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE)
       - [根据不同的构建目标配置](#%E6%A0%B9%E6%8D%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E6%9E%84%E5%BB%BA%E7%9B%AE%E6%A0%87%E9%85%8D%E7%BD%AE)
+      - [调试webpack配置](#%E8%B0%83%E8%AF%95webpack%E9%85%8D%E7%BD%AE)
     - [css 相关](#css-%E7%9B%B8%E5%85%B3)
       - [css 预编译](#css-%E9%A2%84%E7%BC%96%E8%AF%91)
       - [postcss](#postcss)
@@ -202,6 +203,21 @@ module.exports = {
 }
 ```
 
+#### 调试webpack配置
+
+可以使用 `mpx inspect:mp` 以及 `mpx inspect:web` 调试webpack配置。
+
+> `mpx inspect:web` 的选项和 `vue inspect` 相同。
+
+可以将其输出重定向到一个文件以便进行查阅。
+```sh
+mpx inspect:mp > output.js
+```
+
+还可以增加`targets`,`mode`等选项来输出针对不同条件下的配置。
+```sh
+mpx inspect:mp --targets=wx,ali --mode=development
+```
 ### css 相关
 
 #### css 预编译
