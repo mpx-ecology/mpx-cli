@@ -23,6 +23,7 @@ module.exports = function inspect (paths, args, mode) {
       binPath,
       `inspect:${mode}`,
       ...(args.mode ? ['--mode', args.mode] : []),
+      ...(args.targets ? ['--targets', args.targets] : []),
       ...(args.rule ? ['--rule', args.rule] : []),
       ...(args.plugin ? ['--plugin', args.plugin] : []),
       ...(args.rules ? ['--rules'] : []),
