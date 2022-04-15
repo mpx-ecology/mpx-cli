@@ -17,7 +17,7 @@ module.exports = function inspect (paths, args, mode) {
     )
     process.exit(1)
   }
-  const binPath = path.resolve(servicePath, '../../bin/@mpxjs/mpx-cli-service.js')
+  const binPath = path.resolve(servicePath, '../../bin/mpx-cli-service.js')
   if (fs.existsSync(binPath)) {
     execa('node', [
       binPath,
