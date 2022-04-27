@@ -11,6 +11,6 @@ module.exports.resolveMpxLoader = require('./utils/resolveMpxLoader')
 module.exports.resolveMpxWebpackPluginConf = require('./utils/resolveMpxWebpackPluginConf')
 module.exports.supportedModes = require('./config/supportedModes')
 module.exports.defaultModes = {
-  'serve:mp': 'none',
+  'serve:mp': 'development',
   'build:mp': 'production'
 }

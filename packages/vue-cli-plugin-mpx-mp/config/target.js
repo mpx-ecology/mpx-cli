@@ -1,23 +1,26 @@
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
+const { getMpxPluginOptions } = require('../utils')
 
-module.exports = function (
+/**
+ * target相关配置
+ * @param {*} api
+ * @param {*} options
+ * @param {*} webpackConfig
+ * @param {*} target
+ */
+module.exports = function resolveTargetConfig (
   api,
   options = {},
   webpackConfig,
-  args,
-  srcMode,
-  mode
+  target
 ) {
-  const isWatching = !!args.watch
-  const isCompileProd = !!args.production
-
-  let outputDist = `dist/${mode}`
+  const mpxOptions = getMpxPluginOptions(options)
+  let outputDist = `dist/${target}`
   let subDir = ''
+
   if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
     try {
       const projectConfigJson = require(api.resolve(
@@ -29,28 +32,18 @@ module.exports = function (
     } catch (e) {}
   }
 
-  webpackConfig.name(`${mode}-compiler`)
-  webpackConfig.devtool(isWatching ? 'source-map' : false)
-  webpackConfig.mode(isCompileProd ? 'production' : 'none')
+  webpackConfig.name(`${target}-compiler`)
 
-  webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
   webpackConfig.output.path(api.resolve(outputDist))
-
-  webpackConfig.plugin('define-plugin').use(webpack.DefinePlugin, [
-    {
-      'process.env': {
-        NODE_ENV: isWatching ? '"development"' : '"production"'
-      }
-    }
-  ])
 
   webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
     {
       patterns: [
         {
-          context: api.resolve(`static/${mode}`),
+          context: api.resolve(`static/${target}`),
           from: '**/*',
-          to: subDir ? '..' : ''
+          to: subDir ? '..' : '',
+          noErrorOnMissing: true
         }
       ]
     }
@@ -58,15 +51,9 @@ module.exports = function (
 
   webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
     {
-      mode,
-      srcMode,
+      target,
+      srcMode: mpxOptions.srcMode,
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])
-
-  if (args.report) {
-    webpackConfig
-      .plugin('bundle-analyzer-plugin')
-      .use(BundleAnalyzerPlugin, [{}])
-  }
 }

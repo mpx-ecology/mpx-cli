@@ -30,16 +30,6 @@ module.exports = function (api, options) {
     require('./src')(api)
   }
 
-  if (options.cross) {
-    api.extendPackage({
-      scripts: {
-        'watch:cross': 'MPX_CLI_MODE=mp mpx-cli-service serve:mp --watch --wx --ali',
-        'build:cross:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali',
-        'build:cross': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --wx --ali --production'
-      }
-    })
-  }
-
   // 拓展 vue.config.js 当中有关 mpx.config.js 的配置
   api.extendPackage({
     vue: {
@@ -55,9 +45,8 @@ module.exports = function (api, options) {
 
   api.extendPackage({
     scripts: {
-      'watch:mp': 'MPX_CLI_MODE=mp mpx-cli-service serve:mp --watch',
-      'build:mp': 'MPX_CLI_MODE=mp mpx-cli-service build:mp --production',
-      'build:mp:dev': 'MPX_CLI_MODE=mp mpx-cli-service build:mp'
+      serve: 'mpx-cli-service serve:mp',
+      build: 'mpx-cli-service build:mp'
     },
     dependencies: {
       '@mpxjs/api-proxy': '^2.7.0',

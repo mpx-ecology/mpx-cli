@@ -10,18 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "copy-webpack-plugin": "^9.1.0",
-    "webpack-merge": "^5.8.0"
+    "copy-webpack-plugin": "^9.1.0"
   },
   "peerDependencies": {
     "@mpxjs/vue-cli-plugin-mpx": "*",
     "@mpxjs/webpack-plugin": "^2.7.0",
-    "webpack": "^5.48.0"
-  },
-  "devDependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "^1.2.4",
-    "@mpxjs/webpack-plugin": "^2.7.0",
-    "webpack": "^5.48.0"
+    "webpack": "^5.48.0",
+    "webpack-merge": "^5.8.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",

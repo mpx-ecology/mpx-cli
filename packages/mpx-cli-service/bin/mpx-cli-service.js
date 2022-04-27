@@ -12,9 +12,27 @@ if (!semver.satisfies(process.version, requiredVersion, { includePrerelease: tru
   process.exit(1)
 }
 
-const Service = require('@vue/cli-service/lib/Service')
+const Service = require('../lib/Service')
 const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
 const rawArgv = process.argv.slice(2)
+const args = require('minimist')(rawArgv, {
+  boolean: [
+    // build
+    'modern',
+    'report',
+    'report-json',
+    'inline-vue',
+    'watch',
+    // serve
+    'open',
+    'copy',
+    'https',
+    // inspect
+    'verbose'
+  ]
+})
+const command = args._[0]
+process.env.MPX_CLI_MODE = command.split(':')[1] || 'mp'
 
 const setPluginsToSkip = service.setPluginsToSkip.bind(service)
 service.setPluginsToSkip = function (args) {
@@ -33,24 +51,6 @@ service.setPluginsToSkip = function (args) {
     this.pluginsToSkip.add(plugin)
   })
 }
-
-const args = require('minimist')(rawArgv, {
-  boolean: [
-    // build
-    'modern',
-    'report',
-    'report-json',
-    'inline-vue',
-    'watch',
-    // serve
-    'open',
-    'copy',
-    'https',
-    // inspect
-    'verbose'
-  ]
-})
-const command = args._[0]
 
 service.run(command, args, rawArgv).catch(err => {
   error(err)
