@@ -8,5 +8,8 @@ module.exports = function (api, options) {
       .end()
       .use('ts-loader')
       .loader('ts-loader')
+      .options({
+        appendTsSuffixTo: [/\.(mpx|vue)$/]
+      })
   })
 }
