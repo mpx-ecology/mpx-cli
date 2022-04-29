@@ -42,7 +42,7 @@ module.exports = function registerBuildCommand (api, options) {
           webpackConfig.devtool(isWatching ? 'source-map' : false)
         }
       )
-      runWebpack(webpackConfigs, isWatching)
+      return runWebpack(webpackConfigs, isWatching)
     }
   )
 }
