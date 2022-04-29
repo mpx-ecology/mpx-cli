@@ -40,6 +40,11 @@ module.exports = function resolveMpBaseWebpackConfig (api, options) {
     return chain
   }
 
+  webpackConfig.plugin('mpx-provide-plugin').use(webpack.ProvidePlugin, [
+    {
+      process: 'process/browser'
+    }
+  ])
   webpackConfig.plugin('mpx-define-plugin').use(webpack.DefinePlugin, [
     {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
