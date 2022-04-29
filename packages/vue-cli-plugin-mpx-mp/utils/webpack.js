@@ -6,10 +6,14 @@ const resolveMpBaseWebpackConfig = require('../config/base')
 const resolveTargetConfig = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
-function resolveWebpackCompileCallback (isWatchMode) {
+function resolveWebpackCompileCallback (isWatchMode, resolve, reject) {
   return function (err, stats) {
     stopSpinner()
-    if (err) return console.error(err)
+    if (err) {
+      reject(err)
+      console.error(err)
+      return
+    }
     const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
     statsArr.forEach((item) => {
       console.log(item.compilation.name + '打包结果：')
@@ -27,6 +31,7 @@ function resolveWebpackCompileCallback (isWatchMode) {
 
     if (!isWatchMode && stats.hasErrors()) {
       console.log(chalk.red('  Build failed with errors.\n'))
+      reject(err)
       process.exit(1)
     }
 
@@ -36,6 +41,7 @@ function resolveWebpackCompileCallback (isWatchMode) {
         chalk.cyan(`  ${new Date()} build finished.\n  Still watching...\n`)
       )
     }
+    resolve(stats)
   }
 }
 
@@ -80,13 +86,15 @@ function processWebpackConfig (config) {
 }
 
 function runWebpack (config, watch) {
-  const webpackCallback = resolveWebpackCompileCallback(watch)
-  processWebpackConfig(config)
-  if (!watch) {
-    webpack(config, webpackCallback)
-  } else {
-    webpack(config).watch({}, webpackCallback)
-  }
+  return new Promise((resolve, reject) => {
+    const webpackCallback = resolveWebpackCompileCallback(watch, resolve, reject)
+    processWebpackConfig(config)
+    if (!watch) {
+      webpack(config, webpackCallback)
+    } else {
+      webpack(config).watch({}, webpackCallback)
+    }
+  })
 }
 
 module.exports.runWebpack = runWebpack

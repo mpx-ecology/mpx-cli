@@ -30,7 +30,7 @@ module.exports = function registerServeCommand (api, options) {
           webpacConfig.devtool('source-map')
         }
       )
-      runWebpack(webpackConfigs, true)
+      return runWebpack(webpackConfigs, true)
     }
   )
 }
