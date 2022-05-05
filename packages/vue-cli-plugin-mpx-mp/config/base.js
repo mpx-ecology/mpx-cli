@@ -79,7 +79,7 @@ module.exports = function resolveMpBaseWebpackConfig (api, options) {
   createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader')
   createCSSRule('less', /\.less$/, 'less-loader')
   createCSSRule('sass', /\.sass$/, 'sass-loader')
-  createCSSRule('scss', /\.scss$/)
+  createCSSRule('scss', /\.scss$/, 'sass-loader')
 
   return webpackConfig
 }
