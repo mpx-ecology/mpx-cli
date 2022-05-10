@@ -270,14 +270,20 @@ module.exports = {
 
 ```js
 // vue.config.js
+const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
+
 module.exports = {
   chainWebpack: (config) => {
+    const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
     config.module
       .rule('pug')
       .test(/\.pug$/)
-      .use('pug-html-loader')
-      .loader('pug-html-loader')
+      .use('wxml-loader')
+      .loader(wxmlLoader.loader)
+      .options(wxmlLoader.options)
       .end()
+      .use('pug-plain-loader')
+      .loader('pug-plain-loader')
   }
 }
 ```
