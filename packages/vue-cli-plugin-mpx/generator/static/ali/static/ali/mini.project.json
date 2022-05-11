@@ -1,3 +1,8 @@
 {
+  <%_ if (isPlugin) {_%>
+  "miniprogramRoot": "miniprogram",
+  "pluginRoot": "plugin",
+  "compileType": "plugin",
+  <%_ } _%>
   "component2": true
 }
