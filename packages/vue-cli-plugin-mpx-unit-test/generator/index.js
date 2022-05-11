@@ -1,19 +1,29 @@
-module.exports = function (api) {
-  // TODO: build 命令的执行
+module.exports = function (api, options = {}) {
+  const needTs = !!options.needTs
   api.extendPackage({
     scripts: {
-      test: 'npm run build && jest',
-      puretest: 'jest'
+      test: 'jest'
     }
   })
 
   api.extendPackage({
     devDependencies: {
-      jest: '^24.9.0',
-      'miniprogram-simulate': '^1.1.6',
-      'babel-jest': '^25.3.0'
+      '@mpxjs/mpx-jest': '^0.0.9',
+      '@mpxjs/miniprogram-simulate': '^1.4.8',
+      'babel-jest': '^25.3.0',
+      jest: '^24.9.0'
     }
   })
 
-  api.render('./template')
+  if (needTs) {
+    api.extendPackage({
+      devDependencies: {
+        'ts-jest': '^27.1.2'
+      }
+    })
+  }
+
+  api.render('./template', {
+    needTs
+  })
 }
