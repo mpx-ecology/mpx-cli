@@ -14,7 +14,7 @@ module.exports = function registerBuildCommand (api, options) {
       description: 'mp production',
       usage: 'mpx-cli-service build:mp',
       options: {
-        '--target': `compile for target platform, support ${supportedModes}`,
+        '--targets': `compile for target platform, support ${supportedModes}`,
         '--watch': 'compile in watch mode',
         '--report': 'generate report.html to help analyze bundle content'
       }

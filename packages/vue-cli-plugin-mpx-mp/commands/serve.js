@@ -13,7 +13,7 @@ module.exports = function registerServeCommand (api, options) {
       description: 'mp development',
       usage: 'mpx-cli-service serve:mp',
       options: {
-        '--target': `compile for target platform, support ${supportedModes}`
+        '--targets': `compile for target platform, support ${supportedModes}`
       }
     },
     function (args) {
