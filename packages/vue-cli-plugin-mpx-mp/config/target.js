@@ -2,7 +2,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
+const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { getMpxPluginOptions } = require('../utils')
+
+const copyIgnoreArr = supportedModes.map((item) => {
+  return `**/${item}/**`
+})
 
 /**
  * target相关配置
@@ -43,6 +48,15 @@ module.exports = function resolveTargetConfig (
           context: api.resolve(`static/${target}`),
           from: '**/*',
           to: subDir ? '..' : '',
+          noErrorOnMissing: true
+        },
+        {
+          context: api.resolve('static'),
+          from: '**/*',
+          to: subDir ? '..' : '',
+          globOptions: {
+            ignore: copyIgnoreArr
+          },
           noErrorOnMissing: true
         }
       ]
