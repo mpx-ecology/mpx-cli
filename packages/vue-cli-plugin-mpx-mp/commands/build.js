@@ -38,7 +38,7 @@ module.exports = function registerBuildCommand (api, options) {
           if (env === 'production') {
             webpackConfig.mode('production')
           }
-          webpackConfig.plugin('mpx-define-plugin').tap(args => [
+          webpackConfig.plugin('mpx-define-plugin').tap((args) => [
             {
               'process.env.NODE_ENV': `"${env}"`
             }
@@ -48,7 +48,11 @@ module.exports = function registerBuildCommand (api, options) {
               .plugin('bundle-analyzer-plugin')
               .use(BundleAnalyzerPlugin, [{}])
           }
-          webpackConfig.devtool(isWatching ? 'source-map' : false)
+          // 仅在watch模式下生产sourcemap
+          // 百度小程序不开启sourcemap，开启会有模板渲染问题
+          webpackConfig.devtool(
+            isWatching && target.mode !== 'swan' ? 'source-map' : false
+          )
         }
       )
       return runWebpack(webpackConfigs, isWatching)
