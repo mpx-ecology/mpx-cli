@@ -1,5 +1,7 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 
+const supportedModeMap = makeMap(supportedModes)
+
 /**
  * 取数组交集
  * @param {array} a
@@ -7,6 +9,17 @@ const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
  */
 function intersection (a, b) {
   return a.filter((v) => b.includes(v))
+}
+
+/**
+ * makeMap
+ * @param {*} arr
+ * @returns
+ */
+function makeMap (arr) {
+  const map = {}
+  arr.forEach((v) => (map[v] = true))
+  return map
 }
 
 /**
@@ -29,10 +42,17 @@ function getTargets (args, options) {
   const inputTargets = args.targets
     ? args.targets.split(',')
     : Object.keys(args)
-  const targets = intersection(supportedModes, inputTargets)
+  const targets = inputTargets.map((v) => {
+    const [mode, env] = v.split(/[,|]/)
+    return {
+      mode,
+      env
+    }
+  }).filter(v => supportedModeMap[v.mode])
   return targets.length ? targets : defaultTargets
 }
 
+module.exports.makeMap = makeMap
 module.exports.getTargets = getTargets
 module.exports.intersection = intersection
 module.exports.getMpxPluginOptions = getMpxPluginOptions

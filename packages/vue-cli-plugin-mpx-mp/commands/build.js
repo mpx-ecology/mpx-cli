@@ -24,14 +24,19 @@ module.exports = function registerBuildCommand (api, options) {
       const mode = api.service.mode
       const targets = getTargets(args, options)
 
-      logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
+      logWithSpinner(
+        '⚓',
+        `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
+      )
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
         options,
         targets,
-        (webpackConfig) => {
-          if (process.env.NODE_ENV === 'production') {
+        (webpackConfig, target) => {
+          if (target.env) {
+            webpackConfig.mode(target.env)
+          } else if (process.env.NODE_ENV === 'production') {
             webpackConfig.mode('production')
           }
           if (args.report) {

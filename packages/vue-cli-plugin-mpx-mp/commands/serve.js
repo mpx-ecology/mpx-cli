@@ -20,7 +20,10 @@ module.exports = function registerServeCommand (api, options) {
       const mode = api.service.mode
       const targets = getTargets(args, options)
 
-      logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
+      logWithSpinner(
+        '⚓',
+        `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
+      )
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,

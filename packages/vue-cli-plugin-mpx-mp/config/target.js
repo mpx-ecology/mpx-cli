@@ -18,7 +18,7 @@ module.exports = function resolveTargetConfig (
   target
 ) {
   const mpxOptions = getMpxPluginOptions(options)
-  let outputDist = `dist/${target}`
+  let outputDist = `dist/${target.mode}`
   let subDir = ''
 
   if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
@@ -32,7 +32,7 @@ module.exports = function resolveTargetConfig (
     } catch (e) {}
   }
 
-  webpackConfig.name(`${target}-compiler`)
+  webpackConfig.name(`${target.mode}-compiler`)
 
   webpackConfig.output.path(api.resolve(outputDist))
 
@@ -40,7 +40,7 @@ module.exports = function resolveTargetConfig (
     {
       patterns: [
         {
-          context: api.resolve(`static/${target}`),
+          context: api.resolve(`static/${target.mode}`),
           from: '**/*',
           to: subDir ? '..' : '',
           noErrorOnMissing: true
@@ -51,7 +51,7 @@ module.exports = function resolveTargetConfig (
 
   webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
     {
-      target,
+      mode: target.mode,
       srcMode: mpxOptions.srcMode,
       ...resolveMpxWebpackPluginConf(api, options)
     }

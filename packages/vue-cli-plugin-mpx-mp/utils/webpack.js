@@ -58,7 +58,7 @@ function resolveWebpackConfigByTarget (
   resolveCustomConfig
 ) {
   const baseWebpackConfig = resolveMpBaseWebpackConfig(api, options)
-  resolveCustomConfig && resolveCustomConfig(baseWebpackConfig)
+  resolveCustomConfig && resolveCustomConfig(baseWebpackConfig, target)
   // 根据不同 mode 修改小程序构建的 webpack 配置
   resolveTargetConfig(api, options, baseWebpackConfig, target)
   // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
