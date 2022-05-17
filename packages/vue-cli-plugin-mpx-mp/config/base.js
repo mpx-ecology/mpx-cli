@@ -45,11 +45,7 @@ module.exports = function resolveMpBaseWebpackConfig (api, options) {
       process: 'process/browser'
     }
   ])
-  webpackConfig.plugin('mpx-define-plugin').use(webpack.DefinePlugin, [
-    {
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-    }
-  ])
+  console.log(process.env)
   webpackConfig.mode('development').context(api.service.context)
   webpackConfig.performance.hints(false)
   webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning

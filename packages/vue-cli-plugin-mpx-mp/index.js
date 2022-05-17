@@ -10,7 +10,8 @@ module.exports = function (api, options) {
 
 module.exports.defaultModes = {
   'serve:mp': 'development',
-  'build:mp': 'production'
+  'build:mp': 'production',
+  'inspect:mp': 'development'
 }
 
 module.exports.platform = 'mp'

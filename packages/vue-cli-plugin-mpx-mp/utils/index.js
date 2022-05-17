@@ -38,12 +38,12 @@ function getMpxPluginOptions (options) {
  */
 function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)
-  const defaultTargets = [mpxOptions.srcMode || supportedModes[0]]
+  const defaultTargets = [{ mode: mpxOptions.srcMode || supportedModes[0] }]
   const inputTargets = args.targets
-    ? args.targets.split(',')
+    ? args.targets.split(/[,|]/)
     : Object.keys(args)
   const targets = inputTargets.map((v) => {
-    const [mode, env] = v.split(/[,|]/)
+    const [mode, env] = v.split(':')
     return {
       mode,
       env

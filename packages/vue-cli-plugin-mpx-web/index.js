@@ -17,7 +17,8 @@ module.exports = function (api, options) {
 
 module.exports.defaultModes = {
   'serve:web': 'development',
-  'build:web': 'production'
+  'build:web': 'production',
+  'inspect:web': 'development'
 }
 
 module.exports.platform = 'web'

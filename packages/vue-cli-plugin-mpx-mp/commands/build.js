@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
@@ -34,11 +35,15 @@ module.exports = function registerBuildCommand (api, options) {
         options,
         targets,
         (webpackConfig, target) => {
-          if (target.env) {
-            webpackConfig.mode(target.env)
-          } else if (process.env.NODE_ENV === 'production') {
+          const env = target.env || process.env.NODE_ENV
+          if (env === 'production') {
             webpackConfig.mode('production')
           }
+          webpackConfig.plugin('mpx-define-plugin').use(webpack.DefinePlugin, [
+            {
+              'process.env.NODE_ENV': `"${env}"`
+            }
+          ])
           if (args.report) {
             webpackConfig
               .plugin('bundle-analyzer-plugin')
