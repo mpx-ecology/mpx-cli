@@ -20,10 +20,16 @@ module.exports = function registerInspectCommand (api, options) {
         api,
         options,
         targets,
-        (webpackConfig) => {
-          if (process.env.NODE_ENV === 'production') {
+        (webpackConfig, target) => {
+          const env = target.env || process.env.NODE_ENV
+          if (env === 'production') {
             webpackConfig.mode('production')
           }
+          webpackConfig.plugin('mpx-define-plugin').tap(args => [
+            {
+              'process.env.NODE_ENV': `"${env}"`
+            }
+          ])
           if (args.report) {
             webpackConfig
               .plugin('bundle-analyzer-plugin')
