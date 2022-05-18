@@ -29,8 +29,8 @@ module.exports = function registerServeCommand (api, options) {
         api,
         options,
         targets,
-        (webpacConfig) => {
-          webpacConfig.devtool('source-map')
+        (webpackConfig) => {
+          webpackConfig.devtool('source-map')
         }
       )
       return runWebpack(webpackConfigs, true)
