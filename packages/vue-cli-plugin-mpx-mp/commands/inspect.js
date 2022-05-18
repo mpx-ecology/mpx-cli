@@ -22,9 +22,9 @@ module.exports = function registerInspectCommand (api, options) {
         targets,
         (webpackConfig, target) => {
           const env = target.env || process.env.NODE_ENV
-          if (env === 'production') {
-            webpackConfig.mode('production')
-            webpackConfig.plugin('mpx-define-plugin').tap(args => [
+          if (env === 'production' || env === 'development') {
+            webpackConfig.mode(env)
+            webpackConfig.plugin('mpx-define-plugin').tap((args) => [
               {
                 'process.env.NODE_ENV': `"${env}"`
               }
