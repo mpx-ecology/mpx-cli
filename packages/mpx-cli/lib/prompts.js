@@ -43,6 +43,12 @@ module.exports = [
     default: false
   },
   {
+    name: 'needUnitTest',
+    message: '是否需要单元测试',
+    type: 'confirm',
+    default: false
+  },
+  {
     name: 'description',
     type: 'string',
     required: false,
