@@ -11,7 +11,7 @@ const { getMpxPluginOptions } = require('../utils')
  * @param {*} webpackConfig
  * @param {*} target
  */
-module.exports = function resolveTargetConfig (
+function resolveTargetConfig (
   api,
   options = {},
   webpackConfig,
@@ -57,3 +57,13 @@ module.exports = function resolveTargetConfig (
     }
   ])
 }
+
+function processTargetConfig (api, webpacConfig) {
+  webpacConfig.output.clean = true
+  webpacConfig.snapShot = {
+    managedPaths: [api.resolve('node_modules/')]
+  }
+}
+
+module.exports.processTargetConfig = processTargetConfig
+module.exports.resolveTargetConfig = resolveTargetConfig
