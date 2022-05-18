@@ -48,7 +48,7 @@ module.exports = function resolveMpBaseWebpackConfig (api, options, webpackConfi
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
     }
   ])
-  webpackConfig.mode('development').context(api.service.context)
+  webpackConfig.mode(process.env.NODE_ENV).context(api.service.context)
   webpackConfig.performance.hints(false)
   webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
   webpackConfig.module.rules.delete('images')
