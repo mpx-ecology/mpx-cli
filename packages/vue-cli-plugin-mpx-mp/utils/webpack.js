@@ -2,8 +2,8 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { transformMpxEntry } = require('@mpxjs/vue-cli-plugin-mpx')
-const resolveMpBaseWebpackConfig = require('../config/base')
-const resolveTargetConfig = require('../config/target')
+const resolveBaseWebpackConfig = require('../config/base')
+const { resolveTargetConfig, processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
 function resolveWebpackCompileCallback (isWatchMode, resolve, reject) {
@@ -45,31 +45,56 @@ function resolveWebpackCompileCallback (isWatchMode, resolve, reject) {
   }
 }
 
-function addMpPluginWebpackConfig (api, options, webpackConfigs) {
-  const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
-  resolvePluginWebpackConfig(api, options, mpxPluginWebpackConfig)
-  webpackConfigs.push(mpxPluginWebpackConfig)
-}
-
+/**
+ * 根据target生成webpack配置
+ * @param {*} api
+ * @param {*} options
+ * @param {*} target target {mode: 'wx', env: 'development|production'}
+ * @param {*} resolveCustomConfig 自定义配置
+ * @returns
+ */
 function resolveWebpackConfigByTarget (
   api,
   options,
   target,
   resolveCustomConfig
 ) {
-  const baseWebpackConfig = resolveMpBaseWebpackConfig(api, options)
-  resolveCustomConfig && resolveCustomConfig(baseWebpackConfig)
-  // 根据不同 mode 修改小程序构建的 webpack 配置
-  resolveTargetConfig(api, options, baseWebpackConfig, target)
-  // vue.config.js 当中 configureWebpack 的优先级要比 chainWebpack 更高
-  const webpackConfig = api.resolveWebpackConfig(baseWebpackConfig)
+  let webpackConfig = api.resolveChainableWebpackConfig()
+  // 修改基础配置
+  resolveBaseWebpackConfig(api, options, webpackConfig, target)
+  // 根据不同target修改webpack配置
+  resolveTargetConfig(api, options, webpackConfig, target)
+  // 自定义配置
+  resolveCustomConfig && resolveCustomConfig(webpackConfig, target)
+  // resolve其他的插件配置以及vue.config.js配置
+  webpackConfig = api.resolveWebpackConfig(webpackConfig)
+  // 转换entry
   transformMpxEntry(api, options, webpackConfig, false)
+  // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
+  processTargetConfig(api, options, webpackConfig, target)
+  // 返回配置文件
   return webpackConfig
 }
 
-function resolveWebpackConfigByTargets (api, options, targets, process) {
+function addMpPluginWebpackConfig (api, options, webpackConfigs) {
+  const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
+  resolvePluginWebpackConfig(api, options, mpxPluginWebpackConfig)
+  webpackConfigs.push(mpxPluginWebpackConfig)
+}
+
+function resolveWebpackConfigByTargets (
+  api,
+  options,
+  targets,
+  resolveCustomConfig
+) {
   const webpackConfigs = targets.map((target) => {
-    return resolveWebpackConfigByTarget(api, options, target, process)
+    return resolveWebpackConfigByTarget(
+      api,
+      options,
+      target,
+      resolveCustomConfig
+    )
   })
   // 小程序插件构建配置
   if (api.hasPlugin('mpx-plugin-mode')) {
@@ -78,17 +103,13 @@ function resolveWebpackConfigByTargets (api, options, targets, process) {
   return webpackConfigs
 }
 
-function processWebpackConfig (config) {
-  const configs = Array.isArray(config) ? config : [config]
-  configs.forEach((v) => {
-    v.output.clean = true
-  })
-}
-
 function runWebpack (config, watch) {
   return new Promise((resolve, reject) => {
-    const webpackCallback = resolveWebpackCompileCallback(watch, resolve, reject)
-    processWebpackConfig(config)
+    const webpackCallback = resolveWebpackCompileCallback(
+      watch,
+      resolve,
+      reject
+    )
     if (!watch) {
       webpack(config, webpackCallback)
     } else {

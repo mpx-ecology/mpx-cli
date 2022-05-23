@@ -14,7 +14,7 @@ module.exports = function registerBuildCommand (api, options) {
       description: 'mp production',
       usage: 'mpx-cli-service build:mp',
       options: {
-        '--target': `compile for target platform, support ${supportedModes}`,
+        '--targets': `compile for target platform, support ${supportedModes}`,
         '--watch': 'compile in watch mode',
         '--report': 'generate report.html to help analyze bundle content'
       }
@@ -24,22 +24,35 @@ module.exports = function registerBuildCommand (api, options) {
       const mode = api.service.mode
       const targets = getTargets(args, options)
 
-      logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
+      logWithSpinner(
+        '⚓',
+        `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
+      )
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
         options,
         targets,
-        (webpackConfig) => {
-          if (process.env.NODE_ENV === 'production') {
-            webpackConfig.mode('production')
+        (webpackConfig, target) => {
+          const env = target.env
+          if (env === 'production' || env === 'development') {
+            webpackConfig.mode(env)
+            webpackConfig.plugin('mpx-define-plugin').tap(() => [
+              {
+                'process.env.NODE_ENV': `"${env}"`
+              }
+            ])
           }
           if (args.report) {
             webpackConfig
               .plugin('bundle-analyzer-plugin')
               .use(BundleAnalyzerPlugin, [{}])
           }
-          webpackConfig.devtool(isWatching ? 'source-map' : false)
+          // 仅在watch模式下生产sourcemap
+          // 百度小程序不开启sourcemap，开启会有模板渲染问题
+          webpackConfig.devtool(
+            isWatching && target.mode !== 'swan' ? 'source-map' : false
+          )
         }
       )
       return runWebpack(webpackConfigs, isWatching)

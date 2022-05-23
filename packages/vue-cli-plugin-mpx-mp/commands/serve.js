@@ -13,21 +13,24 @@ module.exports = function registerServeCommand (api, options) {
       description: 'mp development',
       usage: 'mpx-cli-service serve:mp',
       options: {
-        '--target': `compile for target platform, support ${supportedModes}`
+        '--targets': `compile for target platform, support ${supportedModes}`
       }
     },
     function (args) {
       const mode = api.service.mode
       const targets = getTargets(args, options)
 
-      logWithSpinner('⚓', `Building for ${mode} of ${targets.join(',')}...`)
+      logWithSpinner(
+        '⚓',
+        `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
+      )
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
         options,
         targets,
-        (webpacConfig) => {
-          webpacConfig.devtool('source-map')
+        (webpackConfig) => {
+          webpackConfig.devtool('source-map')
         }
       )
       return runWebpack(webpackConfigs, true)
