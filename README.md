@@ -361,7 +361,6 @@ module.exports = {
 |@mpxjs/vue-cli-plugin-mpx|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx)|mpx-cli 核心插件，包含基础配置，文件模板等|
 |@mpxjs/vue-cli-plugin-mpx-eslint|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint)|eslint插件，包含eslint相关配置|
 |@mpxjs/vue-cli-plugin-mpx-cloud-func|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func)|云函数编译构建插件|
-|@mpxjs/vue-cli-plugin-mpx-dll|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-dll.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-dll)|dll插件，包含dll相关配置|
 |@mpxjs/vue-cli-plugin-mpx-mp|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp)|小程序插件，包含小程序构建，开发命令，以及相关配置等|
 |@mpxjs/vue-cli-plugin-mpx-web|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web)|web插件，包含web构建，开发命令，以及相关配置等|
 |@mpxjs/vue-cli-plugin-mpx-unit-test|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test)|单测插件，包含单元测试相关配置|
