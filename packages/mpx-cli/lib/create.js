@@ -62,6 +62,9 @@ async function resolvePrompts (name, builtInPreset) {
       if (answers.transWeb) {
         Object.assign(builtInPreset.plugins, plugins.transWeb)
       }
+      if (answers.needUnitTest) {
+        Object.assign(builtInPreset.plugins, plugins.unitTestSupport)
+      }
       // TODO: 添加其他 prompt 插件配置
 
       // 各插件共享 answers 配置
