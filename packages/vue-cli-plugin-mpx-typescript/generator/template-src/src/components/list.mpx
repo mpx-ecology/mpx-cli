@@ -4,7 +4,13 @@
   </view>
 </template>
 
-<script lang="ts" src="./list.ts"></script>
+<script lang="ts">
+import { createComponent } from '@mpxjs/core'
+
+createComponent({
+  data: {}
+})
+</script>
 
 <style lang="stylus">
   .list

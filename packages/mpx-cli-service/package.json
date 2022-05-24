@@ -1,18 +1,18 @@
 {
   "name": "@mpxjs/mpx-cli-service",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "local service for mpx-cli project",
-  "main": "index.js",
+  "main": "lib/Service.js",
   "bin": {
     "mpx-cli-service": "bin/mpx-cli-service.js"
   },
   "peerDependencies": {
     "@vue/cli-service": "^5.0.0",
-    "@vue/cli-shared-utils": "^4.5.6"
+    "@vue/cli-shared-utils": "^5.0.4"
   },
   "devDependencies": {
     "@vue/cli-service": "^5.0.0",
-    "@vue/cli-shared-utils": "^4.5.6"
+    "@vue/cli-shared-utils": "^5.0.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

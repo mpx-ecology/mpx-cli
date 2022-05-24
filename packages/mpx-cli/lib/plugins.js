@@ -6,6 +6,11 @@ const plugins = {
       version: '^1.0.0'
     }
   },
+  unitTestSupport: {
+    [`${prefix}-unit-test`]: {
+      version: '^1.0.0'
+    }
+  },
   cloudFunc: {
     [`${prefix}-cloud-func`]: {
       version: '^1.0.0'
