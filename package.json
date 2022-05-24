@@ -2,11 +2,10 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "publish": "lerna publish from-package",
+    "release": "release-it",
     "test": "node ./scripts/test.js",
     "lint": "npx eslint --fix . --ext .js",
-    "prepare": "husky install",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.js": [
@@ -19,8 +18,8 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@release-it/conventional-changelog": "^4.2.2",
     "@vue/eslint-config-standard": "^6.1.0",
-    "conventional-changelog-cli": "^2.2.2",
     "eslint": "^7.28.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-node": "^11.1.0",
@@ -30,7 +29,10 @@
     "husky": "^6.0.0",
     "lerna": "^3.22.1",
     "lint-staged": "^9.5.0",
-    "ora": "^5.0.1"
+    "ora": "^5.0.1",
+    "release-it": "^14.13.1",
+    "release-it-yarn-workspaces": "^2.0.1",
+    "semver": "^7.3.4"
   },
   "prettier": {
     "semi": false,

@@ -1,0 +1,33 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}"
+  },
+  "github": {
+    "release": true
+  },
+  "npm": {
+    "skipChecks": true
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md",
+      "ignoreRecommendedBump": true
+    },
+    "release-it-yarn-workspaces": {
+      "workspaces": [
+        "packages/mpx-cli-service",
+        "packages/vue-cli-plugin-*"
+      ],
+      "additionalManifests": {
+        "versionUpdates": [
+          "packages/mpx-cli-service/package.json",
+          "packages/vue-cli-plugin-*/package.json"
+        ]
+      }
+    }
+  },
+  "hooks": {
+    "before:init": ["npm run lint"]
+  }
+}
