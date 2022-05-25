@@ -1,6 +1,7 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
+const execa = require('execa')
 const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
@@ -16,11 +17,13 @@ module.exports = function registerBuildCommand (api, options) {
       options: {
         '--targets': `compile for target platform, support ${supportedModes}`,
         '--watch': 'compile in watch mode',
-        '--report': 'generate report.html to help analyze bundle content'
+        '--report': 'generate report.html to help analyze bundle content',
+        '--open-child-process': 'open child process'
       }
     },
     function (args) {
       const isWatching = !!args.watch
+      const openChildProcess = !!args['open-child-process']
       const mode = api.service.mode
       const targets = getTargets(args, options)
 
@@ -55,6 +58,19 @@ module.exports = function registerBuildCommand (api, options) {
           )
         }
       )
+
+      if (openChildProcess) {
+        return Promise.all(
+          webpackConfigs.map((webpackConfig) => {
+            const n = execa.execaNode(
+              require.resolve('../utils/run-webpack-script.js')
+            )
+            n.send(webpackConfig)
+            return n
+          })
+        )
+      }
+
       return runWebpack(webpackConfigs, isWatching)
     }
   )
