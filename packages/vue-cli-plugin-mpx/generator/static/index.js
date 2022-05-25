@@ -1,13 +1,16 @@
+const supportedModes = require('../../config/supportedModes')
+
 module.exports = function (api, options) {
   const srcMode = options.srcMode
-  if (srcMode === 'wx') {
-    api.render('./wx', {
-      ...options,
-      cloudFunc: !!options.cloudFunc,
-      isPlugin: !!options.isPlugin
-    })
+  const newOptions = {
+    ...options,
+    cloudFunc: !!options.cloudFunc,
+    isPlugin: !!options.isPlugin
   }
-  if (srcMode === 'ali' || (srcMode === 'wx' && !!options.cross)) {
-    api.render('./ali', options)
+  api.render(`./${srcMode}`, newOptions)
+  if (srcMode === 'wx' && !!options.cross) {
+    supportedModes.forEach(srcMode => {
+      api.render(`./${srcMode}`, newOptions)
+    })
   }
 }
