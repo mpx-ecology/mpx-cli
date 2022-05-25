@@ -1,3 +1,17 @@
+
+## 1.4.1 (2022-05-25)
+
+#### :rocket: New Features
+* [#35](https://github.com/mpx-ecology/mpx-cli/pull/35) Feature/release ([@mater1996](https://github.com/mater1996))
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx`
+  * [#37](https://github.com/mpx-ecology/mpx-cli/pull/37) fix: isPlugin error ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
 # [](https://github.com/mater1996/mpx-cli/compare/v1.2.0...v) (2022-03-28)
 
 

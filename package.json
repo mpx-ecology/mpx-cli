@@ -40,5 +40,6 @@
     "semi": false,
     "trailingComma": "none",
     "singleQuote": true
-  }
+  },
+  "version": "1.4.1"
 }
