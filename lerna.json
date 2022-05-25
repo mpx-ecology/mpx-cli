@@ -1,7 +1,21 @@
 {
+  "npmClient": "yarn",
+  "useWorkspaces": true,
   "packages": [
     "packages/vue-cli-*",
     "packages/mpx-cli-service"
   ],
-  "version": "1.4.0"
+  "changelog": {
+    "repo": "mpx-ecology/mpx-cli",
+    "cacheDir": ".changelog",
+    "labels": {
+      "PR: New Feature": ":rocket: New Features",
+      "PR: Breaking Change": ":boom: Breaking Changes",
+      "PR: Bug Fix": ":bug: Bug Fix",
+      "PR: Documentation": ":memo: Documentation",
+      "PR: Internal": ":house: Internal",
+      "PR: Underlying Tools": ":hammer: Underlying Tools"
+    }
+  },
+  "version": "1.4.1"
 }

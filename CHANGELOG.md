@@ -1,3 +1,44 @@
+undefined
+
+
+undefined
+
+
+undefined
+
+
+undefined
+
+
+undefined
+
+
+{
+  repo: 'mpx-ecology/mpx-cli',
+  nextVersion: '1.4.0',
+  rootPath: '/Users/materbxh/Program/OpenSource/mpx-cli-new',
+  labels: {
+    'PR: New Feature': ':rocket: New Features',
+    'PR: Breaking Change': ':boom: Breaking Changes',
+    'PR: Bug Fix': ':bug: Bug Fix',
+    'PR: Documentation': ':memo: Documentation',
+    'PR: Internal': ':house: Internal',
+    'PR: Underlying Tools': ':hammer: Underlying Tools'
+  },
+  ignoreCommitters: [
+    'dependabot-bot',
+    'dependabot[bot]',
+    'dependabot-preview[bot]',
+    'greenkeeperio-bot',
+    'greenkeeper[bot]',
+    'renovate-bot',
+    'renovate[bot]'
+  ],
+  cacheDir: '.changelog'
+}
+
+
+
 # [](https://github.com/mater1996/mpx-cli/compare/v1.2.0...v) (2022-03-28)
 
 
