@@ -3,7 +3,9 @@ const path = require('path')
 const execa = require('execa')
 const dotenv = require('dotenv')
 
-dotenv.config()
+dotenv.config({
+  path: path.resolve(__dirname, '../.env.local')
+})
 
 async function genNewRelease () {
   if (process.env.GIT_E2E_SETUP) {
