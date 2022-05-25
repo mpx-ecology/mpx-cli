@@ -8,6 +8,9 @@ module.exports = function (api, options) {
     })
   }
   if (srcMode === 'ali' || (srcMode === 'wx' && !!options.cross)) {
-    api.render('./ali', options)
+    api.render('./ali', {
+      ...options,
+      isPlugin: !!options.isPlugin
+    })
   }
 }
