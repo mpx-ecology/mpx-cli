@@ -17,7 +17,9 @@
       "additionalManifests": {
         "versionUpdates": [
           "packages/mpx-cli-service/package.json",
-          "packages/vue-cli-plugin-*/package.json"
+          "packages/vue-cli-plugin-*/package.json",
+          "lerna.json",
+          "package.json"
         ]
       }
     }
