@@ -1,4 +1,17 @@
 
+## 1.4.2 (2022-05-26)
+
+#### :bug: Bug Fix
+* Other
+  * [#39](https://github.com/mpx-ecology/mpx-cli/pull/39) fix: version update ([@mater1996](https://github.com/mater1996))
+* `vue-cli-plugin-mpx`
+  * [#38](https://github.com/mpx-ecology/mpx-cli/pull/38) fix: npm package build error ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 1.4.1 (2022-05-25)
 
 #### :rocket: New Features
