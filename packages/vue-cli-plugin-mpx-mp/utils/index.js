@@ -1,5 +1,4 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
-
 const supportedModeMap = makeMap(supportedModes)
 
 /**
@@ -52,6 +51,13 @@ function getTargets (args, options) {
   return targets.length ? targets : defaultTargets
 }
 
+function removeArgv (rawArgv, removeName) {
+  return rawArgv.map(argv => {
+    return argv.indexOf(removeName) > -1 ? undefined : argv
+  }).filter(v => v !== undefined)
+}
+
+module.exports.removeArgv = removeArgv
 module.exports.makeMap = makeMap
 module.exports.getTargets = getTargets
 module.exports.intersection = intersection

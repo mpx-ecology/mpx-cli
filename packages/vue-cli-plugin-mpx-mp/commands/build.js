@@ -1,12 +1,14 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { logWithSpinner } = require('@vue/cli-shared-utils')
+const { logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 const execa = require('execa')
-const { getTargets } = require('../utils/index')
+const { getTargets, removeArgv } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
   runWebpack
 } = require('../utils/webpack')
+
+const mpxCliServiceBinPath = require.resolve('@mpxjs/mpx-cli-service/bin/mpx-cli-service.js')
 
 module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(
@@ -21,16 +23,36 @@ module.exports = function registerBuildCommand (api, options) {
         '--open-child-process': 'open child process'
       }
     },
-    function (args) {
+    function (args, rawArgv) {
       const isWatching = !!args.watch
-      const openChildProcess = !!args['open-child-process']
       const mode = api.service.mode
       const targets = getTargets(args, options)
+      const openChildProcess = !!args['open-child-process']
 
-      logWithSpinner(
+      const showLoading = () => logWithSpinner(
         '⚓',
         `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
       )
+
+      if (openChildProcess && targets.length > 1) {
+        showLoading()
+        return Promise.all(targets.map(target => {
+          return execa('node', [
+            mpxCliServiceBinPath,
+            'build:mp',
+            ...removeArgv(rawArgv, '--targets'),
+            `--targets=${target.mode}:${target.env}`
+          ])
+        })).then((result) => {
+          stopSpinner()
+          console.log(result.map(({ stdout }) => stdout).join('\n'))
+        })
+      }
+
+      if (!openChildProcess) {
+        showLoading()
+      }
+
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
@@ -58,18 +80,6 @@ module.exports = function registerBuildCommand (api, options) {
           )
         }
       )
-
-      if (openChildProcess) {
-        return Promise.all(
-          webpackConfigs.map((webpackConfig) => {
-            const n = execa.execaNode(
-              require.resolve('../utils/run-webpack-script.js')
-            )
-            n.send(webpackConfig)
-            return n
-          })
-        )
-      }
 
       return runWebpack(webpackConfigs, isWatching)
     }
