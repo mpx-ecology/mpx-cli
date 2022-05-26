@@ -30,9 +30,9 @@ module.exports = function (api, options, webpackConfig) {
 
   webpackConfig.resolve.extensions
     .add('.mpx')
+    .add('.js')
     .add('.wxml')
     .add('.ts')
-    .add('.js')
 
   webpackConfig.resolve.modules.add('node_modules')
 
