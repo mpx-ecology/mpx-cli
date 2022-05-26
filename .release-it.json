@@ -18,8 +18,7 @@
         "versionUpdates": [
           "packages/mpx-cli-service/package.json",
           "packages/vue-cli-plugin-*/package.json",
-          "lerna.json",
-          "package.json"
+          "lerna.json"
         ]
       }
     }
