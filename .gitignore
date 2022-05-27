@@ -1,6 +1,8 @@
 .idea/
 .vscode/
+.changelog
 node_modules/
 package-lock.json
 .DS_Store
 /test
+*.local
