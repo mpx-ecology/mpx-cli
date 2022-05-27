@@ -1,5 +1,10 @@
+const execa = require('execa')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const supportedModeMap = makeMap(supportedModes)
+
+const mpxCliServiceBinPath = require.resolve(
+  '@mpxjs/mpx-cli-service/bin/mpx-cli-service.js'
+)
 
 /**
  * 取数组交集
@@ -41,20 +46,39 @@ function getTargets (args, options) {
   const inputTargets = args.targets
     ? args.targets.split(/[,|]/)
     : Object.keys(args)
-  const targets = inputTargets.map((v) => {
-    const [mode, env] = v.split(':')
-    return {
-      mode,
-      env
-    }
-  }).filter(v => supportedModeMap[v.mode])
+  const targets = inputTargets
+    .map((v) => {
+      const [mode, env] = v.split(':')
+      return {
+        mode,
+        env
+      }
+    })
+    .filter((v) => supportedModeMap[v.mode])
   return targets.length ? targets : defaultTargets
 }
 
 function removeArgv (rawArgv, removeName) {
-  return rawArgv.filter(argv => argv.indexOf(removeName) === -1)
+  return rawArgv.filter((argv) => argv.indexOf(removeName) === -1)
 }
 
+function runServiceCommand (command, rawArgv) {
+  return execa('node', [mpxCliServiceBinPath, command, ...rawArgv])
+}
+
+function runServiceCommandByTargets (targets, command, rawArgv) {
+  return Promise.all(
+    targets.map((target) =>
+      runServiceCommand(command, [
+        ...removeArgv(rawArgv, '--targets'),
+        `--targets=${target.mode}:${target.env}`
+      ])
+    )
+  )
+}
+
+module.exports.runServiceCommandByTargets = runServiceCommandByTargets
+module.exports.runServiceCommand = runServiceCommand
 module.exports.removeArgv = removeArgv
 module.exports.makeMap = makeMap
 module.exports.getTargets = getTargets

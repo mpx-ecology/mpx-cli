@@ -1,14 +1,11 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
-const execa = require('execa')
-const { getTargets, removeArgv } = require('../utils/index')
+const { getTargets, runServiceCommandByTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
   runWebpack
 } = require('../utils/webpack')
-
-const mpxCliServiceBinPath = require.resolve('@mpxjs/mpx-cli-service/bin/mpx-cli-service.js')
 
 module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(
@@ -27,30 +24,21 @@ module.exports = function registerBuildCommand (api, options) {
       const isWatching = !!args.watch
       const mode = api.service.mode
       const targets = getTargets(args, options)
-      const openChildProcess = !!args['open-child-process']
+      const openChildProcess =
+        !!args['open-child-process'] && targets.length > 1
 
-      const showLoading = () => logWithSpinner(
+      logWithSpinner(
         '⚓',
         `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
       )
 
-      if (openChildProcess && targets.length > 1) {
-        showLoading()
-        return Promise.all(targets.map(target => {
-          return execa('node', [
-            mpxCliServiceBinPath,
-            'build:mp',
-            ...removeArgv(rawArgv, '--targets'),
-            `--targets=${target.mode}:${target.env}`
-          ])
-        })).then((result) => {
-          stopSpinner()
-          console.log(result.map(({ stdout }) => stdout).join('\n'))
-        })
-      }
-
-      if (!openChildProcess) {
-        showLoading()
+      if (openChildProcess) {
+        return runServiceCommandByTargets(targets, 'build:mp', rawArgv).then(
+          (results) => {
+            stopSpinner()
+            console.log(results.map(({ stdout }) => stdout).join('\n'))
+          }
+        )
       }
 
       // 小程序业务代码构建配置
