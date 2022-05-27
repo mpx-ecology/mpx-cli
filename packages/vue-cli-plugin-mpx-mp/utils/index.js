@@ -63,7 +63,7 @@ function removeArgv (rawArgv, removeName) {
 }
 
 function runServiceCommand (command, rawArgv) {
-  return execa('node', [mpxCliServiceBinPath, command, ...rawArgv])
+  return execa.node(mpxCliServiceBinPath, [command, ...rawArgv])
 }
 
 function runServiceCommandByTargets (targets, command, rawArgv) {
