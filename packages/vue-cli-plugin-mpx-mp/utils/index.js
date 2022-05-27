@@ -52,9 +52,7 @@ function getTargets (args, options) {
 }
 
 function removeArgv (rawArgv, removeName) {
-  return rawArgv.map(argv => {
-    return argv.indexOf(removeName) > -1 ? undefined : argv
-  }).filter(v => v !== undefined)
+  return rawArgv.filter(argv => argv.indexOf(removeName) === -1)
 }
 
 module.exports.removeArgv = removeArgv
