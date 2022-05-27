@@ -5,7 +5,7 @@ module.exports = {
       version: '^1.0.0'
     },
     '@mpxjs/vue-cli-plugin-mpx': {
-      version: '/Users/materbxh/Program/OpenSource/mpx-cli-new/packages/vue-cli-plugin-mpx'
+      version: '^1.0.0'
     },
     '@mpxjs/vue-cli-plugin-mpx-mp': {
       version: '^1.0.0'
