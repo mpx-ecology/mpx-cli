@@ -1,6 +1,6 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
+const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets, runServiceCommandByTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
@@ -21,7 +21,7 @@ module.exports = function registerBuildCommand (api, options) {
       }
     },
     function (args, rawArgv) {
-      const isWatching = !!args.watch
+      const watch = !!args.watch
       const mode = api.service.mode
       const targets = getTargets(args, options)
       const openChildProcess =
@@ -33,12 +33,7 @@ module.exports = function registerBuildCommand (api, options) {
       )
 
       if (openChildProcess) {
-        return runServiceCommandByTargets(targets, 'build:mp', rawArgv).then(
-          (results) => {
-            stopSpinner()
-            console.log(results.map(({ stdout }) => stdout).join('\n'))
-          }
-        )
+        return runServiceCommandByTargets('build:mp', rawArgv, { targets, watch })
       }
 
       // 小程序业务代码构建配置
@@ -64,12 +59,15 @@ module.exports = function registerBuildCommand (api, options) {
           // 仅在watch模式下生产sourcemap
           // 百度小程序不开启sourcemap，开启会有模板渲染问题
           webpackConfig.devtool(
-            isWatching && target.mode !== 'swan' ? 'source-map' : false
+            watch && target.mode !== 'swan' ? 'source-map' : false
           )
         }
       )
 
-      return runWebpack(webpackConfigs, isWatching)
+      return runWebpack(webpackConfigs, {
+        watch,
+        childProcess: !!args['open-child-process']
+      })
     }
   )
 }

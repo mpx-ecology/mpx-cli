@@ -6,45 +6,6 @@ const resolveBaseWebpackConfig = require('../config/base')
 const { resolveTargetConfig, processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
-function resolveWebpackCompileCallback (isWatchMode, resolve, reject) {
-  return function (err, stats) {
-    stopSpinner()
-    if (err) {
-      reject(err)
-      console.error(err)
-      return
-    }
-    const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
-    statsArr.forEach((item) => {
-      console.log(item.compilation.name + '打包结果：')
-      process.stdout.write(
-        item.toString({
-          colors: true,
-          modules: false,
-          children: false,
-          chunks: false,
-          chunkModules: false,
-          entrypoints: false
-        }) + '\n\n'
-      )
-    })
-
-    if (!isWatchMode && stats.hasErrors()) {
-      console.log(chalk.red('  Build failed with errors.\n'))
-      reject(err)
-      process.exit(1)
-    }
-
-    console.log(chalk.cyan('  Build complete.\n'))
-    if (isWatchMode) {
-      console.log(
-        chalk.cyan(`  ${new Date()} build finished.\n  Still watching...\n`)
-      )
-    }
-    resolve(stats)
-  }
-}
-
 /**
  * 根据target生成webpack配置
  * @param {*} api
@@ -103,13 +64,57 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
-function runWebpack (config, watch) {
+function resolveWebpackCompileCallback ({ watch, childProcess }) {
+  return function (err, stats) {
+    return new Promise((resolve, reject) => {
+      stopSpinner(false)
+      if (err) {
+        console.error(err)
+        return reject(err)
+      }
+      const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
+      statsArr.forEach((item) => {
+        console.log(chalk.green(item.compilation.name + '打包结果：\n'))
+        console.log(
+          item.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false,
+            entrypoints: false
+          }) + '\n\n'
+        )
+      })
+
+      if (!watch && stats.hasErrors()) {
+        console.log(chalk.red('  Build failed with errors.\n'))
+        process.exit(1)
+      }
+
+      if (!childProcess) {
+        console.log(
+          chalk.cyan(
+            watch
+              ? `  ${new Date()} build finished.\n  Still watching...\n`
+              : '  Build complete.\n'
+          )
+        )
+      } else {
+        process.send(err)
+      }
+      return resolve()
+    })
+  }
+}
+
+function runWebpack (config, { watch, childProcess }) {
   return new Promise((resolve, reject) => {
-    const webpackCallback = resolveWebpackCompileCallback(
-      watch,
-      resolve,
-      reject
-    )
+    const webpackCallback = (...args) =>
+      resolveWebpackCompileCallback({
+        watch,
+        childProcess
+      })(...args).then(resolve).catch(reject)
     if (!watch) {
       webpack(config, webpackCallback)
     } else {

@@ -1,5 +1,5 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
-const { logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
+const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets, runServiceCommandByTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
@@ -28,12 +28,7 @@ module.exports = function registerServeCommand (api, options) {
       )
 
       if (openChildProcess) {
-        return runServiceCommandByTargets(targets, 'serve:mp', rawArgv).then(
-          (results) => {
-            stopSpinner()
-            console.log(results.map(({ stdout }) => stdout).join('\n'))
-          }
-        )
+        return runServiceCommandByTargets('serve:mp', rawArgv, { targets, watch: true })
       }
 
       // 小程序业务代码构建配置
@@ -45,7 +40,10 @@ module.exports = function registerServeCommand (api, options) {
           webpackConfig.devtool('source-map')
         }
       )
-      return runWebpack(webpackConfigs, true)
+      return runWebpack(webpackConfigs, {
+        watch: true,
+        childProcess: !!args['open-child-process']
+      })
     }
   )
 }

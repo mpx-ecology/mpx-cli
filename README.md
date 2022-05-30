@@ -69,6 +69,7 @@ npm run build
   --mode       指定环境模式 (默认值：production)
   --watch      监听文件变化
   --report     生成包分析报告
+  --open-child-process 开启子进程编译
 ```
 
 ```sh

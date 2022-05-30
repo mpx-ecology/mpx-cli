@@ -1,6 +1,8 @@
 const execa = require('execa')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { stopSpinner } = require('@vue/cli-shared-utils')
 const supportedModeMap = makeMap(supportedModes)
+const chalk = require('chalk')
 
 const mpxCliServiceBinPath = require.resolve(
   '@mpxjs/mpx-cli-service/bin/mpx-cli-service.js'
@@ -62,17 +64,44 @@ function removeArgv (rawArgv, removeName) {
   return rawArgv.filter((argv) => argv.indexOf(removeName) === -1)
 }
 
-function runServiceCommand (command, rawArgv) {
-  return execa.node(mpxCliServiceBinPath, [command, ...rawArgv])
+function runServiceCommand (command, rawArgv, options = {}) {
+  return execa.node(mpxCliServiceBinPath, [command, ...rawArgv], options)
 }
 
-function runServiceCommandByTargets (targets, command, rawArgv) {
+function runServiceCommandByTargets (command, rawArgv, { targets, watch }) {
+  let complete = 0
+  let chunks = []
   return Promise.all(
-    targets.map((target) =>
-      runServiceCommand(command, [
+    targets.map((target, index) => {
+      const ls = runServiceCommand(command, [
         ...removeArgv(rawArgv, '--targets'),
         `--targets=${target.mode}:${target.env}`
-      ])
+      ], {
+        env: {
+          ...process.env,
+          FORCE_COLOR: 1
+        }
+      })
+      ls.stdout.on('data', (data) => {
+        chunks[index] = chunks[index] || []
+        chunks[index].push(data)
+      })
+      ls.on('message', (err) => {
+        complete++
+        if (!err && complete === targets.length) {
+          stopSpinner(false)
+          chunks.push([chalk.cyan(
+            watch
+              ? `  ${new Date()} build finished.\n  Still watching...\n`
+              : '  Build complete.\n'
+          )])
+          console.log(chunks.map(v => v.join('')).join(''))
+          complete = 0
+          chunks = []
+        }
+      })
+      return ls
+    }
     )
   )
 }
