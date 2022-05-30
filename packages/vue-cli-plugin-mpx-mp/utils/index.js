@@ -96,7 +96,7 @@ function runServiceCommandByTargets (command, rawArgv, { targets, watch }) {
           chunks[index].push(data)
         })
         ls.on('message', (err) => {
-          if (err) reject(err)
+          if (err) return reject(err)
           complete++
           if (complete === targets.length) {
             stopSpinner(false)
