@@ -41,8 +41,7 @@ module.exports = function registerServeCommand (api, options) {
         }
       )
       return runWebpack(webpackConfigs, {
-        watch: true,
-        childProcess: !!args['open-child-process']
+        watch: true
       })
     }
   )

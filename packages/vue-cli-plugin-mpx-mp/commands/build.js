@@ -65,8 +65,7 @@ module.exports = function registerBuildCommand (api, options) {
       )
 
       return runWebpack(webpackConfigs, {
-        watch,
-        childProcess: !!args['open-child-process']
+        watch
       })
     }
   )

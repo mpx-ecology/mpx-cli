@@ -64,7 +64,7 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
-function resolveWebpackCompileCallback ({ watch, childProcess }) {
+function resolveWebpackCompileCallback ({ watch }) {
   return function (err, stats) {
     return new Promise((resolve, reject) => {
       stopSpinner(false)
@@ -92,7 +92,7 @@ function resolveWebpackCompileCallback ({ watch, childProcess }) {
         process.exit(1)
       }
 
-      if (!childProcess) {
+      if (!process.send) {
         console.log(chalk.cyan(
           watch
             ? `  ${new Date()} build finished.\n  Still watching...\n`
@@ -106,12 +106,11 @@ function resolveWebpackCompileCallback ({ watch, childProcess }) {
   }
 }
 
-function runWebpack (config, { watch, childProcess }) {
+function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
     const webpackCallback = (...args) =>
       resolveWebpackCompileCallback({
-        watch,
-        childProcess
+        watch
       })(...args)
         .then(resolve)
         .catch(reject)
