@@ -77,39 +77,43 @@ function runServiceCommandByTargets (command, rawArgv, { targets, watch }) {
   }
   return Promise.all(
     targets.map((target, index) => {
-      const ls = runServiceCommand(
-        command,
-        [
-          ...removeArgv(rawArgv, '--targets'),
-          `--targets=${target.mode}:${target.env}`
-        ],
-        {
-          env: {
-            ...process.env,
-            FORCE_COLOR: 1
+      return new Promise((resolve, reject) => {
+        const ls = runServiceCommand(
+          command,
+          [
+            ...removeArgv(rawArgv, '--targets'),
+            `--targets=${target.mode}:${target.env}`
+          ],
+          {
+            env: {
+              ...process.env,
+              FORCE_COLOR: 1
+            }
           }
-        }
-      )
-      ls.stdout.on('data', (data) => {
-        chunks[index] = chunks[index] || []
-        chunks[index].push(data)
-      })
-      ls.on('message', (err) => {
-        if (!err) {
+        )
+        ls.stdout.on('data', (data) => {
+          chunks[index] = chunks[index] || []
+          chunks[index].push(data)
+        })
+        ls.on('message', (err) => {
+          if (err) reject(err)
           complete++
           if (complete === targets.length) {
             stopSpinner(false)
-            chunks.push([chalk.cyan(
-              watch
-                ? `  ${new Date()} build finished.\n  Still watching...\n`
-                : '  Build complete.\n'
-            )])
+            chunks.push([
+              chalk.cyan(
+                watch
+                  ? `  ${new Date()} build finished.\n  Still watching...\n`
+                  : '  Build complete.\n'
+              )
+            ])
             console.log(chunks.map((v) => v.join('')).join(''))
             reset()
           }
-        }
+          resolve()
+        })
+        ls.catch(reject)
       })
-      return ls
     })
   )
 }
