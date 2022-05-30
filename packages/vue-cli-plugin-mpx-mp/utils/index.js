@@ -1,7 +1,7 @@
 const execa = require('execa')
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { stopSpinner } = require('@vue/cli-shared-utils')
-const { genWebpackCompletedLog } = require('./webpack')
+const chalk = require('chalk')
 
 const supportedModeMap = makeMap(supportedModes)
 const mpxCliServiceBinPath = require.resolve(
@@ -77,37 +77,39 @@ function runServiceCommandByTargets (command, rawArgv, { targets, watch }) {
   }
   return Promise.all(
     targets.map((target, index) => {
-      return new Promise((resolve, reject) => {
-        const ls = runServiceCommand(
-          command,
-          [
-            ...removeArgv(rawArgv, '--targets'),
-            `--targets=${target.mode}:${target.env}`
-          ],
-          {
-            env: {
-              ...process.env,
-              FORCE_COLOR: 1
-            }
+      const ls = runServiceCommand(
+        command,
+        [
+          ...removeArgv(rawArgv, '--targets'),
+          `--targets=${target.mode}:${target.env}`
+        ],
+        {
+          env: {
+            ...process.env,
+            FORCE_COLOR: 1
           }
-        )
-        ls.stdout.on('data', (data) => {
-          chunks[index] = chunks[index] || []
-          chunks[index].push(data)
-        })
-        ls.on('message', (err) => {
-          if (!err) {
-            complete++
-            if (complete === targets.length) {
-              stopSpinner(false)
-              chunks.push([genWebpackCompletedLog(watch)])
-              console.log(chunks.map((v) => v.join('')).join(''))
-              reset()
-            }
-          }
-        })
-        return ls
+        }
+      )
+      ls.stdout.on('data', (data) => {
+        chunks[index] = chunks[index] || []
+        chunks[index].push(data)
       })
+      ls.on('message', (err) => {
+        if (!err) {
+          complete++
+          if (complete === targets.length) {
+            stopSpinner(false)
+            chunks.push([chalk.cyan(
+              watch
+                ? `  ${new Date()} build finished.\n  Still watching...\n`
+                : '  Build complete.\n'
+            )])
+            console.log(chunks.map((v) => v.join('')).join(''))
+            reset()
+          }
+        }
+      })
+      return ls
     })
   )
 }

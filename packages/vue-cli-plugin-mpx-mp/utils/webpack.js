@@ -64,14 +64,6 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
-function genWebpackCompletedLog (watch) {
-  return chalk.cyan(
-    watch
-      ? `  ${new Date()} build finished.\n  Still watching...\n`
-      : '  Build complete.\n'
-  )
-}
-
 function resolveWebpackCompileCallback ({ watch, childProcess }) {
   return function (err, stats) {
     return new Promise((resolve, reject) => {
@@ -101,7 +93,11 @@ function resolveWebpackCompileCallback ({ watch, childProcess }) {
       }
 
       if (!childProcess) {
-        console.log(genWebpackCompletedLog(watch))
+        console.log(chalk.cyan(
+          watch
+            ? `  ${new Date()} build finished.\n  Still watching...\n`
+            : '  Build complete.\n'
+        ))
       } else {
         process.send(err)
       }
@@ -127,7 +123,6 @@ function runWebpack (config, { watch, childProcess }) {
   })
 }
 
-module.exports.genWebpackCompletedLog = genWebpackCompletedLog
 module.exports.runWebpack = runWebpack
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
