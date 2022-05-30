@@ -1,10 +1,11 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
-const { getTargets, runServiceCommandByTargets } = require('../utils/index')
+const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
-  runWebpack
+  runWebpack,
+  runWebpackInChildProcess
 } = require('../utils/webpack')
 
 module.exports = function registerBuildCommand (api, options) {
@@ -33,7 +34,7 @@ module.exports = function registerBuildCommand (api, options) {
       )
 
       if (openChildProcess) {
-        return runServiceCommandByTargets('build:mp', rawArgv, { targets, watch })
+        return runWebpackInChildProcess('build:mp', rawArgv, { targets, watch })
       }
 
       // 小程序业务代码构建配置

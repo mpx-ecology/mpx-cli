@@ -1,9 +1,10 @@
 const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
-const { getTargets, runServiceCommandByTargets } = require('../utils/index')
+const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
-  runWebpack
+  runWebpack,
+  runWebpackInChildProcess
 } = require('../utils/webpack')
 
 module.exports = function registerServeCommand (api, options) {
@@ -28,7 +29,7 @@ module.exports = function registerServeCommand (api, options) {
       )
 
       if (openChildProcess) {
-        return runServiceCommandByTargets('serve:mp', rawArgv, { targets, watch: true })
+        return runWebpackInChildProcess('serve:mp', rawArgv, { targets, watch: true })
       }
 
       // 小程序业务代码构建配置

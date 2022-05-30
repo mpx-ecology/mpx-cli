@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { transformMpxEntry } = require('@mpxjs/vue-cli-plugin-mpx')
+const { runServiceCommand, removeArgv } = require('./utils')
 const resolveBaseWebpackConfig = require('../config/base')
 const { resolveTargetConfig, processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
@@ -64,6 +65,14 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
+function genBuildCompletedLog (watch) {
+  return chalk.cyan(
+    watch
+      ? `  ${new Date()} build finished.\n  Still watching...\n`
+      : '  Build complete.\n'
+  )
+}
+
 function resolveWebpackCompileCallback ({ watch }) {
   return function (err, stats) {
     return new Promise((resolve, reject) => {
@@ -93,11 +102,7 @@ function resolveWebpackCompileCallback ({ watch }) {
       }
 
       if (!process.send) {
-        console.log(chalk.cyan(
-          watch
-            ? `  ${new Date()} build finished.\n  Still watching...\n`
-            : '  Build complete.\n'
-        ))
+        console.log(genBuildCompletedLog(watch))
       } else {
         process.send(err)
       }
@@ -122,6 +127,51 @@ function runWebpack (config, { watch }) {
   })
 }
 
+function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
+  let complete = 0
+  let chunks = []
+  function reset () {
+    complete = 0
+    chunks = []
+  }
+  return Promise.all(
+    targets.map((target, index) => {
+      return new Promise((resolve, reject) => {
+        const ls = runServiceCommand(
+          command,
+          [
+            ...removeArgv(rawArgv, '--targets'),
+            `--targets=${target.mode}:${target.env}`
+          ],
+          {
+            env: {
+              ...process.env,
+              FORCE_COLOR: 1
+            }
+          }
+        )
+        ls.stdout.on('data', (data) => {
+          chunks[index] = chunks[index] || []
+          chunks[index].push(data)
+        })
+        ls.on('message', (err) => {
+          if (err) return reject(err)
+          complete++
+          if (complete === targets.length) {
+            stopSpinner(false)
+            chunks.push([genBuildCompletedLog(watch)])
+            console.log(chunks.map((v) => v.join('')).join(''))
+            reset()
+          }
+          resolve()
+        })
+        ls.catch(reject)
+      })
+    })
+  )
+}
+
+module.exports.runWebpackInChildProcess = runWebpackInChildProcess
 module.exports.runWebpack = runWebpack
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
