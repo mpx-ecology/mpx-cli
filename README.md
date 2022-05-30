@@ -95,6 +95,7 @@ mpx-cli-service build:mp --targets=wx,ali
 选项:
 
   --targets    编译到小程序目标(默认值: wx)
+  --open-child-process 开启子进程编译
 ```
 
 ```sh
