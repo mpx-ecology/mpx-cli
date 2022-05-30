@@ -78,9 +78,9 @@ function resolveWebpackCompileCallback ({ watch }) {
     return new Promise((resolve, reject) => {
       stopSpinner(false)
       if (err) {
-        console.error(err)
         return reject(err)
       }
+
       const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
       statsArr.forEach((item) => {
         console.log(chalk.green(item.compilation.name + '打包结果：\n'))
@@ -97,8 +97,7 @@ function resolveWebpackCompileCallback ({ watch }) {
       })
 
       if (!watch && stats.hasErrors()) {
-        console.log(chalk.red('  Build failed with errors.\n'))
-        process.exit(1)
+        return reject(new Error(chalk.red('Build failed with errors.\n')))
       }
 
       if (!process.send) {
@@ -134,41 +133,50 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
     complete = 0
     chunks = []
   }
-  return Promise.all(
-    targets.map((target, index) => {
-      return new Promise((resolve, reject) => {
-        const ls = runServiceCommand(
-          command,
-          [
-            ...removeArgv(rawArgv, '--targets'),
-            `--targets=${target.mode}:${target.env}`
-          ],
-          {
-            env: {
-              ...process.env,
-              FORCE_COLOR: 1
-            }
+  function logChunks () {
+    console.log(chunks.map((v) => v.join('')).join(''))
+  }
+  return new Promise((resolve, reject) => {
+    targets.forEach((target, index) => {
+      const ls = runServiceCommand(
+        command,
+        [
+          ...removeArgv(rawArgv, '--targets'),
+          `--targets=${target.mode}:${target.env}`
+        ],
+        {
+          env: {
+            ...process.env,
+            FORCE_COLOR: 1
           }
-        )
-        ls.stdout.on('data', (data) => {
-          chunks[index] = chunks[index] || []
-          chunks[index].push(data)
-        })
-        ls.on('message', (err) => {
-          if (err) return reject(err)
-          complete++
-          if (complete === targets.length) {
-            stopSpinner(false)
-            chunks.push([genBuildCompletedLog(watch)])
-            console.log(chunks.map((v) => v.join('')).join(''))
-            reset()
-          }
+        }
+      )
+      ls.stdout.on('data', (data) => {
+        chunks[index] = chunks[index] || []
+        chunks[index].push(data)
+      })
+      ls.on('message', (err) => {
+        if (err) return reject(err)
+        complete++
+        if (complete === targets.length) {
+          stopSpinner(false)
+          chunks.push([genBuildCompletedLog(watch)])
+          logChunks()
+          reset()
           resolve()
-        })
-        ls.catch(reject)
+        }
+      })
+      ls.catch(() => {
+        complete++
+        if (complete === targets.length) {
+          stopSpinner(false)
+          logChunks()
+          reset()
+          reject(new Error(chalk.red('Build failed with errors.\n')))
+        }
       })
     })
-  )
+  })
 }
 
 module.exports.runWebpackInChildProcess = runWebpackInChildProcess
