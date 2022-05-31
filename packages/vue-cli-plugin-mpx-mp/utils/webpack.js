@@ -78,6 +78,7 @@ function resolveWebpackCompileCallback ({ watch }) {
     return new Promise((resolve, reject) => {
       stopSpinner(false)
       if (err) {
+        process.send && process.send(err)
         return reject(err)
       }
 
@@ -97,13 +98,15 @@ function resolveWebpackCompileCallback ({ watch }) {
       })
 
       if (!watch && stats.hasErrors()) {
-        return reject(new Error(chalk.red('Build failed with errors.\n')))
+        const err = new Error(chalk.red('Build failed with errors.\n'))
+        process.send && process.send(err)
+        return reject(err)
       }
 
       if (!process.send) {
         console.log(genBuildCompletedLog(watch))
       } else {
-        process.send(err)
+        process.send(null)
       }
       return resolve()
     })
@@ -129,50 +132,51 @@ function runWebpack (config, { watch }) {
 function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
   let complete = 0
   let chunks = []
+  let hasErrors = false
   function reset () {
     complete = 0
     chunks = []
+    hasErrors = false
   }
   function logChunks () {
     console.log(chunks.map((v) => v.join('')).join(''))
   }
   return new Promise((resolve, reject) => {
     targets.forEach((target, index) => {
+      let errorHandled = false
       const ls = runServiceCommand(
         command,
         [
           ...removeArgv(rawArgv, '--targets'),
           `--targets=${target.mode}:${target.env}`
-        ],
-        {
-          env: {
-            ...process.env,
-            FORCE_COLOR: 1
-          }
-        }
+        ]
       )
       ls.stdout.on('data', (data) => {
         chunks[index] = chunks[index] || []
         chunks[index].push(data)
       })
       ls.on('message', (err) => {
-        if (err) return reject(err)
+        if (err) hasErrors = true
+        errorHandled = true
         complete++
         if (complete === targets.length) {
           stopSpinner(false)
-          chunks.push([genBuildCompletedLog(watch)])
-          logChunks()
+          if (hasErrors) {
+            logChunks()
+            reject(new Error('Build failed with errors.\n'))
+          } else {
+            chunks.push([genBuildCompletedLog(watch)])
+            logChunks()
+            resolve()
+          }
           reset()
-          resolve()
         }
       })
-      ls.catch(() => {
-        complete++
-        if (complete === targets.length) {
+      ls.catch(err => {
+        if (!errorHandled) {
           stopSpinner(false)
-          logChunks()
-          reset()
-          reject(new Error(chalk.red('Build failed with errors.\n')))
+          console.log(err.message)
+          process.exit(1)
         }
       })
     })
