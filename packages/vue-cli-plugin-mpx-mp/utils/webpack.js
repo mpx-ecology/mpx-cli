@@ -73,9 +73,9 @@ function genBuildCompletedLog (watch) {
   )
 }
 
-function resolveWebpackCompileCallback ({ watch }) {
-  return function (err, stats) {
-    return new Promise((resolve, reject) => {
+function runWebpack (config, { watch }) {
+  return new Promise((resolve, reject) => {
+    function webpackCallback (err, stats) {
       stopSpinner(false)
       if (err) {
         process.send && process.send(err)
@@ -109,18 +109,7 @@ function resolveWebpackCompileCallback ({ watch }) {
         process.send(null)
       }
       return resolve()
-    })
-  }
-}
-
-function runWebpack (config, { watch }) {
-  return new Promise((resolve, reject) => {
-    const webpackCallback = (...args) =>
-      resolveWebpackCompileCallback({
-        watch
-      })(...args)
-        .then(resolve)
-        .catch(reject)
+    }
     if (!watch) {
       webpack(config, webpackCallback)
     } else {
@@ -185,4 +174,3 @@ module.exports.runWebpack = runWebpack
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
 module.exports.addMpPluginWebpackConfig = addMpPluginWebpackConfig
-module.exports.resolveWebpackCompileCallback = resolveWebpackCompileCallback
