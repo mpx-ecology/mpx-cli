@@ -144,13 +144,10 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
   return new Promise((resolve, reject) => {
     targets.forEach((target, index) => {
       let errorHandled = false
-      const ls = runServiceCommand(
-        command,
-        [
-          ...removeArgv(rawArgv, '--targets'),
-          `--targets=${target.mode}:${target.env}`
-        ]
-      )
+      const ls = runServiceCommand(command, [
+        ...removeArgv(rawArgv, '--targets'),
+        `--targets=${target.mode}:${target.env}`
+      ])
       ls.stdout.on('data', (data) => {
         chunks[index] = chunks[index] || []
         chunks[index].push(data)
@@ -172,7 +169,7 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
           reset()
         }
       })
-      ls.catch(err => {
+      ls.catch((err) => {
         if (!errorHandled) {
           stopSpinner(false)
           console.log(err.message)
