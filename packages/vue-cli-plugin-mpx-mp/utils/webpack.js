@@ -161,7 +161,7 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
       ls.catch((err) => {
         if (!errorHandled) {
           stopSpinner(false)
-          console.log(err.message)
+          console.error(err.message)
           process.exit(1)
         }
       })
