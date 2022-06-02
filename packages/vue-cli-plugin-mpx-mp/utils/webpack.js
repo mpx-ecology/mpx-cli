@@ -133,10 +133,19 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
   return new Promise((resolve, reject) => {
     targets.forEach((target, index) => {
       let errorHandled = false
-      const ls = runServiceCommand(command, [
-        ...removeArgv(rawArgv, '--targets'),
-        `--targets=${target.mode}:${target.env}`
-      ])
+      const ls = runServiceCommand(
+        command,
+        [
+          ...removeArgv(rawArgv, '--targets'),
+          `--targets=${target.mode}:${target.env}`
+        ],
+        {
+          env: {
+            ...process.env,
+            FORCE_COLOR: true
+          }
+        }
+      )
       ls.stdout.on('data', (data) => {
         chunks[index] = chunks[index] || []
         chunks[index].push(data)
