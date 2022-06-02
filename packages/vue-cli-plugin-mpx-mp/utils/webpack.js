@@ -2,48 +2,10 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { transformMpxEntry } = require('@mpxjs/vue-cli-plugin-mpx')
+const { runServiceCommand, removeArgv } = require('./index')
 const resolveBaseWebpackConfig = require('../config/base')
 const { resolveTargetConfig, processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
-
-function resolveWebpackCompileCallback (isWatchMode, resolve, reject) {
-  return function (err, stats) {
-    stopSpinner()
-    if (err) {
-      reject(err)
-      console.error(err)
-      return
-    }
-    const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
-    statsArr.forEach((item) => {
-      console.log(item.compilation.name + '打包结果：')
-      process.stdout.write(
-        item.toString({
-          colors: true,
-          modules: false,
-          children: false,
-          chunks: false,
-          chunkModules: false,
-          entrypoints: false
-        }) + '\n\n'
-      )
-    })
-
-    if (!isWatchMode && stats.hasErrors()) {
-      console.log(chalk.red('  Build failed with errors.\n'))
-      reject(err)
-      process.exit(1)
-    }
-
-    console.log(chalk.cyan('  Build complete.\n'))
-    if (isWatchMode) {
-      console.log(
-        chalk.cyan(`  ${new Date()} build finished.\n  Still watching...\n`)
-      )
-    }
-    resolve(stats)
-  }
-}
 
 /**
  * 根据target生成webpack配置
@@ -103,13 +65,51 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
-function runWebpack (config, watch) {
+function genBuildCompletedLog (watch) {
+  return chalk.cyan(
+    watch
+      ? `  ${new Date()} build finished.\n  Still watching...\n`
+      : '  Build complete.\n'
+  )
+}
+
+function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
-    const webpackCallback = resolveWebpackCompileCallback(
-      watch,
-      resolve,
-      reject
-    )
+    function webpackCallback (err, stats) {
+      stopSpinner(false)
+      if (err) {
+        process.send && process.send(err)
+        return reject(err)
+      }
+
+      const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
+      statsArr.forEach((item) => {
+        console.log(chalk.green(item.compilation.name + '打包结果：\n'))
+        console.log(
+          item.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false,
+            entrypoints: false
+          }) + '\n\n'
+        )
+      })
+
+      if (!watch && stats.hasErrors()) {
+        const err = new Error(chalk.red('Build failed with errors.\n'))
+        process.send && process.send(err)
+        return reject(err)
+      }
+
+      if (!process.send) {
+        console.log(genBuildCompletedLog(watch))
+      } else {
+        process.send(null)
+      }
+      return resolve()
+    }
     if (!watch) {
       webpack(config, webpackCallback)
     } else {
@@ -118,8 +118,68 @@ function runWebpack (config, watch) {
   })
 }
 
+function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
+  let complete = 0
+  let chunks = []
+  let hasErrors = false
+  function reset () {
+    complete = 0
+    chunks = []
+    hasErrors = false
+  }
+  function logChunks () {
+    console.log(chunks.map((v) => v.join('')).join(''))
+  }
+  return new Promise((resolve, reject) => {
+    targets.forEach((target, index) => {
+      let errorHandled = false
+      const ls = runServiceCommand(
+        command,
+        [
+          ...removeArgv(rawArgv, '--targets'),
+          `--targets=${target.mode}:${target.env}`
+        ],
+        {
+          env: {
+            ...process.env,
+            FORCE_COLOR: true
+          }
+        }
+      )
+      ls.stdout.on('data', (data) => {
+        chunks[index] = chunks[index] || []
+        chunks[index].push(data)
+      })
+      ls.on('message', (err) => {
+        if (err) hasErrors = true
+        errorHandled = true
+        complete++
+        if (complete === targets.length) {
+          stopSpinner(false)
+          if (hasErrors) {
+            logChunks()
+            reject(new Error('Build failed with errors.\n'))
+          } else {
+            chunks.push([genBuildCompletedLog(watch)])
+            logChunks()
+            resolve()
+          }
+          reset()
+        }
+      })
+      ls.catch((err) => {
+        if (!errorHandled) {
+          stopSpinner(false)
+          console.error(err.message)
+          process.exit(1)
+        }
+      })
+    })
+  })
+}
+
+module.exports.runWebpackInChildProcess = runWebpackInChildProcess
 module.exports.runWebpack = runWebpack
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
 module.exports.addMpPluginWebpackConfig = addMpPluginWebpackConfig
-module.exports.resolveWebpackCompileCallback = resolveWebpackCompileCallback

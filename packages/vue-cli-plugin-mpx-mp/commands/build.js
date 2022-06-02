@@ -4,7 +4,8 @@ const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
-  runWebpack
+  runWebpack,
+  runWebpackInChildProcess
 } = require('../utils/webpack')
 
 module.exports = function registerBuildCommand (api, options) {
@@ -16,18 +17,26 @@ module.exports = function registerBuildCommand (api, options) {
       options: {
         '--targets': `compile for target platform, support ${supportedModes}`,
         '--watch': 'compile in watch mode',
-        '--report': 'generate report.html to help analyze bundle content'
+        '--report': 'generate report.html to help analyze bundle content',
+        '--open-child-process': 'open child process'
       }
     },
-    function (args) {
-      const isWatching = !!args.watch
+    function (args, rawArgv) {
+      const watch = !!args.watch
       const mode = api.service.mode
       const targets = getTargets(args, options)
+      const openChildProcess =
+        !!args['open-child-process'] && targets.length > 1
 
       logWithSpinner(
         '⚓',
         `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
       )
+
+      if (openChildProcess) {
+        return runWebpackInChildProcess('build:mp', rawArgv, { targets, watch })
+      }
+
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
@@ -51,11 +60,14 @@ module.exports = function registerBuildCommand (api, options) {
           // 仅在watch模式下生产sourcemap
           // 百度小程序不开启sourcemap，开启会有模板渲染问题
           webpackConfig.devtool(
-            isWatching && target.mode !== 'swan' ? 'source-map' : false
+            watch && target.mode !== 'swan' ? 'source-map' : false
           )
         }
       )
-      return runWebpack(webpackConfigs, isWatching)
+
+      return runWebpack(webpackConfigs, {
+        watch
+      })
     }
   )
 }

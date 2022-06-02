@@ -3,7 +3,8 @@ const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
-  runWebpack
+  runWebpack,
+  runWebpackInChildProcess
 } = require('../utils/webpack')
 
 module.exports = function registerServeCommand (api, options) {
@@ -16,14 +17,21 @@ module.exports = function registerServeCommand (api, options) {
         '--targets': `compile for target platform, support ${supportedModes}`
       }
     },
-    function (args) {
+    function (args, rawArgv) {
       const mode = api.service.mode
       const targets = getTargets(args, options)
+      const openChildProcess =
+        !!args['open-child-process'] && targets.length > 1
 
       logWithSpinner(
         '⚓',
         `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
       )
+
+      if (openChildProcess) {
+        return runWebpackInChildProcess('serve:mp', rawArgv, { targets, watch: true })
+      }
+
       // 小程序业务代码构建配置
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
@@ -33,7 +41,9 @@ module.exports = function registerServeCommand (api, options) {
           webpackConfig.devtool('source-map')
         }
       )
-      return runWebpack(webpackConfigs, true)
+      return runWebpack(webpackConfigs, {
+        watch: true
+      })
     }
   )
 }
