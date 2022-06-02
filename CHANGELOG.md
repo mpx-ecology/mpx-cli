@@ -1,4 +1,15 @@
 
+## 1.5.0 (2022-06-02)
+
+#### :rocket: New Features
+* `vue-cli-plugin-mpx-mp`
+  * [#40](https://github.com/mpx-ecology/mpx-cli/pull/40) feat: support child process build ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 1.4.2 (2022-05-26)
 
 #### :bug: Bug Fix
