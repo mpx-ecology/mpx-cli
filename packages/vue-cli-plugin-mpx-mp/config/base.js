@@ -9,7 +9,11 @@ const { getMpxPluginOptions } = require('../utils')
  * @param {*} options
  * @returns
  */
-module.exports = function resolveMpBaseWebpackConfig (api, options, webpackConfig) {
+module.exports = function resolveMpBaseWebpackConfig (
+  api,
+  options,
+  webpackConfig
+) {
   const mpxLoader = resolveMpxLoader(api, options)
   const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
   const wxssLoader = MpxWebpackPlugin.wxssLoader()
@@ -37,6 +41,8 @@ module.exports = function resolveMpBaseWebpackConfig (api, options, webpackConfi
     }
     return chain
   }
+
+  webpackConfig.resolve.alias.set('@', api.resolve('src'))
 
   webpackConfig.plugin('mpx-provide-plugin').use(webpack.ProvidePlugin, [
     {
