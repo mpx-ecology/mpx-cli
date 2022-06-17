@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-mp",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "mp mpx plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "peerDependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "1.5.0",
+    "@mpxjs/vue-cli-plugin-mpx": "1.5.1",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "webpack": "^5.48.0",
