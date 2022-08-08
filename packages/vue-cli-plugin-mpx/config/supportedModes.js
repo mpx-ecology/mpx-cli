@@ -1,1 +1,1 @@
-module.exports = ['wx', 'ali', 'swan', 'qq', 'tt']
+module.exports = ['wx', 'ali', 'swan', 'qq', 'tt', 'dd']
