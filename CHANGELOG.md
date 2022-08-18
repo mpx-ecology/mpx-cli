@@ -1,4 +1,15 @@
 
+## 1.6.0 (2022-08-15)
+
+#### :rocket: New Features
+* `mpx-cli`, `vue-cli-plugin-mpx`
+  * [#44](https://github.com/mpx-ecology/mpx-cli/pull/44) Support dd mode. ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 
