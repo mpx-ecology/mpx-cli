@@ -57,6 +57,7 @@ module.exports = function resolveMpBaseWebpackConfig (
   webpackConfig.mode(process.env.NODE_ENV).context(api.service.context)
   webpackConfig.performance.hints(false)
   webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
+  webpackConfig.module.rules.delete('svg')
   webpackConfig.module.rules.delete('images')
   webpackConfig.module
     .rule('images')
