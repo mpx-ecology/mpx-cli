@@ -1,13 +1,13 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-web",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "wx to web plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "1.6.0",
+    "@mpxjs/vue-cli-plugin-mpx": "1.6.1",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
   },

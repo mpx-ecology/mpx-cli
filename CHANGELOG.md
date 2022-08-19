@@ -1,4 +1,15 @@
 
+## 1.6.1 (2022-08-19)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-mp`
+  * [#45](https://github.com/mpx-ecology/mpx-cli/pull/45) Fix: svg没有走mpx-url-loader ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 1.6.0 (2022-08-15)
 
 #### :rocket: New Features
