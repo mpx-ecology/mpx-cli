@@ -19,11 +19,9 @@ module.exports = function transformMpxEntry (api, options = {}, webpackConfig, i
 
   if (!isWeb) {
     // 暂时做下兼容，webpackConfig.entry('app').clear().add(entryPath) 这种格式在 mpx-plugin 最终处理会有格式问题
-    webpackConfig.entry = {
-      app: entry
-    }
+    webpackConfig.entry('app').add(entry)
   } else {
     // web 需要重置 @vue/cli-service 内置的 app 入口为 mpx 的文件
-    webpackConfig.entry('app').clear().add(entry)
+    webpackConfig.entry('app').add(entry)
   }
 }
