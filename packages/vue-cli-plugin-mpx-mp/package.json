@@ -20,6 +20,11 @@
     "webpack-chain": "^6.5.1",
     "webpack-merge": "^5.8.0"
   },
+  "peerDependenciesMeta": {
+    "pug-plain-loader": {
+      "optional": true
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
