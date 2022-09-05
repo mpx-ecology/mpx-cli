@@ -7,7 +7,7 @@ const {
 
 module.exports = function (api, options = {}) {
   api.chainWebpack((webpackConfig) => {
-    transformMpxEntry(api, options, webpackConfig)
+    transformMpxEntry(api, options, webpackConfig, true)
 
     const mpxLoader = resolveMpxLoader(api, options)
     webpackConfig.module

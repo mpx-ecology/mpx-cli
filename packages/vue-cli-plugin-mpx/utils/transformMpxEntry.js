@@ -1,5 +1,5 @@
 // TODO: 看是否能在 @mpxjs/webpack-plugin 内部做下处理？
-module.exports = function transformMpxEntry (api, options = {}, webpackConfig) {
+module.exports = function transformMpxEntry (api, options = {}, webpackConfig, isWeb = false) {
   // 通过 cli 生成的默认的入口文件
   let basePath = 'src/app.mpx'
 
@@ -17,6 +17,9 @@ module.exports = function transformMpxEntry (api, options = {}, webpackConfig) {
       options.pluginOptions.mpx.entry) ||
     defaultMpxEntry
 
+  if (isWeb) {
+    webpackConfig.entry('app').clear()
+  }
   // web 需要重置 @vue/cli-service 内置的 app 入口为 mpx 的文件
   webpackConfig.entry('app').add(entry)
 }
