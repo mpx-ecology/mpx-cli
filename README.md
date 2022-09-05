@@ -262,32 +262,17 @@ module.exports = {
 
 ### template 相关
 
-可以使用任何模板语言来编译 template，只需要在 template 上添加 lang 属性
+可以使用任何模板语言来编译 template，只需要在 template 上添加 lang 属性.
+mpx-cli 内置了pug模板配置，如果需要使用pug模板，只需要安装pug依赖即可。
 
 ```html
 <template lang="pug"></template>
 ```
 
-然后在`vue.config.js`配置该语言的`loader`
+然后安装相关依赖即可
 
-```js
-// vue.config.js
-const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
-
-module.exports = {
-  chainWebpack: (config) => {
-    const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
-    config.module
-      .rule('pug')
-      .test(/\.pug$/)
-      .use('wxml-loader')
-      .loader(wxmlLoader.loader)
-      .options(wxmlLoader.options)
-      .end()
-      .use('pug-plain-loader')
-      .loader('pug-plain-loader')
-  }
-}
+```sh
+npm install -D pug pug-plain-loader
 ```
 
 ## 配置
