@@ -9,4 +9,5 @@ module.exports = function (api, options = {}) {
       '@mpxjs/eslint-config': '^1.0.3'
     }
   })
+  api.render('./template')
 }
