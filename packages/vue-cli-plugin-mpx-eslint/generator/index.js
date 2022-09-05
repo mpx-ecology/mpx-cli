@@ -6,7 +6,7 @@ module.exports = function (api, options = {}) {
     devDependencies: {
       'eslint-webpack-plugin': '^3.1.1',
       eslint: '^7.0.0',
-      "@mpxjs/eslint-config": "^1.0.3"
+      '@mpxjs/eslint-config': '^1.0.3'
     }
   })
 }
