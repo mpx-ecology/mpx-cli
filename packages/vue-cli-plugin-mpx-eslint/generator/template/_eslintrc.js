@@ -8,7 +8,6 @@ module.exports = {
       files: ['**/*.ts'],
       rules: {
         // .ts文件规则 https://typescript-eslint.io/rules/
-        
       }
     },
     {
