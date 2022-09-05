@@ -94,7 +94,7 @@ module.exports = function resolveMpBaseWebpackConfig (
   createCSSRule('sass', /\.sass$/, 'sass-loader')
   createCSSRule('scss', /\.scss$/, 'sass-loader')
 
-  // copied from vue-cli base config
+  // forked from vue-cli base config
   // Other common pre-processors ---------------------------------------------
   const maybeResolve = (name) => {
     try {
@@ -130,7 +130,7 @@ module.exports = function resolveMpBaseWebpackConfig (
       }
     ])
 
-  // copied end ---------------------------------------------
+  // forked end ---------------------------------------------
 
   return webpackConfig
 }
