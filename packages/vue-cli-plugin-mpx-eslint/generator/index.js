@@ -1,7 +1,7 @@
 module.exports = function (api, options = {}) {
   api.extendPackage({
     scripts: {
-      lint: 'eslint --ext .js,.mpx src/'
+      lint: 'eslint --ext .js,.ts,.mpx src/'
     },
     devDependencies: {
       'eslint-webpack-plugin': '^3.1.1',
