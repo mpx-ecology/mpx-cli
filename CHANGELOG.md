@@ -1,4 +1,16 @@
 
+## 1.6.3 (2022-09-06)
+
+#### :rocket: New Features
+* `vue-cli-plugin-mpx-eslint`, `vue-cli-plugin-mpx-typescript`
+  * [#46](https://github.com/mpx-ecology/mpx-cli/pull/46) Feature eslint plugin ([@pagnkelly](https://github.com/pagnkelly))
+
+#### Committers: 2
+- Mater ([@mater1996](https://github.com/mater1996))
+- [@pagnkelly](https://github.com/pagnkelly)
+
+
+
 
 
 
