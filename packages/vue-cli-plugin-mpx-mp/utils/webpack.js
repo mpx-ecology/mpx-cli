@@ -28,10 +28,10 @@ function resolveWebpackConfigByTarget (
   resolveTargetConfig(api, options, webpackConfig, target)
   // 自定义配置
   resolveCustomConfig && resolveCustomConfig(webpackConfig, target)
+  // 转换entry
+  transformMpxEntry(api, options, webpackConfig)
   // resolve其他的插件配置以及vue.config.js配置
   webpackConfig = api.resolveWebpackConfig(webpackConfig)
-  // 转换entry
-  transformMpxEntry(api, options, webpackConfig, false)
   // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
   processTargetConfig(api, options, webpackConfig, target)
   // 返回配置文件

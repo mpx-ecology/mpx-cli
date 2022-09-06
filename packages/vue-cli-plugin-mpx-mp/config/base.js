@@ -24,6 +24,52 @@ module.exports = function resolveMpBaseWebpackConfig (
     }
   )
 
+  webpackConfig.mode(process.env.NODE_ENV).context(api.service.context)
+  webpackConfig.performance.hints(false)
+  webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
+
+  // alias config
+  webpackConfig.resolve.alias.set('@', api.resolve('src'))
+
+  // defind config
+  webpackConfig.plugin('mpx-provide-plugin').use(webpack.ProvidePlugin, [
+    {
+      process: 'process/browser'
+    }
+  ])
+  webpackConfig.plugin('define').use(webpack.DefinePlugin, [
+    {
+      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
+    }
+  ])
+
+  // assets rules
+  webpackConfig.module.rules.delete('svg')
+  webpackConfig.module.rules.delete('images')
+  webpackConfig.module
+    .rule('images')
+    .test(/\.(png|jpe?g|gif|svg)$/)
+    .use('mpx-url-loader')
+    .loader(mpxUrlLoader.loader)
+    .options(mpxUrlLoader.options)
+
+  // mpx rules
+
+  webpackConfig.module
+    .rule('mpx')
+    .test(/\.mpx$/)
+    .use('mpx-loader')
+    .loader(mpxLoader.loader)
+    .options(mpxLoader.options)
+
+  // css rules
+  webpackConfig.module
+    .rule('wxml')
+    .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
+    .use('mpx-wxml-loader')
+    .loader(wxmlLoader.loader)
+    .options(wxmlLoader.options)
+
   function createCSSRule (rule, test, loader, loaderOptions) {
     let chain = webpackConfig.module
       .rule(rule)
@@ -42,49 +88,49 @@ module.exports = function resolveMpBaseWebpackConfig (
     return chain
   }
 
-  webpackConfig.resolve.alias.set('@', api.resolve('src'))
-
-  webpackConfig.plugin('mpx-provide-plugin').use(webpack.ProvidePlugin, [
-    {
-      process: 'process/browser'
-    }
-  ])
-  webpackConfig.plugin('mpx-define-plugin').use(webpack.DefinePlugin, [
-    {
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-    }
-  ])
-  webpackConfig.mode(process.env.NODE_ENV).context(api.service.context)
-  webpackConfig.performance.hints(false)
-  webpackConfig.output.clear() // 清除 cli-service 内部的 output 配置，避免 @mpxjs/webpack-plugin 出现 warning
-  webpackConfig.module.rules.delete('svg')
-  webpackConfig.module.rules.delete('images')
-  webpackConfig.module
-    .rule('images')
-    .test(/\.(png|jpe?g|gif|svg)$/)
-    .use('mpx-url-loader')
-    .loader(mpxUrlLoader.loader)
-    .options(mpxUrlLoader.options)
-
-  webpackConfig.module
-    .rule('mpx')
-    .test(/\.mpx$/)
-    .use('mpx-loader')
-    .loader(mpxLoader.loader)
-    .options(mpxLoader.options)
-
-  webpackConfig.module
-    .rule('wxml')
-    .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
-    .use('mpx-wxml-loader')
-    .loader(wxmlLoader.loader)
-    .options(wxmlLoader.options)
-
   createCSSRule('wxss', /\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
   createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader')
   createCSSRule('less', /\.less$/, 'less-loader')
   createCSSRule('sass', /\.sass$/, 'sass-loader')
   createCSSRule('scss', /\.scss$/, 'sass-loader')
+
+  // forked from vue-cli base config
+  // Other common pre-processors ---------------------------------------------
+  const maybeResolve = (name) => {
+    try {
+      return require.resolve(name)
+    } catch (error) {
+      return name
+    }
+  }
+
+  webpackConfig.module
+    .rule('pug')
+    .test(/\.pug$/)
+    .use('wxml-loader')
+    .loader(wxmlLoader.loader)
+    .options(wxmlLoader.options)
+    .end()
+    .use('pug-plain-loader')
+    .loader(maybeResolve('pug-plain-loader'))
+    .end()
+
+  // friendly error plugin displays very confusing errors when webpack
+  // fails to resolve a loader, so we provide custom handlers to improve it
+  const {
+    transformer,
+    formatter
+  } = require('@vue/cli-service/lib/util/resolveLoaderError')
+  webpackConfig
+    .plugin('friendly-errors')
+    .use(require('@soda/friendly-errors-webpack-plugin'), [
+      {
+        additionalTransformers: [transformer],
+        additionalFormatters: [formatter]
+      }
+    ])
+
+  // forked end ---------------------------------------------
 
   return webpackConfig
 }
