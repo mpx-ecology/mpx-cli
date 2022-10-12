@@ -1,4 +1,15 @@
 
+## 1.6.5 (2022-10-12)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-cloud-func`, `vue-cli-plugin-mpx-eslint`, `vue-cli-plugin-mpx-plugin-mode`, `vue-cli-plugin-mpx-typescript`, `vue-cli-plugin-mpx`
+  * [#50](https://github.com/mpx-ecology/mpx-cli/pull/50) Feat eslint bugfix ([@pagnkelly](https://github.com/pagnkelly))
+
+#### Committers: 1
+- [@pagnkelly](https://github.com/pagnkelly)
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/mpx-cli-service",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "local service for mpx-cli project",
   "main": "lib/Service.js",
   "bin": {
