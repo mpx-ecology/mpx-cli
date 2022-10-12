@@ -9,7 +9,8 @@
       "esnext",
       "dom",
       "dom.iterable"
-    ]
+    ],
+    "types": ["@mpxjs/core"]
   },
   "exclude": [
     "build",
