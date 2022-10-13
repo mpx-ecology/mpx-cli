@@ -1,4 +1,15 @@
 
+## 1.6.6 (2022-10-13)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-eslint`
+  * [#51](https://github.com/mpx-ecology/mpx-cli/pull/51) fix: eslint-config error ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 1.6.5 (2022-10-12)
 
 #### :bug: Bug Fix
