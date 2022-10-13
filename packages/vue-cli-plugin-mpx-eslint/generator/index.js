@@ -8,7 +8,7 @@ module.exports = function (api, options = {}) {
       eslint: '^7.0.0'
     }
   }
-  if (options.needTs) {
+  if (!options.needTs) {
     deps.devDependencies['@mpxjs/eslint-config'] = '^1.0.5'
   } else {
     deps.devDependencies['@mpxjs/eslint-config-ts'] = '^1.0.5'
