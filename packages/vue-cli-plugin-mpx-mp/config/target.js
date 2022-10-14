@@ -2,12 +2,18 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
-const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { getMpxPluginOptions } = require('../utils')
 
-const copyIgnoreArr = supportedModes.map((item) => {
-  return `**/${item}/**`
+const copyIgnoreArr = []
+
+Object.values(MODE.MODE_CONFIG_FILES_MAP).forEach((configFiles) => {
+  configFiles.forEach((v) => {
+    copyIgnoreArr.push('**/' + v)
+  })
 })
+
+console.log(copyIgnoreArr)
 
 /**
  * target相关配置
@@ -16,12 +22,7 @@ const copyIgnoreArr = supportedModes.map((item) => {
  * @param {*} webpackConfig
  * @param {*} target
  */
-function resolveTargetConfig (
-  api,
-  options = {},
-  webpackConfig,
-  target
-) {
+function resolveTargetConfig (api, options = {}, webpackConfig, target) {
   const mpxOptions = getMpxPluginOptions(options)
   let outputDist = `dist/${target.mode}`
   let subDir = ''
@@ -44,12 +45,6 @@ function resolveTargetConfig (
   webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
     {
       patterns: [
-        {
-          context: api.resolve(`static/${target.mode}`),
-          from: '**/*',
-          to: subDir ? '..' : '',
-          noErrorOnMissing: true
-        },
         {
           context: api.resolve('static'),
           from: '**/*',

@@ -1,4 +1,4 @@
-const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets } = require('../utils/index')
 const {
@@ -14,7 +14,7 @@ module.exports = function registerServeCommand (api, options) {
       description: 'mp development',
       usage: 'mpx-cli-service serve:mp',
       options: {
-        '--targets': `compile for target platform, support ${supportedModes}`
+        '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`
       }
     },
     function (args, rawArgv) {

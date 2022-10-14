@@ -1,6 +1,8 @@
-const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
+const fs = require('fs')
+const path = require('path')
 const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
@@ -15,7 +17,7 @@ module.exports = function registerBuildCommand (api, options) {
       description: 'mp production',
       usage: 'mpx-cli-service build:mp',
       options: {
-        '--targets': `compile for target platform, support ${supportedModes}`,
+        '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`,
         '--watch': 'compile in watch mode',
         '--report': 'generate report.html to help analyze bundle content',
         '--open-child-process': 'open child process'
@@ -67,6 +69,25 @@ module.exports = function registerBuildCommand (api, options) {
 
       return runWebpack(webpackConfigs, {
         watch
+      }).then((res) => {
+        targets.forEach((target, k) => {
+          const config = webpackConfigs[k]
+          const outputPath = config.output.path
+          if (outputPath) {
+            const targetConfigFiles = MODE.MODE_CONFIG_FILES_MAP[target] || []
+            targetConfigFiles.forEach(v => {
+              try {
+                fs.symlinkSync(
+                  api.resolve(`static/${target}/${v}`),
+                  path.resolve(outputPath, v)
+                )
+              } catch (error) {
+
+              }
+            })
+          }
+        })
+        return res
       })
     }
   )
