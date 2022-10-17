@@ -1,13 +1,5 @@
 const chalk = require('chalk')
 
-function genBuildCompletedLog (watch) {
-  return chalk.cyan(
-    watch
-      ? `  ${new Date()} build finished.\n  Still watching...\n`
-      : '  Build complete.\n'
-  )
-}
-
 module.exports.WebpackMpErrorPlugin = class WebpackMpErrorPlugin {
   apply (compiler) {
     function WebpackMpErrorPlugin (stats) {
@@ -30,12 +22,6 @@ module.exports.WebpackMpErrorPlugin = class WebpackMpErrorPlugin {
         const err = new Error(chalk.red('Build failed with errors.\n'))
         process.send && process.send(err)
         return console.error(err)
-      }
-
-      if (!process.send) {
-        console.log(genBuildCompletedLog())
-      } else {
-        process.send(null)
       }
     }
 

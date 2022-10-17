@@ -77,6 +77,11 @@ function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
     function webpackCallback () {
       stopSpinner(false)
+      if (!process.send) {
+        console.log(genBuildCompletedLog())
+      } else {
+        process.send(null)
+      }
     }
     if (!watch) {
       webpack(config, webpackCallback)
