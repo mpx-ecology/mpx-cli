@@ -49,12 +49,22 @@ module.exports = function (api, options) {
       build: 'mpx-cli-service build:mp'
     },
     dependencies: {
-      '@mpxjs/api-proxy': '^2.7.0',
-      '@mpxjs/core': '^2.7.0'
+      '@mpxjs/api-proxy': '^2.8.0',
+      '@mpxjs/core': '^2.8.0',
+      '@mpxjs/store': '^2.8.0',
+      '@mpxjs/pinia': '^2.8.0',
+      '@mpxjs/utils': '^2.8.0',
+      '@mpxjs/fetch': '^2.8.0',
+      vue: '^2.7.10',
+      'vue-demi': '^0.13.11',
+      'vue-i18n': '^8.27.2',
+      'vue-i18n-bridge': '^9.2.2',
+      'vue-router': '^3.1.3'
     },
     devDependencies: {
-      '@mpxjs/webpack-plugin': '^2.7.0',
-      'vue-router': '^3.1.3',
+      '@mpxjs/webpack-plugin': '^2.8.0',
+      '@mpxjs/size-report': '^2.8.0',
+      '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
       'vue-template-compiler': '^2.6.10',
       'style-loader': '^1.0.1',
       'css-loader': '^0.28.11',

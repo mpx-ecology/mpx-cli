@@ -1,6 +1,6 @@
 module.exports = {
   <%_ if(needTs) { _%>
-  extends: ['@mpxjs/eslint-config-ts'], 
+  extends: ['@mpxjs/eslint-config-ts'],
   <%_ } else { _%>
   extends: ['@mpxjs'],
   <%_ } _%>
@@ -10,7 +10,7 @@ module.exports = {
   overrides: [
     <%_ if(needTs) { _%>
     {
-      files: ['**/*.ts'],
+      files: ['**/*.ts', "**/*.mpx"],
       rules: {
         // .ts文件规则 https://typescript-eslint.io/rules/
       }
