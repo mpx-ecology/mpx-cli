@@ -88,6 +88,7 @@ function runWebpack (config, { watch }) {
       } else {
         process.send(null)
       }
+      return resolve()
     }
     if (!watch) {
       webpack(config, webpackCallback)

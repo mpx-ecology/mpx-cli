@@ -46,6 +46,7 @@ module.exports = function registerServeCommand (api, options) {
         watch: true
       }).then(res => {
         symLinkTargetConfig(api, targets, webpackConfigs)
+        return res
       })
     }
   )
