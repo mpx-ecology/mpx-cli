@@ -3,6 +3,7 @@
 - [迁移指南](#%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97)
   - [升级@mpxjs/cli](#%E5%8D%87%E7%BA%A7mpxjscli)
   - [配置迁移](#%E9%85%8D%E7%BD%AE%E8%BF%81%E7%A7%BB)
+  - [修改配置参数](#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
   - [Script](#script)
   - [More](#more)
     - [插件化](#%E6%8F%92%E4%BB%B6%E5%8C%96)
@@ -43,6 +44,19 @@ module.exports = defineConfig({
   },
   devServer: {
     // dev服务配置
+  }
+})
+```
+
+## 修改配置参数
+
+```js
+// vue.config.js
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  chainWebpack(config){
+    // 使用mpx inspect 可以根据注释来查看插件命名
+    config.plugin('mpx-webpack-plugin').tap(args => newArgs)
   }
 })
 ```
