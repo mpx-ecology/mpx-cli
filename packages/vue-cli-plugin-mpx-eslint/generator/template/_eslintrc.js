@@ -10,7 +10,7 @@ module.exports = {
   overrides: [
     <%_ if(needTs) { _%>
     {
-      files: ['**/*.ts', "**/*.mpx"],
+      files: ['**/*.ts'],
       rules: {
         // .ts文件规则 https://typescript-eslint.io/rules/
       }
