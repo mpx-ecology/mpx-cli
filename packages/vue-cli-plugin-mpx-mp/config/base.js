@@ -2,6 +2,7 @@ const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 const webpack = require('webpack')
 const { getMpxPluginOptions } = require('../utils')
+const { WebpackMpErrorPlugin } = require('../utils/webpack-mp-error-plugin')
 
 /**
  * 基础配置
@@ -42,6 +43,7 @@ module.exports = function resolveMpBaseWebpackConfig (
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
     }
   ])
+  webpackConfig.plugin('webpack-mp-error-plugin').use(WebpackMpErrorPlugin)
 
   // assets rules
   webpackConfig.module.rules.delete('svg')
