@@ -13,8 +13,6 @@ Object.values(MODE.MODE_CONFIG_FILES_MAP).forEach((configFiles) => {
   })
 })
 
-console.log(copyIgnoreArr)
-
 /**
  * target相关配置
  * @param {*} api
