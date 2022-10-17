@@ -1,6 +1,7 @@
 const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets } = require('../utils/index')
+const { symLinkTargetConfig } = require('../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
@@ -43,6 +44,8 @@ module.exports = function registerServeCommand (api, options) {
       )
       return runWebpack(webpackConfigs, {
         watch: true
+      }).then(res => {
+        symLinkTargetConfig(api, targets, webpackConfigs)
       })
     }
   )

@@ -1,14 +1,13 @@
 const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
-const fs = require('fs')
-const path = require('path')
 const { getTargets } = require('../utils/index')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
   runWebpackInChildProcess
 } = require('../utils/webpack')
+const { symLinkTargetConfig } = require('../utils/symlinkTargetConfig')
 
 module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(
@@ -70,23 +69,7 @@ module.exports = function registerBuildCommand (api, options) {
       return runWebpack(webpackConfigs, {
         watch
       }).then((res) => {
-        targets.forEach((target, k) => {
-          const config = webpackConfigs[k]
-          const outputPath = config.output.path
-          if (outputPath) {
-            const targetConfigFiles = MODE.MODE_CONFIG_FILES_MAP[target] || []
-            targetConfigFiles.forEach(v => {
-              try {
-                fs.symlinkSync(
-                  api.resolve(`static/${target}/${v}`),
-                  path.resolve(outputPath, v)
-                )
-              } catch (error) {
-
-              }
-            })
-          }
-        })
+        symLinkTargetConfig(api, targets, webpackConfigs)
         return res
       })
     }
