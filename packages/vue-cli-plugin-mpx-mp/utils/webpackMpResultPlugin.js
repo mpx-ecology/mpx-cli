@@ -1,8 +1,9 @@
 const chalk = require('chalk')
 
-module.exports.WebpackMpErrorPlugin = class WebpackMpErrorPlugin {
+module.exports.WebpackMpResultPlugin = class WebpackMpResultPlugin {
   apply (compiler) {
-    function WebpackMpErrorPlugin (stats) {
+    function WebpackMpResultPlugin (stats) {
+      if (stats.hasErrors()) return
       const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
       statsArr.forEach((item) => {
         console.log(chalk.green(item.compilation.name + '打包结果：\n'))
@@ -17,19 +18,13 @@ module.exports.WebpackMpErrorPlugin = class WebpackMpErrorPlugin {
           }) + '\n\n'
         )
       })
-
-      if (stats.hasErrors()) {
-        const err = new Error(chalk.red('Build failed with errors.\n'))
-        process.send && process.send(err)
-        return console.error(err)
-      }
     }
 
     if (compiler.hooks) {
-      const plugin = { name: 'WebpackMpErrorPlugin' }
-      compiler.hooks.done.tap(plugin, WebpackMpErrorPlugin)
+      const plugin = { name: 'WebpackMpResultPlugin', stage: Infinity }
+      compiler.hooks.done.tap(plugin, WebpackMpResultPlugin)
     } else {
-      compiler.plugin('done', WebpackMpErrorPlugin)
+      compiler.plugin('done', WebpackMpResultPlugin)
     }
   }
 }

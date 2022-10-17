@@ -75,10 +75,16 @@ function genBuildCompletedLog (watch) {
 
 function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
-    function webpackCallback () {
+    function webpackCallback (err, stats) {
       stopSpinner(false)
+      if (err) return reject(err)
+      if (!watch && stats.hasErrors()) {
+        const err = new Error(chalk.red('Build failed with errors.\n'))
+        process.send && process.send(err)
+        return reject(err)
+      }
       if (!process.send) {
-        console.log(genBuildCompletedLog())
+        console.log(genBuildCompletedLog(watch))
       } else {
         process.send(null)
       }
