@@ -25,8 +25,6 @@
   - [配置](#%E9%85%8D%E7%BD%AE)
     - [vue.config.js](#vueconfigjs)
   - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
-  - [@mpxjs/cli@2.x迁移指南](#mpxjscli2x%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97)
-    - [配置迁移](#%E9%85%8D%E7%BD%AE%E8%BF%81%E7%A7%BB)
   - [cli 相关介绍](#cli-%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D)
 
 <!-- /TOC -->
@@ -340,40 +338,6 @@ module.exports = {
 - 提示用户选择一个特定的选项
 
 [开发插件](https://github.com/mpx-ecology/mpx-cli/tree/master/PLUGIN_GUIDE.md)
-
-## @mpxjs/cli@2.x迁移指南
-
-```
-npm install @mpxjs/cli@3.x -g
-```
-
-### 配置迁移
-
-- `config/devServer.js`迁移到`vue.config.js`下的`devServer`
-- `config/mpxPlugin.conf.js`迁移到`vue.config.js`下的`pluginOptions.mpx.plugin`
-- `config/mpxLoader.conf.js`迁移到`vue.config.js`下的`pluginOptions.mpx.loader`
-
-```js
-// vue.config.js
-const { defineConfig } = require('@vue/cli-service')
-module.exports = defineConfig({
-  pluginOptions: {
-    mpx: {
-      srcMode: 'wx',
-      plugin: {
-        // 这里等同于`@mpxjs/webpack-plugin`的参数
-      },
-      loader: {
-        // 这里等同于`mpx-loader`参数
-      }
-    }
-  },
-  devServer: {
-    // dev服务配置
-  }
-})
-```
-
 
 ## cli 相关介绍
 
