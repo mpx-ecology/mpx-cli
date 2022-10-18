@@ -1,6 +1,6 @@
 <!-- TOC -->
 
-- [迁移指南](#%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97)
+- [mpx-cli v2迁移到v3](#mpx-cli-v2%E8%BF%81%E7%A7%BB%E5%88%B0v3)
   - [升级@mpxjs/cli](#%E5%8D%87%E7%BA%A7mpxjscli)
   - [配置迁移](#%E9%85%8D%E7%BD%AE%E8%BF%81%E7%A7%BB)
   - [新增自定义配置/修改已有配置参数](#%E6%96%B0%E5%A2%9E%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E5%B7%B2%E6%9C%89%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
@@ -13,7 +13,7 @@
 
 <!-- /TOC -->
 
-# 迁移指南
+# mpx-cli v2迁移到v3
 
 ## 升级`@mpxjs/cli`
 
@@ -22,6 +22,8 @@ npm install @mpxjs/cli@3.x -g
 ```
 
 ## 配置迁移
+
+> v3兼容了v2的所有配置，如果没有特殊修改，则不需要进行配置迁移。
 
 - `config/devServer.js`迁移到`vue.config.js`下的`devServer`
 - `config/mpxPlugin.conf.js`迁移到`vue.config.js`下的`pluginOptions.mpx.plugin`
