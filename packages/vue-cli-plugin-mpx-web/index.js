@@ -9,7 +9,6 @@ module.exports = function (api, options) {
   }
 
   api.extendPackage({
-    vue: '^2.7.10',
     'vue-demi': '^0.13.11',
     'vue-i18n': '^8.27.2',
     'vue-i18n-bridge': '^9.2.2',
