@@ -4,7 +4,7 @@
   - [升级@mpxjs/cli](#%E5%8D%87%E7%BA%A7mpxjscli)
   - [配置迁移](#%E9%85%8D%E7%BD%AE%E8%BF%81%E7%A7%BB)
   - [修改配置参数](#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
-  - [Script](#script)
+  - [项目结构变化](#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E5%8F%98%E5%8C%96)
   - [More](#more)
     - [插件化](#%E6%8F%92%E4%BB%B6%E5%8C%96)
     - [模板](#%E6%A8%A1%E6%9D%BF)
@@ -61,14 +61,14 @@ module.exports = defineConfig({
 })
 ```
 
-## Script
+## 项目结构变化
 
-- build --mode=wx => build:mp --targets=wx
-- build:dev => build --mode=development
-- build --mode=web => build:web
-- watch --mode=wwx => serve:mp --targets=wx
-- watch:prod => serve:mp --mode=production
-- watch:web => serve:web
+<img src="./docs/assets/1666074957603.jpg" width="800"/>
+
+v3版本相对于v2版本的目录结构更加清晰。
+- 移除了`config/build`的配置目录，将其统一到了插件配置当中，可以通过`vue.config.js`修改。
+- `index.html`移动到`public`目录下。
+- 增加`jsconfig.json`,让类型提示更加友好。
 
 ## More
 
