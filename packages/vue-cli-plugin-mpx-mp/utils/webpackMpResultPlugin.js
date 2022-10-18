@@ -20,11 +20,7 @@ module.exports.WebpackMpResultPlugin = class WebpackMpResultPlugin {
       })
     }
 
-    if (compiler.hooks) {
-      const plugin = { name: 'WebpackMpResultPlugin', stage: Infinity }
-      compiler.hooks.done.tap(plugin, WebpackMpResultPlugin)
-    } else {
-      compiler.plugin('done', WebpackMpResultPlugin)
-    }
+    const plugin = { name: 'WebpackMpResultPlugin', stage: Infinity }
+    compiler.hooks.done.tap(plugin, WebpackMpResultPlugin)
   }
 }
