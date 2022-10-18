@@ -54,12 +54,7 @@ module.exports = function (api, options) {
       '@mpxjs/store': '^2.8.0',
       '@mpxjs/pinia': '^2.8.0',
       '@mpxjs/utils': '^2.8.0',
-      '@mpxjs/fetch': '^2.8.0',
-      vue: '^2.7.10',
-      'vue-demi': '^0.13.11',
-      'vue-i18n': '^8.27.2',
-      'vue-i18n-bridge': '^9.2.2',
-      'vue-router': '^3.1.3'
+      '@mpxjs/fetch': '^2.8.0'
     },
     devDependencies: {
       '@mpxjs/webpack-plugin': '^2.8.0',
