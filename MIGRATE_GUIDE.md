@@ -3,7 +3,7 @@
 - [迁移指南](#%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97)
   - [升级@mpxjs/cli](#%E5%8D%87%E7%BA%A7mpxjscli)
   - [配置迁移](#%E9%85%8D%E7%BD%AE%E8%BF%81%E7%A7%BB)
-  - [修改配置参数](#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
+  - [新增自定义配置/修改已有配置参数](#%E6%96%B0%E5%A2%9E%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E5%B7%B2%E6%9C%89%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
   - [项目结构变化](#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E5%8F%98%E5%8C%96)
   - [More](#more)
     - [插件化](#%E6%8F%92%E4%BB%B6%E5%8C%96)
@@ -48,18 +48,31 @@ module.exports = defineConfig({
 })
 ```
 
-## 修改配置参数
+## 新增自定义配置/修改已有配置参数
 
 ```js
 // vue.config.js
 const { defineConfig } = require('@vue/cli-service')
+
 module.exports = defineConfig({
   chainWebpack(config){
+    config.plugin('newPlugin').use(newPlugin, [params])
     // 使用mpx inspect 可以根据注释来查看插件命名
     config.plugin('mpx-webpack-plugin').tap(args => newArgs)
+  },
+  // 或者也可以通过configureWebpack配置,这里返回的配置会通过webpack-merge合并到内部配置中
+  configureWebpack(){
+    return {
+      plugins: [
+        new Plugin()
+      ]
+    }
   }
 })
 ```
+
+- [webpack-chain](https://github.com/neutrinojs/webpack-chain)
+- [webpack-merge](https://github.com/survivejs/webpack-merge)
 
 ## 项目结构变化
 
