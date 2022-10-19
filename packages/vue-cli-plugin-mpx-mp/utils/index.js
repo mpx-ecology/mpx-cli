@@ -1,7 +1,7 @@
 const execa = require('execa')
-const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 
-const supportedModeMap = makeMap(supportedModes)
+const supportedModeMap = makeMap(MODE.SUPPORT_MODE)
 const mpxCliServiceBinPath = require.resolve(
   '@mpxjs/mpx-cli-service/bin/mpx-cli-service.js'
 )
@@ -42,7 +42,7 @@ function getMpxPluginOptions (options) {
  */
 function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)
-  const defaultTargets = [{ mode: mpxOptions.srcMode || supportedModes[0] }]
+  const defaultTargets = [{ mode: mpxOptions.srcMode || MODE.SUPPORT_MODE[0] }]
   const inputTargets = args.targets
     ? args.targets.split(/[,|]/)
     : Object.keys(args)

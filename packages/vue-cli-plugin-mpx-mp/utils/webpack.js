@@ -77,32 +77,12 @@ function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
     function webpackCallback (err, stats) {
       stopSpinner(false)
-      if (err) {
-        process.send && process.send(err)
-        return reject(err)
-      }
-
-      const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
-      statsArr.forEach((item) => {
-        console.log(chalk.green(item.compilation.name + '打包结果：\n'))
-        console.log(
-          item.toString({
-            colors: true,
-            modules: false,
-            children: false,
-            chunks: false,
-            chunkModules: false,
-            entrypoints: false
-          }) + '\n\n'
-        )
-      })
-
+      if (err) return reject(err)
       if (!watch && stats.hasErrors()) {
         const err = new Error(chalk.red('Build failed with errors.\n'))
         process.send && process.send(err)
         return reject(err)
       }
-
       if (!process.send) {
         console.log(genBuildCompletedLog(watch))
       } else {

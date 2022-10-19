@@ -9,7 +9,7 @@ module.exports = function (api, options) {
 module.exports.transformMpxEntry = require('./utils/transformMpxEntry')
 module.exports.resolveMpxLoader = require('./utils/resolveMpxLoader')
 module.exports.resolveMpxWebpackPluginConf = require('./utils/resolveMpxWebpackPluginConf')
-module.exports.supportedModes = require('./config/supportedModes')
+module.exports.MODE = require('./constants/mode')
 module.exports.defaultModes = {
   'serve:mp': 'development',
   'build:mp': 'production'

@@ -1,6 +1,7 @@
-const { supportedModes } = require('@mpxjs/vue-cli-plugin-mpx')
+const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
 const { getTargets } = require('../utils/index')
+const { symLinkTargetConfig } = require('../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
@@ -14,7 +15,7 @@ module.exports = function registerServeCommand (api, options) {
       description: 'mp development',
       usage: 'mpx-cli-service serve:mp',
       options: {
-        '--targets': `compile for target platform, support ${supportedModes}`
+        '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`
       }
     },
     function (args, rawArgv) {
@@ -43,6 +44,9 @@ module.exports = function registerServeCommand (api, options) {
       )
       return runWebpack(webpackConfigs, {
         watch: true
+      }).then(res => {
+        symLinkTargetConfig(api, targets, webpackConfigs)
+        return res
       })
     }
   )
