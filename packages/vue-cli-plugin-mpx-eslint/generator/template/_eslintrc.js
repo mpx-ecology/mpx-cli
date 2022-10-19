@@ -1,6 +1,6 @@
 module.exports = {
   <%_ if(needTs) { _%>
-  extends: ['@mpxjs/eslint-config-ts'], 
+  extends: ['@mpxjs/eslint-config-ts'],
   <%_ } else { _%>
   extends: ['@mpxjs'],
   <%_ } _%>
