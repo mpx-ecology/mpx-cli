@@ -1,4 +1,18 @@
 
+## 1.6.7 (2022-10-20)
+
+#### :rocket: New Features
+* [#54](https://github.com/mpx-ecology/mpx-cli/pull/54) feat: migrate document ([@mater1996](https://github.com/mater1996))
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-eslint`, `vue-cli-plugin-mpx-web`, `vue-cli-plugin-mpx`
+  * [#53](https://github.com/mpx-ecology/mpx-cli/pull/53) Feature/composition babel ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 1.6.6 (2022-10-13)
 
 #### :bug: Bug Fix
