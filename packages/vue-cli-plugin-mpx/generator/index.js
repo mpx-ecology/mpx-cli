@@ -72,10 +72,12 @@ module.exports = function (api, options) {
 
   if (options.transWeb) {
     api.extendPackage({
-      'vue-demi': '^0.13.11',
-      'vue-i18n': '^8.27.2',
-      'vue-i18n-bridge': '^9.2.2',
-      'vue-router': '^3.1.3'
+      dependencies: {
+        'vue-demi': '^0.13.11',
+        'vue-i18n': '^8.27.2',
+        'vue-i18n-bridge': '^9.2.2',
+        'vue-router': '^3.1.3'
+      }
     })
   }
 }
