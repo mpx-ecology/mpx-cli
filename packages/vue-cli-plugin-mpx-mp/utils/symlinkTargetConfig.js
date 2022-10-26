@@ -9,7 +9,7 @@ module.exports.symLinkTargetConfig = function (api, targets, webpackConfigs) {
     const outputPath = config.output.path
     const targetConfigFiles = MODE.MODE_CONFIG_FILES_MAP[target.mode] || []
     targetConfigFiles.forEach((v) => {
-      fs.link(
+      fs.linkSync(
         api.resolve(`static/${target.mode}/${v}`),
         path.resolve(outputPath, v)
       )
