@@ -65,7 +65,8 @@ module.exports = function (api, options) {
       'css-loader': '^0.28.11',
       'file-loader': '^1.1.11',
       path: '^0.12.7',
-      'url-loader': '^1.0.1'
+      'url-loader': '^1.0.1',
+      webpack: '^5.43.0'
     },
     browserslist: 'ios >= 8, chrome >= 47'
   })
