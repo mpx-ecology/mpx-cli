@@ -54,7 +54,9 @@ module.exports = function (api, options) {
       '@mpxjs/store': '^2.8.0',
       '@mpxjs/pinia': '^2.8.0',
       '@mpxjs/utils': '^2.8.0',
-      '@mpxjs/fetch': '^2.8.0'
+      '@mpxjs/fetch': '^2.8.0',
+      autoprefixer: '*',
+      pinia: '^2.0.14'
     },
     devDependencies: {
       '@mpxjs/webpack-plugin': '^2.8.0',

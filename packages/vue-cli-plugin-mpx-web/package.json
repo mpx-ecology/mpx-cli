@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@mpxjs/vue-cli-plugin-mpx": "1.6.13",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
