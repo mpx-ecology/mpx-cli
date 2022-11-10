@@ -55,13 +55,13 @@ module.exports = function (api, options) {
       '@mpxjs/pinia': '^2.8.0',
       '@mpxjs/utils': '^2.8.0',
       '@mpxjs/fetch': '^2.8.0',
-      autoprefixer: '*',
       pinia: '^2.0.14'
     },
     devDependencies: {
       '@mpxjs/webpack-plugin': '^2.8.0',
       '@mpxjs/size-report': '^2.8.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
+      autoprefixer: '*',
       'vue-template-compiler': '^2.6.10',
       'style-loader': '^1.0.1',
       'css-loader': '^0.28.11',
