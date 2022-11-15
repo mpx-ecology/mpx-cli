@@ -1,10 +1,10 @@
-# @mpxjs/cli@next
+# @mpxjs/cli
 
 基于 [`@vue/cli`](https://cli.vuejs.org/) 开发的 mpx 脚手架。
 
 <!-- TOC -->
 
-- [@mpxjs/cli@next](#mpxjsclinext)
+- [@mpxjs/cli](#mpxjscli)
   - [安装](#%E5%AE%89%E8%A3%85)
   - [使用](#%E4%BD%BF%E7%94%A8)
   - [基础](#%E5%9F%BA%E7%A1%80)
@@ -32,7 +32,7 @@
 ## 安装
 
 ```sh
-npm i @mpxjs/cli@next -g
+npm i @mpxjs/cli -g
 ```
 
 ## 使用

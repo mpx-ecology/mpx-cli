@@ -1,4 +1,4 @@
-## mpx-cli@next
+## mpx-cli
 
 A cli tool that based on [@vue/cli](https://cli.vuejs.org/) for creating mpx project.
 
@@ -7,7 +7,7 @@ A cli tool that based on [@vue/cli](https://cli.vuejs.org/) for creating mpx pro
 ## Install
 
 ```javascript
-npm i @mpxjs/cli@next -g
+npm i @mpxjs/cli -g
 ```
 
 ## Usage
