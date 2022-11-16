@@ -4,5 +4,6 @@
   "pluginRoot": "plugin",
   "compileType": "plugin",
   <%_ } _%>
+  "enableAppxNg": true,
   "component2": true
 }
