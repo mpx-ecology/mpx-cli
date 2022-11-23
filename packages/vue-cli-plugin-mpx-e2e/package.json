@@ -1,0 +1,18 @@
+{
+  "name": "@mpxjs/vue-cli-plugin-mpx-e2e",
+  "version": "1.6.15",
+  "description": "e2e plugin for mpx",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}
