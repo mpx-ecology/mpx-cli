@@ -39,9 +39,8 @@ async function run (project) {
 }
 
 async function invokeVueCliPlugin (pluginName, projectRoot) {
-  await execa('vue', ['invoke', pluginName], {
-    cwd: projectRoot,
-    needTs: true
+  await execa('vue', ['invoke', pluginName, 'needTs'], {
+    cwd: projectRoot
   })
 }
 
