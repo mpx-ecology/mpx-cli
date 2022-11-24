@@ -40,10 +40,16 @@ async function run (project) {
 }
 
 function formatPrompts (mockPrompts) {
-  return Object.keys(mockPrompts).map(item => `--${item} ${mockPrompts[item]}`)
+  const result = []
+  Object.keys(mockPrompts).forEach(item => {
+    result.push(`--${item}`)
+    result.push(mockPrompts[item])
+  })
+  return result
 }
 
 async function invokeVueCliPlugin (pluginName, projectRoot, prompts) {
+  console.log(prompts, 'prompts')
   await execa('vue', ['invoke', pluginName, ...prompts], {
     cwd: projectRoot
   })
