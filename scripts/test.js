@@ -49,7 +49,6 @@ function formatPrompts (mockPrompts) {
 }
 
 async function invokeVueCliPlugin (pluginName, projectRoot, prompts) {
-  console.log(prompts, 'prompts')
   await execa('vue', ['invoke', pluginName, ...prompts], {
     cwd: projectRoot
   })
