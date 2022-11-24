@@ -24,6 +24,5 @@ module.exports = function (api, options = {}) {
       }
     })
   }
-  console.log(needTs, 'needTsneedTsneedTsneedTsneedTsneedTs')
   api.render(needTs ? './template-typescript' : './template', options)
 }
