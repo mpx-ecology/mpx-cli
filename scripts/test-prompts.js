@@ -1,6 +1,5 @@
 module.exports = {
   name: 'test',
-  srcMode: 'wx',
   cross: true,
   transWeb: false,
   isPlugin: false,
