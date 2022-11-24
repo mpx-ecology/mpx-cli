@@ -1,6 +1,6 @@
 module.exports = {
   name: 'test',
-  needTs: true,
+  needTs: false,
   needUnitTest: false,
   needE2ETest: true
 }
