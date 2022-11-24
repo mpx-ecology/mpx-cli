@@ -42,8 +42,10 @@ async function run (project) {
 function formatPrompts (mockPrompts) {
   const result = []
   Object.keys(mockPrompts).forEach(item => {
-    result.push(`--${item}`)
-    result.push(mockPrompts[item])
+    if (mockPrompts[item]) {
+      result.push(`--${item}`)
+      result.push(mockPrompts[item])
+    }
   })
   return result
 }
