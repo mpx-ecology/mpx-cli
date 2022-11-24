@@ -9,7 +9,7 @@ module.exports = function (api, options = {}) {
 
   api.extendPackage({
     devDependencies: {
-      jest: '^24.9.0',
+      jest: '^27.4.5',
       '@mpxjs/e2e': '^0.0.11',
       '@mpxjs/e2e-scripts': '^0.0.9',
       '@types/jest': '^27.5.1',

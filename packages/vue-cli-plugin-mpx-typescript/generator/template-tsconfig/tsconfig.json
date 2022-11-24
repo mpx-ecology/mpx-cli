@@ -10,7 +10,12 @@
       "dom",
       "dom.iterable"
     ],
-    "types": ["@mpxjs/core"]
+    "types": [
+      <%_ if(needTest) { _%>
+      "jest",
+      <%_ } _%>
+      "@mpxjs/core"
+    ]
   },
   "exclude": [
     "build",
