@@ -1,4 +1,15 @@
 
+## 1.6.16 (2022-12-01)
+
+#### :rocket: New Features
+* `vue-cli-plugin-mpx-eslint`, `vue-cli-plugin-mpx-mp`, `vue-cli-plugin-mpx-typescript`, `vue-cli-plugin-mpx-web`, `vue-cli-plugin-mpx`
+  * [#56](https://github.com/mpx-ecology/mpx-cli/pull/56) feat: move dep ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 

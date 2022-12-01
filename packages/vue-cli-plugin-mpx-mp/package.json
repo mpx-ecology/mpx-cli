@@ -1,13 +1,13 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-mp",
-  "version": "1.6.15",
+  "version": "1.6.16",
   "description": "mp mpx plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "1.6.15",
+    "@mpxjs/vue-cli-plugin-mpx": "1.6.16",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@vue/cli-shared-utils": "^5.0.4",
