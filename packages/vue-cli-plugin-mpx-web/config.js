@@ -14,10 +14,10 @@ module.exports = function (api, options = {}) {
       .rule('mpx')
       .test(/\.mpx$/)
       .use('vue-loader')
-      .loader('vue-loader')
+      .loader(require.resolve('vue-loader'))
       .end()
       .use('mpx-loader')
-      .loader(mpxLoader.loader)
+      .loader(require.resolve(mpxLoader.loader))
       .options(mpxLoader.options)
 
     // 直接更新 vue-cli-service 内部的 vue-loader options 配置

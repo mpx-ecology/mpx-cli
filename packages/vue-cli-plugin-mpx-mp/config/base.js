@@ -52,7 +52,7 @@ module.exports = function resolveMpBaseWebpackConfig (
     .rule('images')
     .test(/\.(png|jpe?g|gif|svg)$/)
     .use('mpx-url-loader')
-    .loader(mpxUrlLoader.loader)
+    .loader(require.resolve(mpxUrlLoader.loader))
     .options(mpxUrlLoader.options)
 
   // mpx rules
@@ -61,7 +61,7 @@ module.exports = function resolveMpBaseWebpackConfig (
     .rule('mpx')
     .test(/\.mpx$/)
     .use('mpx-loader')
-    .loader(mpxLoader.loader)
+    .loader(require.resolve(mpxLoader.loader))
     .options(mpxLoader.options)
 
   // css rules
@@ -69,7 +69,7 @@ module.exports = function resolveMpBaseWebpackConfig (
     .rule('wxml')
     .test(/\.(wxml|axml|swan|qml|ttml|qxml|jxml|ddml)$/)
     .use('mpx-wxml-loader')
-    .loader(wxmlLoader.loader)
+    .loader(require.resolve(wxmlLoader.loader))
     .options(wxmlLoader.options)
 
   function createCSSRule (rule, test, loader, loaderOptions) {
@@ -77,7 +77,7 @@ module.exports = function resolveMpBaseWebpackConfig (
       .rule(rule)
       .test(test)
       .use('mpx-wxss-loader')
-      .loader(wxssLoader.loader)
+      .loader(require.resolve(wxssLoader.loader))
       .options(wxssLoader.options)
       .end()
 
@@ -110,7 +110,7 @@ module.exports = function resolveMpBaseWebpackConfig (
     .rule('pug')
     .test(/\.pug$/)
     .use('wxml-loader')
-    .loader(wxmlLoader.loader)
+    .loader(require.resolve(wxmlLoader.loader))
     .options(wxmlLoader.options)
     .end()
     .use('pug-plain-loader')

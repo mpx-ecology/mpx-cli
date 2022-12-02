@@ -12,7 +12,7 @@ module.exports = function (api, options, webpackConfig) {
     .test(/\.(wxs|qs|sjs|filter\.js)$/)
     .pre()
     .use('mpx-wxs-pre-loader')
-    .loader(MpxWebpackPlugin.wxsPreLoader().loader)
+    .loader(require.resolve(MpxWebpackPlugin.wxsPreLoader().loader))
 
   const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
   webpackConfig.module
@@ -26,7 +26,7 @@ module.exports = function (api, options, webpackConfig) {
     .add(api.resolve('test'))
     .end()
     .use('babel-loader')
-    .loader('babel-loader')
+    .loader(require.resolve('babel-loader'))
 
   webpackConfig.resolve.extensions
     .add('.mpx')
