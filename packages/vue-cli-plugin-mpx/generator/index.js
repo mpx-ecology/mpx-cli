@@ -61,7 +61,7 @@ module.exports = function (api, options) {
       '@mpxjs/webpack-plugin': '^2.8.0',
       '@mpxjs/size-report': '^2.8.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
-      autoprefixer: '*',
+      autoprefixer: '^10.2.4',
       postcss: '^8.2.6',
       webpack: '^5.43.0'
     },
