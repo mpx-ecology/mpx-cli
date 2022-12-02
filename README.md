@@ -189,6 +189,7 @@ module.exports = {
 
 - `MPX_CLI_MODE`: `mp` | `web`
 - `NODE_ENV`：`development` | `production`
+- `MPX_CURRENT_TARGET_MODE`: 'wx', 'ali', 'swan', 'qq', 'tt', 'dd'
 
 ```javascript
 // vue.config.js
