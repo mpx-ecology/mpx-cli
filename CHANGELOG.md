@@ -1,4 +1,16 @@
 
+## 1.6.17-0 (2022-12-02)
+
+#### :rocket: New Features
+* `mpx-cli`, `vue-cli-plugin-mpx-e2e-test`, `vue-cli-plugin-mpx-typescript`
+  * [#55](https://github.com/mpx-ecology/mpx-cli/pull/55) Feature e2e ([@pagnkelly](https://github.com/pagnkelly))
+
+#### Committers: 2
+- Mater ([@mater1996](https://github.com/mater1996))
+- [@pagnkelly](https://github.com/pagnkelly)
+
+
+
 ## 1.6.16 (2022-12-01)
 
 #### :rocket: New Features

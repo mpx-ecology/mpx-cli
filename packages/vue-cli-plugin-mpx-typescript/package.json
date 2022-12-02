@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-typescript",
-  "version": "1.6.16",
+  "version": "1.6.17-0",
   "description": "typescript plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
