@@ -12,9 +12,8 @@
     ],
     "types": [
       <%_ if(needTest) { _%>
-      "jest",
+      "jest"
       <%_ } _%>
-      "@mpxjs/core"
     ]
   },
   "exclude": [

@@ -12,5 +12,12 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
+  },
+  "dependencies": {
+    "@mpxjs/mpx-jest": "^0.0.9",
+    "@mpxjs/miniprogram-simulate": "^1.4.8",
+    "babel-jest": "^25.3.0",
+    "jest": "^27.4.5",
+    "@types/jest": "^27.5.1"
   }
 }
