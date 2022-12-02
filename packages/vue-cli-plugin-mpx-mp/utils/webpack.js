@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { runServiceCommand, removeArgv } = require('./index')
-const { processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
 function addMpPluginWebpackConfig (api, options, webpackConfigs) {
@@ -11,20 +10,29 @@ function addMpPluginWebpackConfig (api, options, webpackConfigs) {
   webpackConfigs.push(mpxPluginWebpackConfig)
 }
 
+function forceChangeWebpackConfig (api, webpackConfig) {
+  webpackConfig.output.clean =
+    webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
+  webpackConfig.snapshot = {
+    managedPaths: [api.resolve('node_modules/')],
+    ...webpackConfig.snapshot
+  }
+}
+
 function resolveWebpackConfigByTargets (
   api,
   options,
   targets,
   resolveCustomConfig
 ) {
-  // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
   const webpackConfigs = targets.map((target) => {
     process.env.MPX_CURRENT_TARGET_MODE = target.mode
     process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
-    processTargetConfig(api, options, webpackConfig, target)
+    // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
+    forceChangeWebpackConfig(api, webpackConfig)
     return webpackConfig
   })
   // 小程序插件构建配置
