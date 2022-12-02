@@ -65,12 +65,4 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
   ])
 }
 
-function processTargetConfig (api, options, webpackConfig, target) {
-  webpackConfig.output.clean = true
-  webpackConfig.snapshot = {
-    managedPaths: [api.resolve('node_modules/')]
-  }
-}
-
-module.exports.processTargetConfig = processTargetConfig
 module.exports.resolveTargetConfig = resolveTargetConfig
