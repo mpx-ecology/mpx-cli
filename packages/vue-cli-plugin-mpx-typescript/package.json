@@ -9,9 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "ts-loader": "^9.0.0"
-  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
