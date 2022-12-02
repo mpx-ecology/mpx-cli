@@ -5,21 +5,6 @@ const { runServiceCommand, removeArgv } = require('./index')
 const { processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
-/**
- * 根据target生成webpack配置
- * @param {*} api
- * @param {*} options
- * @param {*} target target {mode: 'wx', env: 'development|production'}
- */
-function resolveWebpackConfigByTarget (
-  config,
-  api,
-  options,
-  target
-) {
-
-}
-
 function addMpPluginWebpackConfig (api, options, webpackConfigs) {
   const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
   resolvePluginWebpackConfig(api, options, mpxPluginWebpackConfig)
@@ -145,6 +130,5 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
 
 module.exports.runWebpackInChildProcess = runWebpackInChildProcess
 module.exports.runWebpack = runWebpack
-module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
 module.exports.addMpPluginWebpackConfig = addMpPluginWebpackConfig
