@@ -7,13 +7,6 @@ module.exports = function (api, options = {}) {
     }
   })
 
-  api.extendPackage({
-    devDependencies: {
-      jest: '^27.4.5',
-      '@types/jest': '^27.5.1'
-    }
-  })
-
   if (needTs) {
     api.extendPackage({
       devDependencies: {
