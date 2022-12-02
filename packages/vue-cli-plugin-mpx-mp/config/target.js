@@ -66,8 +66,10 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
 }
 
 function processTargetConfig (api, options, webpackConfig, target) {
-  webpackConfig.output.clean = true
+  webpackConfig.output.clean =
+    webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
   webpackConfig.snapshot = {
+    ...webpackConfig.snapshot,
     managedPaths: [api.resolve('node_modules/')]
   }
 }

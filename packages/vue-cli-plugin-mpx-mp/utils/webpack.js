@@ -1,10 +1,8 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
-const { transformMpxEntry } = require('@mpxjs/vue-cli-plugin-mpx')
 const { runServiceCommand, removeArgv } = require('./index')
-const resolveBaseWebpackConfig = require('../config/base')
-const { resolveTargetConfig, processTargetConfig } = require('../config/target')
+const { processTargetConfig } = require('../config/target')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
 /**
@@ -12,30 +10,14 @@ const resolvePluginWebpackConfig = require('../config/plugin')
  * @param {*} api
  * @param {*} options
  * @param {*} target target {mode: 'wx', env: 'development|production'}
- * @param {*} resolveCustomConfig 自定义配置
- * @returns
  */
 function resolveWebpackConfigByTarget (
+  config,
   api,
   options,
-  target,
-  resolveCustomConfig
+  target
 ) {
-  let webpackConfig = api.resolveChainableWebpackConfig()
-  // 修改基础配置
-  resolveBaseWebpackConfig(api, options, webpackConfig, target)
-  // 根据不同target修改webpack配置
-  resolveTargetConfig(api, options, webpackConfig, target)
-  // 自定义配置
-  resolveCustomConfig && resolveCustomConfig(webpackConfig, target)
-  // 转换entry
-  transformMpxEntry(api, options, webpackConfig)
-  // resolve其他的插件配置以及vue.config.js配置
-  webpackConfig = api.resolveWebpackConfig(webpackConfig)
-  // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
-  processTargetConfig(api, options, webpackConfig, target)
-  // 返回配置文件
-  return webpackConfig
+
 }
 
 function addMpPluginWebpackConfig (api, options, webpackConfigs) {
@@ -44,19 +26,21 @@ function addMpPluginWebpackConfig (api, options, webpackConfigs) {
   webpackConfigs.push(mpxPluginWebpackConfig)
 }
 
+module.exports.currentTarget = {}
+
 function resolveWebpackConfigByTargets (
   api,
   options,
   targets,
   resolveCustomConfig
 ) {
+  // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
   const webpackConfigs = targets.map((target) => {
-    return resolveWebpackConfigByTarget(
-      api,
-      options,
-      target,
-      resolveCustomConfig
-    )
+    Object.assign(module.exports.currentTarget, target)
+    const webpackConfig = api.resolveWebpackConfig()
+    resolveCustomConfig && resolveCustomConfig(webpackConfig, target)
+    processTargetConfig(api, options, webpackConfig, target)
+    return webpackConfig
   })
   // 小程序插件构建配置
   if (api.hasPlugin('mpx-plugin-mode')) {
