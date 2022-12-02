@@ -62,6 +62,7 @@ module.exports = function (api, options) {
       '@mpxjs/size-report': '^2.8.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
       autoprefixer: '*',
+      postcss: '^8.2.6',
       webpack: '^5.43.0'
     },
     browserslist: 'ios >= 8, chrome >= 47'
