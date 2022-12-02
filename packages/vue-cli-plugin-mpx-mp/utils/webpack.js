@@ -37,8 +37,9 @@ function resolveWebpackConfigByTargets (
   // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
   const webpackConfigs = targets.map((target) => {
     Object.assign(module.exports.currentTarget, target)
-    const webpackConfig = api.resolveWebpackConfig()
-    resolveCustomConfig && resolveCustomConfig(webpackConfig, target)
+    const chainWebpackConfig = api.resolveChainableWebpackConfig()
+    resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
+    const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
     processTargetConfig(api, options, webpackConfig, target)
     return webpackConfig
   })
