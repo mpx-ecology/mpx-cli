@@ -8,10 +8,10 @@ module.exports = function (api, options = {}) {
 
   api.extendPackage({
     devDependencies: {
-      '@mpxjs/mpx-jest': '^0.0.9',
-      '@mpxjs/miniprogram-simulate': '^1.4.8',
-      'babel-jest': '^25.3.0',
-      jest: '^24.9.0'
+      '@mpxjs/mpx-jest': '^0.0.24',
+      '@mpxjs/miniprogram-simulate': '^1.4.17',
+      'babel-jest': '^27.4.5',
+      jest: '^27.4.5'
     }
   })
 
