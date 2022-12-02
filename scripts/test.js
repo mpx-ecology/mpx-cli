@@ -18,6 +18,7 @@ async function run (project) {
   const installedPackages = glob.sync('*', {
     cwd: resolveProject('node_modules/@mpxjs')
   })
+  // invoke本地包的时候发现没有带创建项目的prompts，比如ts支持，导致依赖下错，所以添加了模拟本地下载参数
   const prompts = formatPrompts(mockPrompts)
   const spinner = ora({
     text: 'Install local packages...',

@@ -26,7 +26,7 @@ describe('index', () => {
     // 断言页面标签
     expect(desc.tagName).toBe('view')
     // 断言文字内容
-    expect(await desc.text()).toContain('this is mpx project')
+    expect(await desc.text()).toContain('手机')
     // 保存页面快照
     await miniProgram.screenshot({
       path: 'e2e/screenshot/homePage.png'

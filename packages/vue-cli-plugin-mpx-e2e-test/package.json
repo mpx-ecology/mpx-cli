@@ -9,9 +9,7 @@
   "dependencies": {
     "@mpxjs/e2e": "^0.0.11",
     "@mpxjs/e2e-scripts": "^0.0.9",
-    "miniprogram-automator": "^0.10.0",
-    "jest": "^27.4.5",
-    "@types/jest": "^27.5.1"
+    "miniprogram-automator": "^0.10.0"
   },
   "keywords": [],
   "author": "",
