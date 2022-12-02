@@ -9,7 +9,8 @@
   "dependencies": {
     "@mpxjs/vue-cli-plugin-mpx": "1.6.16",
     "@mpxjs/webpack-plugin": "^2.7.0",
-    "webpack": "^5.48.0"
+    "webpack": "^5.48.0",
+    "vue-loader": "^15.0.0"
   },
   "keywords": [],
   "author": "",
