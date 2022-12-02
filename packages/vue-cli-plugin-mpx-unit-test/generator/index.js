@@ -2,7 +2,7 @@ module.exports = function (api, options = {}) {
   const needTs = !!options.needTs
   api.extendPackage({
     scripts: {
-      test: 'jest'
+      test: 'jest test/components'
     }
   })
 
