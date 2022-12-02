@@ -6,10 +6,20 @@ module.exports = function (api, options = {}) {
     }
   })
 
+  api.extendPackage({
+    devDependencies: {
+      '@mpxjs/mpx-jest': '^0.0.9',
+      '@mpxjs/miniprogram-simulate': '^1.4.8',
+      'babel-jest': '^25.3.0',
+      jest: '^24.9.0'
+    }
+  })
+
   if (needTs) {
     api.extendPackage({
       devDependencies: {
-        'ts-jest': '^27.1.2'
+        'ts-jest': '^27.1.2',
+        '@types/jest': '^27.5.1'
       }
     })
   }
