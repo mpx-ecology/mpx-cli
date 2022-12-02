@@ -11,8 +11,6 @@ function addMpPluginWebpackConfig (api, options, webpackConfigs) {
   webpackConfigs.push(mpxPluginWebpackConfig)
 }
 
-process.env.MPX_CURRENT_TARGET = undefined
-
 function resolveWebpackConfigByTargets (
   api,
   options,
@@ -21,7 +19,8 @@ function resolveWebpackConfigByTargets (
 ) {
   // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
   const webpackConfigs = targets.map((target) => {
-    process.env.MPX_CURRENT_TARGET = target
+    process.env.MPX_CURRENT_TARGET_MODE = target.mode
+    process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
