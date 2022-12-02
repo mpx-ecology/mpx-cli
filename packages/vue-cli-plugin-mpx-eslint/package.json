@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "eslint-webpack-plugin": "^3.1.1"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"

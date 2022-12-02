@@ -17,6 +17,10 @@
     "webpack-chain": "^6.5.1",
     "webpack-merge": "^5.8.0"
   },
+  "peerDependencies": {
+    "@mpxjs/webpack-plugin": "^2.7.0",
+    "webpack": "^5.48.0"
+  },
   "peerDependenciesMeta": {
     "pug-plain-loader": {
       "optional": true
