@@ -14,7 +14,7 @@ module.exports = function (api, options = {}) {
       .rule('mpx')
       .test(/\.mpx$/)
       .use('vue-loader')
-      .loader(require.resolve('vue-loader'))
+      .loader(require.resolve('@vue/vue-loader-v15'))
       .end()
       .use('mpx-loader')
       .loader(require.resolve(mpxLoader.loader))
