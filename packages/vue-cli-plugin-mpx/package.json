@@ -7,12 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@mpxjs/webpack-plugin": "^2.7.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "babel-loader": "^8.1.0",
-    "webpack": "^5.43.0",
     "webpack-chain": "^6.5.1",
     "webpack-merge": "^5.8.0"
+  },
+  "peerDependencies": {
+    "@mpxjs/webpack-plugin": "^2.7.0",
+    "webpack": "^5.48.0"
   },
   "keywords": [],
   "author": "",

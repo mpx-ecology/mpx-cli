@@ -58,9 +58,11 @@ module.exports = function (api, options) {
       pinia: '^2.0.14'
     },
     devDependencies: {
+      '@mpxjs/webpack-plugin': '^2.8.0',
       '@mpxjs/size-report': '^2.8.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
-      autoprefixer: '*'
+      autoprefixer: '*',
+      webpack: '^5.43.0'
     },
     browserslist: 'ios >= 8, chrome >= 47'
   })
