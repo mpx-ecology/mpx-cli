@@ -3,7 +3,7 @@ const glob = require('glob')
 const path = require('path')
 const ora = require('ora')
 const fs = require('fs')
-
+const mockPrompts = require('./test-prompts')
 async function run (project) {
   const cwd = process.cwd()
   const projectRoot = path.join(cwd, project)
@@ -18,6 +18,7 @@ async function run (project) {
   const installedPackages = glob.sync('*', {
     cwd: resolveProject('node_modules/@mpxjs')
   })
+  const prompts = formatPrompts(mockPrompts)
   const spinner = ora({
     text: 'Install local packages...',
     stream: process.stdout
@@ -31,15 +32,26 @@ async function run (project) {
       await install(absolutePackage, projectRoot)
       if (installedPackage.startsWith('vue-cli-plugin')) {
         spinner.text = `Invoking ${packageName}`
-        await invokeVueCliPlugin(packageName, projectRoot)
+        await invokeVueCliPlugin(packageName, projectRoot, prompts)
       }
     }
   }
   spinner.succeed()
 }
 
-async function invokeVueCliPlugin (pluginName, projectRoot) {
-  await execa('vue', ['invoke', pluginName], {
+function formatPrompts (mockPrompts) {
+  const result = []
+  Object.keys(mockPrompts).forEach(item => {
+    if (mockPrompts[item]) {
+      result.push(`--${item}`)
+      result.push(mockPrompts[item])
+    }
+  })
+  return result
+}
+
+async function invokeVueCliPlugin (pluginName, projectRoot, prompts) {
+  await execa('vue', ['invoke', pluginName, ...prompts], {
     cwd: projectRoot
   })
 }

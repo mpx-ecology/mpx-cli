@@ -11,6 +11,11 @@ const plugins = {
       version: '^1.0.0'
     }
   },
+  e2eTestSupport: {
+    [`${prefix}-e2e-test`]: {
+      version: '^1.0.0'
+    }
+  },
   cloudFunc: {
     [`${prefix}-cloud-func`]: {
       version: '^1.0.0'

@@ -49,6 +49,12 @@ module.exports = [
     default: false
   },
   {
+    name: 'needE2ETest',
+    message: '是否需要自动化测试',
+    type: 'confirm',
+    default: false
+  },
+  {
     name: 'description',
     type: 'string',
     required: false,

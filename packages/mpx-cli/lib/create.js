@@ -65,6 +65,9 @@ async function resolvePrompts (name, builtInPreset) {
       if (answers.needUnitTest) {
         Object.assign(builtInPreset.plugins, plugins.unitTestSupport)
       }
+      if (answers.needE2ETest) {
+        Object.assign(builtInPreset.plugins, plugins.e2eTestSupport)
+      }
       // TODO: 添加其他 prompt 插件配置
 
       // 各插件共享 answers 配置

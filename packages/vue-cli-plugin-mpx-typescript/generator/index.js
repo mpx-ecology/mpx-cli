@@ -8,5 +8,8 @@ module.exports = function (api, options) {
   if (!options.cloudFunc && !options.isPlugin) {
     api.render('./template-src', options)
   }
-  api.render('./template-tsconfig')
+
+  api.render('./template-tsconfig', {
+    needTest: !!options.needUnitTest || !!options.needE2ETest
+  })
 }
