@@ -1,5 +1,5 @@
 const Config = require('webpack-chain')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 
 module.exports = function resolveVueConfigWebpackConfig (api, options) {
   let config = new Config()
