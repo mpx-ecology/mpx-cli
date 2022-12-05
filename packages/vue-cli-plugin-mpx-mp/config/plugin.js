@@ -16,14 +16,10 @@ module.exports = function resolvePluginWebpackConfig (api, options, webpackConfi
   } catch (e) {}
 
   webpackConfig.entry = {
-    plugin: api.resolve(`src/${pluginRoot}/plugin.json`)
+    plugin: MpxWebpackPlugin.getPluginEntry(api.resolve(`src/${pluginRoot}/plugin.json`))
   }
   webpackConfig.output = {
     path: api.resolve(`dist/wx/${pluginRoot}`)
   }
   webpackConfig.name = 'plugin-compiler'
-  webpackConfig.module.rules.push({
-    resource: api.resolve(`src/${pluginRoot}/plugin.json`),
-    use: MpxWebpackPlugin.pluginLoader()
-  })
 }
