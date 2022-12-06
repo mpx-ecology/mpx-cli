@@ -1,4 +1,15 @@
 
+## 1.6.22 (2022-12-06)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-mp`
+  * [#61](https://github.com/mpx-ecology/mpx-cli/pull/61) fix: webpack mode ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 
