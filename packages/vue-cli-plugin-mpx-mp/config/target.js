@@ -3,6 +3,7 @@ const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
 const path = require('path')
 const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
+const TerserPlugin = require('terser-webpack-plugin')
 const { getMpxPluginOptions } = require('../utils')
 
 const copyIgnoreArr = []
@@ -15,9 +16,9 @@ Object.values(MODE.MODE_CONFIG_FILES_MAP).forEach((configFiles) => {
 
 /**
  * target相关配置
- * @param {*} api
- * @param {*} options
- * @param {*} webpackConfig
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @param {import('@vue/cli-service').ProjectOptions} options
+ * @param {import('webpack-chain')} webpackConfig
  * @param {*} target
  */
 function resolveTargetConfig (api, options = {}, webpackConfig, target) {
@@ -66,6 +67,18 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
       ...resolveMpxWebpackPluginConf(api, options)
     }
   ])
+
+  webpackConfig.optimization.noEmitOnErrors(true)
+
+  webpackConfig.optimization.minimizer('mpx-terser').use(TerserPlugin, [{
+    // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+    terserOptions: {
+      // terser的默认行为会把某些对象方法转为箭头函数，导致ios9等不支持箭头函数的环境白屏，详情见 https://github.com/terser/terser#compress-options
+      compress: {
+        arrows: false
+      }
+    }
+  }])
 }
 
 module.exports.resolveTargetConfig = resolveTargetConfig

@@ -14,6 +14,7 @@
     "execa": "^4.1.0",
     "process": "0.11.10",
     "webpack-bundle-analyzer": "^4.5.0",
+    "terser-webpack-plugin": "^5.3.6",
     "webpack-chain": "^6.5.1",
     "webpack-merge": "^5.8.0"
   },

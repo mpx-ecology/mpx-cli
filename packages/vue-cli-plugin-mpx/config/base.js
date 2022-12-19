@@ -39,8 +39,18 @@ module.exports = function (api, options, webpackConfig) {
   webpackConfig.cache({
     type: 'filesystem',
     buildDependencies: {
-      config: [api.resolve('vue.config.js')]
-    }
+      config: [
+        api.resolve('vue.config.js'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx-mp'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx-web'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx-plugin-mode'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx-typescript'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx-eslint'),
+        require.resolve('@mpxjs/vue-cli-plugin-mpx-cloud-func')
+      ]
+    },
+    cacheDirectory: api.resolve('.cache/')
   })
 }
 

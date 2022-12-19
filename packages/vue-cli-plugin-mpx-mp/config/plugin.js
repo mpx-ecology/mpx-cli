@@ -3,9 +3,9 @@ const path = require('path')
 
 /**
  * 插件配置
- * @param {*} api
- * @param {*} options
- * @param {*} webpackConfig
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @param {import('@vue/cli-service').ProjectOptions} options
+ * @param {import('webpack-chain')} webpackConfig
  */
 module.exports = function resolvePluginWebpackConfig (
   api,
