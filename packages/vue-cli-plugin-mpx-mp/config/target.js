@@ -68,8 +68,6 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
     }
   ])
 
-  webpackConfig.optimization.noEmitOnErrors(true)
-
   webpackConfig.optimization.minimizer('mpx-terser').use(TerserPlugin, [{
     // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
     terserOptions: {

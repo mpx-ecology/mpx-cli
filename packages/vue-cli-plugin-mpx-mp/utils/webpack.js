@@ -11,6 +11,10 @@ function forceChangeWebpackConfig (api, webpackConfig) {
     managedPaths: [api.resolve('node_modules/')],
     ...webpackConfig.snapshot
   }
+  webpackConfig.optimization = {
+    emitOnErrors: true,
+    ...webpackConfig.optimization
+  }
 }
 
 function resolveWebpackConfigByTargets (
