@@ -15,13 +15,16 @@ module.exports = function (api, options, webpackConfig) {
     .use('mpx-wxs-pre-loader')
     .loader(require.resolve(MpxWebpackPlugin.wxsPreLoader().loader))
 
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
+  const transpileDepRegex = genTranspileDepRegex(
+    options.transpileDependencies || []
+  )
   webpackConfig.module
     .rule('js')
     .test(/\.js$/)
-    .include
-    .add(filepath => transpileDepRegex && transpileDepRegex.test(filepath))
-    .add(filepath => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
+    .include.add(
+      (filepath) => transpileDepRegex && transpileDepRegex.test(filepath)
+    )
+    .add((filepath) => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
     .add(api.resolve('src'))
     .add(/@mpxjs/)
     .add(api.resolve('test'))
@@ -37,16 +40,21 @@ module.exports = function (api, options, webpackConfig) {
 
   webpackConfig.resolve.modules.add('node_modules')
 
+  const mpxPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx')
+  const mpxMpPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx-mp')
+  const mpxWebPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx-web')
+
   webpackConfig.cache({
     type: 'filesystem',
     buildDependencies: {
       config: [
         api.resolve('vue.config.js'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx'),
-        path.resolve(require.resolve('@mpxjs/vue-cli-plugin-mpx'), 'config'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx-mp'),
-        path.resolve(require.resolve('@mpxjs/vue-cli-plugin-mpx-mp'), 'config'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx-web'),
+        mpxPluginMainPath,
+        path.resolve(mpxPluginMainPath, '../config') + '/',
+        mpxMpPluginMainPath,
+        path.resolve(mpxMpPluginMainPath, '../config') + '/',
+        mpxWebPluginMainPath,
+        path.resolve(mpxWebPluginMainPath, '../config') + '/',
         require.resolve('@mpxjs/vue-cli-plugin-mpx-plugin-mode'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-typescript'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-eslint'),
