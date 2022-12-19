@@ -10,7 +10,7 @@ const { WebpackMpResultPlugin } = require('../utils/webpackMpResultPlugin')
  * @param {import('@vue/cli-service').ProjectOptions} options
  * @returns
  */
-module.exports = function resolveMpBaseWebpackConfig (
+module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
   api,
   options,
   webpackConfig
@@ -137,4 +137,17 @@ module.exports = function resolveMpBaseWebpackConfig (
   // forked end ---------------------------------------------
 
   return webpackConfig
+}
+
+module.exports.forceChangeWebpackConfig = function forceChangeWebpackConfig (api, webpackConfig) {
+  webpackConfig.output.clean =
+    webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
+  webpackConfig.snapshot = {
+    managedPaths: [api.resolve('node_modules/')],
+    ...webpackConfig.snapshot
+  }
+  webpackConfig.optimization = {
+    emitOnErrors: true,
+    ...webpackConfig.optimization
+  }
 }

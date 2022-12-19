@@ -7,7 +7,7 @@ const path = require('path')
  * @param {import('@vue/cli-service').ProjectOptions} options
  * @param {import('webpack-chain')} webpackConfig
  */
-module.exports = function resolvePluginWebpackConfig (
+module.exports.resolvePluginWebpackConfig = function resolvePluginWebpackConfig (
   api,
   options,
   wxWebpackConfig

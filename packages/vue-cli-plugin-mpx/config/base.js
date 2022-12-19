@@ -1,4 +1,5 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
+const path = require('path')
 
 module.exports = function (api, options, webpackConfig) {
   webpackConfig.module
@@ -42,7 +43,9 @@ module.exports = function (api, options, webpackConfig) {
       config: [
         api.resolve('vue.config.js'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx'),
+        path.resolve(require.resolve('@mpxjs/vue-cli-plugin-mpx'), 'config'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-mp'),
+        path.resolve(require.resolve('@mpxjs/vue-cli-plugin-mpx-mp'), 'config'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-web'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-plugin-mode'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-typescript'),

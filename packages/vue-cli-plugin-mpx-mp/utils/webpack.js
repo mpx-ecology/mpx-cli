@@ -2,20 +2,8 @@ const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { runServiceCommand, removeArgv } = require('./index')
-const resolvePluginWebpackConfig = require('../config/plugin')
-
-function forceChangeWebpackConfig (api, webpackConfig) {
-  webpackConfig.output.clean =
-    webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
-  webpackConfig.snapshot = {
-    managedPaths: [api.resolve('node_modules/')],
-    ...webpackConfig.snapshot
-  }
-  webpackConfig.optimization = {
-    emitOnErrors: true,
-    ...webpackConfig.optimization
-  }
-}
+const { resolvePluginWebpackConfig } = require('../config/plugin')
+const { forceChangeWebpackConfig } = require('../config/base')
 
 function resolveWebpackConfigByTargets (
   api,
@@ -35,7 +23,9 @@ function resolveWebpackConfigByTargets (
     webpackConfigs.push(webpackConfig)
     // 小程序插件构建配置
     if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {
-      webpackConfigs.push(resolvePluginWebpackConfig(api, options, merge({}, webpackConfig)))
+      webpackConfigs.push(
+        resolvePluginWebpackConfig(api, options, merge({}, webpackConfig))
+      )
     }
   })
   return webpackConfigs
