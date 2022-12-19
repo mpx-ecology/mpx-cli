@@ -25,7 +25,10 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
   let outputDist = `dist/${target.mode}`
   let subDir = ''
 
-  if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
+  if (
+    target.mode === 'wx' &&
+    (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode'))
+  ) {
     try {
       const projectConfigJson = require(api.resolve(
         'static/wx/project.config.json'

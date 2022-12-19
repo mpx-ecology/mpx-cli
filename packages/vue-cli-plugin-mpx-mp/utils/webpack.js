@@ -4,12 +4,6 @@ const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { runServiceCommand, removeArgv } = require('./index')
 const resolvePluginWebpackConfig = require('../config/plugin')
 
-function addMpPluginWebpackConfig (api, options, webpackConfigs) {
-  const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
-  resolvePluginWebpackConfig(api, options, mpxPluginWebpackConfig)
-  webpackConfigs.push(mpxPluginWebpackConfig)
-}
-
 function forceChangeWebpackConfig (api, webpackConfig) {
   webpackConfig.output.clean =
     webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
@@ -25,7 +19,8 @@ function resolveWebpackConfigByTargets (
   targets,
   resolveCustomConfig
 ) {
-  const webpackConfigs = targets.map((target) => {
+  const webpackConfigs = []
+  targets.forEach((target) => {
     process.env.MPX_CURRENT_TARGET_MODE = target.mode
     process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
@@ -33,12 +28,12 @@ function resolveWebpackConfigByTargets (
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
     // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
     forceChangeWebpackConfig(api, webpackConfig)
-    return webpackConfig
+    webpackConfigs.push(webpackConfig)
+    // 小程序插件构建配置
+    if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {
+      webpackConfigs.push(resolvePluginWebpackConfig(api, options, merge({}, webpackConfig)))
+    }
   })
-  // 小程序插件构建配置
-  if (api.hasPlugin('mpx-plugin-mode')) {
-    addMpPluginWebpackConfig(api, options, webpackConfigs)
-  }
   return webpackConfigs
 }
 
@@ -138,4 +133,3 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
 module.exports.runWebpackInChildProcess = runWebpackInChildProcess
 module.exports.runWebpack = runWebpack
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
-module.exports.addMpPluginWebpackConfig = addMpPluginWebpackConfig
