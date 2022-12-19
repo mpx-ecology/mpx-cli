@@ -16,13 +16,11 @@ module.exports.symLinkTargetConfig = function (api, targets, webpackConfigs) {
         outputPath = path.resolve(outputPath, '../')
       }
       try {
-        fs.unlinkSync(path.resolve(outputPath, v))
-        fs.linkSync(
-          api.resolve(`static/${target.mode}/${v}`),
-          path.resolve(outputPath, v)
-        )
+        const targetConfigFile = path.resolve(outputPath, v)
+        if (fs.existsSync(targetConfigFile)) fs.unlinkSync(targetConfigFile)
+        fs.linkSync(api.resolve(`static/${target.mode}/${v}`), targetConfigFile)
       } catch (error) {
-        fs.copyFile(
+        fs.copyFileSync(
           api.resolve(`static/${target.mode}/${v}`),
           path.resolve(outputPath, v)
         )
