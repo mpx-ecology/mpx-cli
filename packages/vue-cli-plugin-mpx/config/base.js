@@ -41,8 +41,12 @@ module.exports = function (api, options, webpackConfig) {
   webpackConfig.resolve.modules.add('node_modules')
 
   const mpxPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx')
+  const mpxPluginConfigPath = path.resolve(mpxPluginMainPath, '../config')
   const mpxMpPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx-mp')
+  const mpxMpPluginConfigPath = path.resolve(mpxPluginMainPath, '../config')
+  const mpxMpPluginUtilPath = path.resolve(mpxPluginMainPath, '../utils')
   const mpxWebPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx-web')
+  const mpxWebPluginConfigPath = path.resolve(mpxWebPluginMainPath, '../config')
 
   webpackConfig.cache({
     type: 'filesystem',
@@ -50,11 +54,14 @@ module.exports = function (api, options, webpackConfig) {
       config: [
         api.resolve('vue.config.js'),
         mpxPluginMainPath,
-        path.resolve(mpxPluginMainPath, '../config') + '/',
+        path.resolve(mpxPluginConfigPath, 'base.js'),
         mpxMpPluginMainPath,
-        path.resolve(mpxMpPluginMainPath, '../config') + '/',
+        path.resolve(mpxMpPluginConfigPath, 'base'),
+        path.resolve(mpxMpPluginConfigPath, 'plugin'),
+        path.resolve(mpxMpPluginConfigPath, 'target'),
+        path.resolve(mpxMpPluginUtilPath, 'webpack.js'),
         mpxWebPluginMainPath,
-        path.resolve(mpxWebPluginMainPath, '../config') + '/',
+        path.resolve(mpxWebPluginConfigPath, 'index.js'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-plugin-mode'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-typescript'),
         require.resolve('@mpxjs/vue-cli-plugin-mpx-eslint'),
