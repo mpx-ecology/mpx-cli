@@ -3,8 +3,14 @@ const { merge } = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { runServiceCommand, removeArgv } = require('./index')
 const { resolvePluginWebpackConfig } = require('../config/plugin')
-const { forceChangeWebpackConfig } = require('../config/base')
+const { resolveBaseRawWebpackConfig } = require('../config/base')
 
+/**
+ * 基础配置
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @param {import('@vue/cli-service').ProjectOptions} options
+ * @returns
+ */
 function resolveWebpackConfigByTargets (
   api,
   options,
@@ -17,9 +23,12 @@ function resolveWebpackConfigByTargets (
     process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
+    api.service.webpackRawConfigFns.splice(
+      api.service.webpackRawConfigFns.length - 1,
+      0,
+      resolveBaseRawWebpackConfig(api)
+    )
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
-    // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
-    forceChangeWebpackConfig(api, webpackConfig)
     webpackConfigs.push(webpackConfig)
     // 小程序插件构建配置
     if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {

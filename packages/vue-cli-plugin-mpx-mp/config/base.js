@@ -139,15 +139,16 @@ module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
   return webpackConfig
 }
 
-module.exports.forceChangeWebpackConfig = function forceChangeWebpackConfig (api, webpackConfig) {
-  webpackConfig.output.clean =
-    webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
-  webpackConfig.snapshot = {
-    managedPaths: [api.resolve('node_modules/')],
-    ...webpackConfig.snapshot
-  }
-  webpackConfig.optimization = {
-    emitOnErrors: true,
-    ...webpackConfig.optimization
+module.exports.resolveBaseRawWebpackConfig = function resolveBaseRawWebpackConfig (api) {
+  return {
+    output: {
+      clean: true
+    },
+    snapshot: {
+      managedPaths: [api.resolve('node_modules/')]
+    },
+    optimization: {
+      emitOnErrors: true
+    }
   }
 }
