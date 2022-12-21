@@ -139,6 +139,11 @@ module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
   return webpackConfig
 }
 
+/**
+ *
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @returns {import('@vue/cli-service').ProjectOptions['configureWebpack']}
+ */
 module.exports.resolveBaseRawWebpackConfig = function resolveBaseRawWebpackConfig (api) {
   return {
     output: {

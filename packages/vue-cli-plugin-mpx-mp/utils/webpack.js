@@ -17,18 +17,18 @@ function resolveWebpackConfigByTargets (
   targets,
   resolveCustomConfig
 ) {
+  // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
+  api.service.webpackRawConfigFns.splice(
+    api.service.webpackRawConfigFns.length - 1,
+    0,
+    resolveBaseRawWebpackConfig(api)
+  )
   const webpackConfigs = []
   targets.forEach((target) => {
     process.env.MPX_CURRENT_TARGET_MODE = target.mode
     process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
-    // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
-    api.service.webpackRawConfigFns.splice(
-      api.service.webpackRawConfigFns.length - 1,
-      0,
-      resolveBaseRawWebpackConfig(api)
-    )
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
     webpackConfigs.push(webpackConfig)
     // 小程序插件构建配置
