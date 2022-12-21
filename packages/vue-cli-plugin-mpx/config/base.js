@@ -40,33 +40,31 @@ module.exports = function (api, options, webpackConfig) {
 
   webpackConfig.resolve.modules.add('node_modules')
 
-  const mpxPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx')
-  const mpxPluginConfigPath = path.resolve(mpxPluginMainPath, '../config')
-  const mpxMpPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx-mp')
-  const mpxMpPluginConfigPath = path.resolve(mpxPluginMainPath, '../config')
-  const mpxMpPluginUtilPath = path.resolve(mpxPluginMainPath, '../utils')
-  const mpxWebPluginMainPath = require.resolve('@mpxjs/vue-cli-plugin-mpx-web')
-  const mpxWebPluginConfigPath = path.resolve(mpxWebPluginMainPath, '../config')
+  const dependenciesConfig = [api.resolve('vue.config.js')]
+
+  const addDepConfig = (names = []) => {
+    names.forEach((name) => {
+      try {
+        const pkgDir = path.resolve(require.resolve(name), '../')
+        dependenciesConfig.push(pkgDir)
+      } catch (error) {}
+    })
+  }
+
+  addDepConfig([
+    '@mpxjs/vue-cli-plugin-mpx',
+    '@mpxjs/vue-cli-plugin-mpx-mp',
+    '@mpxjs/vue-cli-plugin-mpx-web',
+    '@mpxjs/vue-cli-plugin-mpx-plugin-mode',
+    '@mpxjs/vue-cli-plugin-mpx-typescript',
+    '@mpxjs/vue-cli-plugin-mpx-eslint',
+    '@mpxjs/vue-cli-plugin-mpx-cloud-func'
+  ])
 
   webpackConfig.cache({
     type: 'filesystem',
     buildDependencies: {
-      config: [
-        api.resolve('vue.config.js'),
-        mpxPluginMainPath,
-        path.resolve(mpxPluginConfigPath, 'base.js'),
-        mpxMpPluginMainPath,
-        path.resolve(mpxMpPluginConfigPath, 'base.js'),
-        path.resolve(mpxMpPluginConfigPath, 'plugin.js'),
-        path.resolve(mpxMpPluginConfigPath, 'target.js'),
-        path.resolve(mpxMpPluginUtilPath, 'webpack.js'),
-        mpxWebPluginMainPath,
-        path.resolve(mpxWebPluginConfigPath, 'index.js'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx-plugin-mode'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx-typescript'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx-eslint'),
-        require.resolve('@mpxjs/vue-cli-plugin-mpx-cloud-func')
-      ]
+      config: dependenciesConfig
     },
     cacheDirectory: api.resolve('.cache/')
   })
