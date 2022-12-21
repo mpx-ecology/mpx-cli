@@ -45,7 +45,7 @@ module.exports = function (api, options, webpackConfig) {
   const addDepConfig = (names = []) => {
     names.forEach((name) => {
       try {
-        const pkgDir = path.resolve(require.resolve(name), '../')
+        const pkgDir = path.resolve(require.resolve(name), '../') + '/'
         dependenciesConfig.push(pkgDir)
       } catch (error) {}
     })
