@@ -23,6 +23,7 @@ function resolveWebpackConfigByTargets (
     process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
+    // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
     api.service.webpackRawConfigFns.splice(
       api.service.webpackRawConfigFns.length - 1,
       0,
