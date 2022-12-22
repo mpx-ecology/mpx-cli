@@ -1,6 +1,6 @@
 <template>
   <view class="list">
-    <view wx:for="{{listData}}" wx:key="index">{{item}}</view>
+    <view wx:for="{{listData}}" wx:key="*this">{{item}}</view>
   </view>
 </template>
 
