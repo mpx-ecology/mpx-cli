@@ -1,4 +1,15 @@
 
+## 1.6.23 (2022-12-22)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-mp`, `vue-cli-plugin-mpx-web`, `vue-cli-plugin-mpx`
+  * [#62](https://github.com/mpx-ecology/mpx-cli/pull/62) Fix: 更改output.path导致linkfile失效。 ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 1.6.22 (2022-12-06)
 
 #### :bug: Bug Fix
