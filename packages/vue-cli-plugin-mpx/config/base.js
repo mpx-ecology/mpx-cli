@@ -1,4 +1,5 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
+const path = require('path')
 
 module.exports = function (api, options, webpackConfig) {
   webpackConfig.module
@@ -14,13 +15,16 @@ module.exports = function (api, options, webpackConfig) {
     .use('mpx-wxs-pre-loader')
     .loader(require.resolve(MpxWebpackPlugin.wxsPreLoader().loader))
 
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies || [])
+  const transpileDepRegex = genTranspileDepRegex(
+    options.transpileDependencies || []
+  )
   webpackConfig.module
     .rule('js')
     .test(/\.js$/)
-    .include
-    .add(filepath => transpileDepRegex && transpileDepRegex.test(filepath))
-    .add(filepath => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
+    .include.add(
+      (filepath) => transpileDepRegex && transpileDepRegex.test(filepath)
+    )
+    .add((filepath) => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
     .add(api.resolve('src'))
     .add(/@mpxjs/)
     .add(api.resolve('test'))
@@ -36,11 +40,33 @@ module.exports = function (api, options, webpackConfig) {
 
   webpackConfig.resolve.modules.add('node_modules')
 
+  const dependenciesConfig = [api.resolve('vue.config.js')]
+
+  const addDepConfig = (names = []) => {
+    names.forEach((name) => {
+      try {
+        const pkgDir = path.resolve(require.resolve(name), '../') + '/'
+        dependenciesConfig.push(pkgDir)
+      } catch (error) {}
+    })
+  }
+
+  addDepConfig([
+    '@mpxjs/vue-cli-plugin-mpx',
+    '@mpxjs/vue-cli-plugin-mpx-mp',
+    '@mpxjs/vue-cli-plugin-mpx-web',
+    '@mpxjs/vue-cli-plugin-mpx-plugin-mode',
+    '@mpxjs/vue-cli-plugin-mpx-typescript',
+    '@mpxjs/vue-cli-plugin-mpx-eslint',
+    '@mpxjs/vue-cli-plugin-mpx-cloud-func'
+  ])
+
   webpackConfig.cache({
     type: 'filesystem',
     buildDependencies: {
-      config: [api.resolve('vue.config.js')]
-    }
+      config: dependenciesConfig
+    },
+    cacheDirectory: api.resolve('.cache/')
   })
 }
 

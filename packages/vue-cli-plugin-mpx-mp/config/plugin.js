@@ -1,12 +1,17 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
+const path = require('path')
 
 /**
  * 插件配置
- * @param {*} api
- * @param {*} options
- * @param {*} webpackConfig
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @param {import('@vue/cli-service').ProjectOptions} options
+ * @param {import('webpack-chain')} webpackConfig
  */
-module.exports = function resolvePluginWebpackConfig (api, options, webpackConfig) {
+module.exports.resolvePluginWebpackConfig = function resolvePluginWebpackConfig (
+  api,
+  options,
+  wxWebpackConfig
+) {
   let pluginRoot = ''
   try {
     const projectConfigJson = require(api.resolve(
@@ -15,11 +20,17 @@ module.exports = function resolvePluginWebpackConfig (api, options, webpackConfi
     pluginRoot = projectConfigJson.pluginRoot
   } catch (e) {}
 
-  webpackConfig.entry = {
-    plugin: MpxWebpackPlugin.getPluginEntry(api.resolve(`src/${pluginRoot}/plugin.json`))
+  wxWebpackConfig.entry = {
+    plugin: MpxWebpackPlugin.getPluginEntry(
+      api.resolve(`src/${pluginRoot}/plugin.json`)
+    )
   }
-  webpackConfig.output = {
-    path: api.resolve(`dist/wx/${pluginRoot}`)
+  wxWebpackConfig.output = {
+    path: api.resolve(
+      `${path.resolve(wxWebpackConfig.output.path, '../')}/${pluginRoot}`
+    )
   }
-  webpackConfig.name = 'plugin-compiler'
+  wxWebpackConfig.name = 'plugin-compiler'
+
+  return wxWebpackConfig
 }

@@ -2,43 +2,42 @@ const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { runServiceCommand, removeArgv } = require('./index')
-const resolvePluginWebpackConfig = require('../config/plugin')
+const { resolvePluginWebpackConfig } = require('../config/plugin')
+const { resolveBaseRawWebpackConfig } = require('../config/base')
 
-function addMpPluginWebpackConfig (api, options, webpackConfigs) {
-  const mpxPluginWebpackConfig = merge({}, webpackConfigs[0])
-  resolvePluginWebpackConfig(api, options, mpxPluginWebpackConfig)
-  webpackConfigs.push(mpxPluginWebpackConfig)
-}
-
-function forceChangeWebpackConfig (api, webpackConfig) {
-  webpackConfig.output.clean =
-    webpackConfig.output.clean === undefined ? true : webpackConfig.output.clean
-  webpackConfig.snapshot = {
-    managedPaths: [api.resolve('node_modules/')],
-    ...webpackConfig.snapshot
-  }
-}
-
+/**
+ * 基础配置
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @param {import('@vue/cli-service').ProjectOptions} options
+ * @returns
+ */
 function resolveWebpackConfigByTargets (
   api,
   options,
   targets,
   resolveCustomConfig
 ) {
-  const webpackConfigs = targets.map((target) => {
+  // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
+  api.service.webpackRawConfigFns.splice(
+    api.service.webpackRawConfigFns.length - 1,
+    0,
+    resolveBaseRawWebpackConfig(api)
+  )
+  const webpackConfigs = []
+  targets.forEach((target) => {
     process.env.MPX_CURRENT_TARGET_MODE = target.mode
     process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
-    // 根据不同target修改webpack配置(webpack5，chainWebpack未兼容，直接修改)
-    forceChangeWebpackConfig(api, webpackConfig)
-    return webpackConfig
+    webpackConfigs.push(webpackConfig)
+    // 小程序插件构建配置
+    if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {
+      webpackConfigs.push(
+        resolvePluginWebpackConfig(api, options, merge({}, webpackConfig))
+      )
+    }
   })
-  // 小程序插件构建配置
-  if (api.hasPlugin('mpx-plugin-mode')) {
-    addMpPluginWebpackConfig(api, options, webpackConfigs)
-  }
   return webpackConfigs
 }
 
@@ -138,4 +137,3 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
 module.exports.runWebpackInChildProcess = runWebpackInChildProcess
 module.exports.runWebpack = runWebpack
 module.exports.resolveWebpackConfigByTargets = resolveWebpackConfigByTargets
-module.exports.addMpPluginWebpackConfig = addMpPluginWebpackConfig

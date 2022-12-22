@@ -6,7 +6,7 @@ module.exports = function (api, options) {
 
   // 删除 @vue/cli-service 默认生成的文件内容
   api.render(function (files) {
-    Object.keys(files).forEach(key => {
+    Object.keys(files).forEach((key) => {
       if (key.includes('src')) {
         delete files[key]
       }
@@ -36,10 +36,42 @@ module.exports = function (api, options) {
       pluginOptions: {
         mpx: {
           srcMode: options.srcMode,
-          plugin: {},
+          plugin: {
+            hackResolveBuildDependencies: ({ files, resolveDependencies }) => {
+              const path = require('path')
+              const packageJSONPath = path.resolve('package.json')
+              if (files.has(packageJSONPath)) files.delete(packageJSONPath)
+              if (resolveDependencies.files.has(packageJSONPath)) {
+                resolveDependencies.files.delete(packageJSONPath)
+              }
+            }
+          },
           loader: {}
         }
+      },
+      configureWebpack (config) {}
+    }
+  })
+
+  api.postProcessFiles((files) => {
+    // 处理 vue.config.js 中 crossorigin 和 productionSourceMap
+    const vueConfigJs = files['vue.config.js']
+    if (vueConfigJs) {
+      const lines = vueConfigJs.split(/\r?\n/g)
+      const configureWebpackIndex = lines.findIndex((v) =>
+        /configureWebpack/.test(v)
+      )
+      if (configureWebpackIndex > -1) {
+        lines.splice(
+          configureWebpackIndex,
+          0,
+          `  /**
+     * 如果希望node_modules下的文件时对应的缓存可以失效，
+     * 可以将configureWebpack.snap.managedPaths修改为 []
+     */`
+        )
       }
+      files['vue.config.js'] = lines.join('\n')
     }
   })
 

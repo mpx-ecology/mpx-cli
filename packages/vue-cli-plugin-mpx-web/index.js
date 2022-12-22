@@ -1,7 +1,7 @@
 const registerServeCommand = require('./commands/serve')
 const registerBuildCommand = require('./commands/build')
 const registerInspectCommand = require('./commands/inspect')
-const applyWebConfig = require('./config')
+const applyWebConfig = require('./config/index')
 
 module.exports = function (api, options) {
   if (options.outputDir === 'dist') {

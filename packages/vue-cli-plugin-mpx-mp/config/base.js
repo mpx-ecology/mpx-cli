@@ -6,11 +6,11 @@ const { WebpackMpResultPlugin } = require('../utils/webpackMpResultPlugin')
 
 /**
  * 基础配置
- * @param {*} api
- * @param {*} options
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @param {import('@vue/cli-service').ProjectOptions} options
  * @returns
  */
-module.exports = function resolveMpBaseWebpackConfig (
+module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
   api,
   options,
   webpackConfig
@@ -137,4 +137,23 @@ module.exports = function resolveMpBaseWebpackConfig (
   // forked end ---------------------------------------------
 
   return webpackConfig
+}
+
+/**
+ *
+ * @param {import('@vue/cli-service').PluginAPI} api
+ * @returns {import('@vue/cli-service').ProjectOptions['configureWebpack']}
+ */
+module.exports.resolveBaseRawWebpackConfig = function resolveBaseRawWebpackConfig (api) {
+  return {
+    output: {
+      clean: true
+    },
+    snapshot: {
+      managedPaths: [api.resolve('node_modules/')]
+    },
+    optimization: {
+      emitOnErrors: true
+    }
+  }
 }
