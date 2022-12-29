@@ -1,4 +1,15 @@
 
+## 1.6.25 (2022-12-29)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-mp`
+  * [#63](https://github.com/mpx-ecology/mpx-cli/pull/63) fix: copy plugin target mode path error ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 
