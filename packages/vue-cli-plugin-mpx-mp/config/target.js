@@ -1,18 +1,12 @@
+const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
-const { resolveMpxWebpackPluginConf } = require('@mpxjs/vue-cli-plugin-mpx')
-const path = require('path')
-const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
+const {
+  resolveMpxWebpackPluginConf,
+  MODE
+} = require('@mpxjs/vue-cli-plugin-mpx')
 const TerserPlugin = require('terser-webpack-plugin')
 const { getMpxPluginOptions } = require('../utils')
-
-const copyIgnoreArr = []
-
-Object.values(MODE.MODE_CONFIG_FILES_MAP).forEach((configFiles) => {
-  configFiles.forEach((v) => {
-    copyIgnoreArr.push('**/' + v)
-  })
-})
 
 /**
  * target相关配置
@@ -48,11 +42,20 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
     {
       patterns: [
         {
+          context: api.resolve(`static/${target.mode}`),
+          from: '**/*',
+          to: subDir ? '..' : '',
+          globOptions: {
+            ignore: MODE.MODE_CONFIG_FILES_MAP[target.mode] || []
+          },
+          noErrorOnMissing: true
+        },
+        {
           context: api.resolve('static'),
           from: '**/*',
           to: subDir ? '..' : '',
           globOptions: {
-            ignore: copyIgnoreArr
+            ignore: MODE.SUPPORT_MODE.map((v) => `**/${v}/**`)
           },
           noErrorOnMissing: true
         }
@@ -68,15 +71,17 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
     }
   ])
 
-  webpackConfig.optimization.minimizer('mpx-terser').use(TerserPlugin, [{
-    // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-    terserOptions: {
-      // terser的默认行为会把某些对象方法转为箭头函数，导致ios9等不支持箭头函数的环境白屏，详情见 https://github.com/terser/terser#compress-options
-      compress: {
-        arrows: false
+  webpackConfig.optimization.minimizer('mpx-terser').use(TerserPlugin, [
+    {
+      // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+      terserOptions: {
+        // terser的默认行为会把某些对象方法转为箭头函数，导致ios9等不支持箭头函数的环境白屏，详情见 https://github.com/terser/terser#compress-options
+        compress: {
+          arrows: false
+        }
       }
     }
-  }])
+  ])
 }
 
 module.exports.resolveTargetConfig = resolveTargetConfig
