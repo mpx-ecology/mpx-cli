@@ -34,7 +34,6 @@ module.exports = function registerServeCommand (api, options) {
       }
 
       // 小程序业务代码构建配置
-      console.log(11111, targets)
       const webpackConfigs = resolveWebpackConfigByTargets(
         api,
         options,
