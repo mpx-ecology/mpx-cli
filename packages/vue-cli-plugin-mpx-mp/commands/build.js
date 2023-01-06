@@ -19,11 +19,13 @@ module.exports = function registerBuildCommand (api, options) {
         '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`,
         '--watch': 'compile in watch mode',
         '--report': 'generate report.html to help analyze bundle content',
-        '--open-child-process': 'open child process'
+        '--open-child-process': 'open child process',
+        '--env': 'custom define __mpx_env__'
       }
     },
     function (args, rawArgv) {
       const watch = !!args.watch
+      const customEnv = args.env
       const mode = api.service.mode
       const targets = getTargets(args, options)
       const openChildProcess =
@@ -44,20 +46,23 @@ module.exports = function registerBuildCommand (api, options) {
         options,
         targets,
         (webpackConfig, target) => {
-          const env = target.env
-          if (env === 'production' || env === 'development') {
-            webpackConfig.mode(env === 'production' ? env : 'none')
-            webpackConfig.plugin('mpx-define-plugin').tap(() => [
-              {
-                'process.env.NODE_ENV': `"${env}"`
-              }
-            ])
+          const targetEnv = target.env
+          if (targetEnv === 'production' || targetEnv === 'development') {
+            webpackConfig.mode(targetEnv === 'production' ? targetEnv : 'none')
+            webpackConfig.plugin('mpx-define-plugin').tap((args) => {
+              args[0]['process.env.NODE_ENV'] = targetEnv
+              return args
+            })
           }
           if (args.report) {
             webpackConfig
               .plugin('bundle-analyzer-plugin')
               .use(BundleAnalyzerPlugin, [{}])
           }
+          webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+            args[0].env = customEnv
+            return args
+          })
           // 仅在watch模式下生产sourcemap
           // 百度小程序不开启sourcemap，开启会有模板渲染问题
           webpackConfig.devtool(

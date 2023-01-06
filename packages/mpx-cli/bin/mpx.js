@@ -63,6 +63,7 @@ program
   .description('inspect the webpack config in a project with mpx-cli-service')
   .option('--mode <mode>')
   .option('--targets <targets>')
+  .option('--env <env>')
   .option('-v --verbose', 'Show full function definitions in output')
   .action((paths, options) => {
     require('../lib/inspect')(paths, options, 'mp')

@@ -67,6 +67,7 @@ npm run build
 
   --targets    编译到小程序目标(默认值: wx)
   --mode       指定环境模式 (默认值：production)
+  --env        自定义 __mpx_env__
   --watch      监听文件变化
   --report     生成包分析报告
   --open-child-process 开启子进程编译
@@ -95,6 +96,7 @@ mpx-cli-service build:mp --targets=wx,ali
 选项:
 
   --targets    编译到小程序目标(默认值: wx)
+  --env        自定义 __mpx_env__
   --open-child-process 开启子进程编译
 ```
 
@@ -114,6 +116,7 @@ mpx-cli-service serve:mp --targets=wx,ali
   --dest        指定输出目录 (默认值：dist)
   --modern      面向现代浏览器带自动回退地构建应用
   --target      app | lib | wc | wc-async (默认值：app)
+  --env         自定义 __mpx_env__
   --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
   --no-clean    在构建项目之前不清除目标目录的内容
   --report      生成 report.html 以帮助分析包内容
@@ -139,6 +142,7 @@ mpx-cli-service build:web
   --host    指定 host (默认值：0.0.0.0)
   --port    指定 port (默认值：8080)
   --https   使用 https (默认值：false)
+  --env     自定义 __mpx_env__
 ```
 
 ```sh

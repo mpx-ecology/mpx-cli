@@ -4,6 +4,7 @@ const {
   resolveMpxLoader,
   resolveMpxWebpackPluginConf
 } = require('@mpxjs/vue-cli-plugin-mpx')
+const minimist = require('minimist')
 
 module.exports = function (api, options = {}) {
   api.chainWebpack((webpackConfig) => {
@@ -37,10 +38,13 @@ module.exports = function (api, options = {}) {
     // 对于 svg 交给 mpx-url-loader 处理，去掉 vue-cli 配置的 svg 规则
     webpackConfig.module.rules.delete('svg')
 
+    const parsedArgs = minimist(process.argv.slice(2))
+
     webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
       {
         mode: 'web',
         srcMode: 'wx',
+        env: parsedArgs.env,
         forceDisableBuiltInLoader: true,
         ...resolveMpxWebpackPluginConf(api, options)
       }

@@ -15,11 +15,14 @@ module.exports = function registerServeCommand (api, options) {
       description: 'mp development',
       usage: 'mpx-cli-service serve:mp',
       options: {
-        '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`
+        '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`,
+        '--open-child-process': 'open child process',
+        '--env': 'custom define __mpx_env__'
       }
     },
     function (args, rawArgv) {
       const mode = api.service.mode
+      const customEnv = args.env
       const targets = getTargets(args, options)
       const openChildProcess =
         !!args['open-child-process'] && targets.length > 1
@@ -40,6 +43,10 @@ module.exports = function registerServeCommand (api, options) {
         targets,
         (webpackConfig) => {
           webpackConfig.devtool('source-map')
+          webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+            args[0].env = customEnv
+            return args
+          })
         }
       )
       return runWebpack(webpackConfigs, {
