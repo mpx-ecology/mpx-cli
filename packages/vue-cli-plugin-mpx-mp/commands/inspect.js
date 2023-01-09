@@ -9,10 +9,7 @@ module.exports = function registerInspectCommand (api, options) {
     'inspect:mp',
     {
       description: 'inspect mp',
-      usage: 'mpx-cli-service inspect:mp',
-      options: {
-        '--env': 'custom define __mpx_env__'
-      }
+      usage: 'mpx-cli-service inspect:mp'
     },
     function (args) {
       const targets = getTargets(args, options)
