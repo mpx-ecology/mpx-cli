@@ -40,6 +40,7 @@ module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
       process: 'process/browser'
     }
   ])
+  // 和vue-cli保持同名，方便一次性修改mp和web版本的define参数
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [
     {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`

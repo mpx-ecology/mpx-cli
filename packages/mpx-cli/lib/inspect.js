@@ -24,6 +24,7 @@ module.exports = function inspect (paths, args, mode) {
       `inspect:${mode}`,
       ...(args.mode ? ['--mode', args.mode] : []),
       ...(args.targets ? ['--targets', args.targets] : []),
+      ...(args.env ? ['--env', args.env] : []),
       ...(args.rule ? ['--rule', args.rule] : []),
       ...(args.plugin ? ['--plugin', args.plugin] : []),
       ...(args.rules ? ['--rules'] : []),
