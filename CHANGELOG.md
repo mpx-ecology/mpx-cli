@@ -1,4 +1,15 @@
 
+## 1.6.27 (2023-01-09)
+
+#### :rocket: New Features
+* `mpx-cli`, `vue-cli-plugin-mpx-mp`, `vue-cli-plugin-mpx-web`, `vue-cli-plugin-mpx`
+  * [#64](https://github.com/mpx-ecology/mpx-cli/pull/64) Feature/mpx env ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 
