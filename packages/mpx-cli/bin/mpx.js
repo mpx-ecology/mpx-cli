@@ -63,7 +63,7 @@ program
   .description('inspect the webpack config in a project with mpx-cli-service')
   .option('--mode <mode>')
   .option('--targets <targets>')
-  .option('--env <env>')
+  .option('--env <env>', 'custom define __mpx_env__')
   .option('-v --verbose', 'Show full function definitions in output')
   .action((paths, options) => {
     require('../lib/inspect')(paths, options, 'mp')
@@ -73,6 +73,7 @@ program
   .command('inspect:web [paths...]')
   .description('inspect the webpack config in a project with mpx-cli-service')
   .option('--mode <mode>')
+  .option('--env <env>', 'custom define __mpx_env__')
   .option('--rule <ruleName>', 'inspect a specific module rule')
   .option('--plugin <pluginName>', 'inspect a specific plugin')
   .option('--rules', 'list all module rule names')
