@@ -22,7 +22,7 @@ module.exports = function registerServeCommand (api, options) {
     },
     function (args, rawArgv) {
       const mode = api.service.mode
-      const customEnv = args.env
+      const customMpxEnv = args.env
       const targets = getTargets(args, options)
       const openChildProcess =
         !!args['open-child-process'] && targets.length > 1
@@ -44,7 +44,7 @@ module.exports = function registerServeCommand (api, options) {
         (webpackConfig) => {
           webpackConfig.devtool('source-map')
           webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-            args[0].env = customEnv
+            args[0].env = customMpxEnv
             return args
           })
         }

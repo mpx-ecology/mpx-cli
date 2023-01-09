@@ -25,7 +25,7 @@ module.exports = function registerBuildCommand (api, options) {
     },
     function (args, rawArgv) {
       const watch = !!args.watch
-      const customEnv = args.env
+      const customMpxEnv = args.env
       const mode = api.service.mode
       const targets = getTargets(args, options)
       const openChildProcess =
@@ -49,10 +49,11 @@ module.exports = function registerBuildCommand (api, options) {
           const targetEnv = target.env
           if (targetEnv === 'production' || targetEnv === 'development') {
             webpackConfig.mode(targetEnv === 'production' ? targetEnv : 'none')
-            webpackConfig.plugin('mpx-define-plugin').tap((args) => {
-              args[0]['process.env.NODE_ENV'] = targetEnv
-              return args
-            })
+            webpackConfig.plugin('define').tap((args) => [
+              {
+                'process.env.NODE_ENV': `"${targetEnv}"`
+              }
+            ])
           }
           if (args.report) {
             webpackConfig
@@ -60,7 +61,7 @@ module.exports = function registerBuildCommand (api, options) {
               .use(BundleAnalyzerPlugin, [{}])
           }
           webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-            args[0].env = customEnv
+            args[0].env = customMpxEnv
             return args
           })
           // 仅在watch模式下生产sourcemap

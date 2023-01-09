@@ -14,7 +14,7 @@ module.exports = function registerInspectCommand (api, options) {
     function (args) {
       const targets = getTargets(args, options)
       const { verbose } = args
-      const customEnv = args.env
+      const customMpxEnv = args.env
 
       // 小程序业务代码构建配置
       const res = resolveWebpackConfigByTargets(
@@ -25,10 +25,11 @@ module.exports = function registerInspectCommand (api, options) {
           const targetEnv = target.env
           if (targetEnv === 'production' || targetEnv === 'development') {
             webpackConfig.mode(targetEnv === 'production' ? targetEnv : 'none')
-            webpackConfig.plugin('mpx-define-plugin').tap((args) => {
-              args[0]['process.env.NODE_ENV'] = targetEnv
-              return args
-            })
+            webpackConfig.plugin('define').tap((args) => [
+              {
+                'process.env.NODE_ENV': `"${targetEnv}"`
+              }
+            ])
           }
           if (args.report) {
             webpackConfig
@@ -36,7 +37,7 @@ module.exports = function registerInspectCommand (api, options) {
               .use(BundleAnalyzerPlugin, [{}])
           }
           webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-            args[0].env = customEnv
+            args[0].env = customMpxEnv
             return args
           })
         }
