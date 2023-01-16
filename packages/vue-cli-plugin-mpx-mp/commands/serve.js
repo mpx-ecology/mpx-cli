@@ -33,7 +33,10 @@ module.exports = function registerServeCommand (api, options) {
       )
 
       if (openChildProcess) {
-        return runWebpackInChildProcess('serve:mp', rawArgv, { targets, watch: true })
+        return runWebpackInChildProcess('serve:mp', rawArgv, {
+          targets,
+          watch: true
+        })
       }
 
       // 小程序业务代码构建配置
@@ -43,15 +46,17 @@ module.exports = function registerServeCommand (api, options) {
         targets,
         (webpackConfig) => {
           webpackConfig.devtool('source-map')
-          webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-            args[0].env = customMpxEnv
-            return args
-          })
+          if (customMpxEnv) {
+            webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+              args[0].env = customMpxEnv
+              return args
+            })
+          }
         }
       )
       return runWebpack(webpackConfigs, {
         watch: true
-      }).then(res => {
+      }).then((res) => {
         symLinkTargetConfig(api, targets, webpackConfigs)
         return res
       })

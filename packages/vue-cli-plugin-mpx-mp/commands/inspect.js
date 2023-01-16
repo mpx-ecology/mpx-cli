@@ -36,10 +36,12 @@ module.exports = function registerInspectCommand (api, options) {
               .plugin('bundle-analyzer-plugin')
               .use(BundleAnalyzerPlugin, [{}])
           }
-          webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-            args[0].env = customMpxEnv
-            return args
-          })
+          if (customMpxEnv) {
+            webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+              args[0].env = customMpxEnv
+              return args
+            })
+          }
         }
       )
       const output = toString(res, { verbose })

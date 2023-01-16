@@ -60,10 +60,12 @@ module.exports = function registerBuildCommand (api, options) {
               .plugin('bundle-analyzer-plugin')
               .use(BundleAnalyzerPlugin, [{}])
           }
-          webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-            args[0].env = customMpxEnv
-            return args
-          })
+          if (customMpxEnv) {
+            webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+              args[0].env = customMpxEnv
+              return args
+            })
+          }
           // 仅在watch模式下生产sourcemap
           // 百度小程序不开启sourcemap，开启会有模板渲染问题
           webpackConfig.devtool(
