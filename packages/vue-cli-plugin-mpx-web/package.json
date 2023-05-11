@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@mpxjs/vue-cli-plugin-mpx": "1.6.28"
+    "@mpxjs/vue-cli-plugin-mpx": "1.6.28",
+    "@vue/vue-loader-v15": "npm:vue-loader@^15.9.7"
   },
   "peerDependencies": {
     "@mpxjs/webpack-plugin": "^2.7.0",
