@@ -1,9 +1,9 @@
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
-const { chalk, stopSpinner } = require('@vue/cli-shared-utils')
 const { runServiceCommand, removeArgv } = require('./index')
-const { resolvePluginWebpackConfig } = require('../config/plugin')
-const { resolveBaseRawWebpackConfig } = require('../config/base')
+const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
+const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
+const LogUpdate = require('./logUpdate')
 
 /**
  * 基础配置
@@ -25,8 +25,6 @@ function resolveWebpackConfigByTargets (
   )
   const webpackConfigs = []
   targets.forEach((target) => {
-    process.env.MPX_CURRENT_TARGET_MODE = target.mode
-    process.env.MPX_CURRENT_TARGET_ENV = target.env
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
@@ -41,31 +39,9 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
-function genBuildCompletedLog (watch) {
-  return chalk.cyan(
-    watch
-      ? `  ${new Date()} build finished.\n  Still watching...\n`
-      : '  Build complete.\n'
-  )
-}
-
 function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
-    function webpackCallback (err, stats) {
-      stopSpinner(false)
-      if (err) return reject(err)
-      if (!watch && stats.hasErrors()) {
-        const err = new Error(chalk.red('Build failed with errors.\n'))
-        process.send && process.send(err)
-        return reject(err)
-      }
-      if (!process.send) {
-        console.log(genBuildCompletedLog(watch))
-      } else {
-        process.send(null)
-      }
-      return resolve()
-    }
+    function webpackCallback () {}
     if (!watch) {
       webpack(config, webpackCallback)
     } else {
@@ -74,21 +50,18 @@ function runWebpack (config, { watch }) {
   })
 }
 
+/**
+ * @typedef { import('../utils/index').Target } Target
+ * @param {string} rawArgv
+ * @param { { targets: Target, watch: boolean } } param1
+ * @returns
+ */
 function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
-  let complete = 0
-  let chunks = []
-  let hasErrors = false
-  function reset () {
-    complete = 0
-    chunks = []
-    hasErrors = false
-  }
-  function logChunks () {
-    console.log(chunks.map((v) => v.join('')).join(''))
-  }
+  const logUpdate = new LogUpdate()
   return new Promise((resolve, reject) => {
+    const chunks = []
+    let doneNum = 0
     targets.forEach((target, index) => {
-      let errorHandled = false
       const ls = runServiceCommand(
         command,
         [
@@ -98,36 +71,25 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
         {
           env: {
             ...process.env,
-            FORCE_COLOR: true
-          }
+            FORCE_COLOR: true,
+            MPX_CURRENT_TARGET_MODE: target.mode,
+            MPX_CURRENT_TARGET_ENV: target.env
+          },
+          stdio: 'inherit'
         }
       )
-      ls.stdout.on('data', (data) => {
-        chunks[index] = chunks[index] || []
-        chunks[index].push(data)
-      })
-      ls.on('message', (err) => {
-        if (err) hasErrors = true
-        errorHandled = true
-        complete++
-        if (complete === targets.length) {
-          stopSpinner(false)
-          if (hasErrors) {
-            logChunks()
-            reject(new Error('Build failed with errors.\n'))
-          } else {
-            chunks.push([genBuildCompletedLog(watch)])
-            logChunks()
+      ls.send(logUpdate)
+      ls.on('message', (data) => {
+        if (data.status === 'done') {
+          doneNum++
+          if (doneNum === targets.length) {
+            doneNum = 0
+            logUpdate.extraLines = ''
             resolve()
           }
-          reset()
-        }
-      })
-      ls.catch((err) => {
-        if (!errorHandled) {
-          stopSpinner(false)
-          console.error(err.message)
-          process.exit(1)
+        } else {
+          chunks[index] = data.message
+          logUpdate.render('\n' + chunks.join('\n\n'))
         }
       })
     })

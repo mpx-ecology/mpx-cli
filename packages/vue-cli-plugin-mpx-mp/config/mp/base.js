@@ -1,8 +1,7 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 const webpack = require('webpack')
-const { getMpxPluginOptions } = require('../utils')
-const { WebpackMpResultPlugin } = require('../utils/webpackMpResultPlugin')
+const { getMpxPluginOptions } = require('../../utils')
 
 /**
  * 基础配置
@@ -10,10 +9,11 @@ const { WebpackMpResultPlugin } = require('../utils/webpackMpResultPlugin')
  * @param {import('@vue/cli-service').ProjectOptions} options
  * @returns
  */
-module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
+module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig (
   api,
   options,
-  webpackConfig
+  webpackConfig,
+  target
 ) {
   const mpxLoader = resolveMpxLoader(api, options)
   const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
@@ -24,6 +24,8 @@ module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
       name: 'img/[name][hash].[ext]'
     }
   )
+
+  webpackConfig.name(`${target.mode}-compiler`)
 
   webpackConfig
     .mode(process.env.NODE_ENV === 'production' ? 'production' : 'none')
@@ -46,7 +48,6 @@ module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
     }
   ])
-  webpackConfig.plugin('webpack-mp-result-plugin').use(WebpackMpResultPlugin)
 
   // assets rules
   webpackConfig.module.rules.delete('svg')
@@ -119,23 +120,6 @@ module.exports.resolveBaseWebpackConfig = function resolveBaseWebpackConfig (
     .use('pug-plain-loader')
     .loader(maybeResolve('pug-plain-loader'))
     .end()
-
-  // friendly error plugin displays very confusing errors when webpack
-  // fails to resolve a loader, so we provide custom handlers to improve it
-  const {
-    transformer,
-    formatter
-  } = require('@vue/cli-service/lib/util/resolveLoaderError')
-  webpackConfig
-    .plugin('friendly-errors')
-    .use(require('@soda/friendly-errors-webpack-plugin'), [
-      {
-        additionalTransformers: [transformer],
-        additionalFormatters: [formatter]
-      }
-    ])
-
-  // forked end ---------------------------------------------
 
   return webpackConfig
 }

@@ -35,10 +35,17 @@ function getMpxPluginOptions (options) {
 }
 
 /**
+ * @typedef { import('@mpxjs/vue-cli-plugin-mpx/constants/mode').Mode } Mode
+ * @typedef { object } Target
+ * @property { 'production' | 'development' } env
+ * @property { Mode } mode
+ */
+
+/**
  * 获取最终的targets
  * @param {*} args
  * @param {*} options
- * @returns
+ * @returns { Target[] }
  */
 function getTargets (args, options) {
   const mpxOptions = getMpxPluginOptions(options)

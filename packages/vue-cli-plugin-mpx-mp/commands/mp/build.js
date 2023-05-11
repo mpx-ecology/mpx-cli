@@ -1,13 +1,12 @@
 const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { logWithSpinner } = require('@vue/cli-shared-utils')
-const { getTargets } = require('../utils/index')
+const { getTargets } = require('../../utils/index')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
   runWebpackInChildProcess
-} = require('../utils/webpack')
-const { symLinkTargetConfig } = require('../utils/symlinkTargetConfig')
+} = require('../../utils/webpack')
+const { symLinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 
 module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(
@@ -26,15 +25,9 @@ module.exports = function registerBuildCommand (api, options) {
     function (args, rawArgv) {
       const watch = !!args.watch
       const customMpxEnv = args.env
-      const mode = api.service.mode
       const targets = getTargets(args, options)
       const openChildProcess =
         !!args['open-child-process'] && targets.length > 1
-
-      logWithSpinner(
-        '⚓',
-        `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
-      )
 
       if (openChildProcess) {
         return runWebpackInChildProcess('build:mp', rawArgv, { targets, watch })

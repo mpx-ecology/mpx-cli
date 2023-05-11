@@ -1,8 +1,8 @@
 const { toString } = require('webpack-chain')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { highlight } = require('cli-highlight')
-const { getTargets } = require('../utils/index')
-const { resolveWebpackConfigByTargets } = require('../utils/webpack')
+const { getTargets } = require('../../utils/index')
+const { resolveWebpackConfigByTargets } = require('../../utils/webpack')
 
 module.exports = function registerInspectCommand (api, options) {
   api.registerCommand(

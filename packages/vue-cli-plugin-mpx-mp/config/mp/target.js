@@ -6,7 +6,7 @@ const {
   MODE
 } = require('@mpxjs/vue-cli-plugin-mpx')
 const TerserPlugin = require('terser-webpack-plugin')
-const { getMpxPluginOptions } = require('../utils')
+const { getMpxPluginOptions } = require('../../utils')
 
 /**
  * target相关配置
@@ -15,7 +15,7 @@ const { getMpxPluginOptions } = require('../utils')
  * @param {import('webpack-chain')} webpackConfig
  * @param {*} target
  */
-function resolveTargetConfig (api, options = {}, webpackConfig, target) {
+module.exports.resolveMpTargetConfig = function resolveMpTargetConfig (api, options = {}, webpackConfig, target) {
   const mpxOptions = getMpxPluginOptions(options)
   let outputDist = `dist/${target.mode}`
   let subDir = ''
@@ -83,5 +83,3 @@ function resolveTargetConfig (api, options = {}, webpackConfig, target) {
     }
   ])
 }
-
-module.exports.resolveTargetConfig = resolveTargetConfig
