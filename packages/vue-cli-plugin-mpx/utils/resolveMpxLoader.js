@@ -1,6 +1,6 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 
-module.exports = function (api, options = {}) {
+module.exports.resolveMpxLoader = function (api, options = {}) {
   const mpxLoaderOptions =
     (options.pluginOptions &&
       options.pluginOptions.mpx &&

@@ -7,9 +7,11 @@
   ],
   "scripts": {
     "changelog": "node ./scripts/genChangelog.js",
+    "clean": "rimraf packages/test/* packages/**/temp/*",
     "lint": "npx eslint --fix . --ext .js",
     "prepare": "husky install",
     "release": "release-it",
+    "pretest": "yarn clean",
     "test": "node ./scripts/test.js"
   },
   "lint-staged": {
@@ -23,7 +25,6 @@
     "trailingComma": "none"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@vue/cli-test-utils": "5.0.8",

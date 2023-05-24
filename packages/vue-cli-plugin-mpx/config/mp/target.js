@@ -1,12 +1,12 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
-const {
-  resolveMpxWebpackPluginConf,
-  MODE
-} = require('@mpxjs/vue-cli-plugin-mpx')
 const TerserPlugin = require('terser-webpack-plugin')
-const { getMpxPluginOptions } = require('../../../vue-cli-plugin-mpx-mp/utils')
+const { MODE_CONFIG_FILES_MAP, SUPPORT_MODE } = require('../../constants/mode')
+const { getMpxPluginOptions } = require('../../utils')
+const {
+  resolveMpxWebpackPluginConf
+} = require('../../utils/resolveMpxWebpackPluginConf')
 
 /**
  * target相关配置
@@ -15,7 +15,12 @@ const { getMpxPluginOptions } = require('../../../vue-cli-plugin-mpx-mp/utils')
  * @param {import('webpack-chain')} webpackConfig
  * @param {*} target
  */
-module.exports.resolveMpTargetConfig = function resolveMpTargetConfig (api, options = {}, webpackConfig, target) {
+module.exports.resolveMpTargetConfig = function resolveMpTargetConfig (
+  api,
+  options = {},
+  webpackConfig,
+  target
+) {
   const mpxOptions = getMpxPluginOptions(options)
   let outputDist = `dist/${target.mode}`
   let subDir = ''
@@ -46,7 +51,7 @@ module.exports.resolveMpTargetConfig = function resolveMpTargetConfig (api, opti
           from: '**/*',
           to: subDir ? '..' : '',
           globOptions: {
-            ignore: MODE.MODE_CONFIG_FILES_MAP[target.mode] || []
+            ignore: MODE_CONFIG_FILES_MAP[target.mode] || []
           },
           noErrorOnMissing: true
         },
@@ -55,7 +60,7 @@ module.exports.resolveMpTargetConfig = function resolveMpTargetConfig (api, opti
           from: '**/*',
           to: subDir ? '..' : '',
           globOptions: {
-            ignore: MODE.SUPPORT_MODE.map((v) => `**/${v}/**`)
+            ignore: SUPPORT_MODE.map((v) => `**/${v}/**`)
           },
           noErrorOnMissing: true
         }

@@ -33,24 +33,6 @@ const args = require('minimist')(rawArgv, {
 const command = args._[0]
 process.env.MPX_CLI_MODE = command.split(':')[1] || 'mp'
 
-// const setPluginsToSkip = service.setPluginsToSkip.bind(service)
-// service.setPluginsToSkip = function (args) {
-//   setPluginsToSkip(args, rawArgv)
-//   let plugins = filterPluginsByPlatform(process.env.MPX_CLI_MODE)
-//   // 小程序模式下，将 @vue/cli-service 内置的 base 及 app 配置过滤掉
-//   if (process.env.MPX_CLI_MODE === 'mp') {
-//     plugins = plugins.concat([
-//       'built-in:config/base',
-//       'built-in:config/app',
-//       'built-in:config/css'
-//     ])
-//   }
-
-//   plugins.forEach(plugin => {
-//     this.pluginsToSkip.add(plugin)
-//   })
-// }
-
 service.run(command, args, rawArgv).catch(err => {
   error(err)
   process.exit(1)

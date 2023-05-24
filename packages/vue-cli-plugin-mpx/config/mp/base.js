@@ -1,7 +1,9 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
-const { resolveMpxLoader } = require('@mpxjs/vue-cli-plugin-mpx')
 const webpack = require('webpack')
-const { getMpxPluginOptions } = require('../../../vue-cli-plugin-mpx-mp/utils')
+const WebpackBar = require('webpackbar')
+const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
+const { getMpxPluginOptions } = require('../../utils')
+const { FancyReporter } = require('../../utils/reporter')
 
 /**
  * 基础配置
@@ -46,6 +48,15 @@ module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [
     {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
+    }
+  ])
+  // fancy reporter
+  webpackConfig.plugin('webpackbar').use(WebpackBar, [
+    {
+      color: 'orange',
+      name: process.env.MPX_CURRENT_TARGET_MODE + '-compiler',
+      basic: false,
+      reporter: new FancyReporter()
     }
   ])
 
@@ -129,16 +140,17 @@ module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig 
  * @param {import('@vue/cli-service').PluginAPI} api
  * @returns {import('@vue/cli-service').ProjectOptions['configureWebpack']}
  */
-module.exports.resolveBaseRawWebpackConfig = function resolveBaseRawWebpackConfig (api) {
-  return {
-    output: {
-      clean: true
-    },
-    snapshot: {
-      managedPaths: [api.resolve('node_modules/')]
-    },
-    optimization: {
-      emitOnErrors: true
+module.exports.resolveBaseRawWebpackConfig =
+  function resolveBaseRawWebpackConfig (api) {
+    return {
+      output: {
+        clean: true
+      },
+      snapshot: {
+        managedPaths: [api.resolve('node_modules/')]
+      },
+      optimization: {
+        emitOnErrors: true
+      }
     }
   }
-}

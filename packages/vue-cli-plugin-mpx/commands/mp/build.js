@@ -1,12 +1,12 @@
-const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
+const { SUPPORT_MODE } = require('../../constants/mode')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { getTargets } = require('../../../vue-cli-plugin-mpx-mp/utils/index')
+const { getTargets } = require('../../utils/index')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
   runWebpackInChildProcess
-} = require('../../../vue-cli-plugin-mpx-mp/utils/webpack')
-const { symLinkTargetConfig } = require('../../../vue-cli-plugin-mpx-mp/utils/symlinkTargetConfig')
+} = require('../../utils/webpack')
+const { symLinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 
 module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(
@@ -15,7 +15,7 @@ module.exports = function registerBuildCommand (api, options) {
       description: 'mp production',
       usage: 'mpx-cli-service build:mp',
       options: {
-        '--targets': `compile for target platform, support ${MODE.SUPPORT_MODE}`,
+        '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
         '--watch': 'compile in watch mode',
         '--report': 'generate report.html to help analyze bundle content',
         '--open-child-process': 'open child process',

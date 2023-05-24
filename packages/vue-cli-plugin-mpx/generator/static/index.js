@@ -1,4 +1,4 @@
-const MODE = require('../../constants/mode')
+const { SUPPORT_MODE } = require('../../constants/mode')
 
 module.exports = function (api, options) {
   const srcMode = options.srcMode
@@ -9,7 +9,7 @@ module.exports = function (api, options) {
   }
   api.render(`./${srcMode}`, newOptions)
   if (srcMode === 'wx' && !!options.cross) {
-    MODE.SUPPORT_MODE.forEach(srcMode => {
+    SUPPORT_MODE.forEach(srcMode => {
       api.render(`./${srcMode}`, newOptions)
     })
   }

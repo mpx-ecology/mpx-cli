@@ -1,5 +1,6 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const path = require('path')
+const fs = require('fs')
 
 module.exports = function (api, options, webpackConfig) {
   webpackConfig.module
@@ -40,7 +41,9 @@ module.exports = function (api, options, webpackConfig) {
 
   webpackConfig.resolve.modules.add('node_modules')
 
-  const dependenciesConfig = [api.resolve('vue.config.js')]
+  const dependenciesConfig = []
+  const res = api.resolve('vue.config.js')
+  if (fs.existsSync(res)) dependenciesConfig.push(res)
 
   const addDepConfig = (names = []) => {
     names.forEach((name) => {

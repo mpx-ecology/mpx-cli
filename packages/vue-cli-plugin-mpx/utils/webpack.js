@@ -1,8 +1,8 @@
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const { runServiceCommand, removeArgv } = require('./index')
-const { resolvePluginWebpackConfig } = require('@mpxjs/vue-cli-plugin-mpx/config/mp/plugin')
-const { resolveBaseRawWebpackConfig } = require('@mpxjs/vue-cli-plugin-mpx/config/mp/base')
+const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
+const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
 const LogUpdate = require('./logUpdate')
 
 /**
@@ -25,7 +25,6 @@ function resolveWebpackConfigByTargets (
   )
   const webpackConfigs = []
   targets.forEach((target) => {
-    // process
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
@@ -40,9 +39,53 @@ function resolveWebpackConfigByTargets (
   return webpackConfigs
 }
 
+function extractErrorsFromStats (stats, type = 'errors') {
+  if (isMultiStats(stats)) {
+    const errors = stats.stats.reduce(
+      (errors, stats) => errors.concat(extractErrorsFromStats(stats, type)),
+      []
+    )
+    // Dedupe to avoid showing the same error many times when multiple
+    // compilers depend on the same module.
+    return uniqueBy(errors, (error) => error.message)
+  }
+
+  const findErrorsRecursive = (compilation) => {
+    const errors = compilation[type]
+    if (errors.length === 0 && compilation.children) {
+      for (const child of compilation.children) {
+        errors.push(...findErrorsRecursive(child))
+      }
+    }
+    return uniqueBy(errors, (error) => error.message)
+  }
+
+  return findErrorsRecursive(stats.compilation)
+}
+
+function uniqueBy (arr, fun) {
+  const seen = {}
+  return arr.filter((el) => {
+    const e = fun(el)
+    return !(e in seen) && (seen[e] = 1)
+  })
+}
+
+function isMultiStats (stats) {
+  return stats.stats
+}
+
 function runWebpack (config, { watch }) {
   return new Promise((resolve, reject) => {
-    function webpackCallback () {}
+    function webpackCallback (err, stats) {
+      if (err) {
+        return reject(err)
+      }
+      if (stats.hasErrors()) {
+        return reject(new Error('Build failed with errors.' + extractErrorsFromStats(stats)))
+      }
+      resolve()
+    }
     if (!watch) {
       webpack(config, webpackCallback)
     } else {
@@ -76,10 +119,13 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
             MPX_CURRENT_TARGET_MODE: target.mode,
             MPX_CURRENT_TARGET_ENV: target.env
           },
-          stdio: 'inherit'
+          stderr: 'inherit'
         }
       )
-      ls.send(logUpdate)
+      let output = ''
+      ls.stdout.addListener('data', (d) => {
+        output += `${d}`
+      })
       ls.on('message', (data) => {
         if (data.status === 'done') {
           doneNum++
@@ -92,6 +138,9 @@ function runWebpackInChildProcess (command, rawArgv, { targets, watch }) {
           chunks[index] = data.message
           logUpdate.render('\n' + chunks.join('\n\n'))
         }
+      })
+      ls.on('close', () => {
+        console.log(output)
       })
     })
   })

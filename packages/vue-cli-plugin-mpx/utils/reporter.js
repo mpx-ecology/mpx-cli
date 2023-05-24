@@ -152,10 +152,6 @@ function extractErrorsFromStats (stats, type = 'errors') {
 }
 
 class FancyReporter {
-  constructor (mode) {
-    this.mode = mode
-  }
-
   allDone (context) {
     if (process.send) {
       process.send({
@@ -171,7 +167,7 @@ class FancyReporter {
         return {
           ...v,
           message: v.message,
-          result: process.env.MPX_CURRENT_TARGET_ENV !== 'web' ? getWebpackMpResult(stats) : ''
+          result: getWebpackMpResult(stats)
         }
       })
     )

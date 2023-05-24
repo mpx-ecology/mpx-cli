@@ -1,5 +1,5 @@
 // TODO: 看是否能在 @mpxjs/webpack-plugin 内部做下处理？
-module.exports = function transformMpxEntry (api, options = {}, webpackConfig, isWeb = false) {
+module.exports.transformMpxEntry = function transformMpxEntry (api, options = {}, webpackConfig, isWeb = false) {
   // 通过 cli 生成的默认的入口文件
   let basePath = 'src/app.mpx'
 
