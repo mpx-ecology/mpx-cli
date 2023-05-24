@@ -1,8 +1,8 @@
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const { runServiceCommand, removeArgv } = require('./index')
-const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
-const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
+const { resolvePluginWebpackConfig } = require('@mpxjs/vue-cli-plugin-mpx/config/mp/plugin')
+const { resolveBaseRawWebpackConfig } = require('@mpxjs/vue-cli-plugin-mpx/config/mp/base')
 const LogUpdate = require('./logUpdate')
 
 /**
@@ -25,6 +25,7 @@ function resolveWebpackConfigByTargets (
   )
   const webpackConfigs = []
   targets.forEach((target) => {
+    // process
     const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
     resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
     const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)

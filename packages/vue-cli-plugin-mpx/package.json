@@ -2,25 +2,64 @@
   "name": "@mpxjs/vue-cli-plugin-mpx",
   "version": "1.6.28",
   "description": "base mpx plugin for mpx-cli",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "babel-loader": "^8.1.0",
+    "copy-webpack-plugin": "^9.1.0",
+    "execa": "^4.1.0",
+    "process": "0.11.10",
+    "terser-webpack-plugin": "^5.3.6",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-chain": "^6.5.1",
     "webpack-merge": "^5.8.0"
   },
+  "devDependencies": {
+    "@mpxjs/api-proxy": "^2.8.0",
+    "@mpxjs/core": "^2.8.0",
+    "@mpxjs/fetch": "^2.8.0",
+    "@mpxjs/pinia": "^2.8.0",
+    "@mpxjs/store": "^2.8.0",
+    "@mpxjs/utils": "^2.8.0",
+    "@mpxjs/webpack-plugin": "^2.7.0",
+    "pinia": "^2.0.14",
+    "stylus-loader": "^6.1.0",
+    "vue": "^2.6.14",
+    "vue-demi": "^0.13.11",
+    "vue-i18n": "^8.27.2",
+    "vue-i18n-bridge": "^9.2.2",
+    "vue-router": "^3.1.3",
+    "webpack": "^5.48.0",
+    "cache-loader": "^4.1.0"
+  },
   "peerDependencies": {
+    "@mpxjs/vue-cli-plugin-mpx": "1.6.28",
     "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "peerDependenciesMeta": {
+    "less-loader": {
+      "optional": true
+    },
+    "pug-plain-loader": {
+      "optional": true
+    },
+    "sass-loader": {
+      "optional": true
+    },
+    "stylus-loader": {
+      "optional": true
+    }
+  },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }

@@ -1,12 +1,12 @@
 const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { getTargets } = require('../../utils/index')
+const { getTargets } = require('../../../vue-cli-plugin-mpx-mp/utils/index')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
   runWebpackInChildProcess
-} = require('../../utils/webpack')
-const { symLinkTargetConfig } = require('../../utils/symlinkTargetConfig')
+} = require('../../../vue-cli-plugin-mpx-mp/utils/webpack')
+const { symLinkTargetConfig } = require('../../../vue-cli-plugin-mpx-mp/utils/symlinkTargetConfig')
 
 module.exports = function registerBuildCommand (api, options) {
   api.registerCommand(

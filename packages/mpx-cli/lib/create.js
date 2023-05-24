@@ -1,19 +1,17 @@
 const minimist = require('minimist')
 const path = require('path')
 const inquirer = require('inquirer')
-const merge = require('lodash.merge')
 const { chalk, exit, error, log } = require('@vue/cli-shared-utils')
 const loadRemotePreset = require('@vue/cli/lib/util/loadRemotePreset')
 const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
+const vueCreate = require('@vue/cli/lib/create')
 
 const prompts = require('./prompts')
 const plugins = require('./plugins')
 const builtInPreset = require('./preset')
 
-const { regenCmd, doVueCli } = require('../utils')
-
 async function resolvePreset (args = {}) {
-  const { p, preset, i, inlinePreset, c, clone } = args
+  const { p, preset, c, clone } = args
   let res = {}
   let cliPreset = {}
   if (p || preset) {
@@ -34,64 +32,54 @@ async function resolvePreset (args = {}) {
         throw e
       }
     }
-  } else if (i || inlinePreset) {
-    // mpx create foo --inlinePreset {...}
-    cliPreset = i || inlinePreset
-    try {
-      res = JSON.parse(cliPreset)
-    } catch (e) {
-      error(`CLI inline preset is not valid JSON: ${cliPreset}`)
-      exit(1)
-    }
   }
   return res
 }
 
-async function resolvePrompts (name, builtInPreset) {
-  return new Promise(function (resolve) {
-    inquirer.prompt(prompts).then((answers) => {
-      if (answers.needTs) {
-        Object.assign(builtInPreset.plugins, plugins.tsSupport)
-      }
-      if (answers.cloudFunc) {
-        Object.assign(builtInPreset.plugins, plugins.cloudFunc)
-      }
-      if (answers.isPlugin) {
-        Object.assign(builtInPreset.plugins, plugins.isPlugin)
-      }
-      if (answers.transWeb) {
-        Object.assign(builtInPreset.plugins, plugins.transWeb)
-      }
-      if (answers.needUnitTest) {
-        Object.assign(builtInPreset.plugins, plugins.unitTestSupport)
-      }
-      if (answers.needE2ETest) {
-        Object.assign(builtInPreset.plugins, plugins.e2eTestSupport)
-      }
-      // TODO: 添加其他 prompt 插件配置
-
-      // 各插件共享 answers 配置
-      Object.keys(builtInPreset.plugins).forEach(function (key) {
-        const plugin = builtInPreset.plugins[key]
-        Object.assign(plugin, {
-          ...answers,
-          name
-        })
-      })
-
-      resolve(builtInPreset)
-    })
-  })
+async function resolvePrompts () {
+  return inquirer.prompt(prompts).then((answers) => answers)
 }
 
-module.exports = async function () {
+module.exports = async function (appName, options, preset = null) {
   const args = process.argv.slice(2)
   const parsedArgs = minimist(args)
-  const name = args[1]
-  const cmd = regenCmd(parsedArgs)
-  const mpxBuiltInPreset = await resolvePrompts(name, builtInPreset)
-  const cliPreset = await resolvePreset(parsedArgs)
-  const mergedPreset = merge(mpxBuiltInPreset, cliPreset)
-  cmd.push('-i', JSON.stringify(mergedPreset))
-  doVueCli(cmd)
+  if (!preset) {
+    if (options.preset) {
+      preset = await resolvePreset(parsedArgs)
+    } else if (options.inlinePreset) {
+      try {
+        preset = JSON.parse(options.inlinePreset)
+      } catch (error) {
+        error(`CLI inline preset is not valid JSON: ${options.inlinePreset}`)
+        exit(1)
+      }
+    } else {
+      preset = await resolvePrompts(appName, builtInPreset)
+    }
+  }
+  preset.cssPreprocessor = 'stylus'
+  Object.assign(preset.plugins, builtInPreset.plugins)
+  if (preset.needTs) {
+    Object.assign(preset.plugins, plugins.tsSupport)
+  }
+  if (preset.cloudFunc) {
+    Object.assign(preset.plugins, plugins.cloudFunc)
+  }
+  if (preset.isPlugin) {
+    Object.assign(preset.plugins, plugins.isPlugin)
+  }
+  if (preset.needUnitTest) {
+    Object.assign(preset.plugins, plugins.unitTestSupport)
+  }
+  if (preset.needE2ETest) {
+    Object.assign(preset.plugins, plugins.e2eTestSupport)
+  }
+  console.log({
+    ...options,
+    inlinePreset: JSON.stringify(preset)
+  })
+  return vueCreate(appName, {
+    ...options,
+    inlinePreset: JSON.stringify(preset)
+  })
 }

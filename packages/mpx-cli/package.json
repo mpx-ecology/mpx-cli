@@ -14,6 +14,9 @@
     "lodash.merge": "^4.6.2",
     "shelljs": "^0.8.4"
   },
+  "devDependencies": {
+    "cmd-shim": "^4.1.0"
+  },
   "engines": {
     "node": ">=8.9"
   },

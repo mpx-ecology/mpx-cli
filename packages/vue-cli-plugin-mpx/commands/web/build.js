@@ -1,4 +1,4 @@
-const { runWebpack } = require('../../utils/webpack')
+const { runWebpack } = require('../../../vue-cli-plugin-mpx-mp/utils/webpack')
 
 const defaults = {
   clean: true,

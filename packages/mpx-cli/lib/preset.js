@@ -7,9 +7,6 @@ module.exports = {
     '@mpxjs/vue-cli-plugin-mpx': {
       version: '^1.0.0'
     },
-    '@mpxjs/vue-cli-plugin-mpx-mp': {
-      version: '^1.0.0'
-    },
     '@mpxjs/vue-cli-plugin-mpx-eslint': {
       version: '^1.0.0'
     }

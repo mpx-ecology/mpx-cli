@@ -25,11 +25,6 @@ const plugins = {
     [`${prefix}-plugin-mode`]: {
       version: '^1.0.0'
     }
-  },
-  transWeb: {
-    [`${prefix}-web`]: {
-      version: '^1.0.0'
-    }
   }
   // TODO: 添加其他插件配置
 }

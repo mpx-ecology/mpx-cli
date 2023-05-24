@@ -6,7 +6,7 @@ const {
   MODE
 } = require('@mpxjs/vue-cli-plugin-mpx')
 const TerserPlugin = require('terser-webpack-plugin')
-const { getMpxPluginOptions } = require('../../utils')
+const { getMpxPluginOptions } = require('../../../vue-cli-plugin-mpx-mp/utils')
 
 /**
  * target相关配置

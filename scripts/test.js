@@ -1,66 +1,34 @@
-const execa = require('execa')
-const glob = require('glob')
-const path = require('path')
-const ora = require('ora')
-const fs = require('fs')
-const mockPrompts = require('./test-prompts')
-async function run (project) {
-  const cwd = process.cwd()
-  const projectRoot = path.join(cwd, project)
-  const resolveProject = (dir = '') => path.join(projectRoot, dir)
-  const resolvePackages = (p = '') => path.join(cwd, 'packages', p)
-  const packages = glob.sync('*', { cwd: resolvePackages() })
-  if (!fs.existsSync(projectRoot)) {
-    await execa('node', ['packages/mpx-cli/bin/mpx.js', 'create', project], {
-      stdio: 'inherit'
-    })
-  }
-  const installedPackages = glob.sync('*', {
-    cwd: resolveProject('node_modules/@mpxjs')
-  })
-  // invoke本地包的时候发现没有带创建项目的prompts，比如ts支持，导致依赖下错，所以添加了模拟本地下载参数
-  const prompts = formatPrompts(mockPrompts)
-  const spinner = ora({
-    text: 'Install local packages...',
-    stream: process.stdout
-  }).start()
-  for (const installedPackage of installedPackages) {
-    if (packages.includes(installedPackage)) {
-      const absolutePackage = resolvePackages(installedPackage)
-      const packagePkg = require(path.join(absolutePackage, 'package.json'))
-      const packageName = packagePkg.name
-      spinner.text = `Installing ${packageName}`
-      await install(absolutePackage, projectRoot)
-      if (installedPackage.startsWith('vue-cli-plugin')) {
-        spinner.text = `Invoking ${packageName}`
-        await invokeVueCliPlugin(packageName, projectRoot, prompts)
-      }
-    }
-  }
-  spinner.succeed()
+const minimist = require('minimist')
+const rawArgs = process.argv.slice(2)
+const args = minimist(rawArgs)
+
+let regex
+if (args.p) {
+  const packages = (args.p || args.package).split(',').join('|')
+  regex = `.*@vue/(${packages}|cli-plugin-(${packages}))/.*\\.spec\\.js$`
+  const i = rawArgs.indexOf('-p')
+  rawArgs.splice(i, 2)
 }
 
-function formatPrompts (mockPrompts) {
-  const result = []
-  Object.keys(mockPrompts).forEach(item => {
-    if (mockPrompts[item]) {
-      result.push(`--${item}`)
-      result.push(mockPrompts[item])
-    }
-  })
-  return result
+const e2ePathPattern = 'Migrator|Vue3|mochaPlugin|MochaPlugin|eslint8'
+
+if (args['e2e-only']) {
+  regex = e2ePathPattern
+  const i = rawArgs.indexOf('--e2e-only')
+  rawArgs.splice(i, 2)
 }
 
-async function invokeVueCliPlugin (pluginName, projectRoot, prompts) {
-  await execa('vue', ['invoke', pluginName, ...prompts], {
-    cwd: projectRoot
-  })
+const jestArgs = [
+  '--env', 'node',
+  '--runInBand',
+  ...rawArgs,
+  ...(regex ? [regex] : [])
+]
+
+if (!args['e2e-only']) {
+  jestArgs.push('--testPathIgnorePatterns', e2ePathPattern)
 }
 
-async function install (plugin, projectRoot) {
-  await execa('yarn', ['add', plugin], {
-    cwd: projectRoot
-  })
-}
+console.log(`running jest with args: ${jestArgs.join(' ')}`)
 
-run('test')
+require('jest').run(jestArgs)

@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander')
+const minimist = require('minimist')
 const { doVueCli } = require('../utils')
+const chalk = require('chalk')
 
 program
   .version(`@mpx/cli ${require('../package').version}`)
@@ -35,9 +37,15 @@ program.command('create <app-name>')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy <proxyUrl>', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
-  .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
-  .action(async () => {
-    require('../lib/create')()
+  .action(async (appName, options) => {
+    if (minimist(process.argv.slice(3))._.length > 1) {
+      console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
+    }
+    // --git makes commander to default git to true
+    if (process.argv.includes('-g') || process.argv.includes('--git')) {
+      options.forceGit = true
+    }
+    return require('../lib/create')(appName, options)
   })
 
 program

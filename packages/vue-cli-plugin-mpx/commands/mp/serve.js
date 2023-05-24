@@ -1,12 +1,12 @@
 const { MODE } = require('@mpxjs/vue-cli-plugin-mpx')
 const { logWithSpinner } = require('@vue/cli-shared-utils')
-const { getTargets } = require('../../utils/index')
-const { symLinkTargetConfig } = require('../../utils/symlinkTargetConfig')
+const { getTargets } = require('../../../vue-cli-plugin-mpx-mp/utils/index')
+const { symLinkTargetConfig } = require('../../../vue-cli-plugin-mpx-mp/utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTargets,
   runWebpack,
   runWebpackInChildProcess
-} = require('../../utils/webpack')
+} = require('../../../vue-cli-plugin-mpx-mp/utils/webpack')
 
 module.exports = function registerServeCommand (api, options) {
   api.registerCommand(
