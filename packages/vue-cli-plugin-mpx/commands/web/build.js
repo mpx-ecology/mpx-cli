@@ -1,4 +1,6 @@
-const { runWebpack } = require('../../utils/webpack')
+const { getReporter } = require('../../utils/reporter')
+const { modifyConfig, extractErrorsFromStats, extractResultFromStats } = require('../../utils/webpack')
+const webpack = require('webpack')
 
 const defaults = {
   clean: true,
@@ -7,64 +9,21 @@ const defaults = {
   formats: 'commonjs,umd,umd-min'
 }
 
-const modifyConfig = (config, fn) => {
-  if (Array.isArray(config)) {
-    config.forEach((c) => fn(c))
-  } else {
-    fn(config)
-  }
-}
-
 module.exports = (api, options) => {
-  api.registerCommand(
-    'build:web',
-    {
-      description: 'build for production',
-      usage: 'vue-cli-service build [options] [entry|pattern]',
-      options: {
-        '--mode': 'specify env mode (default: production)',
-        '--dest': `specify output directory (default: ${options.outputDir})`,
-        '--no-module':
-          'build app without generating <script type="module"> chunks for modern browsers',
-        '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
-        '--inline-vue':
-          'include the Vue module in the final bundle of library or web component target',
-        '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
-        '--name':
-          'name for lib or web-component mode (default: "name" in package.json or entry filename)',
-        '--filename':
-          "file name for output, only usable for 'lib' target (default: value of --name)",
-        '--no-clean':
-          'do not remove the dist directory contents before building the project',
-        '--report': 'generate report.html to help analyze bundle content',
-        '--report-json': 'generate report.json to help analyze bundle content',
-        '--skip-plugins':
-          'comma-separated list of plugin names to skip for this run',
-        '--watch': 'watch for changes',
-        '--stdin': 'close when stdin ends'
+  api.registerCommand('build:web', {}, async (args, rawArgs) => {
+    for (const key in defaults) {
+      if (args[key] == null) {
+        args[key] = defaults[key]
       }
-    },
-    async (args, rawArgs) => {
-      for (const key in defaults) {
-        if (args[key] == null) {
-          args[key] = defaults[key]
-        }
-      }
-      const moduleBuildArgs = { ...args, moduleBuild: true, clean: false }
-      await build(moduleBuildArgs, api, options)
     }
-  )
+    const moduleBuildArgs = { ...args, moduleBuild: true, clean: false }
+    await build(moduleBuildArgs, api, options)
+  })
 }
 
 async function build (args, api, options) {
   const fs = require('fs-extra')
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
-
-  if (args.dest) {
-    // Override outputDir before resolving webpack config as config relies on it (#2327)
-    options.outputDir = args.dest
-  }
-
   const targetDir = api.resolve(options.outputDir)
   const isLegacyBuild = args.needsDifferentialLoading && !args.moduleBuild
 
@@ -85,14 +44,7 @@ async function build (args, api, options) {
     })
   }
 
-  if (args.stdin) {
-    process.stdin.on('end', () => {
-      process.exit(0)
-    })
-    process.stdin.resume()
-  }
-
-  if (args.report || args['report-json']) {
+  if (args.report) {
     const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
     modifyConfig(webpackConfig, (config) => {
       const bundleName =
@@ -108,7 +60,7 @@ async function build (args, api, options) {
           analyzerMode: args.report ? 'static' : 'disabled',
           reportFilename: `${bundleName}report.html`,
           statsFilename: `${bundleName}report.json`,
-          generateStatsFile: !!args['report-json']
+          generateStatsFile: !!args.report
         })
       )
     })
@@ -118,8 +70,27 @@ async function build (args, api, options) {
     await fs.emptyDir(targetDir)
   }
 
-  return runWebpack(webpackConfig, {
-    watch: args.watch
+  return new Promise((resolve, reject) => {
+    webpack(webpackConfig, (err, res) => {
+      const hasErrors = err || res.hasErrors()
+      const status = hasErrors ? 'with some errors' : 'successfully'
+      getReporter()._renderStates(
+        res.stats.map((v) => {
+          return {
+            ...v,
+            name: 'web-compiler',
+            message: `Compiled ${status}`,
+            color: hasErrors ? 'red' : 'green',
+            progress: 100,
+            hasErrors: hasErrors,
+            result: hasErrors
+              ? extractErrorsFromStats(res)
+              : extractResultFromStats(res)
+          }
+        }),
+        () => (hasErrors ? reject(err) : resolve(res))
+      )
+    })
   })
 }
 

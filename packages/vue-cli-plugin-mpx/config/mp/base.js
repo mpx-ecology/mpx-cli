@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getMpxPluginOptions } = require('../../utils')
-const { FancyReporter } = require('../../utils/reporter')
+const { getReporter } = require('../../utils/reporter')
 
 /**
  * 基础配置
@@ -56,7 +56,7 @@ module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig 
       color: 'orange',
       name: process.env.MPX_CURRENT_TARGET_MODE + '-compiler',
       basic: false,
-      reporter: new FancyReporter()
+      reporter: getReporter()
     }
   ])
 

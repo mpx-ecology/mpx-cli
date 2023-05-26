@@ -1,6 +1,94 @@
 /* eslint-disable no-tabs */
 const chalk = require('chalk')
-const LogUpdate = require('./logUpdate')
+const ansiEscapes = require('ansi-escapes')
+const wrapAnsi = require('wrap-ansi')
+const originalWrite = Symbol('webpackbarWrite')
+
+class LogUpdate {
+  constructor () {
+    this.prevLineCount = 0
+    this.listening = false
+    this.extraLines = ''
+    this._onData = this._onData.bind(this)
+    this._streams = [process.stdout, process.stderr]
+  }
+
+  render (lines) {
+    this.listen()
+    const wrappedLines = wrapAnsi(lines, this.columns, {
+      trim: false,
+      hard: true,
+      wordWrap: false
+    })
+    const data = ansiEscapes.eraseLines(this.prevLineCount) + wrappedLines + '\n' + this.extraLines
+    this.write(data)
+    const _lines = data.split('\n')
+    this.prevLineCount = _lines.length
+  }
+
+  get columns () {
+    return (process.stderr.columns || 80) - 2
+  }
+
+  write (data) {
+    const stream = process.stderr
+    if (stream.write[originalWrite]) {
+      stream.write[originalWrite].call(stream, data, 'utf-8')
+    } else {
+      stream.write(data, 'utf-8')
+    }
+  }
+
+  clear () {
+    this.done()
+    this.write(ansiEscapes.eraseLines(this.prevLineCount))
+  }
+
+  done () {
+    this.stopListen()
+    this.prevLineCount = 0
+    this.extraLines = ''
+  }
+
+  _onData (data) {
+    const str = String(data)
+    const lines = str.split('\n').length - 1
+    if (lines > 0) {
+      this.prevLineCount += lines
+      this.extraLines += data
+    }
+  }
+
+  listen () {
+    if (this.listening) {
+      return
+    }
+    for (const stream of this._streams) {
+      if (stream.write[originalWrite]) {
+        continue
+      }
+      const write = (data, ...args) => {
+        if (!stream.write[originalWrite]) {
+          return stream.write(data, ...args)
+        }
+        this._onData(data)
+        return stream.write[originalWrite].call(stream, data, ...args)
+      }
+      write[originalWrite] = stream.write
+      stream.write = write
+    }
+    this.listening = true
+  }
+
+  stopListen () {
+    for (const stream of this._streams) {
+      if (stream.write[originalWrite]) {
+        stream.write = stream.write[originalWrite]
+      }
+    }
+    this.listening = false
+  }
+}
 
 const logUpdate = new LogUpdate()
 
@@ -92,65 +180,6 @@ const formatRequest = (request) => {
   return `${loaders}${NEXT}${request.file}`
 }
 
-function getWebpackMpResult (stats) {
-  if (stats.hasErrors()) {
-    return new Error(
-      chalk.red('Build failed with errors.\n') + extractErrorsFromStats(stats)
-    )
-  }
-  const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
-  return statsArr.map((item) => {
-    return item
-      .toString({
-        colors: true,
-        modules: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
-        entrypoints: false
-      })
-      .split('\n')
-      .map((v) => `  ${v}`)
-      .join('\n')
-  })
-}
-
-function uniqueBy (arr, fun) {
-  const seen = {}
-  return arr.filter((el) => {
-    const e = fun(el)
-    return !(e in seen) && (seen[e] = 1)
-  })
-}
-
-function isMultiStats (stats) {
-  return stats.stats
-}
-
-function extractErrorsFromStats (stats, type = 'errors') {
-  if (isMultiStats(stats)) {
-    const errors = stats.stats.reduce(
-      (errors, stats) => errors.concat(extractErrorsFromStats(stats, type)),
-      []
-    )
-    // Dedupe to avoid showing the same error many times when multiple
-    // compilers depend on the same module.
-    return uniqueBy(errors, (error) => error.message)
-  }
-
-  const findErrorsRecursive = (compilation) => {
-    const errors = compilation[type]
-    if (errors.length === 0 && compilation.children) {
-      for (const child of compilation.children) {
-        errors.push(...findErrorsRecursive(child))
-      }
-    }
-    return uniqueBy(errors, (error) => error.message)
-  }
-
-  return findErrorsRecursive(stats.compilation)
-}
-
 class FancyReporter {
   allDone (context) {
     if (process.send) {
@@ -161,17 +190,7 @@ class FancyReporter {
     }
   }
 
-  done (context, { stats }) {
-    this._renderStates(
-      context.statesArray.map((v) => {
-        return {
-          ...v,
-          message: v.message,
-          result: getWebpackMpResult(stats)
-        }
-      })
-    )
-  }
+  done (context, { stats }) {}
 
   progress (context) {
     if (!logUpdate) return
@@ -180,19 +199,19 @@ class FancyReporter {
     }
   }
 
-  _renderStates (statesArray) {
+  _renderStates (statesArray, cb) {
     lastRender = Date.now()
     const renderedStates = statesArray.map((c) => this._renderState(c)).join('')
     if (renderedStates && process.send) {
       process.send({
         status: 'progress',
         message: renderedStates
-      })
+      }, cb)
     }
   }
 
   _renderState (state) {
-    if (state.details.includes('IdleFileCachePlugin')) return
+    if (state.details && state.details.includes('IdleFileCachePlugin')) return
     const color = colorize(state.color)
     let line1
     let line2
@@ -229,3 +248,11 @@ class FancyReporter {
 }
 
 exports.FancyReporter = FancyReporter
+
+let reporter = null
+
+exports.getReporter = function () {
+  if (reporter) return reporter
+  return (reporter = new FancyReporter())
+}
+exports.LogUpdate = LogUpdate

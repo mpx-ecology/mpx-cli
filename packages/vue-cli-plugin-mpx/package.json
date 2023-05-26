@@ -10,7 +10,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^9.1.0",

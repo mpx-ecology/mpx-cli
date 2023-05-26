@@ -33,7 +33,6 @@ const args = require('minimist')(rawArgv, {
 const command = args._[0]
 process.env.MPX_CLI_MODE = command.split(':')[1] || 'mp'
 
-service.run(command, args, rawArgv).catch(err => {
-  error(err)
+service.run(command, args, rawArgv).catch(() => {
   process.exit(1)
 })

@@ -1,12 +1,12 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const WebpackBar = require('webpackbar')
 const minimist = require('minimist')
-const { transformMpxEntry } = require('../../utils/transformMpxEntry')
+const { transformMpxEntry } = require('../transformMpxEntry')
 const {
   resolveMpxWebpackPluginConf
-} = require('../../utils/resolveMpxWebpackPluginConf')
+} = require('../resolveMpxWebpackPluginConf')
 const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
-const { FancyReporter } = require('../../utils/reporter')
+const { getReporter } = require('../../utils/reporter')
 
 module.exports.resolveWebBaseWebpackConfig = function (api, options = {}, webpackConfig) {
   webpackConfig.name('web-compiler')
@@ -58,7 +58,7 @@ module.exports.resolveWebBaseWebpackConfig = function (api, options = {}, webpac
       color: 'orange',
       name: process.env.MPX_CURRENT_TARGET_MODE + (process.env.VUE_CLI_MODERN_BUILD === 'true' ? '-modern' : '') + '-compiler',
       basic: false,
-      reporter: new FancyReporter()
+      reporter: getReporter()
     }
   ])
 }

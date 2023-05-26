@@ -1,65 +1,60 @@
-const { SUPPORT_MODE } = require('../../constants/mode')
-const { logWithSpinner } = require('@vue/cli-shared-utils')
-const { getTargets } = require('../../utils/index')
-const { symLinkTargetConfig } = require('../../utils/symlinkTargetConfig')
+const { parseTarget } = require('../../utils/index')
+const { symLinkTargetConfig } = require('../../utils/symLinkTargetConfig')
 const {
-  resolveWebpackConfigByTargets,
-  runWebpack,
-  runWebpackInChildProcess
+  resolveWebpackConfigByTarget,
+  extractResultFromStats,
+  extractErrorsFromStats
 } = require('../../utils/webpack')
+const { getReporter } = require('../../utils/reporter')
+const webpack = require('webpack')
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = function registerServeCommand (api, options) {
-  api.registerCommand(
-    'serve:mp',
-    {
-      description: 'mp development',
-      usage: 'mpx-cli-service serve:mp',
-      options: {
-        '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
-        '--open-child-process': 'open child process',
-        '--env': 'custom define __mpx_env__'
-      }
-    },
-    function (args, rawArgv) {
-      const mode = api.service.mode
-      const customMpxEnv = args.env
-      const targets = getTargets(args, options)
-      const openChildProcess =
-        !!args['open-child-process'] && targets.length > 1
+  api.registerCommand('serve:mp', {}, function (args, rawArgv) {
+    const customMpxEnv = args.env
+    const target = parseTarget(args.target, options)
 
-      logWithSpinner(
-        '⚓',
-        `Building for ${mode} of ${targets.map((v) => v.mode).join(',')}...`
-      )
-
-      if (openChildProcess) {
-        return runWebpackInChildProcess('serve:mp', rawArgv, {
-          targets,
-          watch: true
-        })
-      }
-
-      // 小程序业务代码构建配置
-      const webpackConfigs = resolveWebpackConfigByTargets(
-        api,
-        options,
-        targets,
-        (webpackConfig) => {
-          webpackConfig.devtool('source-map')
-          if (customMpxEnv) {
-            webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
-              args[0].env = customMpxEnv
-              return args
-            })
-          }
+    // 小程序业务代码构建配置
+    const webpackConfigs = resolveWebpackConfigByTarget(
+      api,
+      options,
+      target,
+      (webpackConfig) => {
+        webpackConfig.devtool('source-map')
+        if (customMpxEnv) {
+          webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+            args[0].env = customMpxEnv
+            return args
+          })
         }
-      )
-      return runWebpack(webpackConfigs, {
-        watch: true
-      }).then((res) => {
-        symLinkTargetConfig(api, targets, webpackConfigs)
-        return res
+      }
+    )
+    return new Promise((resolve, reject) => {
+      webpack(webpackConfigs).watch({}, (err, res) => {
+        const hasErrors = err || res.hasErrors()
+        const status = hasErrors ? 'with some errors' : 'successfully'
+        getReporter()._renderStates(
+          res.stats.map((v) => {
+            return {
+              ...v,
+              name: `${target.mode}-compiler`,
+              message: `Compiled ${status}`,
+              color: hasErrors ? 'red' : 'green',
+              progress: 100,
+              hasErrors: hasErrors,
+              result: hasErrors
+                ? extractErrorsFromStats(res)
+                : extractResultFromStats(res)
+            }
+          }),
+          () => {
+            if (hasErrors) {
+              if (err) reject(err)
+            } else resolve(res)
+          }
+        )
+        symLinkTargetConfig(api, target, webpackConfigs[0])
       })
-    }
-  )
+    })
+  })
 }

@@ -15,13 +15,6 @@ module.exports = [
     default: true
   },
   {
-    name: 'transWeb',
-    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === true,
-    message: '是否需要支持输出web',
-    type: 'confirm',
-    default: false
-  },
-  {
     name: 'cloudFunc',
     when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
     message: '是否需要使用小程序云开发能力',

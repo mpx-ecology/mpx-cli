@@ -6,7 +6,7 @@ const { MODE_CONFIG_FILES_MAP, SUPPORT_MODE } = require('../../constants/mode')
 const { getMpxPluginOptions } = require('../../utils')
 const {
   resolveMpxWebpackPluginConf
-} = require('../../utils/resolveMpxWebpackPluginConf')
+} = require('../resolveMpxWebpackPluginConf')
 
 /**
  * target相关配置

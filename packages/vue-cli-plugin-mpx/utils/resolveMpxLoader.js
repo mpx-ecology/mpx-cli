@@ -1,5 +1,11 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 
+/**
+ * 获取vue.config.js配置的 mpx loader 配置
+ * @param {*} api
+ * @param {*} options
+ * @returns
+ */
 module.exports.resolveMpxLoader = function (api, options = {}) {
   const mpxLoaderOptions =
     (options.pluginOptions &&

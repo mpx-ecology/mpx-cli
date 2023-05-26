@@ -15,6 +15,15 @@ test('normal', async () => {
       cwd
     },
     {
+      srcMode: 'wx',
+      appid: 'test',
+      description: 'test',
+      needE2ETest: false,
+      needUnitTest: false,
+      needTs: false,
+      isPlugin: false,
+      cloudFunc: false,
+      cross: true,
       plugins: {}
     }
   )

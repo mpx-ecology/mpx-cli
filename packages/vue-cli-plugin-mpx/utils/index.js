@@ -35,13 +35,6 @@ function getMpxPluginOptions (options) {
 }
 
 /**
- * @typedef { import('@mpxjs/vue-cli-plugin-mpx/constants/mode').Mode } Mode
- * @typedef { object } Target
- * @property { 'production' | 'development' } env
- * @property { Mode } mode
- */
-
-/**
  * 获取最终的targets
  * @param {*} args
  * @param {*} options
@@ -54,15 +47,18 @@ function getTargets (args, options) {
     ? args.targets.split(/[,|]/)
     : Object.keys(args)
   const targets = inputTargets
-    .map((v) => {
-      const [mode, env] = v.split(':')
-      return {
-        mode,
-        env
-      }
-    })
+    .map((v) => parseTarget(v, options))
     .filter((v) => supportedModeMap[v.mode])
   return targets.length ? targets : defaultTargets
+}
+
+function parseTarget (target, options) {
+  const mpxOptions = getMpxPluginOptions(options)
+  const [mode = mpxOptions.srcMode || SUPPORT_MODE[0], env] = target.split(':')
+  return {
+    mode,
+    env
+  }
 }
 
 function removeArgv (rawArgv, removeName) {
@@ -77,5 +73,6 @@ module.exports.runServiceCommand = runServiceCommand
 module.exports.removeArgv = removeArgv
 module.exports.makeMap = makeMap
 module.exports.getTargets = getTargets
+module.exports.parseTarget = parseTarget
 module.exports.intersection = intersection
 module.exports.getMpxPluginOptions = getMpxPluginOptions

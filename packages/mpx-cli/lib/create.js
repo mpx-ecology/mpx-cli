@@ -139,6 +139,23 @@ async function create (projectName, options, preset = null) {
       }
     }
   }
+
+  Object.keys(preset.plugins).forEach(function (key) {
+    const plugin = builtInPreset.plugins[key]
+    Object.assign(plugin, {
+      srcMode: preset.srcMode,
+      appid: preset.appid,
+      description: preset.description,
+      needE2ETest: preset.needE2ETest,
+      needUnitTest: preset.needUnitTest,
+      needTs: preset.needTs,
+      isPlugin: preset.isPlugin,
+      cloudFunc: preset.cloudFunc,
+      cross: preset.cross,
+      name
+    })
+  })
+
   const creator = new Creator(name, targetDir, getPromptModules())
   creator.on('creation', ({ event }) => {
     if (event === 'plugins-install') {

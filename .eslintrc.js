@@ -4,7 +4,9 @@ module.exports = {
   globals: {
     name: 'off'
   },
-  rules: {},
+  rules: {
+    'no-unused-vars': ['warn']
+  },
   overrides: [
     {
       files: ['**/__tests__/**/*.js', '**/cli-test-utils/**/*.js'],
