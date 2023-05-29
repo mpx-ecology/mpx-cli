@@ -10,7 +10,6 @@ const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { clearConsole } = require('@vue/cli/lib/util/clearConsole')
 const { linkBin } = require('@vue/cli/lib/util/linkBin')
-
 const prompts = require('./prompts')
 const plugins = require('./plugins')
 const builtInPreset = require('./preset')
@@ -45,7 +44,7 @@ async function resolvePrompts () {
   return inquirer.prompt(prompts).then((answers) => answers)
 }
 
-async function create (projectName, options, preset = null) {
+async function create (projectName, options, preset = { plugins: {} }) {
   const args = process.argv.slice(2)
   const parsedArgs = minimist(args)
   if (!preset) {
@@ -64,6 +63,7 @@ async function create (projectName, options, preset = null) {
   }
   preset.cssPreprocessor = 'stylus'
   Object.assign(preset.plugins, builtInPreset.plugins)
+
   if (preset.needTs) {
     Object.assign(preset.plugins, plugins.tsSupport)
   }
@@ -157,14 +157,18 @@ async function create (projectName, options, preset = null) {
   })
 
   const creator = new Creator(name, targetDir, getPromptModules())
-  creator.on('creation', ({ event }) => {
-    if (event === 'plugins-install') {
-      return linkBin(
-        require.resolve('@mpxjs/mpx-cli-service/bin/mpx-cli-service'),
-        path.join(targetDir, 'node_modules', '.bin', 'mpx-cli-service')
-      )
-    }
-  })
+
+  if (process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG) {
+    creator.on('creation', ({ event }) => {
+      if (event === 'plugins-install') {
+        linkBin(
+          require.resolve('@mpxjs/mpx-cli-service/bin/mpx-cli-service'),
+          path.join(targetDir, 'node_modules', '.bin', 'mpx-cli-service')
+        )
+      }
+    })
+  }
+
   await creator.create({
     ...options,
     inlinePreset: JSON.stringify(preset)

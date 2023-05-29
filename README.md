@@ -216,20 +216,18 @@ module.exports = {
 
 #### 调试 webpack 配置
 
-可以使用 `mpx inspect:mp` 以及 `mpx inspect:web` 调试 webpack 配置。
-
-> `mpx inspect:web` 的选项和 `vue inspect` 相同。
+可以使用 `mpx inspect` 以及 `mpx inspect` 调试 webpack 配置。
 
 可以将其输出重定向到一个文件以便进行查阅。
 
 ```sh
-mpx inspect:mp > output.js
+mpx inspect > output.js
 ```
 
 还可以增加`targets`,`mode`等选项来输出针对不同条件下的配置。
 
 ```sh
-mpx inspect:mp --targets=wx,ali --mode=development
+mpx inspect --targets=wx,ali --mode=development
 ```
 
 ### css 相关

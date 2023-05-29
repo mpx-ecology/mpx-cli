@@ -4,6 +4,8 @@ const WebpackBar = require('webpackbar')
 const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getMpxPluginOptions } = require('../../utils')
 const { getReporter } = require('../../utils/reporter')
+const { resolveMpTargetConfig } = require('./target')
+const { transformMpxEntry } = require('../transformMpxEntry')
 
 /**
  * 基础配置
@@ -11,7 +13,7 @@ const { getReporter } = require('../../utils/reporter')
  * @param {import('@vue/cli-service').ProjectOptions} options
  * @returns
  */
-module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig (
+module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
   api,
   options,
   webpackConfig,
@@ -91,6 +93,7 @@ module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig 
     let chain = webpackConfig.module
       .rule(rule)
       .test(test)
+      .oneOf('mpx')
       .use('mpx-wxss-loader')
       .loader(require.resolve(wxssLoader.loader))
       .options(wxssLoader.options)
@@ -132,6 +135,10 @@ module.exports.resolveMpBaseWebpackConfig = function resolveMpBaseWebpackConfig 
     .loader(maybeResolve('pug-plain-loader'))
     .end()
 
+  // 根据不同target修改webpack配置
+  resolveMpTargetConfig(api, options, webpackConfig, target)
+  // 转换entry
+  transformMpxEntry(api, options, webpackConfig)
   return webpackConfig
 }
 

@@ -30,7 +30,7 @@ function makeMap (arr) {
  * 获取@mpxjs/webpack-plugin选项
  * @param {*} options 选项
  */
-function getMpxPluginOptions (options) {
+function getMpxPluginOptions (options = {}) {
   return options.pluginOptions ? options.pluginOptions.mpx || {} : {}
 }
 
@@ -52,7 +52,7 @@ function getTargets (args, options) {
   return targets.length ? targets : defaultTargets
 }
 
-function parseTarget (target, options) {
+function parseTarget (target = '', options = {}) {
   const mpxOptions = getMpxPluginOptions(options)
   const [mode = mpxOptions.srcMode || SUPPORT_MODE[0], env] = target.split(':')
   return {

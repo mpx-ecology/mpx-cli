@@ -47,18 +47,19 @@ const chunks = []
 let doneNum = 0
 let num = 0
 const logUpdate = new LogUpdate()
-function buildTargetInChildProcess (command, rawArgv, { target, watch }) {
+function buildTargetInChildProcess (command, target, rawArgv) {
   const index = num++
   return new Promise((resolve, reject) => {
     const ls = runServiceCommand(
       command,
-      [...rawArgv, `--target=${target.mode}:${target.env}`],
+      [...rawArgv, `--target=${target.mode}${target.env ? `:${target.env}` : ''}`],
       {
         env: {
           ...process.env,
           FORCE_COLOR: true,
           MPX_CURRENT_TARGET_MODE: target.mode,
-          MPX_CURRENT_TARGET_ENV: target.env
+          MPX_CURRENT_TARGET_ENV: target.env,
+          NODE_ENV: undefined
         },
         stderr: 'inherit'
       }

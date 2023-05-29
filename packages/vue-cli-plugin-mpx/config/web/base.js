@@ -8,9 +8,24 @@ const {
 const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getReporter } = require('../../utils/reporter')
 
-module.exports.resolveWebBaseWebpackConfig = function (api, options = {}, webpackConfig) {
+function changeStyleVueRuleToMpx (webpackConfig, name) {
+  webpackConfig.module.rule(name).oneOfs.get('vue').name = 'mpx'
+  webpackConfig.module.rule(name).oneOfs.get('vue').names = [name, 'mpx']
+}
+
+module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (api, options = {}, webpackConfig) {
   webpackConfig.name('web-compiler')
   transformMpxEntry(api, options, webpackConfig, true)
+  try {
+    changeStyleVueRuleToMpx(webpackConfig, 'css')
+    changeStyleVueRuleToMpx(webpackConfig, 'stylus')
+    changeStyleVueRuleToMpx(webpackConfig, 'sass')
+    changeStyleVueRuleToMpx(webpackConfig, 'less')
+    changeStyleVueRuleToMpx(webpackConfig, 'scss')
+    changeStyleVueRuleToMpx(webpackConfig, 'postcss')
+  } catch (error) {
+
+  }
   const mpxLoader = resolveMpxLoader(api, options)
   webpackConfig.plugins.delete('friendly-errors')
   webpackConfig.module
