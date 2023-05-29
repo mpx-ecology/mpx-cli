@@ -109,7 +109,11 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
   }
 
   createCSSRule('wxss', /\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
-  createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader')
+  createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', {
+    stylusOptions: {
+      compress: false
+    }
+  })
   createCSSRule('less', /\.less$/, 'less-loader')
   createCSSRule('sass', /\.sass$/, 'sass-loader')
   createCSSRule('scss', /\.scss$/, 'sass-loader')
