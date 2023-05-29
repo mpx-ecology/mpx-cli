@@ -17,6 +17,8 @@ module.exports = function (api, options) {
     return files
   })
 
+  require('./web')(api, options)
+
   // 删除 @vue/cli-service 内置的 npm script
   api.extendPackage((pkg) => {
     delete pkg.scripts.serve
