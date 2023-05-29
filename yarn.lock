@@ -3260,7 +3260,7 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@soda/friendly-errors-webpack-plugin@^1.8.0", "@soda/friendly-errors-webpack-plugin@^1.8.1":
+"@soda/friendly-errors-webpack-plugin@^1.8.0":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@soda/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.8.1.tgz#4d4fbb1108993aaa362116247c3d18188a2c6c85"
   integrity sha512-h2ooWqP8XuFqTXT+NyAFbrArzfQA7R6HTezADrvD9Re8fxMLTPPniLdqVTdDaO0eIoLaAwKT+d6w+5GeTk7Vbg==

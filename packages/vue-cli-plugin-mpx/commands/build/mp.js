@@ -66,7 +66,6 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
             ? 'with some warnings'
             : 'successfully'
         const result = []
-        // if (hasErrors) result.push(output.getErrors(stats, 'errors'))
         if (hasErrors) result.push(extractResultFromStats(stats))
         if (hasWarnings) result.push(output.getErrors(stats, 'warnings'))
         if (!hasErrors) result.push(extractResultFromStats(stats))

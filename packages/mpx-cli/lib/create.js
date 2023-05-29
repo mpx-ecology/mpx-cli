@@ -44,9 +44,17 @@ async function resolvePrompts () {
   return inquirer.prompt(prompts).then((answers) => answers)
 }
 
-async function create (projectName, options, preset = { plugins: {} }) {
+/**
+ * 从vue-cli clone 下来，方便处理creator的创建以及生命周期管理
+ * @param {*} projectName
+ * @param {*} options
+ * @param {*} preset
+ * @returns
+ */
+async function create (projectName, options, preset = null) {
   const args = process.argv.slice(2)
   const parsedArgs = minimist(args)
+  // resolve preset
   if (!preset) {
     if (options.preset) {
       preset = await resolvePreset(parsedArgs)
@@ -61,9 +69,10 @@ async function create (projectName, options, preset = { plugins: {} }) {
       preset = await resolvePrompts(projectName, builtInPreset)
     }
   }
+  // css preprocessor
   preset.cssPreprocessor = 'stylus'
-  Object.assign(preset.plugins, builtInPreset.plugins)
-
+  // mpx cli 插件
+  preset.plugins = Object.assign({}, preset.plugins, builtInPreset.plugins)
   if (preset.needTs) {
     Object.assign(preset.plugins, plugins.tsSupport)
   }
@@ -79,7 +88,7 @@ async function create (projectName, options, preset = { plugins: {} }) {
   if (preset.needE2ETest) {
     Object.assign(preset.plugins, plugins.e2eTestSupport)
   }
-
+  // 设置代理
   if (options.proxy) {
     process.env.HTTP_PROXY = options.proxy
   }
@@ -141,7 +150,7 @@ async function create (projectName, options, preset = { plugins: {} }) {
   }
 
   Object.keys(preset.plugins).forEach(function (key) {
-    const plugin = builtInPreset.plugins[key]
+    const plugin = preset.plugins[key]
     Object.assign(plugin, {
       srcMode: preset.srcMode,
       appid: preset.appid,
@@ -159,6 +168,7 @@ async function create (projectName, options, preset = { plugins: {} }) {
   const creator = new Creator(name, targetDir, getPromptModules())
 
   if (process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG) {
+    // 单测下，link bin文件到源码
     creator.on('creation', ({ event }) => {
       if (event === 'plugins-install') {
         linkBin(
