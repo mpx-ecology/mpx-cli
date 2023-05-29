@@ -9,10 +9,8 @@
   - [使用](#%E4%BD%BF%E7%94%A8)
   - [基础](#%E5%9F%BA%E7%A1%80)
     - [CLI 命令](#cli-%E5%91%BD%E4%BB%A4)
-      - [build:mp](#buildmp)
-      - [serve:mp](#servemp)
-      - [build:web](#buildweb)
-      - [serve:web](#serveweb)
+      - [build](#build)
+      - [serve](#serve)
   - [开发](#%E5%BC%80%E5%8F%91)
     - [webpack 相关](#webpack-%E7%9B%B8%E5%85%B3)
       - [mpx 编译构建配置](#mpx-%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE)
@@ -47,10 +45,8 @@ npm run build
 
 ```json
 {
-  "serve": "mpx-cli-service serve:mp", // 开发小程序
-  "build": "mpx-cli-service build:mp", // 构建小程序
-  "serve:web": "mpx-cli-service serve:web", // 开发Web
-  "build:web": "mpx-cli-service build:web" // 构建Web
+  "serve": "mpx-cli-service serve", // 开发模式
+  "build": "mpx-cli-service build", // 构建模式
 }
 ```
 
@@ -58,14 +54,14 @@ npm run build
 
 ### CLI 命令
 
-#### build:mp
+#### build
 
 ```sh
-用法：mpx-cli-service build:mp [options]
+用法：mpx-cli-service build [options]
 
 选项:
 
-  --targets    编译到小程序目标(默认值: wx)
+  --targets    编译目标(默认值: wx)
   --mode       指定环境模式 (默认值：production)
   --env        自定义 __mpx_env__
   --watch      监听文件变化
@@ -75,7 +71,7 @@ npm run build
 
 ```sh
 # 构建小程序，默认微信
-mpx-cli-service build:mp --targets=wx,ali
+mpx-cli-service build --targets=wx,ali
 ```
 
 **目前支持的小程序平台**
@@ -87,67 +83,18 @@ mpx-cli-service build:mp --targets=wx,ali
 | 百度 | swan   |
 | QQ   | qq     |
 | 头条 | tt     |
+| 浏览器 | web     |
 
-#### serve:mp
+#### serve
 
 ```sh
-用法：mpx-cli-service serve:mp [options]
+用法：mpx-cli-service serve [options]
 
 选项:
 
   --targets    编译到小程序目标(默认值: wx)
   --env        自定义 __mpx_env__
   --open-child-process 开启子进程编译
-```
-
-```sh
-# 开发小程序，默认微信
-mpx-cli-service serve:mp --targets=wx,ali
-```
-
-#### build:web
-
-```sh
-用法：mpx-cli-service build:web [options] [entry|pattern]
-
-选项：
-
-  --mode        指定环境模式 (默认值：production)
-  --dest        指定输出目录 (默认值：dist)
-  --modern      面向现代浏览器带自动回退地构建应用
-  --target      app | lib | wc | wc-async (默认值：app)
-  --env         自定义 __mpx_env__
-  --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
-  --no-clean    在构建项目之前不清除目标目录的内容
-  --report      生成 report.html 以帮助分析包内容
-  --report-json 生成 report.json 以帮助分析包内容
-  --watch       监听文件变化
-```
-
-```sh
-# 构建web
-mpx-cli-service build:web
-```
-
-#### serve:web
-
-```sh
-用法：mpx-cli-service serve:web [options] [entry]
-
-选项：
-
-  --open    在服务器启动时打开浏览器
-  --copy    在服务器启动时将 URL 复制到剪切版
-  --mode    指定环境模式 (默认值：development)
-  --host    指定 host (默认值：0.0.0.0)
-  --port    指定 port (默认值：8080)
-  --https   使用 https (默认值：false)
-  --env     自定义 __mpx_env__
-```
-
-```sh
-# 开发web
-mpx-cli-service serve:web
 ```
 
 ## 开发
