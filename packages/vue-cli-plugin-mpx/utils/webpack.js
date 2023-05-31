@@ -77,7 +77,7 @@ function buildTargetInChildProcess (command, target, rawArgv) {
         }
       } else {
         chunks[index] = data.message
-        logUpdate.render('\n' + chunks.join('\n\n'))
+        logUpdate.render(chunks.join('\n\n'))
       }
     })
     // render过程中，其它的数据在结束后展示
