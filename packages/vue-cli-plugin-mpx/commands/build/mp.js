@@ -4,7 +4,7 @@ const {
   resolveWebpackConfigByTarget,
   extractResultFromStats
 } = require('../../utils/webpack')
-const { symLinkTargetConfig } = require('../../utils/symLinkTargetConfig')
+const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const { getReporter } = require('../../utils/reporter')
 const { output } = require('../../utils/output')
 const webpack = require('webpack')
@@ -83,7 +83,7 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
           }),
           () => (hasErrors ? reject(new Error('Build error')) : resolve(stats))
         )
-        symLinkTargetConfig(api, target, webpackConfigs[0])
+        symlinkTargetConfig(api, target, webpackConfigs[0])
       })
     })
   })

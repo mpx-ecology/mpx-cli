@@ -9,7 +9,7 @@ const { MODE_CONFIG_FILES_MAP } = require('../constants/mode')
  * @param {*} target
  * @param {*} webpackConfig
  */
-module.exports.symLinkTargetConfig = function (api, target, webpackConfig) {
+module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
   const targetConfigFiles = MODE_CONFIG_FILES_MAP[target.mode] || []
   let outputPath = webpackConfig.output.path
   targetConfigFiles.forEach((v) => {

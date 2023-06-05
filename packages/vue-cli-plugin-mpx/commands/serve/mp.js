@@ -1,5 +1,5 @@
 const { parseTarget } = require('../../utils/index')
-const { symLinkTargetConfig } = require('../../utils/symLinkTargetConfig')
+const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTarget,
   extractResultFromStats,
@@ -71,7 +71,7 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
             } else resolve(res)
           }
         )
-        symLinkTargetConfig(api, target, webpackConfigs[0])
+        symlinkTargetConfig(api, target, webpackConfigs[0])
       })
     })
   })
