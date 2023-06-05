@@ -2,7 +2,8 @@ const { merge } = require('webpack-merge')
 const { runServiceCommand } = require('./index')
 const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
 const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
-const { LogUpdate } = require('./reporter')
+const { LogUpdate, getReporter } = require('./reporter')
+const { extractResultFromStats, extractErrorsFromStats } = require('./output')
 
 /**
  * 获取基础配置通过构建目标，该方法会运行插件方法并增加默认配置
@@ -91,71 +92,6 @@ function buildTargetInChildProcess (command, target, rawArgv) {
   })
 }
 
-/**
- * 从stats里提取结果信息
- * @param {*} stats
- * @returns
- */
-function extractResultFromStats (stats) {
-  const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
-  return statsArr.map((item) => {
-    return item
-      .toString({
-        colors: true,
-        modules: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
-        entrypoints: false
-      })
-      .split('\n')
-      .map((v) => `  ${v}`)
-      .join('\n')
-  })
-}
-
-function uniqueBy (arr, fun) {
-  const seen = {}
-  return arr.filter((el) => {
-    const e = fun(el)
-    return !(e in seen) && (seen[e] = 1)
-  })
-}
-
-function isMultiStats (stats) {
-  return stats.stats
-}
-
-/**
- * 从stats里提取错误信息
- * @param {*} stats
- * @param {*} type
- * @returns
- */
-function extractErrorsFromStats (stats, type = 'errors') {
-  if (isMultiStats(stats)) {
-    const errors = stats.stats.reduce(
-      (errors, stats) => errors.concat(extractErrorsFromStats(stats, type)),
-      []
-    )
-    // Dedupe to avoid showing the same error many times when multiple
-    // compilers depend on the same module.
-    return uniqueBy(errors, (error) => error.message)
-  }
-
-  const findErrorsRecursive = (compilation) => {
-    const errors = compilation[type]
-    if (errors.length === 0 && compilation.children) {
-      for (const child of compilation.children) {
-        errors.push(...findErrorsRecursive(child))
-      }
-    }
-    return uniqueBy(errors, (error) => error.message)
-  }
-
-  return findErrorsRecursive(stats.compilation)
-}
-
 const modifyConfig = (config, fn) => {
   if (Array.isArray(config)) {
     config.forEach((c) => fn(c))
@@ -164,8 +100,36 @@ const modifyConfig = (config, fn) => {
   }
 }
 
+module.exports.handleWebpackDone = function (err, stats, target) {
+  return new Promise((resolve, reject) => {
+    if (err) return reject(err)
+    const hasErrors = stats.hasErrors()
+    const hasWarnings = stats.hasWarnings()
+    const status = hasErrors
+      ? 'with some errors'
+      : hasWarnings
+        ? 'with some warnings'
+        : 'successfully'
+    const result = []
+    if (hasErrors) result.push(extractResultFromStats(stats))
+    if (hasWarnings) result.push(extractErrorsFromStats(stats, 'warnings'))
+    if (!hasErrors) result.push(extractResultFromStats(stats))
+    getReporter()._renderStates(
+      stats.stats.map((v) => {
+        return {
+          ...v,
+          name: `${target.mode}-compiler`,
+          message: `Compiled ${status}`,
+          color: hasErrors ? 'red' : 'green',
+          progress: 100,
+          hasErrors: hasErrors,
+          result: result.join('\n')
+        }
+      }),
+      () => (hasErrors ? reject(new Error('Build error')) : resolve(stats))
+    )
+  })
+}
 module.exports.modifyConfig = modifyConfig
-module.exports.extractResultFromStats = extractResultFromStats
-module.exports.extractErrorsFromStats = extractErrorsFromStats
 module.exports.buildTargetInChildProcess = buildTargetInChildProcess
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget

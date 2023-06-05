@@ -1,12 +1,7 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { parseTarget } = require('../../utils/index')
-const {
-  resolveWebpackConfigByTarget,
-  extractResultFromStats
-} = require('../../utils/webpack')
+const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
-const { getReporter } = require('../../utils/reporter')
-const { output } = require('../../utils/output')
 const webpack = require('webpack')
 const { resolveMpWebpackConfig } = require('../../config/mp/base')
 
@@ -64,33 +59,10 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
     const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {
       webpack(webpackConfigs, (err, stats) => {
-        if (err) return reject(err)
-        const hasErrors = stats.hasErrors()
-        const hasWarnings = stats.hasWarnings()
-        const status = hasErrors
-          ? 'with some errors'
-          : hasWarnings
-            ? 'with some warnings'
-            : 'successfully'
-        const result = []
-        if (hasErrors) result.push(extractResultFromStats(stats))
-        if (hasWarnings) result.push(output.getErrors(stats, 'warnings'))
-        if (!hasErrors) result.push(extractResultFromStats(stats))
-        getReporter()._renderStates(
-          stats.stats.map((v) => {
-            return {
-              ...v,
-              name: `${target.mode}-compiler`,
-              message: `Compiled ${status}`,
-              color: hasErrors ? 'red' : 'green',
-              progress: 100,
-              hasErrors: hasErrors,
-              result: result.join('\n')
-            }
-          }),
-          () => (hasErrors ? reject(new Error('Build error')) : resolve(stats))
-        )
-        symlinkTargetConfig(api, target, webpackConfigs[0])
+        handleWebpackDone(err, stats, target).then((...res) => {
+          symlinkTargetConfig(api, target, webpackConfigs[0])
+          resolve(...res)
+        }).catch(reject)
       })
     })
   })

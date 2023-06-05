@@ -1,10 +1,6 @@
-const { getReporter } = require('../../utils/reporter')
-const {
-  modifyConfig,
-  extractErrorsFromStats,
-  extractResultFromStats
-} = require('../../utils/webpack')
 const webpack = require('webpack')
+const { modifyConfig, handleWebpackDone } = require('../../utils/webpack')
+const { parseTarget } = require('../../utils')
 
 const defaults = {
   clean: true,
@@ -59,7 +55,10 @@ module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig
 module.exports.registerWebBuildCommand = (api, options) => {
   api.registerCommand('build:web', {}, async (args, rawArgs) => {
     if (!args.targets) {
-      return api.service.commands.build.fn({ ...args, targets: 'web' }, [rawArgs, '--targets=web'])
+      return api.service.commands.build.fn({ ...args, targets: 'web' }, [
+        rawArgs,
+        '--targets=web'
+      ])
     }
     for (const key in defaults) {
       if (args[key] == null) {
@@ -74,6 +73,7 @@ module.exports.registerWebBuildCommand = (api, options) => {
 async function build (args, api, options) {
   const fs = require('fs-extra')
   const targetDir = api.resolve('dist/web')
+  const target = parseTarget(args.target, options)
   Object.assign(options, { outputDir: targetDir })
 
   // resolve raw webpack config
@@ -85,32 +85,7 @@ async function build (args, api, options) {
 
   return new Promise((resolve, reject) => {
     webpack([webpackConfig], (err, stats) => {
-      if (err) return reject(err)
-      const hasErrors = stats.hasErrors()
-      const hasWarnings = stats.hasWarnings()
-      const status = hasErrors
-        ? 'with some errors'
-        : hasWarnings
-          ? 'with some warnings'
-          : 'successfully'
-      const result = []
-      if (hasErrors) result.push(extractErrorsFromStats(stats))
-      if (hasWarnings) result.push(extractErrorsFromStats(stats, 'warnings'))
-      if (!hasErrors) result.push(extractResultFromStats(stats))
-      getReporter()._renderStates(
-        stats.stats.map((v) => {
-          return {
-            ...v,
-            name: 'web-compiler',
-            message: `Compiled ${status}`,
-            color: hasErrors ? 'red' : 'green',
-            progress: 100,
-            hasErrors: hasErrors,
-            result: result.join('\n')
-          }
-        }),
-        () => (hasErrors ? reject(err) : resolve(stats))
-      )
+      handleWebpackDone(err, stats, target).then(resolve).catch(reject)
     })
   })
 }

@@ -1,6 +1,6 @@
 const { hasProjectYarn, hasProjectPnpm } = require('@vue/cli-shared-utils')
 const { getReporter } = require('../../utils/reporter')
-const { extractErrorsFromStats } = require('../../utils/webpack')
+const { extractErrorsFromStats } = require('../../utils/output')
 
 const defaults = {
   host: '0.0.0.0',

@@ -1,12 +1,7 @@
+const webpack = require('webpack')
 const { parseTarget } = require('../../utils/index')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
-const {
-  resolveWebpackConfigByTarget,
-  extractResultFromStats,
-  extractErrorsFromStats
-} = require('../../utils/webpack')
-const { getReporter } = require('../../utils/reporter')
-const webpack = require('webpack')
+const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
 const { resolveMpWebpackConfig } = require('../../config/mp/base')
 
 const resolveMpServeWebpackConfig = (api, options, args) => {
@@ -46,38 +41,11 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
     // 小程序业务代码构建配置
     const webpackConfigs = resolveMpServeWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {
-      webpack(webpackConfigs).watch({}, (err, res) => {
-        if (err) return reject(err)
-        const hasErrors = res.hasErrors()
-        const hasWarnings = res.hasWarnings()
-        const status = hasErrors
-          ? 'with some errors'
-          : hasWarnings
-            ? 'with some warnings'
-            : 'successfully'
-        const result = []
-        if (hasErrors) result.push(extractErrorsFromStats(res))
-        if (hasWarnings) result.push(extractErrorsFromStats(res, 'warnings'))
-        if (!hasErrors) result.push(extractResultFromStats(res))
-        getReporter()._renderStates(
-          res.stats.map((v) => {
-            return {
-              ...v,
-              name: `${target.mode}-compiler`,
-              message: `Compiled ${status}`,
-              color: hasErrors ? 'red' : 'green',
-              progress: 100,
-              hasErrors: hasErrors,
-              result: result.join('\n')
-            }
-          }),
-          () => {
-            if (hasErrors) {
-              if (err) reject(err)
-            } else resolve(res)
-          }
-        )
-        symlinkTargetConfig(api, target, webpackConfigs[0])
+      webpack(webpackConfigs).watch({}, (err, stats) => {
+        handleWebpackDone(err, stats, target).then((...res) => {
+          symlinkTargetConfig(api, target, webpackConfigs[0])
+          resolve(...res)
+        }).catch(reject)
       })
     })
   })

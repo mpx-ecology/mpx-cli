@@ -53,4 +53,29 @@ output.getErrors = (stats, severity) => {
   return messages.join('\n')
 }
 
+/**
+ * 从stats里提取结果信息
+ * @param {*} stats
+ * @returns
+ */
+function extractResultFromStats (stats) {
+  const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
+  return statsArr.map((item) => {
+    return item
+      .toString({
+        colors: true,
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false,
+        entrypoints: false
+      })
+      .split('\n')
+      .map((v) => `  ${v}`)
+      .join('\n')
+  })
+}
+
+module.exports.extractErrorsFromStats = extractErrorsFromStats
+module.exports.extractResultFromStats = extractResultFromStats
 module.exports.output = output
