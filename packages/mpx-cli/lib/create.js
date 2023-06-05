@@ -1,4 +1,3 @@
-const minimist = require('minimist')
 const path = require('path')
 const inquirer = require('inquirer')
 const fs = require('fs-extra')
@@ -52,12 +51,10 @@ async function resolvePrompts () {
  * @returns
  */
 async function create (projectName, options, preset = null) {
-  const args = process.argv.slice(2)
-  const parsedArgs = minimist(args)
   // resolve preset
   if (!preset) {
     if (options.preset) {
-      preset = await resolvePreset(parsedArgs)
+      preset = await resolvePreset(options)
     } else if (options.inlinePreset) {
       try {
         preset = JSON.parse(options.inlinePreset)
