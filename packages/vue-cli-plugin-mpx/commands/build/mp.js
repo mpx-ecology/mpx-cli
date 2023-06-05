@@ -8,6 +8,7 @@ const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const { getReporter } = require('../../utils/reporter')
 const { output } = require('../../utils/output')
 const webpack = require('webpack')
+const { resolveMpWebpackConfig } = require('../../config/mp/base')
 
 const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
@@ -51,8 +52,14 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
   api,
   options
 ) {
-  api.registerCommand('build:mp', {}, function (args, rawArgv) {
+  api.registerCommand('build:mp', {}, function (args, rawArgs) {
+    if (args.targets && !args.target) {
+      return api.service.commands.build.fn(args, rawArgs)
+    }
     const target = parseTarget(args.target, options)
+    api.chainWebpack((config) => {
+      resolveMpWebpackConfig(api, options, config, target)
+    })
     // 小程序业务代码构建配置
     const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {

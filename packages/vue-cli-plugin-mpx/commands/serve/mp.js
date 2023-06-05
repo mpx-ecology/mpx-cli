@@ -7,6 +7,7 @@ const {
 } = require('../../utils/webpack')
 const { getReporter } = require('../../utils/reporter')
 const webpack = require('webpack')
+const { resolveMpWebpackConfig } = require('../../config/mp/base')
 
 const resolveMpServeWebpackConfig = (api, options, args) => {
   const customMpxEnv = args.env
@@ -34,9 +35,14 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
   api,
   options
 ) {
-  api.registerCommand('serve:mp', {}, function (args, rawArgv) {
+  api.registerCommand('serve:mp', {}, function (args, rawArgs) {
+    if (args.targets && !args.target) {
+      return api.service.commands.serve.fn(args, rawArgs)
+    }
     const target = parseTarget(args.target, options)
-
+    api.chainWebpack((config) => {
+      resolveMpWebpackConfig(api, options, config, target)
+    })
     // 小程序业务代码构建配置
     const webpackConfigs = resolveMpServeWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {

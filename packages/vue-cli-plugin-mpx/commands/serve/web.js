@@ -65,7 +65,10 @@ module.exports.registerWebServeCommand = (api, options) => {
       usage: 'vue-cli-service serve [options] [entry]',
       options: {}
     },
-    async function serve (args) {
+    async function serve (args, rawArgs) {
+      if (!args.targets) {
+        return api.service.commands.serve.fn({ ...args, targets: 'web' }, [rawArgs, '--targets=web'])
+      }
       // although this is primarily a dev server, it is possible that we
       // are running it in a mode with a production env, e.g. in E2E tests.
       const isInContainer = checkInContainer()

@@ -58,6 +58,9 @@ module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig
 
 module.exports.registerWebBuildCommand = (api, options) => {
   api.registerCommand('build:web', {}, async (args, rawArgs) => {
+    if (!args.targets) {
+      return api.service.commands.build.fn({ ...args, targets: 'web' }, [rawArgs, '--targets=web'])
+    }
     for (const key in defaults) {
       if (args[key] == null) {
         args[key] = defaults[key]
