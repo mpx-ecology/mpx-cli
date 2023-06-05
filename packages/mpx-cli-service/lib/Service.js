@@ -1,14 +1,7 @@
 const Service = require('@vue/cli-service')
 const PluginAPI = require('@vue/cli-service/lib/PluginAPI')
 
-const t = require('@vue/cli-shared-utils')
-
 process.env.CI = 't'
-
-t.logWithSpinner = () => {}
-t.stopSpinner = () => {}
-t.pauseSpinner = () => {}
-t.resumeSpinner = () => {}
 
 const originalChainWebpack = PluginAPI.prototype.chainWebpack
 const originalConfigureWebpack = PluginAPI.prototype.configureWebpack

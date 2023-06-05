@@ -18,7 +18,8 @@ test('normal', async () => {
       appid: 'test',
       description: 'test',
       cross: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 
@@ -42,7 +43,8 @@ test('test-ts', async () => {
       description: 'test',
       cross: true,
       needTs: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 
@@ -66,7 +68,8 @@ test('test-cloud-func', async () => {
       description: 'test',
       cross: true,
       cloudFunc: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 
@@ -90,7 +93,8 @@ test('test-cloud-func', async () => {
       description: 'test',
       cross: true,
       cloudFunc: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 
@@ -114,7 +118,8 @@ test('test-plugin', async () => {
       description: 'test',
       cross: true,
       isPlugin: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 
@@ -138,7 +143,8 @@ test('test-unit', async () => {
       description: 'test',
       cross: true,
       needUnitTest: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 
@@ -162,7 +168,8 @@ test('test-e2e', async () => {
       description: 'test',
       cross: true,
       needE2ETest: true,
-      plugins: {}
+      plugins: {},
+      useConfigFiles: true
     }
   )
 

@@ -104,6 +104,6 @@ module.exports = function (api, options) {
       postcss: '^8.2.6',
       webpack: '^5.43.0'
     },
-    browserslist: 'ios >= 8, chrome >= 47'
+    browserslist: ['ios >= 8', 'chrome >= 47']
   })
 }
