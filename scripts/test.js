@@ -53,13 +53,15 @@ function formatPrompts (mockPrompts) {
 
 async function invokeVueCliPlugin (pluginName, projectRoot, prompts) {
   await execa('vue', ['invoke', pluginName, ...prompts], {
-    cwd: projectRoot
+    cwd: projectRoot,
+    stdio: 'inherit'
   })
 }
 
 async function install (plugin, projectRoot) {
   await execa('yarn', ['add', plugin], {
-    cwd: projectRoot
+    cwd: projectRoot,
+    stdio: 'inherit'
   })
 }
 

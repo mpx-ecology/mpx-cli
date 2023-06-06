@@ -39,7 +39,13 @@ module.exports = [
   {
     name: 'needTs',
     type: 'confirm',
-    message: '是否需要typescript',
+    message: '是否需要使用typescript',
+    default: false
+  },
+  {
+    name: 'needUtilityFirstCSS',
+    type: 'confirm',
+    message: '是否需要使用原子类',
     default: false
   },
   {

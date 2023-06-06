@@ -1,0 +1,23 @@
+{
+  "name": "@mpxjs/vue-cli-plugin-mpx-utility-first-css",
+  "version": "1.6.30",
+  "description": "utility-first css plugin for mpx-cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "@mpxjs/windicss-plugin": "^2.8.28-beta.1"
+  },
+  "keywords": [
+    "mpx",
+    "utility-first css",
+    "windicss"
+  ],
+  "author": "hiyuki",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}

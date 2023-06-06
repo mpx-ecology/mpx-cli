@@ -30,6 +30,11 @@ const plugins = {
     [`${prefix}-web`]: {
       version: '^1.0.0'
     }
+  },
+  utilityFirstCSS: {
+    [`${prefix}-utility-first-css`]: {
+      version: '^1.0.0'
+    }
   }
   // TODO: 添加其他插件配置
 }
