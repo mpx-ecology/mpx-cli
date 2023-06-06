@@ -2,7 +2,13 @@ const path = require('path')
 const inquirer = require('inquirer')
 const fs = require('fs-extra')
 const validateProjectName = require('validate-npm-package-name')
-const { chalk, exit, error, log, stopSpinner } = require('@vue/cli-shared-utils')
+const {
+  chalk,
+  exit,
+  error,
+  log,
+  stopSpinner
+} = require('@vue/cli-shared-utils')
 const Creator = require('@vue/cli/lib/Creator')
 const loadRemotePreset = require('@vue/cli/lib/util/loadRemotePreset')
 const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
@@ -43,6 +49,16 @@ async function resolvePrompts () {
   return inquirer.prompt(prompts).then((answers) => answers)
 }
 
+function getCustomPluginsByPreset (preset) {
+  const customPlugin = {}
+  Object.keys(plugins).forEach(function (key) {
+    if (preset[key]) {
+      Object.assign(customPlugin, plugins[key])
+    }
+  })
+  return customPlugin
+}
+
 /**
  * 从vue-cli clone 下来，方便处理creator的创建以及生命周期管理
  * @param {*} projectName
@@ -63,28 +79,18 @@ async function create (projectName, options, preset = null) {
         exit(1)
       }
     } else {
-      preset = await resolvePrompts(projectName, builtInPreset)
+      preset = await resolvePrompts()
     }
   }
   // css preprocessor
   preset.cssPreprocessor = 'stylus'
   // mpx cli 插件
-  preset.plugins = Object.assign({}, preset.plugins, builtInPreset.plugins)
-  if (preset.needTs) {
-    Object.assign(preset.plugins, plugins.tsSupport)
-  }
-  if (preset.cloudFunc) {
-    Object.assign(preset.plugins, plugins.cloudFunc)
-  }
-  if (preset.isPlugin) {
-    Object.assign(preset.plugins, plugins.isPlugin)
-  }
-  if (preset.needUnitTest) {
-    Object.assign(preset.plugins, plugins.unitTestSupport)
-  }
-  if (preset.needE2ETest) {
-    Object.assign(preset.plugins, plugins.e2eTestSupport)
-  }
+  preset.plugins = Object.assign(
+    {},
+    preset.plugins,
+    builtInPreset.plugins,
+    getCustomPluginsByPreset(preset)
+  )
   // 设置代理
   if (options.proxy) {
     process.env.HTTP_PROXY = options.proxy
@@ -98,12 +104,14 @@ async function create (projectName, options, preset = null) {
   const result = validateProjectName(name)
   if (!result.validForNewPackages) {
     console.error(chalk.red(`Invalid project name: "${name}"`))
-    result.errors && result.errors.forEach(err => {
-      console.error(chalk.red.dim('Error: ' + err))
-    })
-    result.warnings && result.warnings.forEach(warn => {
-      console.error(chalk.red.dim('Warning: ' + warn))
-    })
+    result.errors &&
+      result.errors.forEach((err) => {
+        console.error(chalk.red.dim('Error: ' + err))
+      })
+    result.warnings &&
+      result.warnings.forEach((warn) => {
+        console.error(chalk.red.dim('Warning: ' + warn))
+      })
     exit(1)
   }
 
@@ -128,7 +136,9 @@ async function create (projectName, options, preset = null) {
           {
             name: 'action',
             type: 'list',
-            message: `Target directory ${chalk.cyan(targetDir)} already exists. Pick an action:`,
+            message: `Target directory ${chalk.cyan(
+              targetDir
+            )} already exists. Pick an action:`,
             choices: [
               { name: 'Overwrite', value: 'overwrite' },
               { name: 'Merge', value: 'merge' },
@@ -183,7 +193,7 @@ async function create (projectName, options, preset = null) {
 }
 
 module.exports = function (...args) {
-  return create(...args).catch(err => {
+  return create(...args).catch((err) => {
     stopSpinner(false) // do not persist
     error(err)
     if (!process.env.VUE_CLI_TEST) {

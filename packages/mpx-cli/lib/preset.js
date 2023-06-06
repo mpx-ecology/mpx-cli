@@ -1,3 +1,6 @@
+/**
+ * 默认preset
+ */
 module.exports = {
   cssPreprocessor: 'stylus',
   plugins: {

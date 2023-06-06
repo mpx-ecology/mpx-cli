@@ -1,17 +1,18 @@
 const prefix = '@mpxjs/vue-cli-plugin-mpx'
 
+// prompt值和插件对应结构
 const plugins = {
-  tsSupport: {
+  needTs: {
     [`${prefix}-typescript`]: {
       version: '^1.0.0'
     }
   },
-  unitTestSupport: {
+  needUnitTest: {
     [`${prefix}-unit-test`]: {
       version: '^1.0.0'
     }
   },
-  e2eTestSupport: {
+  needE2ETest: {
     [`${prefix}-e2e-test`]: {
       version: '^1.0.0'
     }
