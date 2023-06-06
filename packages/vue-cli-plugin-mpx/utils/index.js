@@ -52,6 +52,14 @@ function getTargets (args, options) {
   return targets.length ? targets : defaultTargets
 }
 
+function getCurrentTarget () {
+  const currentTarget = {
+    mode: process.env.MPX_CURRENT_TARGET_MODE,
+    env: process.env.MPX_CURRENT_TARGET_ENV
+  }
+  return currentTarget
+}
+
 function parseTarget (target = '', options = {}) {
   const mpxOptions = getMpxPluginOptions(options)
   let [mode, env] = target.split(':')
@@ -70,6 +78,7 @@ function runServiceCommand (command, rawArgv, options = {}) {
   return execa.node(mpxCliServiceBinPath, [command, ...rawArgv], options)
 }
 
+module.exports.getCurrentTarget = getCurrentTarget
 module.exports.runServiceCommand = runServiceCommand
 module.exports.removeArgv = removeArgv
 module.exports.makeMap = makeMap

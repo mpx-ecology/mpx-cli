@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const { parseTarget } = require('../../utils/index')
+const { parseTarget, getCurrentTarget } = require('../../utils/index')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
 const { resolveMpWebpackConfig } = require('../../config/mp/base')
@@ -31,10 +31,10 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
   options
 ) {
   api.registerCommand('serve:mp', {}, function (args, rawArgs) {
-    if ((args.targets && !args.target) || !args.target) {
+    const target = getCurrentTarget()
+    if ((args.targets && !target.mode) || !target.mode) {
       return api.service.commands.serve.fn(args, rawArgs)
     }
-    const target = parseTarget(args.target, options)
     api.chainWebpack((config) => {
       resolveMpWebpackConfig(api, options, config, target)
     })

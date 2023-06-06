@@ -1,5 +1,5 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { parseTarget } = require('../../utils/index')
+const { getCurrentTarget } = require('../../utils/index')
 const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const webpack = require('webpack')
@@ -8,7 +8,7 @@ const { resolveMpWebpackConfig } = require('../../config/mp/base')
 const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
   const customMpxEnv = args.env
-  const target = parseTarget(args.target, options)
+  const target = getCurrentTarget()
   return resolveWebpackConfigByTarget(api, options, (webpackConfig) => {
     const targetEnv = target.env
     if (targetEnv === 'production' || targetEnv === 'development') {
@@ -48,10 +48,10 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
   options
 ) {
   api.registerCommand('build:mp', {}, function (args, rawArgs) {
-    if ((args.targets && !args.target) || !args.target) {
+    const target = getCurrentTarget()
+    if ((args.targets && !target.mode) || !target.mode) {
       return api.service.commands.build.fn(args, rawArgs)
     }
-    const target = parseTarget(args.target, options)
     api.chainWebpack((config) => {
       resolveMpWebpackConfig(api, options, config, target)
     })

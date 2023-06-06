@@ -51,20 +51,16 @@ const logUpdate = new LogUpdate()
 function buildTargetInChildProcess (command, target, rawArgv) {
   const index = num++
   return new Promise((resolve, reject) => {
-    const ls = runServiceCommand(
-      command,
-      [...rawArgv, `--target=${target.mode}${target.env ? `:${target.env}` : ''}`],
-      {
-        env: {
-          ...process.env,
-          FORCE_COLOR: true,
-          MPX_CURRENT_TARGET_MODE: target.mode,
-          MPX_CURRENT_TARGET_ENV: target.env,
-          NODE_ENV: undefined
-        },
-        stderr: 'inherit'
-      }
-    )
+    const ls = runServiceCommand(command, rawArgv, {
+      env: {
+        ...process.env,
+        FORCE_COLOR: true,
+        MPX_CURRENT_TARGET_MODE: target.mode,
+        MPX_CURRENT_TARGET_ENV: target.env,
+        NODE_ENV: undefined
+      },
+      stderr: 'inherit'
+    })
     // 执行错误
     ls.catch(reject)
     // 进度条数据
