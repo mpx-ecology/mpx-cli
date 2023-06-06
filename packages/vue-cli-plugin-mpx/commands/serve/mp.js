@@ -31,7 +31,7 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
   options
 ) {
   api.registerCommand('serve:mp', {}, function (args, rawArgs) {
-    if (args.targets && !args.target) {
+    if ((args.targets && !args.target) || !args.target) {
       return api.service.commands.serve.fn(args, rawArgs)
     }
     const target = parseTarget(args.target, options)

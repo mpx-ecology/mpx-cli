@@ -48,7 +48,7 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
   options
 ) {
   api.registerCommand('build:mp', {}, function (args, rawArgs) {
-    if (args.targets && !args.target) {
+    if ((args.targets && !args.target) || !args.target) {
       return api.service.commands.build.fn(args, rawArgs)
     }
     const target = parseTarget(args.target, options)

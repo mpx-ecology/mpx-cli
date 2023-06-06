@@ -54,7 +54,8 @@ function getTargets (args, options) {
 
 function parseTarget (target = '', options = {}) {
   const mpxOptions = getMpxPluginOptions(options)
-  const [mode = mpxOptions.srcMode || SUPPORT_MODE[0], env] = target.split(':')
+  let [mode, env] = target.split(':')
+  if (!mode) mode = mpxOptions.srcMode || SUPPORT_MODE[0]
   return {
     mode,
     env
