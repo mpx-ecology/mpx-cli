@@ -66,7 +66,6 @@ npm run build
   --env        自定义 __mpx_env__
   --watch      监听文件变化
   --report     生成包分析报告
-  --open-child-process 开启子进程编译
 ```
 
 ```sh
@@ -74,7 +73,7 @@ npm run build
 mpx-cli-service build --targets=wx,ali
 ```
 
-**目前支持的小程序平台**
+**目前支持的平台**
 
 | 平台 | target |
 | ---- | ------ |
@@ -93,8 +92,8 @@ mpx-cli-service build --targets=wx,ali
 选项:
 
   --targets    编译到小程序目标(默认值: wx)
+  --mode       指定环境模式 (默认值：production)
   --env        自定义 __mpx_env__
-  --open-child-process 开启子进程编译
 ```
 
 ## 开发
@@ -140,7 +139,7 @@ module.exports = {
 
 - `MPX_CLI_MODE`: 'mp' | 'web'
 - `NODE_ENV`：'development' | 'production'
-- `MPX_CURRENT_TARGET_MODE`: 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd'
+- `MPX_CURRENT_TARGET_MODE`: 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd' | 'web'
 - `MPX_CURRENT_TARGET_ENV` : 'development' | 'production'
 
 ```javascript

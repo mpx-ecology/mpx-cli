@@ -1,6 +1,7 @@
 jest.mock('inquirer')
 
 const path = require('path')
+const fs = require('fs')
 const create = require('@mpxjs/cli/lib/create')
 
 test('normal', async () => {
@@ -25,6 +26,33 @@ test('normal', async () => {
 
   const pkg = require(path.resolve(cwd, name, 'package.json'))
   expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx')
+})
+
+/**
+ * 非跨平台项目不生成static/ali目录
+ */
+test('normal-nocross', async () => {
+  const cwd = path.resolve(__dirname, '../../test')
+  const name = 'normal-nocross'
+  await create(
+    name,
+    {
+      force: true,
+      git: false,
+      cwd
+    },
+    {
+      srcMode: 'wx',
+      appid: 'test',
+      description: 'test',
+      cross: false,
+      plugins: {},
+      useConfigFiles: true
+    }
+  )
+
+  const staticAliDir = fs.existsSync(path.resolve(cwd, name, 'static/ali'))
+  expect(staticAliDir).toBe(false)
 })
 
 test('test-ts', async () => {
