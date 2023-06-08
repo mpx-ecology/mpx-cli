@@ -49,9 +49,6 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
 ) {
   api.registerCommand('build:mp', {}, function (args, rawArgs) {
     const target = getCurrentTarget()
-    if ((args.targets && !target.mode) || !target.mode) {
-      return api.service.commands.build.fn(args, rawArgs)
-    }
     api.chainWebpack((config) => {
       resolveMpWebpackConfig(api, options, config, target)
     })

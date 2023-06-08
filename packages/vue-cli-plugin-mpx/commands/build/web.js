@@ -1,13 +1,6 @@
 const webpack = require('webpack')
 const { modifyConfig, handleWebpackDone } = require('../../utils/webpack')
-const { parseTarget } = require('../../utils')
-
-const defaults = {
-  clean: true,
-  target: 'app',
-  module: true,
-  formats: 'commonjs,umd,umd-min'
-}
+const { getCurrentTarget } = require('../../utils')
 
 const resolveWebBuildWebpackConfig = (api, options, args) => {
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
@@ -54,17 +47,6 @@ module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig
 
 module.exports.registerWebBuildCommand = (api, options) => {
   api.registerCommand('build:web', {}, async (args, rawArgs) => {
-    if (!args.targets) {
-      return api.service.commands.build.fn({ ...args, targets: 'web' }, [
-        rawArgs,
-        '--targets=web'
-      ])
-    }
-    for (const key in defaults) {
-      if (args[key] == null) {
-        args[key] = defaults[key]
-      }
-    }
     const moduleBuildArgs = { ...args, moduleBuild: true, clean: false }
     await build(moduleBuildArgs, api, options)
   })
@@ -73,7 +55,7 @@ module.exports.registerWebBuildCommand = (api, options) => {
 async function build (args, api, options) {
   const fs = require('fs-extra')
   const targetDir = api.resolve('dist/web')
-  const target = parseTarget(args.target, options)
+  const target = getCurrentTarget()
   Object.assign(options, { outputDir: targetDir })
 
   // resolve raw webpack config

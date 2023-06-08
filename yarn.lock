@@ -2891,6 +2891,30 @@
   resolved "https://registry.yarnpkg.com/@mpxjs/utils/-/utils-2.8.15.tgz#fe53dc8184191e39c6b0d2f365ba19be1befcb46"
   integrity sha512-K2iaS8sIEbD5xKtSg8xugh694AOP4Q2CFu49XcgKT2JSvpvX/nMNdxMO3lRPdPTquzz3r+VFOAT9TplEx10EOQ==
 
+"@mpxjs/vue-cli-plugin-mpx-mp@^1.6.30":
+  version "1.6.30"
+  resolved "https://registry.yarnpkg.com/@mpxjs/vue-cli-plugin-mpx-mp/-/vue-cli-plugin-mpx-mp-1.6.30.tgz#5829cc83076d536dbc188bd9f3bd806b8346cd61"
+  integrity sha512-DGuP10PXMvSs815cj85LoQaoy7+Qno/q8xE4e0N+MHoXXjrbbGsx5M6BwkZ9kAoCYyERfQpFhRWzAJn3FUR+MA==
+  dependencies:
+    "@mpxjs/vue-cli-plugin-mpx" "1.6.30"
+    "@soda/friendly-errors-webpack-plugin" "^1.8.0"
+    "@vue/cli-shared-utils" "^5.0.4"
+    copy-webpack-plugin "^9.1.0"
+    execa "^4.1.0"
+    process "0.11.10"
+    terser-webpack-plugin "^5.3.6"
+    webpack-bundle-analyzer "^4.5.0"
+    webpack-chain "^6.5.1"
+    webpack-merge "^5.8.0"
+
+"@mpxjs/vue-cli-plugin-mpx-web@^1.6.30":
+  version "1.6.30"
+  resolved "https://registry.yarnpkg.com/@mpxjs/vue-cli-plugin-mpx-web/-/vue-cli-plugin-mpx-web-1.6.30.tgz#2b8d0ceeeab73f684c797a6d088faa287c6171a8"
+  integrity sha512-T16yXurvBzuNTYdo9vNdKUSr8zzQloOkktsHkMr8p8sRCqqXvHHvluxEN02SWa6hKiQ521xkboHhBRthvUi/8g==
+  dependencies:
+    "@mpxjs/vue-cli-plugin-mpx" "1.6.30"
+    "@vue/vue-loader-v15" "npm:vue-loader@^15.9.7"
+
 "@mpxjs/webpack-plugin@^2.7.0":
   version "2.8.32"
   resolved "https://registry.yarnpkg.com/@mpxjs/webpack-plugin/-/webpack-plugin-2.8.32.tgz#65c5b980d8eb273bf08709b22890e75dad6c9bb5"
@@ -7603,7 +7627,7 @@ execa@^3.3.0:
     signal-exit "^3.0.2"
     strip-final-newline "^2.0.0"
 
-execa@^4.0.2:
+execa@^4.0.2, execa@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/execa/-/execa-4.1.0.tgz#4e5491ad1572f2f17a77d388c6c857135b22847a"
   integrity sha512-j5W0//W7f8UxAn8hXVnwG8tLwdiUy4FJLcSupCg6maBYZDpyBvTApK7KyuI4bKj8KOh1r2YH+6ucuYtJv1bTZA==

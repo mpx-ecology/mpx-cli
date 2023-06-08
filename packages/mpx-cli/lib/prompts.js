@@ -19,7 +19,10 @@ module.exports = [
     when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
     message: '是否需要使用小程序云开发能力',
     type: 'confirm',
-    default: false
+    default: false,
+    preset: {
+      plugins: []
+    }
   },
   {
     name: 'isPlugin',

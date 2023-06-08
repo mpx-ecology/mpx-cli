@@ -32,9 +32,6 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
 ) {
   api.registerCommand('serve:mp', {}, function (args, rawArgs) {
     const target = getCurrentTarget()
-    if ((args.targets && !target.mode) || !target.mode) {
-      return api.service.commands.serve.fn(args, rawArgs)
-    }
     api.chainWebpack((config) => {
       resolveMpWebpackConfig(api, options, config, target)
     })
