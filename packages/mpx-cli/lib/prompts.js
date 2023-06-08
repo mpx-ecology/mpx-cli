@@ -25,7 +25,7 @@ module.exports = [
     preset: {
       plugins: {
         [`${prefix}-cloud-func`]: {
-          version: '^1.0.0'
+          version: '^2.0.0'
         }
       }
     }
@@ -40,7 +40,7 @@ module.exports = [
     preset: {
       plugins: {
         [`${prefix}-plugin-mode`]: {
-          version: '^1.0.0'
+          version: '^2.0.0'
         }
       }
     }
@@ -53,7 +53,7 @@ module.exports = [
     preset: {
       plugins: {
         [`${prefix}-typescript`]: {
-          version: '^1.0.0'
+          version: '^2.0.0'
         }
       }
     }
@@ -66,7 +66,7 @@ module.exports = [
     preset: {
       plugins: {
         [`${prefix}-unit-test`]: {
-          version: '^1.0.0'
+          version: '^2.0.0'
         }
       }
     }
@@ -79,7 +79,7 @@ module.exports = [
     preset: {
       plugins: {
         [`${prefix}-e2e-test`]: {
-          version: '^1.0.0'
+          version: '^2.0.0'
         }
       }
     }
