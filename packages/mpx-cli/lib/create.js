@@ -15,8 +15,8 @@ const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { clearConsole } = require('@vue/cli/lib/util/clearConsole')
 const { linkBin } = require('@vue/cli/lib/util/linkBin')
+const merge = require('lodash.merge')
 const prompts = require('./prompts')
-const plugins = require('./plugins')
 const builtInPreset = require('./preset')
 
 async function resolvePreset (args = {}) {
@@ -49,16 +49,6 @@ async function resolvePrompts () {
   return inquirer.prompt(prompts).then((answers) => answers)
 }
 
-function getCustomPluginsByPreset (preset) {
-  const customPlugin = {}
-  Object.keys(plugins).forEach(function (key) {
-    if (preset[key]) {
-      Object.assign(customPlugin, plugins[key])
-    }
-  })
-  return customPlugin
-}
-
 /**
  * 从vue-cli clone 下来，方便处理creator的创建以及生命周期管理
  * @param {*} projectName
@@ -84,13 +74,21 @@ async function create (projectName, options, preset = null) {
   }
   // css preprocessor
   preset.cssPreprocessor = 'stylus'
+
   // mpx cli 插件
   preset.plugins = Object.assign(
     {},
     preset.plugins,
-    builtInPreset.plugins,
-    getCustomPluginsByPreset(preset)
+    builtInPreset.plugins
   )
+
+  // 合并问答中的preset
+  prompts.forEach(v => {
+    if (preset[v.name]) {
+      merge(preset, v.preset)
+    }
+  })
+
   // 设置代理
   if (options.proxy) {
     process.env.HTTP_PROXY = options.proxy

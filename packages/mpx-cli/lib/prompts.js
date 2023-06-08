@@ -1,3 +1,5 @@
+const prefix = '@mpxjs/vue-cli-plugin-mpx'
+
 module.exports = [
   {
     name: 'srcMode',
@@ -21,7 +23,11 @@ module.exports = [
     type: 'confirm',
     default: false,
     preset: {
-      plugins: []
+      plugins: {
+        [`${prefix}-cloud-func`]: {
+          version: '^1.0.0'
+        }
+      }
     }
   },
   {
@@ -30,25 +36,53 @@ module.exports = [
     type: 'confirm',
     message:
       '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-plugin-mode`]: {
+          version: '^1.0.0'
+        }
+      }
+    }
   },
   {
     name: 'needTs',
     type: 'confirm',
     message: '是否需要typescript',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-typescript`]: {
+          version: '^1.0.0'
+        }
+      }
+    }
   },
   {
     name: 'needUnitTest',
     message: '是否需要单元测试',
     type: 'confirm',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-unit-test`]: {
+          version: '^1.0.0'
+        }
+      }
+    }
   },
   {
     name: 'needE2ETest',
     message: '是否需要自动化测试',
     type: 'confirm',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-e2e-test`]: {
+          version: '^1.0.0'
+        }
+      }
+    }
   },
   {
     name: 'description',
