@@ -22,6 +22,7 @@
     - [template 相关](#template-%E7%9B%B8%E5%85%B3)
   - [配置](#%E9%85%8D%E7%BD%AE)
     - [vue.config.js](#vueconfigjs)
+  - [mpx-cli 插件 1.0 升级到 2.0](#mpx-cli-%E6%8F%92%E4%BB%B6-10-%E5%8D%87%E7%BA%A7%E5%88%B0-20)
   - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
   - [cli 相关介绍](#cli-%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D)
 
@@ -276,6 +277,15 @@ module.exports = {
   }
 }
 ```
+
+## mpx-cli 插件 1.0 升级到 2.0
+
+插件1.0和2.0在构建流程上做了很大的改动，所以如果需要从1.0 升级到 2.0，需要做以下改动
+
+1. npm uninstall @mpxjs/vue-cli-plugin-mpx-mp @mpxjs/vue-cli-plugin-mpx-web
+2. 修改 `package.json` 里的`build:mp`为`build`,`serve:mp`为`serve`
+
+之后正常运行命令即可
 
 ## 开发插件
 
