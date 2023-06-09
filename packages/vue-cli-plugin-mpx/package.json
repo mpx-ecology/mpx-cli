@@ -16,6 +16,7 @@
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^9.1.0",
     "cli-highlight": "^2.1.10",
+    "execa": "^5.0.0",
     "launch-editor-middleware": "^2.2.1",
     "minimist": "^1.2.5",
     "portfinder": "^1.0.26",
@@ -26,7 +27,8 @@
     "webpack-chain": "^6.5.1",
     "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.8.0",
-    "wrap-ansi": "^5.1.0"
+    "wrap-ansi": "^5.1.0",
+    "webpackbar": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
