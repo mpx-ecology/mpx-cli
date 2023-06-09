@@ -4,7 +4,6 @@ const execa = require('execa')
 const minimist = require('minimist')
 
 const parsedArgs = minimist(process.argv.slice(2))
-console.log('file: sync-mirror.js:7 > parsedArgs:', parsedArgs.mirror)
 
 Promise.all(
   glob
