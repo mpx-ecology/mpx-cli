@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@vue/cli-service": "^5.0.0",
-    "@vue/cli-shared-utils": "^5.0.4"
+    "@vue/cli-shared-utils": "^5.0.4",
+    "minimist": "^1.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

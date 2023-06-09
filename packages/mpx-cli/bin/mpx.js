@@ -2,7 +2,7 @@
 const program = require('commander')
 const minimist = require('minimist')
 const { doVueCli } = require('../utils')
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 
 program
   .version(`@mpx/cli ${require('../package').version}`)

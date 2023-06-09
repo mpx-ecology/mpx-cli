@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 const ansiEscapes = require('ansi-escapes')
 const wrapAnsi = require('wrap-ansi')
 const originalWrite = Symbol('webpackbarWrite')

@@ -11,6 +11,7 @@
     "lint": "npx eslint --fix . --ext .js",
     "prepare": "husky install",
     "release": "release-it",
+    "release:cli": "release-it --cli",
     "pretest": "yarn clean",
     "test": "node ./scripts/test.js"
   },
@@ -42,6 +43,7 @@
     "lerna": "^3.22.1",
     "lerna-changelog": "^2.2.0",
     "lint-staged": "^9.5.0",
+    "minimist": "^1.2.8",
     "ora": "^5.0.1",
     "release-it": "^14.13.1",
     "release-it-yarn-workspaces": "^2.0.1",

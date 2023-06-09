@@ -1,4 +1,4 @@
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 
 module.exports = function () {
   console.log(chalk.bold('\nEnvironment Info:'))

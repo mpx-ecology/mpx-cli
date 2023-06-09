@@ -1,4 +1,4 @@
-const execa = require('execa')
+const { execa } = require('@vue/cli-shared-utils')
 const vueCliBinPath = require.resolve('@vue/cli/bin/vue')
 
 module.exports.regenCmd = function regenCmd (parsedArgs) {
