@@ -11,6 +11,7 @@
     "lint": "npx eslint --fix . --ext .js",
     "prepare": "husky install",
     "release": "release-it",
+    "release:cli": "cd packages/mpx-cli && release-it",
     "pretest": "yarn clean",
     "test": "node ./scripts/test.js"
   },
