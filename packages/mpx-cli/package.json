@@ -10,9 +10,12 @@
   "license": "Apache",
   "dependencies": {
     "@vue/cli": "^5.0.0",
-    "execa": "^4.1.0",
     "lodash.merge": "^4.6.2",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
+    "cmd-shim": "^4.1.0"
   },
   "engines": {
     "node": ">=8.9"

@@ -1,25 +1,35 @@
 {
   "name": "root",
+  "version": "1.6.30",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "release": "release-it",
-    "test": "node ./scripts/test.js",
+    "changelog": "node ./scripts/genChangelog.js",
+    "clean": "rimraf packages/test/* packages/**/temp/*",
     "lint": "npx eslint --fix . --ext .js",
     "prepare": "husky install",
-    "changelog": "node ./scripts/genChangelog.js"
+    "release": "release-it",
+    "pretest": "yarn clean",
+    "test": "node ./scripts/test.js"
   },
   "lint-staged": {
     "*.js": [
       "npm run lint"
     ]
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none"
+  },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@vue/cli-test-utils": "5.0.8",
     "@vue/eslint-config-standard": "^6.1.0",
+    "babel-jest": "^27.0.6",
     "dotenv": "^16.0.1",
     "eslint": "^7.28.0",
     "eslint-plugin-import": "^2.23.4",
@@ -28,6 +38,7 @@
     "execa": "^5.0.0",
     "glob": "^7.2.0",
     "husky": "^6.0.0",
+    "jest": "^27.0.6",
     "lerna": "^3.22.1",
     "lerna-changelog": "^2.2.0",
     "lint-staged": "^9.5.0",
@@ -35,11 +46,5 @@
     "release-it": "^14.13.1",
     "release-it-yarn-workspaces": "^2.0.1",
     "semver": "^7.3.4"
-  },
-  "prettier": {
-    "semi": false,
-    "trailingComma": "none",
-    "singleQuote": true
-  },
-  "version": "1.6.30"
+  }
 }

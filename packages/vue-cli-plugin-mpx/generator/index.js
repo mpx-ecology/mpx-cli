@@ -17,6 +17,8 @@ module.exports = function (api, options) {
     return files
   })
 
+  require('./web')(api, options)
+
   // 删除 @vue/cli-service 内置的 npm script
   api.extendPackage((pkg) => {
     delete pkg.scripts.serve
@@ -77,8 +79,8 @@ module.exports = function (api, options) {
 
   api.extendPackage({
     scripts: {
-      serve: 'mpx-cli-service serve:mp',
-      build: 'mpx-cli-service build:mp'
+      serve: 'mpx-cli-service serve',
+      build: 'mpx-cli-service build'
     },
     dependencies: {
       '@mpxjs/api-proxy': '^2.8.0',
@@ -87,7 +89,12 @@ module.exports = function (api, options) {
       '@mpxjs/pinia': '^2.8.0',
       '@mpxjs/utils': '^2.8.0',
       '@mpxjs/fetch': '^2.8.0',
-      pinia: '^2.0.14'
+      // web的相关
+      pinia: '^2.0.14',
+      'vue-demi': '^0.13.11',
+      'vue-i18n': '^8.27.2',
+      'vue-i18n-bridge': '^9.2.2',
+      'vue-router': '^3.1.3'
     },
     devDependencies: {
       '@mpxjs/webpack-plugin': '^2.8.0',
@@ -97,17 +104,6 @@ module.exports = function (api, options) {
       postcss: '^8.2.6',
       webpack: '^5.43.0'
     },
-    browserslist: 'ios >= 8, chrome >= 47'
+    browserslist: ['ios >= 8', 'chrome >= 47']
   })
-
-  if (options.transWeb) {
-    api.extendPackage({
-      dependencies: {
-        'vue-demi': '^0.13.11',
-        'vue-i18n': '^8.27.2',
-        'vue-i18n-bridge': '^9.2.2',
-        'vue-router': '^3.1.3'
-      }
-    })
-  }
 }

@@ -18,6 +18,7 @@ module.exports = function (api, options, webpackConfig) {
   const transpileDepRegex = genTranspileDepRegex(
     options.transpileDependencies || []
   )
+
   webpackConfig.module
     .rule('js')
     .test(/\.js$/)
@@ -53,8 +54,6 @@ module.exports = function (api, options, webpackConfig) {
 
   addDepConfig([
     '@mpxjs/vue-cli-plugin-mpx',
-    '@mpxjs/vue-cli-plugin-mpx-mp',
-    '@mpxjs/vue-cli-plugin-mpx-web',
     '@mpxjs/vue-cli-plugin-mpx-plugin-mode',
     '@mpxjs/vue-cli-plugin-mpx-typescript',
     '@mpxjs/vue-cli-plugin-mpx-eslint',
