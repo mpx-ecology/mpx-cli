@@ -14,7 +14,6 @@ const loadRemotePreset = require('@vue/cli/lib/util/loadRemotePreset')
 const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { clearConsole } = require('@vue/cli/lib/util/clearConsole')
-const { linkBin } = require('@vue/cli/lib/util/linkBin')
 const merge = require('lodash.merge')
 const prompts = require('./prompts')
 const builtInPreset = require('./preset')
@@ -174,6 +173,7 @@ async function create (projectName, options, preset = null) {
 
   if (process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG) {
     // 单测下，link bin文件到源码
+    const { linkBin } = require('@vue/cli/lib/util/linkBin')
     creator.on('creation', ({ event }) => {
       if (event === 'plugins-install') {
         linkBin(
