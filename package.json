@@ -13,7 +13,8 @@
     "release": "release-it",
     "release:cli": "cd packages/mpx-cli && release-it",
     "pretest": "yarn clean",
-    "test": "node ./scripts/test.js"
+    "test": "node ./scripts/test.js",
+    "sync": "node ./scripts/sync-mirror --mirror=https://npmmirror.com/sync/"
   },
   "lint-staged": {
     "*.js": [
