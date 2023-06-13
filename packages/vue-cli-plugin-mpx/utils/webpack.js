@@ -3,7 +3,7 @@ const { runServiceCommand } = require('./index')
 const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
 const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
 const { LogUpdate, getReporter } = require('./reporter')
-const { extractResultFromStats, extractErrorsFromStats } = require('./output')
+const { extractResultFromStats } = require('./output')
 
 /**
  * 获取基础配置通过构建目标，该方法会运行插件方法并增加默认配置
@@ -108,7 +108,6 @@ module.exports.handleWebpackDone = function (err, stats, target) {
         : 'successfully'
     const result = []
     if (hasErrors) result.push(extractResultFromStats(stats))
-    if (hasWarnings) result.push(extractErrorsFromStats(stats, 'warnings'))
     if (!hasErrors) result.push(extractResultFromStats(stats))
     getReporter()._renderStates(
       stats.stats.map((v) => {

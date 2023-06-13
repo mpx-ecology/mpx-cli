@@ -4,7 +4,6 @@ const { getCurrentTarget } = require('../../utils')
 
 const resolveWebBuildWebpackConfig = (api, options, args) => {
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
-  const isLegacyBuild = args.needsDifferentialLoading && !args.moduleBuild
   // resolve raw webpack config
   const webpackConfig =
     require('@vue/cli-service/lib/commands/build/resolveAppConfig')(
@@ -13,7 +12,7 @@ const resolveWebBuildWebpackConfig = (api, options, args) => {
       options
     )
   // check for common config errors
-  validateWebpackConfig(webpackConfig, api, options, args.target)
+  validateWebpackConfig(webpackConfig, api, options)
   if (args.watch) {
     modifyConfig(webpackConfig, (config) => {
       config.watch = true
@@ -22,19 +21,13 @@ const resolveWebBuildWebpackConfig = (api, options, args) => {
   if (args.report) {
     const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
     modifyConfig(webpackConfig, (config) => {
-      const bundleName =
-        args.target !== 'app'
-          ? config.output.filename.replace(/\.js$/, '-')
-          : isLegacyBuild
-            ? 'legacy-'
-            : ''
       config.plugins.push(
         new BundleAnalyzerPlugin({
           logLevel: 'warn',
           openAnalyzer: false,
           analyzerMode: args.report ? 'static' : 'disabled',
-          reportFilename: `${bundleName}report.html`,
-          statsFilename: `${bundleName}report.json`,
+          reportFilename: 'report.html',
+          statsFilename: 'report.json',
           generateStatsFile: !!args.report
         })
       )

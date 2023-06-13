@@ -15,26 +15,14 @@ module.exports.registerInspectCommand = function registerInspectCommand (
   api.registerCommand(
     'inspect:mp',
     {
-      description: 'inspect',
+      description: 'inspect mp',
       usage: 'mpx-cli-service inspect:mp'
     },
     (args, rawArgs) => {
       const target = getCurrentTarget()
-      if ((args.targets && !target.mode) || !target.mode) {
-        return api.service.commands.inspect.fn(args, rawArgs)
-      }
       const { verbose } = args
       if (target.env) process.env.NODE_ENV = target.env
-      const res =
-        target.mode === 'web'
-          ? resolveWebBuildWebpackConfig(api, options, {
-            ...args,
-            target: `${target.mode}:${target.env}`
-          })
-          : resolveMpBuildWebpackConfig(api, options, {
-            ...args,
-            target: `${target.mode}:${target.env}`
-          })
+      const res = resolveMpBuildWebpackConfig(api, options, args)
       const output = toString(res, { verbose })
       console.log(highlight(output, { language: 'js' }))
     }
@@ -42,11 +30,16 @@ module.exports.registerInspectCommand = function registerInspectCommand (
   api.registerCommand(
     'inspect:web',
     {
-      description: 'inspect',
+      description: 'inspect web',
       usage: 'mpx-cli-service inspect:web'
     },
     (args, rawArgs) => {
-      return api.service.commands.inspect.fn({ args, targets: 'web' }, [...rawArgs, '--targets=web'])
+      const target = getCurrentTarget()
+      const { verbose } = args
+      if (target.env) process.env.NODE_ENV = target.env
+      const res = resolveWebBuildWebpackConfig(api, options, args)
+      const output = toString(res, { verbose })
+      console.log(highlight(output, { language: 'js' }))
     }
   )
   api.registerCommand(
@@ -59,16 +52,20 @@ module.exports.registerInspectCommand = function registerInspectCommand (
       const targets = getTargets(args, options)
       // 小程序业务代码构建配置
       for (const target of targets) {
-        await runServiceCommand('inspect:mp', rawArgs, {
-          env: {
-            ...process.env,
-            FORCE_COLOR: true,
-            MPX_CURRENT_TARGET_MODE: target.mode,
-            MPX_CURRENT_TARGET_ENV: target.env,
-            NODE_ENV: undefined
-          },
-          stdio: 'inherit'
-        })
+        await runServiceCommand(
+          target.mode === 'web' ? 'inspect:web' : 'inspect:mp',
+          rawArgs,
+          {
+            env: {
+              ...process.env,
+              FORCE_COLOR: true,
+              MPX_CURRENT_TARGET_MODE: target.mode,
+              MPX_CURRENT_TARGET_ENV: target.env,
+              NODE_ENV: undefined
+            },
+            stdio: 'inherit'
+          }
+        )
       }
     }
   )

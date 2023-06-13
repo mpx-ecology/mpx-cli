@@ -17,6 +17,7 @@
     "copy-webpack-plugin": "^9.1.0",
     "cli-highlight": "^2.1.10",
     "execa": "^5.0.0",
+    "fs-extra": "^9.1.0",
     "launch-editor-middleware": "^2.2.1",
     "minimist": "^1.2.5",
     "portfinder": "^1.0.26",

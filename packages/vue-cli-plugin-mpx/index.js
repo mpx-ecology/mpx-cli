@@ -32,5 +32,5 @@ module.exports.defaultModes = {
   'serve:mp': 'development',
   'serve:web': 'development',
   'build:mp': 'production',
-  'build:web': 'development'
+  'build:web': 'production'
 }
