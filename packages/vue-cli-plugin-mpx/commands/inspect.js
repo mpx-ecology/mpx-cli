@@ -58,7 +58,6 @@ module.exports.registerInspectCommand = function registerInspectCommand (
           {
             env: {
               ...process.env,
-              FORCE_COLOR: true,
               MPX_CURRENT_TARGET_MODE: target.mode,
               MPX_CURRENT_TARGET_ENV: target.env,
               NODE_ENV: undefined
