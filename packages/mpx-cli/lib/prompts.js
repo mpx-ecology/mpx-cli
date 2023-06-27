@@ -93,7 +93,7 @@ module.exports = [
   },
   {
     name: 'appid',
-    when: ({ srcMode }) => srcMode === 'wx',
+    when: ({ srcMode }) => srcMode === 'wx' || srcMode === 'dd',
     required: true,
     message: '请输入小程序的Appid',
     default: 'touristappid'
