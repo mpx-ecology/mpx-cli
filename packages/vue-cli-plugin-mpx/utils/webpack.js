@@ -107,8 +107,7 @@ module.exports.handleWebpackDone = function (err, stats, target) {
         ? 'with some warnings'
         : 'successfully'
     const result = []
-    if (hasErrors) result.push(extractResultFromStats(stats))
-    if (hasWarnings) result.push(extractErrorsFromStats(stats, 'warnings'))
+    if (hasErrors) result.push(extractErrorsFromStats(stats))
     if (!hasErrors) result.push(extractResultFromStats(stats))
     getReporter()._renderStates(
       stats.stats.map((v) => {

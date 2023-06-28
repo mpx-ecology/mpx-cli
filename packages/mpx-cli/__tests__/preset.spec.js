@@ -28,6 +28,30 @@ test('normal', async () => {
   expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx')
 })
 
+test('normal-didi', async () => {
+  const cwd = path.resolve(__dirname, '../../test')
+  const name = 'test-normal-didi'
+  await create(
+    name,
+    {
+      force: true,
+      git: false,
+      cwd
+    },
+    {
+      srcMode: 'dd',
+      description: 'test',
+      appid: 'dd-test',
+      cross: true,
+      plugins: {},
+      useConfigFiles: true
+    }
+  )
+
+  const pkg = require(path.resolve(cwd, name, 'package.json'))
+  expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx')
+})
+
 /**
  * 非跨平台项目不生成static/ali目录
  */
