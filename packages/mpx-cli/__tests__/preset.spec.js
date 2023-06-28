@@ -41,6 +41,7 @@ test('normal-didi', async () => {
     {
       srcMode: 'dd',
       description: 'test',
+      appid: 'dd-test',
       cross: true,
       plugins: {},
       useConfigFiles: true
