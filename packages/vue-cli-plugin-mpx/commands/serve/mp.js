@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const { parseTarget, getCurrentTarget } = require('../../utils/index')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
-const { resolveMpWebpackConfig } = require('../../config/mp/base')
 
 const resolveMpServeWebpackConfig = (api, options, args) => {
   const customMpxEnv = args.env
@@ -32,9 +31,6 @@ module.exports.registerMpServeCommand = function registerMpServeCommand (
 ) {
   api.registerCommand('serve:mp', {}, function (args, rawArgs) {
     const target = getCurrentTarget()
-    api.chainWebpack((config) => {
-      resolveMpWebpackConfig(api, options, config, target)
-    })
     // 小程序业务代码构建配置
     const webpackConfigs = resolveMpServeWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {

@@ -3,13 +3,12 @@ const { getCurrentTarget } = require('../../utils/index')
 const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const webpack = require('webpack')
-const { resolveMpWebpackConfig } = require('../../config/mp/base')
 
 const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
   const customMpxEnv = args.env
   const target = getCurrentTarget()
-  return resolveWebpackConfigByTarget(api, options, (webpackConfig) => {
+  return resolveWebpackConfigByTarget(api, options, target, (webpackConfig) => {
     const targetEnv = target.env
     if (targetEnv === 'production' || targetEnv === 'development') {
       webpackConfig.mode(targetEnv === 'production' ? targetEnv : 'none')
@@ -49,9 +48,6 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
 ) {
   api.registerCommand('build:mp', {}, function (args, rawArgs) {
     const target = getCurrentTarget()
-    api.chainWebpack((config) => {
-      resolveMpWebpackConfig(api, options, config, target)
-    })
     // 小程序业务代码构建配置
     const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {
