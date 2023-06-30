@@ -29,7 +29,7 @@
     "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.8.0",
     "wrap-ansi": "^5.1.0",
-    "webpackbar": "^3.0.0"
+    "webpackbar": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
