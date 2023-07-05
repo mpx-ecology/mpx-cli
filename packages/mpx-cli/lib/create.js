@@ -186,6 +186,7 @@ async function create (projectName, options, preset = null) {
 
   await creator.create({
     ...options,
+    preset: undefined,
     inlinePreset: JSON.stringify(preset)
   })
 }
