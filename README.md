@@ -35,6 +35,8 @@
 npm i @mpxjs/cli -g
 ```
 
+> 如果插件版本是2.x以上，需要前往https://github.com/mpx-ecology/mpx-cli/tree/next  查看文档
+
 ## 使用
 
 ```sh
