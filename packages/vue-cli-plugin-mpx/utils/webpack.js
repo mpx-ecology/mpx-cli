@@ -59,7 +59,7 @@ function buildTargetInChildProcess (command, target, rawArgv) {
         MPX_CURRENT_TARGET_ENV: target.env,
         NODE_ENV: undefined
       },
-      stderr: 'inherit'
+      stdio: 'inherit'
     })
     // 执行错误
     ls.catch(reject)
@@ -76,14 +76,6 @@ function buildTargetInChildProcess (command, target, rawArgv) {
         chunks[index] = data.message
         logUpdate.render(chunks.join('\n\n'))
       }
-    })
-    // render过程中，其它的数据在结束后展示
-    let output = ''
-    ls.stdout.addListener('data', (d) => {
-      output += `${d}`
-    })
-    ls.on('close', () => {
-      console.log(output)
     })
   })
 }
