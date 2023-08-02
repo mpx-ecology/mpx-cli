@@ -59,7 +59,7 @@ function buildTargetInChildProcess (command, target, rawArgv) {
         MPX_CURRENT_TARGET_ENV: target.env,
         NODE_ENV: undefined
       },
-      stderr: 'inherit'
+      stdio: 'inherit'
     })
     // 执行错误
     ls.catch(reject)
