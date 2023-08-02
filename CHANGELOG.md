@@ -1,4 +1,15 @@
 
+## 2.0.5 (2023-08-02)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx`
+  * [#71](https://github.com/mpx-ecology/mpx-cli/pull/71) Bugfix/web css loader options ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 
