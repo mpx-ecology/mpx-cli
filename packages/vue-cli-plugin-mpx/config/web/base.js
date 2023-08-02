@@ -9,11 +9,19 @@ const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getReporter } = require('../../utils/reporter')
 
 function changeStyleVueRuleToMpx (webpackConfig, name) {
-  webpackConfig.module.rule(name).oneOfs.get('vue').name = 'mpx'
-  webpackConfig.module.rule(name).oneOfs.get('vue').names = [name, 'mpx']
+  const store = webpackConfig.module.rule(name).oneOfs.store
+  const value = store.get('vue')
+  value.name = 'mpx'
+  value.names = [name, 'mpx']
+  store.delete('vue')
+  store.set('mpx', value)
 }
 
-module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (api, options = {}, webpackConfig) {
+module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (
+  api,
+  options = {},
+  webpackConfig
+) {
   webpackConfig.name('web-compiler')
   transformMpxEntry(api, options, webpackConfig, true)
   try {
@@ -23,9 +31,7 @@ module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (api, 
     changeStyleVueRuleToMpx(webpackConfig, 'less')
     changeStyleVueRuleToMpx(webpackConfig, 'scss')
     changeStyleVueRuleToMpx(webpackConfig, 'postcss')
-  } catch (error) {
-
-  }
+  } catch (error) {}
   const mpxLoader = resolveMpxLoader(api, options)
   webpackConfig.plugins.delete('friendly-errors')
   webpackConfig.module
@@ -71,7 +77,10 @@ module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (api, 
   webpackConfig.plugin('webpackbar').use(WebpackBar, [
     {
       color: 'orange',
-      name: process.env.MPX_CURRENT_TARGET_MODE + (process.env.VUE_CLI_MODERN_BUILD === 'true' ? '-modern' : '') + '-compiler',
+      name:
+        process.env.MPX_CURRENT_TARGET_MODE +
+        (process.env.VUE_CLI_MODERN_BUILD === 'true' ? '-modern' : '') +
+        '-compiler',
       basic: false,
       reporter: getReporter()
     }

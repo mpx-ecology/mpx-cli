@@ -77,14 +77,6 @@ function buildTargetInChildProcess (command, target, rawArgv) {
         logUpdate.render(chunks.join('\n\n'))
       }
     })
-    // render过程中，其它的数据在结束后展示
-    let output = ''
-    ls.stdout.addListener('data', (d) => {
-      output += `${d}`
-    })
-    ls.on('close', () => {
-      console.log(output)
-    })
   })
 }
 
