@@ -1,10 +1,16 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
-const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const { MODE_CONFIG_FILES_MAP, SUPPORT_MODE } = require('../../constants/mode')
 const { getMpxPluginOptions } = require('../../utils')
+const {
+  resolveMpxWebpackPluginConf
+} = require('../resolveMpxWebpackPluginConf')
+const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getReporter } = require('../../utils/reporter')
-const { resolveMpTargetConfig } = require('./target')
 const { transformMpxEntry } = require('../transformMpxEntry')
 
 /**
@@ -28,6 +34,9 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
       name: 'img/[name][hash].[ext]'
     }
   )
+  const mpxOptions = getMpxPluginOptions(options)
+  let outputDist = `dist/${target.mode}`
+  let subDir = ''
 
   webpackConfig.name(`${target.mode}-compiler`)
 
@@ -139,8 +148,68 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     .loader(maybeResolve('pug-plain-loader'))
     .end()
 
-  // 根据不同target修改webpack配置
-  resolveMpTargetConfig(api, options, webpackConfig, target)
+  if (
+    target.mode === 'wx' &&
+    (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode'))
+  ) {
+    try {
+      const projectConfigJson = require(api.resolve(
+        'static/wx/project.config.json'
+      ))
+      outputDist = path.join(outputDist, projectConfigJson.miniprogramRoot)
+      subDir =
+        projectConfigJson.cloudfunctionRoot || projectConfigJson.pluginRoot
+    } catch (e) {}
+  }
+
+  webpackConfig.output.path(api.resolve(outputDist))
+
+  webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
+    {
+      patterns: [
+        {
+          context: api.resolve(`static/${target.mode}`),
+          from: '**/*',
+          to: subDir ? '..' : '',
+          globOptions: {
+            ignore: MODE_CONFIG_FILES_MAP[target.mode] || []
+          },
+          noErrorOnMissing: true
+        },
+        {
+          context: api.resolve('static'),
+          from: '**/*',
+          to: subDir ? '..' : '',
+          globOptions: {
+            ignore: SUPPORT_MODE.map((v) => `**/${v}/**`)
+          },
+          noErrorOnMissing: true
+        }
+      ]
+    }
+  ])
+
+  webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
+    {
+      mode: target.mode,
+      srcMode: mpxOptions.srcMode,
+      ...resolveMpxWebpackPluginConf(api, options)
+    }
+  ])
+
+  webpackConfig.optimization.minimizer('mpx-terser').use(TerserPlugin, [
+    {
+      // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+      terserOptions: {
+        // terser的默认行为会把某些对象方法转为箭头函数，导致ios9等不支持箭头函数的环境白屏，详情见 https://github.com/terser/terser#compress-options
+        compress: {
+          arrows: false
+        }
+      }
+    }
+  ])
+
+  webpackConfig.devtool(process.env.NODE_ENV === 'production' ? false : 'source-map')
   // 转换entry
   transformMpxEntry(api, options, webpackConfig)
   return webpackConfig
