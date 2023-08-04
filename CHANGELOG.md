@@ -1,4 +1,15 @@
 
+## 2.0.6 (2023-08-04)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx`
+  * [#72](https://github.com/mpx-ecology/mpx-cli/pull/72) Bugfix/devtool edit ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 2.0.5 (2023-08-02)
 
 #### :bug: Bug Fix
