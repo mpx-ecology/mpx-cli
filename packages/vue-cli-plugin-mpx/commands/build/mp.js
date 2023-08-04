@@ -1,6 +1,9 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { getCurrentTarget } = require('../../utils/index')
-const { resolveWebpackConfigByTarget, handleWebpackDone } = require('../../utils/webpack')
+const {
+  resolveWebpackConfigByTarget,
+  handleWebpackDone
+} = require('../../utils/webpack')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const webpack = require('webpack')
 
@@ -8,37 +11,35 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
   const customMpxEnv = args.env
   const target = getCurrentTarget()
-  return resolveWebpackConfigByTarget(api, options, target, (webpackConfig) => {
+  api.chainWebpack((config) => {
     const targetEnv = target.env
     if (targetEnv === 'production' || targetEnv === 'development') {
-      webpackConfig.mode(targetEnv === 'production' ? targetEnv : 'none')
-      webpackConfig.plugin('define').tap((args) => [
+      config.mode(targetEnv === 'production' ? targetEnv : 'none')
+      config.plugin('define').tap((args) => [
         {
           'process.env.NODE_ENV': `"${targetEnv}"`
         }
       ])
     }
     if (args.report) {
-      webpackConfig
-        .plugin('bundle-analyzer-plugin')
-        .use(BundleAnalyzerPlugin, [{}])
+      config.plugin('bundle-analyzer-plugin').use(BundleAnalyzerPlugin, [{}])
     }
     if (customMpxEnv) {
-      webpackConfig.plugin('mpx-webpack-plugin').tap((args) => {
+      config.plugin('mpx-webpack-plugin').tap((args) => {
         args[0].env = customMpxEnv
         return args
       })
     }
     // 仅在watch模式下生产sourcemap
     // 百度小程序不开启sourcemap，开启会有模板渲染问题
-    webpackConfig.devtool(
-      watch && target.mode !== 'swan' ? 'source-map' : false
-    )
-
+    if (watch && target.mode !== 'swan') {
+      config.devtool('source-map')
+    }
     if (args.watch) {
-      webpackConfig.watch(true)
+      config.watch(true)
     }
   })
+  return resolveWebpackConfigByTarget(api, options, target)
 }
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
@@ -52,10 +53,12 @@ module.exports.registerMpBuildCommand = function registerMpBuildCommand (
     const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
     return new Promise((resolve, reject) => {
       webpack(webpackConfigs, (err, stats) => {
-        handleWebpackDone(err, stats, target).then((...res) => {
-          symlinkTargetConfig(api, target, webpackConfigs[0])
-          resolve(...res)
-        }).catch(reject)
+        handleWebpackDone(err, stats, target)
+          .then((...res) => {
+            symlinkTargetConfig(api, target, webpackConfigs[0])
+            resolve(...res)
+          })
+          .catch(reject)
       })
     })
   })
