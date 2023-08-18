@@ -48,6 +48,21 @@ async function resolvePrompts () {
   return inquirer.prompt(prompts).then((answers) => answers)
 }
 
+async function mergePreset (preset, options) {
+  if (options.preset) {
+    const remotePreset = await resolvePreset(options)
+    merge(preset, remotePreset)
+  } else if (options.inlinePreset) {
+    try {
+      const inlinePreset = JSON.parse(options.inlinePreset)
+      merge(preset, inlinePreset)
+    } catch (error) {
+      error(`CLI inline preset is not valid JSON: ${options.inlinePreset}`)
+      exit(1)
+    }
+  }
+  return preset
+}
 /**
  * 从vue-cli clone 下来，方便处理creator的创建以及生命周期管理
  * @param {*} projectName
@@ -58,18 +73,9 @@ async function resolvePrompts () {
 async function create (projectName, options, preset = null) {
   // resolve preset
   if (!preset) {
-    if (options.preset) {
-      preset = await resolvePreset(options)
-    } else if (options.inlinePreset) {
-      try {
-        preset = JSON.parse(options.inlinePreset)
-      } catch (error) {
-        error(`CLI inline preset is not valid JSON: ${options.inlinePreset}`)
-        exit(1)
-      }
-    } else {
-      preset = await resolvePrompts()
-    }
+    // 默认回答
+    preset = await resolvePrompts()
+    await mergePreset(preset, options)
   }
   // css preprocessor
   preset.cssPreprocessor = 'stylus'
