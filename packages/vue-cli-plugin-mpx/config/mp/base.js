@@ -35,7 +35,7 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     }
   )
   const mpxOptions = getMpxPluginOptions(options)
-  let outputDist = `dist/${target.mode}`
+  let outputDir = options.outputDir ? options.outputDir : `dist/${target.mode}`
   let subDir = ''
 
   webpackConfig.name(`${target.mode}-compiler`)
@@ -156,13 +156,13 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
       const projectConfigJson = require(api.resolve(
         'static/wx/project.config.json'
       ))
-      outputDist = path.join(outputDist, projectConfigJson.miniprogramRoot)
+      outputDir = path.join(outputDir, projectConfigJson.miniprogramRoot)
       subDir =
         projectConfigJson.cloudfunctionRoot || projectConfigJson.pluginRoot
     } catch (e) {}
   }
 
-  webpackConfig.output.path(api.resolve(outputDist))
+  webpackConfig.output.path(api.resolve(outputDir))
 
   webpackConfig.plugin('mpx-mp-copy-webpack-plugin').use(CopyWebpackPlugin, [
     {

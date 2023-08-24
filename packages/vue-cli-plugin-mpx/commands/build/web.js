@@ -47,15 +47,15 @@ module.exports.registerWebBuildCommand = (api, options) => {
 
 async function build (args, api, options) {
   const fs = require('fs-extra')
-  const targetDir = api.resolve('dist/web')
+  const outputDir = options.outputDir !== 'dist' ? options.outputDir : 'dist/web'
   const target = getCurrentTarget()
-  Object.assign(options, { outputDir: targetDir })
+  Object.assign(options, { outputDir })
 
   // resolve raw webpack config
   const webpackConfig = resolveWebBuildWebpackConfig(api, options, args)
 
   if (args.clean) {
-    await fs.emptyDir(targetDir)
+    await fs.emptyDir(outputDir)
   }
 
   return new Promise((resolve, reject) => {
