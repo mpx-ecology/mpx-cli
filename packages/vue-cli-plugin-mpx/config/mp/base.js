@@ -35,7 +35,7 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     }
   )
   const mpxOptions = getMpxPluginOptions(options)
-  let outputDir = options.outputDir ? options.outputDir : `dist/${target.mode}`
+  let outputDir = options.outputDir !== 'dist' ? options.outputDir : `dist/${target.mode}`
   let subDir = ''
 
   webpackConfig.name(`${target.mode}-compiler`)
