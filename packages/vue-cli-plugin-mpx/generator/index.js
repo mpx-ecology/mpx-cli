@@ -35,6 +35,8 @@ module.exports = function (api, options) {
   // 拓展 vue.config.js 当中有关 mpx.config.js 的配置
   api.extendPackage({
     vue: {
+      // eslint-disable-next-line no-template-curly-in-string
+      outputDir: '{outputDir}',
       pluginOptions: {
         mpx: {
           srcMode: options.srcMode,
@@ -57,8 +59,10 @@ module.exports = function (api, options) {
 
   api.postProcessFiles((files) => {
     // 处理 vue.config.js 中 crossorigin 和 productionSourceMap
-    const vueConfigJs = files['vue.config.js']
+    let vueConfigJs = files['vue.config.js']
     if (vueConfigJs) {
+      // eslint-disable-next-line no-template-curly-in-string
+      vueConfigJs = vueConfigJs.replace('\'{outputDir}\'', '`dist/${process.env.MPX_CURRENT_TARGET_MODE}`')
       const lines = vueConfigJs.split(/\r?\n/g)
       const configureWebpackIndex = lines.findIndex((v) =>
         /configureWebpack/.test(v)
