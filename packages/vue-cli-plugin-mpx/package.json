@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "base mpx plugin for mpx-cli",
   "keywords": [],
   "license": "ISC",
@@ -41,7 +41,7 @@
     "@mpxjs/core": "^2.8.0",
     "@mpxjs/eslint-config": "^1.0.5",
     "@mpxjs/fetch": "^2.8.0",
-    "@mpxjs/mpx-cli-service": "^2.0.6",
+    "@mpxjs/mpx-cli-service": "^2.0.7",
     "@mpxjs/pinia": "^2.8.0",
     "@mpxjs/size-report": "^2.8.0",
     "@mpxjs/store": "^2.8.0",
