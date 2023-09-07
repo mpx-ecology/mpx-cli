@@ -1,5 +1,5 @@
-const { SUPPORT_MODE } = require('@mpxjs/cli-shared/constant')
-const { getCurrentTarget } = require('@mpxjs/cli-shared')
+const { SUPPORT_MODE } = require('@mpxjs/mpx-cli-service/shared/constant')
+const { getCurrentTarget } = require('@mpxjs/mpx-cli-service/shared')
 const { serveWeb } = require('./web')
 const { serveMp } = require('./mp')
 

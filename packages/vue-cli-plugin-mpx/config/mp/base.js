@@ -7,8 +7,8 @@ const TerserPlugin = require('terser-webpack-plugin')
 const {
   MODE_CONFIG_FILES_MAP,
   SUPPORT_MODE
-} = require('@mpxjs/cli-shared/constant')
-const { getMpxPluginOptions } = require('@mpxjs/cli-shared')
+} = require('@mpxjs/mpx-cli-service/shared/constant')
+const { getMpxPluginOptions } = require('@mpxjs/mpx-cli-service/shared')
 const {
   resolveMpxWebpackPluginConf
 } = require('../resolveMpxWebpackPluginConf')

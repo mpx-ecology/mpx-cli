@@ -9,7 +9,7 @@ const {
   setTargetProcessEnv,
   runServiceCommand,
   removeArgv
-} = require('@mpxjs/cli-shared')
+} = require('../shared')
 
 if (
   !semver.satisfies(process.version, requiredVersion, {

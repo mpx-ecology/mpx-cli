@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const { modifyConfig, handleWebpackDone } = require('../../utils/webpack')
-const { getCurrentTarget } = require('@mpxjs/cli-shared')
+const { getCurrentTarget } = require('@mpxjs/mpx-cli-service/shared')
 
 const resolveWebBuildWebpackConfig = (api, options, args) => {
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')

@@ -12,7 +12,6 @@
   "dependencies": {
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@vue/cli-shared-utils": "^5.0.4",
-    "@mpxjs/cli-shared": "^2.0.0",
     "ansi-escapes": "^4.1.0",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^9.1.0",
