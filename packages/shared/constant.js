@@ -16,3 +16,4 @@ module.exports.MODE_CONFIG_FILES_MAP = {
   dd: ['project.config.json'],
   web: []
 }
+module.exports.DEFAULT_MODE = 'wx'

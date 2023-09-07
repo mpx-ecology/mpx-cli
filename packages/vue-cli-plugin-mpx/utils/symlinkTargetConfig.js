@@ -1,10 +1,9 @@
 const fs = require('fs')
 const path = require('path')
-const { MODE_CONFIG_FILES_MAP } = require('../constants/mode')
+const { MODE_CONFIG_FILES_MAP } = require('@mpxjs/cli-shared/constant')
 
 /**
  * 为配置文件添加symlink，保证IDE修改配置文件也会同步到static下
-
  * @param {*} api
  * @param {*} target
  * @param {*} webpackConfig

@@ -1,4 +1,4 @@
-const { SUPPORT_MODE } = require('../../constants/mode')
+const { SUPPORT_MODE } = require('@mpxjs/cli-shared/constant')
 
 module.exports = function (api, options) {
   const srcMode = options.srcMode

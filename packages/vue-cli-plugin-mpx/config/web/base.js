@@ -77,10 +77,7 @@ module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (
   webpackConfig.plugin('webpackbar').use(WebpackBar, [
     {
       color: 'orange',
-      name:
-        process.env.MPX_CURRENT_TARGET_MODE +
-        (process.env.VUE_CLI_MODERN_BUILD === 'true' ? '-modern' : '') +
-        '-compiler',
+      name: `${process.env.MPX_CURRENT_TARGET_MODE}-compiler-${api.service.mode}`,
       basic: false,
       reporter: getReporter()
     }

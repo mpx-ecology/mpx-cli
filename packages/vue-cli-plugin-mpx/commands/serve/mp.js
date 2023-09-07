@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const { parseTarget, getCurrentTarget } = require('../../utils/index')
+const { parseTarget, getCurrentTarget } = require('@mpxjs/cli-shared')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTarget,
@@ -24,23 +24,22 @@ const resolveMpServeWebpackConfig = (api, options, args) => {
 module.exports.resolveMpServeWebpackConfig = resolveMpServeWebpackConfig
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
-module.exports.registerMpServeCommand = function registerMpServeCommand (
+module.exports.serveMp = function serveMp (
   api,
-  options
+  options,
+  args
 ) {
-  api.registerCommand('serve:mp', {}, function (args, rawArgs) {
-    const target = getCurrentTarget()
-    // 小程序业务代码构建配置
-    const webpackConfigs = resolveMpServeWebpackConfig(api, options, args)
-    return new Promise((resolve, reject) => {
-      webpack(webpackConfigs).watch({}, (err, stats) => {
-        handleWebpackDone(err, stats, target)
-          .then((...res) => {
-            symlinkTargetConfig(api, target, webpackConfigs[0])
-            resolve(...res)
-          })
-          .catch(reject)
-      })
+  const target = getCurrentTarget()
+  // 小程序业务代码构建配置
+  const webpackConfigs = resolveMpServeWebpackConfig(api, options, args)
+  return new Promise((resolve, reject) => {
+    webpack(webpackConfigs).watch({}, (err, stats) => {
+      handleWebpackDone(err, stats, target, api)
+        .then((...res) => {
+          symlinkTargetConfig(api, target, webpackConfigs[0])
+          resolve(...res)
+        })
+        .catch(reject)
     })
   })
 }

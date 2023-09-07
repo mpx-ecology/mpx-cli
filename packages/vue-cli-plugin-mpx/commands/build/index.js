@@ -1,13 +1,10 @@
-const { SUPPORT_MODE } = require('../../constants/mode')
-const { getTargets } = require('../../utils')
-const { buildTargetInChildProcess } = require('../../utils/webpack')
-const { registerMpBuildCommand } = require('./mp')
-const { registerWebBuildCommand } = require('./web')
+const { SUPPORT_MODE } = require('@mpxjs/cli-shared/constant')
+const { getCurrentTarget } = require('@mpxjs/cli-shared')
+const { buildMp } = require('./mp')
+const { buildWeb } = require('./web')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.registerBuildCommand = function (api, options) {
-  registerMpBuildCommand(api, options)
-  registerWebBuildCommand(api, options)
   api.registerCommand(
     'build',
     {
@@ -21,17 +18,10 @@ module.exports.registerBuildCommand = function (api, options) {
       }
     },
     function build (args, rawArgv) {
-      const targets = getTargets(args, options)
-      // 利用子进程转发构建
-      return Promise.all(
-        targets.map((target) =>
-          buildTargetInChildProcess(
-            target.mode === 'web' ? 'build:web' : 'build:mp',
-            target,
-            rawArgv
-          )
-        )
-      )
+      const target = getCurrentTarget()
+      return target.mode === 'web'
+        ? buildWeb(api, options, args)
+        : buildMp(api, options, args)
     }
   )
 }
