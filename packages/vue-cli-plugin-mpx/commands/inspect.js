@@ -1,6 +1,6 @@
 const { toString } = require('webpack-chain')
 const { highlight } = require('cli-highlight')
-const { getTargets, getCurrentTarget } = require('@mpxjs/mpx-cli-service/shared')
+const { getTargets, getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const { resolveMpBuildWebpackConfig } = require('./build/mp')
 const { resolveWebBuildWebpackConfig } = require('./build/web')
 

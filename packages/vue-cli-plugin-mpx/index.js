@@ -4,7 +4,7 @@ const { resolveMpWebpackConfig } = require('./config/mp/base')
 const { resolveWebWebpackConfig } = require('./config/web/base')
 const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
-const { getCurrentTarget } = require('@mpxjs/mpx-cli-service/shared')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = function (api, options) {

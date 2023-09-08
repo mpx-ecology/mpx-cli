@@ -1,6 +1,16 @@
 const execa = require('execa')
-const { SUPPORT_MODE } = require('./constant')
 
+const SUPPORT_MODE = ['wx', 'ali', 'swan', 'qq', 'tt', 'dd', 'web']
+const MODE_CONFIG_FILES_MAP = {
+  wx: ['project.config.json'],
+  ali: ['mini.project.json'],
+  swan: ['project.swan.json'],
+  qq: ['project.config.json'],
+  tt: ['project.config.json'],
+  dd: ['project.config.json'],
+  web: []
+}
+const DEFAULT_MODE = 'wx'
 const supportedModeMap = makeMap(SUPPORT_MODE)
 const mpxCliServiceBinPath = require.resolve(
   '@mpxjs/mpx-cli-service/bin/mpx-cli-service.js'
@@ -67,6 +77,17 @@ function runServiceCommand (rawArgv, options = {}) {
   return execa.node(mpxCliServiceBinPath, [...rawArgv], options)
 }
 
+/**
+ * @typedef { 'wx'|'ali'|'swan' | 'qq' | 'tt' |'dd' |'web' } Mode
+ */
+
+/**
+ * @typedef { Mode[] } SupportMode
+ * @type { SupportMode }
+ */
+module.exports.SUPPORT_MODE = SUPPORT_MODE
+module.exports.MODE_CONFIG_FILES_MAP = MODE_CONFIG_FILES_MAP
+module.exports.DEFAULT_MODE = DEFAULT_MODE
 module.exports.getCurrentTarget = getCurrentTarget
 module.exports.runServiceCommand = runServiceCommand
 module.exports.makeMap = makeMap

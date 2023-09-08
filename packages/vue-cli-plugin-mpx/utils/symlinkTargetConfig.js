@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { MODE_CONFIG_FILES_MAP } = require('@mpxjs/mpx-cli-service/shared/constant')
+const { MODE_CONFIG_FILES_MAP } = require('@mpxjs/cli-shared-utils')
 
 /**
  * 为配置文件添加symlink，保证IDE修改配置文件也会同步到static下

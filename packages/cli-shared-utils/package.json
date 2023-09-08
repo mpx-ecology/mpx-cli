@@ -1,0 +1,20 @@
+{
+  "name": "@mpxjs/cli-shared-utils",
+  "version": "2.0.7",
+  "description": "share utils for mpx-cli",
+  "main": "lib/index.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=8"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}

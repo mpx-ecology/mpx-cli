@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const { parseTarget, getCurrentTarget } = require('@mpxjs/mpx-cli-service/shared')
+const { parseTarget, getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTarget,

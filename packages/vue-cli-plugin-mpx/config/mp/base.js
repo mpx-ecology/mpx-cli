@@ -5,10 +5,10 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const {
+  getMpxPluginOptions,
   MODE_CONFIG_FILES_MAP,
   SUPPORT_MODE
-} = require('@mpxjs/mpx-cli-service/shared/constant')
-const { getMpxPluginOptions } = require('@mpxjs/mpx-cli-service/shared')
+} = require('@mpxjs/cli-shared-utils')
 const {
   resolveMpxWebpackPluginConf
 } = require('../resolveMpxWebpackPluginConf')

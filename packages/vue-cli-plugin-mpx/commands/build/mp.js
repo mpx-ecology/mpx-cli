@@ -1,5 +1,5 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { getCurrentTarget } = require('@mpxjs/mpx-cli-service/shared')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const {
   resolveWebpackConfigByTarget,
   handleWebpackDone
