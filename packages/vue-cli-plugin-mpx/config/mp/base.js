@@ -9,6 +9,7 @@ const {
   MODE_CONFIG_FILES_MAP,
   SUPPORT_MODE
 } = require('@mpxjs/cli-shared-utils')
+const resolveClientEnv = require('@vue/cli-service/lib/util/resolveClientEnv')
 const {
   resolveMpxWebpackPluginConf
 } = require('../resolveMpxWebpackPluginConf')
@@ -60,11 +61,9 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     }
   ])
   // 和vue-cli保持同名，方便一次性修改mp和web版本的define参数
-  webpackConfig.plugin('define').use(webpack.DefinePlugin, [
-    {
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-    }
-  ])
+  webpackConfig
+    .plugin('define')
+    .use(webpack.DefinePlugin, [resolveClientEnv(options)])
   // fancy reporter
   webpackConfig.plugin('webpackbar').use(WebpackBar, [
     {

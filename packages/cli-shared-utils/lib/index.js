@@ -35,6 +35,10 @@ function getMpxPluginOptions (options = {}) {
   return options.pluginOptions ? options.pluginOptions.mpx || {} : {}
 }
 
+function rawTarget (target) {
+  return [target.mode, target.env].filter(Boolean).join(':')
+}
+
 function getTargets (args) {
   const defaultTargets = [{ mode: 'wx' || SUPPORT_MODE[0] }]
   const inputTargets = args.targets
@@ -64,9 +68,13 @@ function getCurrentTarget () {
 }
 
 function setTargetProcessEnv (target) {
-  process.env.MPX_CLI_MODE = target.mode === 'web' ? 'web' : 'mp'
-  process.env.MPX_CURRENT_TARGET_MODE = target.mode
-  process.env.MPX_CURRENT_TARGET_ENV = target.env
+  if (target.mode) {
+    process.env.MPX_CLI_MODE = target.mode === 'web' ? 'web' : 'mp'
+    process.env.MPX_CURRENT_TARGET_MODE = target.mode
+  }
+  if (target.env) {
+    process.env.MPX_CURRENT_TARGET_ENV = target.env
+  }
 }
 
 function removeArgv (rawArgv, removeName) {
@@ -96,3 +104,4 @@ module.exports.parseTarget = parseTarget
 module.exports.getMpxPluginOptions = getMpxPluginOptions
 module.exports.setTargetProcessEnv = setTargetProcessEnv
 module.exports.removeArgv = removeArgv
+module.exports.rawTarget = rawTarget

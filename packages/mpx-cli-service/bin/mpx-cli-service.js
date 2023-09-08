@@ -8,7 +8,8 @@ const {
   getTargets,
   setTargetProcessEnv,
   runServiceCommand,
-  removeArgv
+  removeArgv,
+  rawTarget
 } = require('@mpxjs/cli-shared-utils')
 
 if (
@@ -62,8 +63,8 @@ if (targets.length === 1) {
       this.pluginsToSkip.add(plugin)
     })
   }
-  const mode = target.env || args.mode
-  service.run(command, { ...args, mode: mode }, rawArgv).catch((err) => {
+  if (target.env) args.mode = target.env
+  service.run(command, args, rawArgv).catch((err) => {
     error(err)
     process.exit(1)
   })
@@ -72,9 +73,9 @@ if (targets.length === 1) {
   let doneNum = 0
   const num = 0
   const logUpdate = new LogUpdate()
-  targets.forEach((v, index) => {
+  targets.forEach((target, index) => {
     const ls = runServiceCommand(
-      [...removeArgv(rawArgv, 'targets'), '--targets', `${v.mode}:${v.env}`],
+      [...removeArgv(rawArgv, 'targets'), '--targets', rawTarget(target)],
       {
         env: {
           ...process.env,

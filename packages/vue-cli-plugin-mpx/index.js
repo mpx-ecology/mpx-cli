@@ -29,5 +29,6 @@ module.exports = function (api, options) {
 
 module.exports.defaultModes = {
   serve: 'development',
-  build: 'production'
+  build: 'production',
+  inspect: 'development'
 }

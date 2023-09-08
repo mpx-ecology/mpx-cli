@@ -11,6 +11,7 @@ module.exports.registerServeCommand = function (api, options) {
       options: {
         '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
         '--report': 'generate report.html to help analyze bundle content',
+        '--mode': 'specify env mode (default: development)',
         '--env': 'custom define __mpx_env__'
       }
     },

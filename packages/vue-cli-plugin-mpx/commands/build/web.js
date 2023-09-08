@@ -36,14 +36,7 @@ const resolveWebBuildWebpackConfig = (api, options, args) => {
   return webpackConfig
 }
 
-module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig
-
-module.exports.buildWeb = (api, options, args) => {
-  const moduleBuildArgs = { ...args, moduleBuild: true, clean: false }
-  return build(moduleBuildArgs, api, options)
-}
-
-async function build (args, api, options) {
+module.exports.buildWeb = async (api, options, args) => {
   const fs = require('fs-extra')
   const outputDir =
     options.outputDir !== 'dist' ? options.outputDir : 'dist/web'
@@ -63,3 +56,4 @@ async function build (args, api, options) {
     })
   })
 }
+module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig

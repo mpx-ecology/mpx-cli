@@ -12,15 +12,6 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
   const customMpxEnv = args.env
   const target = getCurrentTarget()
   api.chainWebpack((config) => {
-    const targetEnv = target.env
-    if (targetEnv === 'production' || targetEnv === 'development') {
-      config.mode(targetEnv === 'production' ? targetEnv : 'none')
-      config.plugin('define').tap((args) => [
-        {
-          'process.env.NODE_ENV': `"${targetEnv}"`
-        }
-      ])
-    }
     if (args.report) {
       config.plugin('bundle-analyzer-plugin').use(BundleAnalyzerPlugin, [{}])
     }
@@ -35,7 +26,7 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
     if (watch && target.mode !== 'swan') {
       config.devtool('source-map')
     }
-    if (args.watch) {
+    if (watch) {
       config.watch(true)
     }
   })

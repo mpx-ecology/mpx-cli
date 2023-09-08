@@ -12,6 +12,7 @@ module.exports.registerBuildCommand = function (api, options) {
       options: {
         '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
         '--watch': 'compile in watch mode',
+        '--mode': 'specify env mode (default: production)',
         '--report': 'generate report.html to help analyze bundle content',
         '--env': 'custom define __mpx_env__'
       }
