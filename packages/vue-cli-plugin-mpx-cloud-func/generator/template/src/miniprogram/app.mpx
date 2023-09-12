@@ -1,14 +1,14 @@
 <script>
-  import mpx, { createApp } from '@mpxjs/core'
-  import apiProxy from '@mpxjs/api-proxy'
+import mpx, { createApp } from '@mpxjs/core'
+import apiProxy from '@mpxjs/api-proxy'
 
-  mpx.use(apiProxy, { usePromise: true })
+mpx.use(apiProxy, { usePromise: true })
 
-  createApp({
-    onLaunch() {
-      //
-    }
-  })
+createApp({
+  onLaunch() {
+    //
+  }
+})
 </script>
 
 <style>
@@ -33,7 +33,7 @@
 <!--    plugins: {-->
 <!--      'myPlugin': {-->
 <!--        'version': 'dev',-->
-<!--        'provider': '<%= appid %>'-->
+<!--        'provider': 'touristappid'-->
 <!--      }-->
 <!--    }-->
 <!--  }-->
