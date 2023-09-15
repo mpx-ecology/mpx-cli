@@ -20,7 +20,11 @@ class LogUpdate {
       hard: true,
       wordWrap: false
     })
-    const data = ansiEscapes.eraseLines(this.prevLineCount) + wrappedLines + '\n' + this.extraLines
+    const data =
+      ansiEscapes.eraseLines(this.prevLineCount) +
+      wrappedLines +
+      '\n' +
+      this.extraLines
     this.write(data)
     const _lines = data.split('\n')
     this.prevLineCount = _lines.length
@@ -190,10 +194,7 @@ class FancyReporter {
     }
   }
 
-  done (context, { stats }) {}
-
   progress (context) {
-    if (!logUpdate) return
     if (Date.now() - lastRender > 50) {
       this._renderStates(context.statesArray)
     }
@@ -203,10 +204,15 @@ class FancyReporter {
     lastRender = Date.now()
     const renderedStates = statesArray.map((c) => this._renderState(c)).join('')
     if (renderedStates && process.send) {
-      process.send({
-        status: 'progress',
-        message: renderedStates
-      }, cb)
+      process.send(
+        {
+          status: 'progress',
+          message: renderedStates
+        },
+        cb
+      )
+    } else {
+      logUpdate.render('\n' + renderedStates + '\n')
     }
   }
 
@@ -241,18 +247,17 @@ class FancyReporter {
         icon = CIRCLE_OPEN
       }
       line1 = color(`${icon} ${state.name}`)
-      line2 = chalk.grey('  ' + state.message) + '\n' + state.result
+      line2 = chalk.grey('  ' + state.message) + '\n' + (state.result || '')
     }
     return line1 + '\n' + line2
   }
 }
 
-exports.FancyReporter = FancyReporter
-
 let reporter = null
-
 exports.getReporter = function () {
   if (reporter) return reporter
   return (reporter = new FancyReporter())
 }
+
 exports.LogUpdate = LogUpdate
+exports.FancyReporter = FancyReporter

@@ -4,7 +4,7 @@ const { resolveMpWebpackConfig } = require('./config/mp/base')
 const { resolveWebWebpackConfig } = require('./config/web/base')
 const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
-const { getCurrentTarget } = require('./utils')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = function (api, options) {
@@ -27,10 +27,8 @@ module.exports = function (api, options) {
   })
 }
 
-module.exports.MODE = require('./constants/mode')
 module.exports.defaultModes = {
-  'serve:mp': 'development',
-  'serve:web': 'development',
-  'build:mp': 'production',
-  'build:web': 'production'
+  serve: 'development',
+  build: 'production',
+  inspect: 'development'
 }

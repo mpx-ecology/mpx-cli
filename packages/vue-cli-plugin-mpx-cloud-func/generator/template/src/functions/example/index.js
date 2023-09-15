@@ -1,6 +1,6 @@
 exports.main = (event, context) => {
-  let { a, b } = event
-  let sum = a + b
+  const { a, b } = event
+  const sum = a + b
   return {
     sum
   }

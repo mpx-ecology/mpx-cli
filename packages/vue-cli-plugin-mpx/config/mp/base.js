@@ -4,8 +4,12 @@ const WebpackBar = require('webpackbar')
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const { MODE_CONFIG_FILES_MAP, SUPPORT_MODE } = require('../../constants/mode')
-const { getMpxPluginOptions } = require('../../utils')
+const {
+  getMpxPluginOptions,
+  MODE_CONFIG_FILES_MAP,
+  SUPPORT_MODE
+} = require('@mpxjs/cli-shared-utils')
+const resolveClientEnv = require('@vue/cli-service/lib/util/resolveClientEnv')
 const {
   resolveMpxWebpackPluginConf
 } = require('../resolveMpxWebpackPluginConf')
@@ -35,7 +39,8 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     }
   )
   const mpxOptions = getMpxPluginOptions(options)
-  let outputDir = options.outputDir !== 'dist' ? options.outputDir : `dist/${target.mode}`
+  let outputDir =
+    options.outputDir !== 'dist' ? options.outputDir : `dist/${target.mode}`
   let subDir = ''
 
   webpackConfig.name(`${target.mode}-compiler`)
@@ -56,16 +61,14 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     }
   ])
   // 和vue-cli保持同名，方便一次性修改mp和web版本的define参数
-  webpackConfig.plugin('define').use(webpack.DefinePlugin, [
-    {
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-    }
-  ])
+  webpackConfig
+    .plugin('define')
+    .use(webpack.DefinePlugin, [resolveClientEnv(options)])
   // fancy reporter
   webpackConfig.plugin('webpackbar').use(WebpackBar, [
     {
       color: 'orange',
-      name: process.env.MPX_CURRENT_TARGET_MODE + '-compiler',
+      name: `${process.env.MPX_CURRENT_TARGET_MODE}-compiler-${api.service.mode}`,
       basic: false,
       reporter: getReporter()
     }
@@ -209,7 +212,9 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     }
   ])
 
-  webpackConfig.devtool(process.env.NODE_ENV === 'production' ? false : 'source-map')
+  webpackConfig.devtool(
+    process.env.NODE_ENV === 'production' ? false : 'source-map'
+  )
   // 转换entry
   transformMpxEntry(api, options, webpackConfig)
   return webpackConfig

@@ -1,5 +1,5 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { getCurrentTarget } = require('../../utils/index')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const {
   resolveWebpackConfigByTarget,
   handleWebpackDone
@@ -12,15 +12,6 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
   const customMpxEnv = args.env
   const target = getCurrentTarget()
   api.chainWebpack((config) => {
-    const targetEnv = target.env
-    if (targetEnv === 'production' || targetEnv === 'development') {
-      config.mode(targetEnv === 'production' ? targetEnv : 'none')
-      config.plugin('define').tap((args) => [
-        {
-          'process.env.NODE_ENV': `"${targetEnv}"`
-        }
-      ])
-    }
     if (args.report) {
       config.plugin('bundle-analyzer-plugin').use(BundleAnalyzerPlugin, [{}])
     }
@@ -35,7 +26,7 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
     if (watch && target.mode !== 'swan') {
       config.devtool('source-map')
     }
-    if (args.watch) {
+    if (watch) {
       config.watch(true)
     }
   })
@@ -43,23 +34,18 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
 }
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
-module.exports.registerMpBuildCommand = function registerMpBuildCommand (
-  api,
-  options
-) {
-  api.registerCommand('build:mp', {}, function (args, rawArgs) {
-    const target = getCurrentTarget()
-    // 小程序业务代码构建配置
-    const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
-    return new Promise((resolve, reject) => {
-      webpack(webpackConfigs, (err, stats) => {
-        handleWebpackDone(err, stats, target)
-          .then((...res) => {
-            symlinkTargetConfig(api, target, webpackConfigs[0])
-            resolve(...res)
-          })
-          .catch(reject)
-      })
+module.exports.buildMp = function buildMp (api, options, args) {
+  const target = getCurrentTarget()
+  // 小程序业务代码构建配置
+  const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
+  return new Promise((resolve, reject) => {
+    webpack(webpackConfigs, (err, stats) => {
+      handleWebpackDone(err, stats, target, api)
+        .then((...res) => {
+          symlinkTargetConfig(api, target, webpackConfigs[0])
+          resolve(...res)
+        })
+        .catch(reject)
     })
   })
 }

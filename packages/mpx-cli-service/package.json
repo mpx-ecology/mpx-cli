@@ -7,6 +7,7 @@
     "mpx-cli-service": "bin/mpx-cli-service.js"
   },
   "dependencies": {
+    "@mpxjs/cli-shared-utils": "^2.0.7",
     "@vue/cli-service": "^5.0.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "minimist": "^1.2.5"

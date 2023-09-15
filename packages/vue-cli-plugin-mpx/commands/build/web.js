@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const { modifyConfig, handleWebpackDone } = require('../../utils/webpack')
-const { getCurrentTarget } = require('../../utils')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 
 const resolveWebBuildWebpackConfig = (api, options, args) => {
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
@@ -36,18 +36,10 @@ const resolveWebBuildWebpackConfig = (api, options, args) => {
   return webpackConfig
 }
 
-module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig
-
-module.exports.registerWebBuildCommand = (api, options) => {
-  api.registerCommand('build:web', {}, async (args, rawArgs) => {
-    const moduleBuildArgs = { ...args, moduleBuild: true, clean: false }
-    await build(moduleBuildArgs, api, options)
-  })
-}
-
-async function build (args, api, options) {
+module.exports.buildWeb = async (api, options, args) => {
   const fs = require('fs-extra')
-  const outputDir = options.outputDir !== 'dist' ? options.outputDir : 'dist/web'
+  const outputDir =
+    options.outputDir !== 'dist' ? options.outputDir : 'dist/web'
   const target = getCurrentTarget()
   Object.assign(options, { outputDir })
 
@@ -60,7 +52,8 @@ async function build (args, api, options) {
 
   return new Promise((resolve, reject) => {
     webpack([webpackConfig], (err, stats) => {
-      handleWebpackDone(err, stats, target).then(resolve).catch(reject)
+      handleWebpackDone(err, stats, target, api).then(resolve).catch(reject)
     })
   })
 }
+module.exports.resolveWebBuildWebpackConfig = resolveWebBuildWebpackConfig

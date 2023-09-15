@@ -1,8 +1,7 @@
 const { merge } = require('webpack-merge')
-const { runServiceCommand } = require('./index')
 const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
 const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
-const { LogUpdate, getReporter } = require('./reporter')
+const { getReporter } = require('./reporter')
 const { extractResultFromStats, extractErrorsFromStats } = require('./output')
 
 /**
@@ -37,49 +36,6 @@ function resolveWebpackConfigByTarget (
   return webpackConfigs
 }
 
-/**
- * 通过子进程构建目标
- * @typedef { import('./index').Target } Target
- * @param {string} rawArgv
- * @param { { targets: Target, watch: boolean } } param1
- * @returns
- */
-const chunks = []
-let doneNum = 0
-let num = 0
-const logUpdate = new LogUpdate()
-function buildTargetInChildProcess (command, target, rawArgv) {
-  const index = num++
-  return new Promise((resolve, reject) => {
-    const ls = runServiceCommand(command, rawArgv, {
-      env: {
-        ...process.env,
-        FORCE_COLOR: true,
-        MPX_CURRENT_TARGET_MODE: target.mode,
-        MPX_CURRENT_TARGET_ENV: target.env,
-        NODE_ENV: undefined
-      },
-      stdio: 'inherit'
-    })
-    // 执行错误
-    ls.catch(reject)
-    // 进度条数据
-    ls.on('message', (data) => {
-      if (data.status === 'done') {
-        doneNum++
-        if (doneNum === num) {
-          doneNum = 0
-          logUpdate.extraLines = ''
-          resolve()
-        }
-      } else {
-        chunks[index] = data.message
-        logUpdate.render(chunks.join('\n\n'))
-      }
-    })
-  })
-}
-
 const modifyConfig = (config, fn) => {
   if (Array.isArray(config)) {
     config.forEach((c) => fn(c))
@@ -88,7 +44,7 @@ const modifyConfig = (config, fn) => {
   }
 }
 
-module.exports.handleWebpackDone = function (err, stats, target) {
+module.exports.handleWebpackDone = function (err, stats, target, api) {
   return new Promise((resolve, reject) => {
     if (err) return reject(err)
     const hasErrors = stats.hasErrors()
@@ -105,7 +61,7 @@ module.exports.handleWebpackDone = function (err, stats, target) {
       stats.stats.map((v) => {
         return {
           ...v,
-          name: `${target.mode}-compiler`,
+          name: `${target.mode}-compiler-${api.service.mode}`,
           message: `Compiled ${status}`,
           color: hasErrors ? 'red' : 'green',
           progress: 100,
@@ -118,5 +74,4 @@ module.exports.handleWebpackDone = function (err, stats, target) {
   })
 }
 module.exports.modifyConfig = modifyConfig
-module.exports.buildTargetInChildProcess = buildTargetInChildProcess
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget

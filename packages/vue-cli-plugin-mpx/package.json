@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@mpxjs/cli-shared-utils": "^2.0.7",
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "ansi-escapes": "^4.1.0",
