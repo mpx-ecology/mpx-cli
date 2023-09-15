@@ -2,15 +2,8 @@
 const { semver, error } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
 const filterPluginsByPlatform = require('../utils/filterPlugins')
-const { LogUpdate } = require('@mpxjs/vue-cli-plugin-mpx/utils/reporter')
 const Service = require('../lib/Service')
-const {
-  getTargets,
-  setTargetProcessEnv,
-  runServiceCommand,
-  removeArgv,
-  rawTarget
-} = require('@mpxjs/cli-shared-utils')
+const { getTargets, rawTarget } = require('@mpxjs/cli-shared-utils')
 
 if (
   !semver.satisfies(process.version, requiredVersion, {
@@ -24,7 +17,6 @@ if (
   process.exit(1)
 }
 
-const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
 const rawArgv = process.argv.slice(2)
 const args = require('minimist')(rawArgv, {
   boolean: [
@@ -43,10 +35,12 @@ const args = require('minimist')(rawArgv, {
   ]
 })
 const targets = getTargets(args)
-if (targets.length === 1) {
+// wx,ali
+targets.forEach((target) => {
   const command = args._[0]
-  const target = targets[0]
-  setTargetProcessEnv(target)
+  args.targets = rawTarget(target) // wx
+  const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
+  service.target = target
   const setPluginsToSkip = service.setPluginsToSkip.bind(service)
   service.setPluginsToSkip = function (args) {
     setPluginsToSkip(args, rawArgv)
@@ -63,40 +57,10 @@ if (targets.length === 1) {
       this.pluginsToSkip.add(plugin)
     })
   }
-  if (target.env) args.mode = target.env
+  // 收集插件，运行Config.js
+  // build => resolveChainWebpack
   service.run(command, args, rawArgv).catch((err) => {
     error(err)
     process.exit(1)
   })
-} else {
-  const chunks = []
-  let doneNum = 0
-  const num = 0
-  const logUpdate = new LogUpdate()
-  targets.forEach((target, index) => {
-    const ls = runServiceCommand(
-      [...removeArgv(rawArgv, 'targets'), '--targets', rawTarget(target)],
-      {
-        env: {
-          ...process.env,
-          FORCE_COLOR: true,
-          NODE_ENV: undefined
-        },
-        stdio: 'inherit'
-      }
-    )
-    // 子进程输出内容
-    ls.on('message', (data) => {
-      if (data.status === 'done') {
-        doneNum++
-        if (doneNum === num) {
-          doneNum = 0
-          logUpdate.done()
-        }
-      } else {
-        chunks[index] = data.message
-        logUpdate.render(chunks.join('\n\n'))
-      }
-    })
-  })
-}
+})

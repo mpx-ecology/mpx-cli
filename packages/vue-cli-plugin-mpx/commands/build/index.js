@@ -1,4 +1,4 @@
-const { getCurrentTarget, SUPPORT_MODE } = require('@mpxjs/cli-shared-utils')
+const { SUPPORT_MODE } = require('@mpxjs/cli-shared-utils')
 const { buildMp } = require('./mp')
 const { buildWeb } = require('./web')
 
@@ -18,7 +18,7 @@ module.exports.registerBuildCommand = function (api, options) {
       }
     },
     function build (args, rawArgv) {
-      const target = getCurrentTarget()
+      const target = api.service.target
       return target.mode === 'web'
         ? buildWeb(api, options, args)
         : buildMp(api, options, args)

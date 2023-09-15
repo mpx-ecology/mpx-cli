@@ -4,7 +4,6 @@ const { resolveMpWebpackConfig } = require('./config/mp/base')
 const { resolveWebWebpackConfig } = require('./config/web/base')
 const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = function (api, options) {
@@ -15,7 +14,7 @@ module.exports = function (api, options) {
 
   api.chainWebpack((config) => {
     // 当前构建的目标
-    const currentTarget = getCurrentTarget()
+    const currentTarget = api.service.target
     // 公共配置
     applyBaseMpxConfig(api, options, config)
     // 修改环境配置

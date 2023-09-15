@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const { parseTarget, getCurrentTarget } = require('@mpxjs/cli-shared-utils')
+const { parseTarget } = require('@mpxjs/cli-shared-utils')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTarget,
@@ -29,7 +29,7 @@ module.exports.serveMp = function serveMp (
   options,
   args
 ) {
-  const target = getCurrentTarget()
+  const target = api.service.target
   // 小程序业务代码构建配置
   const webpackConfigs = resolveMpServeWebpackConfig(api, options, args)
   return new Promise((resolve, reject) => {

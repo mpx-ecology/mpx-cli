@@ -1,4 +1,4 @@
-const { getCurrentTarget, SUPPORT_MODE } = require('@mpxjs/cli-shared-utils')
+const { SUPPORT_MODE } = require('@mpxjs/cli-shared-utils')
 const { serveWeb } = require('./web')
 const { serveMp } = require('./mp')
 
@@ -16,7 +16,7 @@ module.exports.registerServeCommand = function (api, options) {
       }
     },
     function build (args, rawArgv) {
-      const target = getCurrentTarget()
+      const target = api.service.target
       // 利用子进程转发构建
       return target.mode === 'web'
         ? serveWeb(api, options, args)

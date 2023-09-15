@@ -1,6 +1,5 @@
 const { toString } = require('webpack-chain')
 const { highlight } = require('cli-highlight')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const { resolveMpBuildWebpackConfig } = require('./build/mp')
 const { resolveWebBuildWebpackConfig } = require('./build/web')
 
@@ -15,7 +14,7 @@ module.exports.registerInspectCommand = function registerInspectCommand (
       usage: 'mpx-cli-service inspect'
     },
     async function inspect (args) {
-      const target = getCurrentTarget()
+      const target = api.service.target
       const { verbose } = args
       if (target.env) process.env.NODE_ENV = target.env
       const res =

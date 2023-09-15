@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const { modifyConfig, handleWebpackDone } = require('../../utils/webpack')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 
 const resolveWebBuildWebpackConfig = (api, options, args) => {
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
@@ -40,7 +39,7 @@ module.exports.buildWeb = async (api, options, args) => {
   const fs = require('fs-extra')
   const outputDir =
     options.outputDir !== 'dist' ? options.outputDir : 'dist/web'
-  const target = getCurrentTarget()
+  const target = api.service.target
   Object.assign(options, { outputDir })
 
   // resolve raw webpack config

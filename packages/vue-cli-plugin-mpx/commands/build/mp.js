@@ -1,5 +1,4 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const {
   resolveWebpackConfigByTarget,
   handleWebpackDone
@@ -10,7 +9,7 @@ const webpack = require('webpack')
 const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
   const customMpxEnv = args.env
-  const target = getCurrentTarget()
+  const target = api.service.target
   api.chainWebpack((config) => {
     if (args.report) {
       config.plugin('bundle-analyzer-plugin').use(BundleAnalyzerPlugin, [{}])
@@ -35,7 +34,7 @@ const resolveMpBuildWebpackConfig = (api, options, args) => {
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.buildMp = function buildMp (api, options, args) {
-  const target = getCurrentTarget()
+  const target = api.service.target
   // 小程序业务代码构建配置
   const webpackConfigs = resolveMpBuildWebpackConfig(api, options, args)
   return new Promise((resolve, reject) => {
