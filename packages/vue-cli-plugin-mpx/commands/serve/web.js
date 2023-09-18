@@ -1,6 +1,7 @@
 const { hasProjectYarn, hasProjectPnpm } = require('@vue/cli-shared-utils')
 const { getReporter } = require('../../utils/reporter')
 const { extractErrorsFromStats } = require('../../utils/output')
+const { modifyMpxPluginConfig } = require('../../utils/webpack')
 
 const defaults = {
   host: '0.0.0.0',
@@ -87,6 +88,11 @@ module.exports.serveWeb = async (api, options, args) => {
       webpackConfig.output.globalObject(
         "(typeof self !== 'undefined' ? self : this)"
       )
+    }
+    if (args.env) {
+      modifyMpxPluginConfig(api, webpackConfig, {
+        env: args.env
+      })
     }
   })
 
@@ -329,16 +335,16 @@ module.exports.serveWeb = async (api, options, args) => {
         result.push(logChunk.join('\n'))
       }
 
-      getReporter()._renderStates([
+      getReporter()._renderStates(stats.stats.map(v => [
         {
-          name: 'web-compiler-' + api.service.mode,
+          name: v.compilation.name,
           message: `Compiled ${status}`,
           color: hasErrors ? 'red' : 'green',
           progress: 100,
           hasErrors: hasErrors,
           result: result.join('\n')
         }
-      ])
+      ]))
     })
 
     server.start().catch((err) => reject(err))

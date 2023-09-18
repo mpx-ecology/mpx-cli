@@ -1,12 +1,13 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const WebpackBar = require('webpackbar')
-const minimist = require('minimist')
 const { transformMpxEntry } = require('../transformMpxEntry')
 const {
   resolveMpxWebpackPluginConf
 } = require('../resolveMpxWebpackPluginConf')
 const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getReporter } = require('../../utils/reporter')
+const { getWebpackName } = require('../../utils/name')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
 
 function changeStyleVueRuleToMpx (webpackConfig, name) {
   const store = webpackConfig.module.rule(name).oneOfs.store
@@ -22,7 +23,7 @@ module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (
   options = {},
   webpackConfig
 ) {
-  webpackConfig.name('web-compiler')
+  const target = getCurrentTarget()
   transformMpxEntry(api, options, webpackConfig, true)
   try {
     changeStyleVueRuleToMpx(webpackConfig, 'css')
@@ -61,23 +62,26 @@ module.exports.resolveWebWebpackConfig = function resolveWebWebpackConfig (
   // 对于 svg 交给 mpx-url-loader 处理，去掉 vue-cli 配置的 svg 规则
   webpackConfig.module.rules.delete('svg')
 
-  const parsedArgs = minimist(process.argv.slice(2))
+  const pluginConfig = {
+    mode: 'web',
+    srcMode: 'wx',
+    forceDisableBuiltInLoader: true,
+    ...resolveMpxWebpackPluginConf(api, options)
+  }
 
-  webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
-    {
-      mode: 'web',
-      srcMode: 'wx',
-      env: parsedArgs.env,
-      forceDisableBuiltInLoader: true,
-      ...resolveMpxWebpackPluginConf(api, options)
-    }
-  ])
+  webpackConfig
+    .plugin('mpx-webpack-plugin')
+    .use(MpxWebpackPlugin, [pluginConfig])
+
+  const name = getWebpackName(api, target, pluginConfig)
+
+  webpackConfig.name(name)
 
   // fancy reporter
   webpackConfig.plugin('webpackbar').use(WebpackBar, [
     {
       color: 'orange',
-      name: `${process.env.MPX_CURRENT_TARGET_MODE}-compiler-${api.service.mode}`,
+      name: name,
       basic: false,
       reporter: getReporter()
     }

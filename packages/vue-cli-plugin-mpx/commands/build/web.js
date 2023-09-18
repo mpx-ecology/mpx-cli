@@ -1,9 +1,32 @@
 const webpack = require('webpack')
-const { modifyConfig, handleWebpackDone } = require('../../utils/webpack')
+const { handleWebpackDone, modifyMpxPluginConfig } = require('../../utils/webpack')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 
 const resolveWebBuildWebpackConfig = (api, options, args) => {
   const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
+  api.chainWebpack((config) => {
+    if (args.watch) {
+      config.watch(true)
+    }
+    if (args.report) {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+      config.plugin('bundler-analyzer-plugin', BundleAnalyzerPlugin, [
+        {
+          logLevel: 'warn',
+          openAnalyzer: false,
+          analyzerMode: args.report ? 'static' : 'disabled',
+          reportFilename: 'report.html',
+          statsFilename: 'report.json',
+          generateStatsFile: !!args.report
+        }
+      ])
+    }
+    if (args.env) {
+      modifyMpxPluginConfig(api, config, {
+        env: args.env
+      })
+    }
+  })
   // resolve raw webpack config
   const webpackConfig =
     require('@vue/cli-service/lib/commands/build/resolveAppConfig')(
@@ -13,26 +36,6 @@ const resolveWebBuildWebpackConfig = (api, options, args) => {
     )
   // check for common config errors
   validateWebpackConfig(webpackConfig, api, options)
-  if (args.watch) {
-    modifyConfig(webpackConfig, (config) => {
-      config.watch = true
-    })
-  }
-  if (args.report) {
-    const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-    modifyConfig(webpackConfig, (config) => {
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          logLevel: 'warn',
-          openAnalyzer: false,
-          analyzerMode: args.report ? 'static' : 'disabled',
-          reportFilename: 'report.html',
-          statsFilename: 'report.json',
-          generateStatsFile: !!args.report
-        })
-      )
-    })
-  }
   return webpackConfig
 }
 

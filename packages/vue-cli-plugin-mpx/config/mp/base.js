@@ -16,6 +16,7 @@ const {
 const { resolveMpxLoader } = require('../../utils/resolveMpxLoader')
 const { getReporter } = require('../../utils/reporter')
 const { transformMpxEntry } = require('../transformMpxEntry')
+const { getWebpackName } = require('../../utils/name')
 
 /**
  * 基础配置
@@ -43,8 +44,6 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
     options.outputDir !== 'dist' ? options.outputDir : `dist/${target.mode}`
   let subDir = ''
 
-  webpackConfig.name(`${target.mode}-compiler`)
-
   webpackConfig
     .mode(process.env.NODE_ENV === 'production' ? 'production' : 'none')
     .context(api.service.context)
@@ -64,15 +63,6 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
   webpackConfig
     .plugin('define')
     .use(webpack.DefinePlugin, [resolveClientEnv(options)])
-  // fancy reporter
-  webpackConfig.plugin('webpackbar').use(WebpackBar, [
-    {
-      color: 'orange',
-      name: `${process.env.MPX_CURRENT_TARGET_MODE}-compiler-${api.service.mode}`,
-      basic: false,
-      reporter: getReporter()
-    }
-  ])
 
   // assets rules
   webpackConfig.module.rules.delete('svg')
@@ -191,12 +181,27 @@ module.exports.resolveMpWebpackConfig = function resolveMpWebpackConfig (
       ]
     }
   ])
+  const pluginConfig = {
+    mode: target.mode,
+    srcMode: mpxOptions.srcMode,
+    ...resolveMpxWebpackPluginConf(api, options)
+  }
 
-  webpackConfig.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [
+  webpackConfig
+    .plugin('mpx-webpack-plugin')
+    .use(MpxWebpackPlugin, [pluginConfig])
+
+  const name = getWebpackName(api, target, pluginConfig)
+
+  webpackConfig.name(name)
+
+  // fancy reporter
+  webpackConfig.plugin('webpackbar').use(WebpackBar, [
     {
-      mode: target.mode,
-      srcMode: mpxOptions.srcMode,
-      ...resolveMpxWebpackPluginConf(api, options)
+      color: 'orange',
+      basic: false,
+      name,
+      reporter: getReporter()
     }
   ])
 

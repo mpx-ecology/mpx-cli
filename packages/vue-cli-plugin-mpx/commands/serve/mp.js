@@ -3,18 +3,17 @@ const { parseTarget, getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const {
   resolveWebpackConfigByTarget,
-  handleWebpackDone
+  handleWebpackDone,
+  modifyMpxPluginConfig
 } = require('../../utils/webpack')
 
 const resolveMpServeWebpackConfig = (api, options, args) => {
-  const customMpxEnv = args.env
   const target = parseTarget(args.target, options)
   // 小程序业务代码构建配置
   api.chainWebpack((config) => {
-    if (customMpxEnv) {
-      config.plugin('mpx-webpack-plugin').tap((args) => {
-        args[0].env = customMpxEnv
-        return args
+    if (args.env) {
+      modifyMpxPluginConfig(api, config, {
+        env: args.env
       })
     }
   })

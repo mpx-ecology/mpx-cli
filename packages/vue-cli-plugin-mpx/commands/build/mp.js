@@ -2,23 +2,22 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const {
   resolveWebpackConfigByTarget,
-  handleWebpackDone
+  handleWebpackDone,
+  modifyMpxPluginConfig
 } = require('../../utils/webpack')
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const webpack = require('webpack')
 
 const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
-  const customMpxEnv = args.env
   const target = getCurrentTarget()
   api.chainWebpack((config) => {
     if (args.report) {
       config.plugin('bundle-analyzer-plugin').use(BundleAnalyzerPlugin, [{}])
     }
-    if (customMpxEnv) {
-      config.plugin('mpx-webpack-plugin').tap((args) => {
-        args[0].env = customMpxEnv
-        return args
+    if (args.env) {
+      modifyMpxPluginConfig(api, config, {
+        env: args.env
       })
     }
     // 仅在watch模式下生产sourcemap

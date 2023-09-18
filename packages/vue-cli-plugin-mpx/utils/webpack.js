@@ -3,6 +3,8 @@ const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
 const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
 const { getReporter } = require('./reporter')
 const { extractResultFromStats, extractErrorsFromStats } = require('./output')
+const { getWebpackName } = require('./name')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
 
 /**
  * 获取基础配置通过构建目标，该方法会运行插件方法并增加默认配置
@@ -61,7 +63,7 @@ module.exports.handleWebpackDone = function (err, stats, target, api) {
       stats.stats.map((v) => {
         return {
           ...v,
-          name: `${target.mode}-compiler-${api.service.mode}`,
+          name: v.compilation.name,
           message: `Compiled ${status}`,
           color: hasErrors ? 'red' : 'green',
           progress: 100,
@@ -73,5 +75,19 @@ module.exports.handleWebpackDone = function (err, stats, target, api) {
     )
   })
 }
+
+module.exports.modifyMpxPluginConfig = function (api, config, pluginConfig) {
+  config.plugin('mpx-webpack-plugin').tap((args) => {
+    Object.assign(args[0], pluginConfig)
+    const name = getWebpackName(api, getCurrentTarget(), args[0])
+    config.name(name)
+    config.plugin('webpackbar').tap((args) => {
+      args[0].name = name
+      return args
+    })
+    return args
+  })
+}
+
 module.exports.modifyConfig = modifyConfig
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
