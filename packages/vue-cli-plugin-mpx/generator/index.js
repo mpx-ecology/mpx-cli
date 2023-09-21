@@ -90,7 +90,7 @@ module.exports = function (api, options) {
       pinia: '^2.0.14'
     },
     devDependencies: {
-      '@mpxjs/webpack-plugin': '^2.8.28-beta.8',
+      '@mpxjs/webpack-plugin': '^2.8.0',
       '@mpxjs/size-report': '^2.8.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
       autoprefixer: '^10.2.4',

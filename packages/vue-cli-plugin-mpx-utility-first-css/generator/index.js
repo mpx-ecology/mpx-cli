@@ -1,8 +1,8 @@
 module.exports = function (api, options) {
   api.extendPackage({
     devDependencies: {
-      '@mpxjs/unocss-base': '^2.8.28-beta.10',
-      '@mpxjs/unocss-plugin': '^2.8.28-beta.10'
+      '@mpxjs/unocss-base': '^2.9.0',
+      '@mpxjs/unocss-plugin': '^2.9.0'
     },
     vue: {
       pluginOptions: {
