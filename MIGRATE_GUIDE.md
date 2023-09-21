@@ -10,6 +10,7 @@
     - [模板](#%E6%A8%A1%E6%9D%BF)
     - [调试](#%E8%B0%83%E8%AF%95)
     - [插件管理](#%E6%8F%92%E4%BB%B6%E7%AE%A1%E7%90%86)
+- [mpx-cli 插件 1.0 升级到 2.0](#mpx-cli-%E6%8F%92%E4%BB%B6-10-%E5%8D%87%E7%BA%A7%E5%88%B0-20)
 
 <!-- /TOC -->
 
@@ -108,9 +109,17 @@ v3版本的模板也可以通过插件进行自定义生成，同时不依赖于
 
 ### 3. 调试
 
-v3版本可以通过`mpx inspect:mp/web`来直接调试相关配置，可以更直观的发现配置错误。
+v3版本可以通过`mpx inspect`来直接调试相关配置，可以更直观的发现配置错误。
 
 ### 4. 插件管理
 
 使用`mpx invoke`/`mpx add`/`mpx upgrade`来管理插件，可以更细粒度的控制相关配置的更新。
 
+# mpx-cli 插件 1.0 升级到 2.0
+
+插件1.0和2.0在构建流程上做了很大的改动，所以如果需要从1.0 升级到 2.0，需要做以下改动
+
+1. npm uninstall @mpxjs/vue-cli-plugin-mpx-mp @mpxjs/vue-cli-plugin-mpx-web
+2. 修改 `package.json` 里的`build:mp`为`build`,`serve:mp`为`serve`
+
+之后正常运行命令即可

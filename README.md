@@ -9,10 +9,8 @@
   - [使用](#%E4%BD%BF%E7%94%A8)
   - [基础](#%E5%9F%BA%E7%A1%80)
     - [CLI 命令](#cli-%E5%91%BD%E4%BB%A4)
-      - [build:mp](#buildmp)
-      - [serve:mp](#servemp)
-      - [build:web](#buildweb)
-      - [serve:web](#serveweb)
+      - [build](#build)
+      - [serve](#serve)
   - [开发](#%E5%BC%80%E5%8F%91)
     - [webpack 相关](#webpack-%E7%9B%B8%E5%85%B3)
       - [mpx 编译构建配置](#mpx-%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE)
@@ -24,6 +22,7 @@
     - [template 相关](#template-%E7%9B%B8%E5%85%B3)
   - [配置](#%E9%85%8D%E7%BD%AE)
     - [vue.config.js](#vueconfigjs)
+  - [mpx-cli 插件 1.0 升级到 2.0](#mpx-cli-%E6%8F%92%E4%BB%B6-10-%E5%8D%87%E7%BA%A7%E5%88%B0-20)
   - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
   - [cli 相关介绍](#cli-%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D)
 
@@ -49,10 +48,8 @@ npm run build
 
 ```json
 {
-  "serve": "mpx-cli-service serve:mp", // 开发小程序
-  "build": "mpx-cli-service build:mp", // 构建小程序
-  "serve:web": "mpx-cli-service serve:web", // 开发Web
-  "build:web": "mpx-cli-service build:web" // 构建Web
+  "serve": "mpx-cli-service serve", // 开发模式
+  "build": "mpx-cli-service build" // 构建模式
 }
 ```
 
@@ -60,96 +57,46 @@ npm run build
 
 ### CLI 命令
 
-#### build:mp
+#### build
 
 ```sh
-用法：mpx-cli-service build:mp [options]
+用法：mpx-cli-service build [options]
+
+选项:
+
+  --targets    编译目标(默认值: wx)
+  --mode       指定环境模式 (默认值：production)
+  --env        自定义 __mpx_env__
+  --watch      监听文件变化
+  --report     生成包分析报告
+```
+
+```sh
+# 构建小程序，默认微信
+mpx-cli-service build --targets=wx,ali
+```
+
+**目前支持的平台**
+
+| 平台   | target |
+| ------ | ------ |
+| 微信   | wx     |
+| 阿里   | ali    |
+| 百度   | swan   |
+| QQ     | qq     |
+| 头条   | tt     |
+| 浏览器 | web    |
+
+#### serve
+
+```sh
+用法：mpx-cli-service serve [options]
 
 选项:
 
   --targets    编译到小程序目标(默认值: wx)
   --mode       指定环境模式 (默认值：production)
   --env        自定义 __mpx_env__
-  --watch      监听文件变化
-  --report     生成包分析报告
-  --open-child-process 开启子进程编译
-```
-
-```sh
-# 构建小程序，默认微信
-mpx-cli-service build:mp --targets=wx,ali
-```
-
-**目前支持的小程序平台**
-
-| 平台 | target |
-| ---- | ------ |
-| 微信 | wx     |
-| 阿里 | ali    |
-| 百度 | swan   |
-| QQ   | qq     |
-| 头条 | tt     |
-
-#### serve:mp
-
-```sh
-用法：mpx-cli-service serve:mp [options]
-
-选项:
-
-  --targets    编译到小程序目标(默认值: wx)
-  --env        自定义 __mpx_env__
-  --open-child-process 开启子进程编译
-```
-
-```sh
-# 开发小程序，默认微信
-mpx-cli-service serve:mp --targets=wx,ali
-```
-
-#### build:web
-
-```sh
-用法：mpx-cli-service build:web [options] [entry|pattern]
-
-选项：
-
-  --mode        指定环境模式 (默认值：production)
-  --dest        指定输出目录 (默认值：dist)
-  --modern      面向现代浏览器带自动回退地构建应用
-  --target      app | lib | wc | wc-async (默认值：app)
-  --env         自定义 __mpx_env__
-  --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
-  --no-clean    在构建项目之前不清除目标目录的内容
-  --report      生成 report.html 以帮助分析包内容
-  --report-json 生成 report.json 以帮助分析包内容
-  --watch       监听文件变化
-```
-
-```sh
-# 构建web
-mpx-cli-service build:web
-```
-
-#### serve:web
-
-```sh
-用法：mpx-cli-service serve:web [options] [entry]
-
-选项：
-
-  --open    在服务器启动时打开浏览器
-  --copy    在服务器启动时将 URL 复制到剪切版
-  --mode    指定环境模式 (默认值：development)
-  --host    指定 host (默认值：0.0.0.0)
-  --port    指定 port (默认值：8080)
-  --https   使用 https (默认值：false)
-  --env     自定义 __mpx_env__
-```
-
-```sh
-# 开发web
-mpx-cli-service serve:web
 ```
 
 ## 开发
@@ -195,7 +142,7 @@ module.exports = {
 
 - `MPX_CLI_MODE`: 'mp' | 'web'
 - `NODE_ENV`：'development' | 'production'
-- `MPX_CURRENT_TARGET_MODE`: 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd'
+- `MPX_CURRENT_TARGET_MODE`: 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd' | 'web'
 - `MPX_CURRENT_TARGET_ENV` : 'development' | 'production'
 
 ```javascript
@@ -218,20 +165,18 @@ module.exports = {
 
 #### 调试 webpack 配置
 
-可以使用 `mpx inspect:mp` 以及 `mpx inspect:web` 调试 webpack 配置。
-
-> `mpx inspect:web` 的选项和 `vue inspect` 相同。
+可以使用 `mpx inspect` 以及 `mpx inspect` 调试 webpack 配置。
 
 可以将其输出重定向到一个文件以便进行查阅。
 
 ```sh
-mpx inspect:mp > output.js
+mpx inspect > output.js
 ```
 
 还可以增加`targets`,`mode`等选项来输出针对不同条件下的配置。
 
 ```sh
-mpx inspect:mp --targets=wx,ali --mode=development
+mpx inspect --targets=wx,ali --mode=development
 ```
 
 ### css 相关
@@ -271,7 +216,7 @@ module.exports = {
 ### template 相关
 
 可以使用任何模板语言来编译 template，只需要在 template 上添加 lang 属性.
-mpx-cli 内置了pug模板配置，如果需要使用pug模板，只需要安装pug依赖即可。
+mpx-cli 内置了 pug 模板配置，如果需要使用 pug 模板，只需要安装 pug 依赖即可。
 
 ```html
 <template lang="pug"></template>
@@ -291,31 +236,31 @@ npm install -D pug pug-plain-loader
 
 注：`yes` 表示在对应环境支持配置，`no` 表示在对应环境不支持配置。
 
-| 字段                       | web | 小程序 | 备注                   |
-| -------------------------- | --- | ------ | ---------------------- |
-| publicPath                 | yes | no     | -                      |
-| outputDir                  | no  | no     | `dist`目录作为输出目录 |
-| assetsDir                  | yes | no     | -                      |
-| indexPath                  | yes | no     | -                      |
-| filenameHashing            | yes | no     | -                      |
-| pages                      | yes | no     | -                      |
-| lintOnSave                 | no  | no     | -                      |
-| runtimeCompiler            | yes | no     | -                      |
-| transpileDependencies      | yes | yes    | -                      |
-| productionSourceMap        | yes | no     | 未来会支持             |
-| crossorigin                | yes | no     | -                      |
-| integrity                  | yes | no     | -                      |
-| configureWebpack           | yes | yes    | -                      |
-| chainWebpack               | yes | yes    | -                      |
-| css.requireModuleExtension | yes | no     | -                      |
-| css.extract                | yes | no     | -                      |
-| css.sourceMap              | yes | no     | 未来会支持             |
-| css.loaderOptions          | yes | no     | 未来会支持             |
-| devServer                  | yes | no     | -                      |
-| devServer.proxy            | yes | no     | -                      |
-| parallel                   | yes | no     | -                      |
-| pwa                        | yes | no     | -                      |
-| pluginOptions              | yes | yes    | -                      |
+| 字段                       | web | 小程序 | 备注                                                          |
+| -------------------------- | --- | ------ | ------------------------------------------------------------- |
+| publicPath                 | yes | no     | -                                                             |
+| outputDir                  | yes | yes    | `dist/${process.env.MPX_CURRENT_TARGET_MODE}`目录作为输出目录 |
+| assetsDir                  | yes | no     | -                                                             |
+| indexPath                  | yes | no     | -                                                             |
+| filenameHashing            | yes | no     | -                                                             |
+| pages                      | yes | no     | -                                                             |
+| lintOnSave                 | no  | no     | -                                                             |
+| runtimeCompiler            | yes | no     | -                                                             |
+| transpileDependencies      | yes | yes    | -                                                             |
+| productionSourceMap        | yes | no     | 未来会支持                                                    |
+| crossorigin                | yes | no     | -                                                             |
+| integrity                  | yes | no     | -                                                             |
+| configureWebpack           | yes | yes    | -                                                             |
+| chainWebpack               | yes | yes    | -                                                             |
+| css.requireModuleExtension | yes | no     | -                                                             |
+| css.extract                | yes | no     | -                                                             |
+| css.sourceMap              | yes | no     | 未来会支持                                                    |
+| css.loaderOptions          | yes | no     | 未来会支持                                                    |
+| devServer                  | yes | no     | -                                                             |
+| devServer.proxy            | yes | no     | -                                                             |
+| parallel                   | yes | no     | -                                                             |
+| pwa                        | yes | no     | -                                                             |
+| pluginOptions              | yes | yes    | -                                                             |
 
 可通过 `vue.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
 
@@ -335,6 +280,15 @@ module.exports = {
 }
 ```
 
+## mpx-cli 插件 1.0 升级到 2.0
+
+插件 1.0 和 2.0 在构建流程上做了很大的改动，所以如果需要从 1.0 升级到 2.0，需要做以下改动
+
+1. npm uninstall @mpxjs/vue-cli-plugin-mpx-mp @mpxjs/vue-cli-plugin-mpx-web
+2. 修改 `package.json` 里的`build:mp`为`build`,`serve:mp`为`serve`
+
+之后正常运行命令即可
+
 ## 开发插件
 
 一个 CLI 插件是一个 npm 包，它能够为 `MPX CLI` 创建的项目添加额外的功能，这些功能包括：
@@ -349,15 +303,15 @@ module.exports = {
 
 ## cli 相关介绍
 
-|包名|版本|描述|
-|-----|----|----|
-|@mpxjs/cli|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fcli.svg)](https://badge.fury.io/js/%40mpxjs%2Fcli)|mpx-cli|
-|@mpxjs/mpx-cli-service|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fmpx-cli-service.svg)](https://badge.fury.io/js/%40mpxjs%2Fmpx-cli-service)|mpx-cli 服务|
-|@mpxjs/vue-cli-plugin-mpx|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx)|mpx-cli 核心插件，包含基础配置，文件模板等|
-|@mpxjs/vue-cli-plugin-mpx-eslint|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint)|eslint插件，包含eslint相关配置|
-|@mpxjs/vue-cli-plugin-mpx-cloud-func|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func)|云函数编译构建插件|
-|@mpxjs/vue-cli-plugin-mpx-mp|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp)|小程序插件，包含小程序构建，开发命令，以及相关配置等|
-|@mpxjs/vue-cli-plugin-mpx-web|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web)|web插件，包含web构建，开发命令，以及相关配置等|
-|@mpxjs/vue-cli-plugin-mpx-unit-test|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test)|单测插件，包含单元测试相关配置|
-|@mpxjs/vue-cli-plugin-mpx-plugin-mode|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-plugin-mode.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-plugin-mode)|小程序插件模式插件，包含小程序插件的js，ts模板等|
-|@mpxjs/vue-cli-plugin-mpx-typescript|[![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-typescript.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-typescript)|ts插件，包含小程序ts模板以及相关配置等|
+| 包名                                  | 版本                                                                                                                                                         | 描述                                                 |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| @mpxjs/cli                            | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fcli.svg)](https://badge.fury.io/js/%40mpxjs%2Fcli)                                                       | mpx-cli                                              |
+| @mpxjs/mpx-cli-service                | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fmpx-cli-service.svg)](https://badge.fury.io/js/%40mpxjs%2Fmpx-cli-service)                               | mpx-cli 服务                                         |
+| @mpxjs/vue-cli-plugin-mpx             | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx)                         | mpx-cli 核心插件，包含基础配置，文件模板等           |
+| @mpxjs/vue-cli-plugin-mpx-eslint      | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint)           | eslint 插件，包含 eslint 相关配置                    |
+| @mpxjs/vue-cli-plugin-mpx-cloud-func  | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func)   | 云函数编译构建插件                                   |
+| @mpxjs/vue-cli-plugin-mpx-mp          | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp)                   | 小程序插件，包含小程序构建，开发命令，以及相关配置等 |
+| @mpxjs/vue-cli-plugin-mpx-web         | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web)                 | web 插件，包含 web 构建，开发命令，以及相关配置等    |
+| @mpxjs/vue-cli-plugin-mpx-unit-test   | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test)     | 单测插件，包含单元测试相关配置                       |
+| @mpxjs/vue-cli-plugin-mpx-plugin-mode | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-plugin-mode.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-plugin-mode) | 小程序插件模式插件，包含小程序插件的 js，ts 模板等   |
+| @mpxjs/vue-cli-plugin-mpx-typescript  | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-typescript.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-typescript)   | ts 插件，包含小程序 ts 模板以及相关配置等            |

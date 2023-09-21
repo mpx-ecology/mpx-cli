@@ -2,6 +2,54 @@
 
 
 
+## 2.0.6 (2023-08-04)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx`
+  * [#72](https://github.com/mpx-ecology/mpx-cli/pull/72) Bugfix/devtool edit ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
+## 2.0.5 (2023-08-02)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx`
+  * [#71](https://github.com/mpx-ecology/mpx-cli/pull/71) Bugfix/web css loader options ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
+
+
+
+
+
+
+## 2.0.2 (2023-06-28)
+
+#### :bug: Bug Fix
+* `mpx-cli`, `vue-cli-plugin-mpx`
+  * [#66](https://github.com/mpx-ecology/mpx-cli/pull/66) fix: web inspect ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

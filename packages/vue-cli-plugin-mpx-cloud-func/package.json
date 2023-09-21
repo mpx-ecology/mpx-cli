@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-cloud-func",
-  "version": "1.6.30",
+  "version": "2.0.7",
   "description": "mp cloud func plugin for mpx",
   "main": "index.js",
   "scripts": {

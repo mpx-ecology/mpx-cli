@@ -1,3 +1,5 @@
+const prefix = '@mpxjs/vue-cli-plugin-mpx'
+
 module.exports = [
   {
     name: 'srcMode',
@@ -15,18 +17,18 @@ module.exports = [
     default: true
   },
   {
-    name: 'transWeb',
-    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === true,
-    message: '是否需要支持输出web',
-    type: 'confirm',
-    default: false
-  },
-  {
     name: 'cloudFunc',
     when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
     message: '是否需要使用小程序云开发能力',
     type: 'confirm',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-cloud-func`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
   },
   {
     name: 'isPlugin',
@@ -34,31 +36,67 @@ module.exports = [
     type: 'confirm',
     message:
       '是否是个插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-plugin-mode`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
   },
   {
     name: 'needTs',
     type: 'confirm',
-    message: '是否需要使用typescript',
-    default: false
+    message: '是否需要typescript',
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-typescript`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
   },
+
   {
     name: 'needUtilityFirstCSS',
     type: 'confirm',
     message: '是否需要使用原子类',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-utility-first-css`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
   },
   {
     name: 'needUnitTest',
     message: '是否需要单元测试',
     type: 'confirm',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-unit-test`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
   },
   {
     name: 'needE2ETest',
     message: '是否需要自动化测试',
     type: 'confirm',
-    default: false
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-e2e-test`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
   },
   {
     name: 'description',
@@ -69,7 +107,7 @@ module.exports = [
   },
   {
     name: 'appid',
-    when: ({ srcMode }) => srcMode === 'wx',
+    when: ({ srcMode }) => srcMode === 'wx' || srcMode === 'dd',
     required: true,
     message: '请输入小程序的Appid',
     default: 'touristappid'

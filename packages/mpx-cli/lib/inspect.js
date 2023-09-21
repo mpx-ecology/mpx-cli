@@ -3,7 +3,7 @@ const path = require('path')
 const resolve = require('resolve')
 const { execa } = require('@vue/cli-shared-utils')
 
-module.exports = function inspect (paths, args, mode) {
+module.exports = function inspect (paths, args) {
   const cwd = process.cwd()
   let servicePath
   try {
@@ -21,7 +21,7 @@ module.exports = function inspect (paths, args, mode) {
   if (fs.existsSync(binPath)) {
     execa('node', [
       binPath,
-      `inspect:${mode}`,
+      'inspect',
       ...(args.mode ? ['--mode', args.mode] : []),
       ...(args.targets ? ['--targets', args.targets] : []),
       ...(args.env ? ['--env', args.env] : []),

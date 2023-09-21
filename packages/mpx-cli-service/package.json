@@ -1,14 +1,16 @@
 {
   "name": "@mpxjs/mpx-cli-service",
-  "version": "1.6.30",
+  "version": "2.0.7",
   "description": "local service for mpx-cli project",
   "main": "lib/Service.js",
   "bin": {
     "mpx-cli-service": "bin/mpx-cli-service.js"
   },
   "dependencies": {
+    "@mpxjs/cli-shared-utils": "^2.0.7",
     "@vue/cli-service": "^5.0.0",
-    "@vue/cli-shared-utils": "^5.0.4"
+    "@vue/cli-shared-utils": "^5.0.4",
+    "minimist": "^1.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
