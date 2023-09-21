@@ -6,13 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "peerDependencies": {
-    "@mpxjs/windicss-plugin": "^2.8.28-beta.1"
-  },
   "keywords": [
     "mpx",
     "utility-first css",
-    "windicss"
+    "unocss"
   ],
   "author": "hiyuki",
   "license": "ISC",
