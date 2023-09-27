@@ -112,10 +112,11 @@ mpx-cli-service build --targets=wx,ali
 module.exports = {
   pluginOptions: {
     mpx: {
-      srcMode: 'wx',
       // 传入 @mpxjs/webpack-plugin 当中的配置信息
       // 具体可参考文档：https://www.mpxjs.cn/api/compile.html#mpxwebpackplugin-options
-      plugin: {},
+      plugin: {
+        srcMode: 'wx',
+      },
       // 传入 @mpxjs/webpack-plugin loader 当中的配置信息
       // 具体可参考文档：https://www.mpxjs.cn/api/compile.html#mpxwebpackplugin-loader
       loader: {},

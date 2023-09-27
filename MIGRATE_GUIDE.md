@@ -36,9 +36,9 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   pluginOptions: {
     mpx: {
-      srcMode: 'wx',
       plugin: {
         // 这里等同于`@mpxjs/webpack-plugin`的参数
+        srcMode: 'wx',
       },
       loader: {
         // 这里等同于`mpx-loader`参数

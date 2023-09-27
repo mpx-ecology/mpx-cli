@@ -6,8 +6,9 @@
 module.exports = {
   pluginOptions: {
     mpx: {
-      srcMode: 'wx',
-      plugin: {},
+      plugin: {
+        srcMode: 'wx',
+      },
       loader: {}
     }
   },

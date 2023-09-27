@@ -39,8 +39,8 @@ module.exports = function (api, options) {
       outputDir: '{outputDir}',
       pluginOptions: {
         mpx: {
-          srcMode: options.srcMode,
           plugin: {
+            srcMode: options.srcMode,
             hackResolveBuildDependencies: ({ files, resolveDependencies }) => {
               const path = require('path')
               const packageJSONPath = path.resolve('package.json')
