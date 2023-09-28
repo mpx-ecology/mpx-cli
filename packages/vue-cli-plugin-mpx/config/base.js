@@ -38,7 +38,6 @@ module.exports = function (api, options, webpackConfig) {
     .add('.ts')
     .add('.js')
     .add('.wxml')
-    .add('.vue')
 
   webpackConfig.resolve.modules.add('node_modules')
 
