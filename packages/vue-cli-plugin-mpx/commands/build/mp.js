@@ -8,6 +8,7 @@ const {
 const { symlinkTargetConfig } = require('../../utils/symlinkTargetConfig')
 const webpack = require('webpack')
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 const resolveMpBuildWebpackConfig = (api, options, args) => {
   const watch = !!args.watch
   const target = getCurrentTarget()

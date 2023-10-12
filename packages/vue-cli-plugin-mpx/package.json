@@ -13,10 +13,11 @@
     "@mpxjs/cli-shared-utils": "^2.0.7",
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@vue/cli-shared-utils": "^5.0.4",
+    "@vue/vue-loader-v15": "npm:vue-loader@^15.9.7",
     "ansi-escapes": "^4.1.0",
     "babel-loader": "^8.1.0",
-    "copy-webpack-plugin": "^9.1.0",
     "cli-highlight": "^2.1.10",
+    "copy-webpack-plugin": "^9.1.0",
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
     "launch-editor-middleware": "^2.2.1",
@@ -29,8 +30,8 @@
     "webpack-chain": "^6.5.1",
     "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.8.0",
-    "wrap-ansi": "^5.1.0",
-    "webpackbar": "^5.0.0"
+    "webpackbar": "^5.0.0",
+    "wrap-ansi": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -52,7 +53,7 @@
     "pinia": "^2.0.14",
     "stylus": "^0.55.0",
     "stylus-loader": "^6.1.0",
-    "vue": "^2.6.14",
+    "vue": "^2.7.0",
     "vue-demi": "^0.13.11",
     "vue-i18n": "^8.27.2",
     "vue-i18n-bridge": "^9.2.2",

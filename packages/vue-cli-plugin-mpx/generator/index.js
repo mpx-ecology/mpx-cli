@@ -57,6 +57,15 @@ module.exports = function (api, options) {
     }
   })
 
+  if (options.vueVersion !== '3') {
+    api.extendPackage({
+      dependencies: {
+        vue: '^2.7.0'
+      }
+    })
+    delete api.generator.pkg.devDependencies['vue-template-compiler']
+  }
+
   api.postProcessFiles((files) => {
     // 处理 vue.config.js 中 crossorigin 和 productionSourceMap
     let vueConfigJs = files['vue.config.js']

@@ -76,18 +76,26 @@ module.exports.handleWebpackDone = function (err, stats, target, api) {
   })
 }
 
-module.exports.modifyMpxPluginConfig = function (api, config, pluginConfig) {
-  config.plugin('mpx-webpack-plugin').tap((args) => {
-    Object.assign(args[0], pluginConfig)
-    const name = getWebpackName(api, getCurrentTarget(), args[0])
-    config.name(name)
-    config.plugin('webpackbar').tap((args) => {
-      args[0].name = name
-      return args
-    })
+function updateWebpackName (api, config) {
+  const mpxWebpackPluginConfig = config
+    .plugin('mpx-webpack-plugin')
+    .get('args')[0]
+  const name = getWebpackName(api, getCurrentTarget(), mpxWebpackPluginConfig)
+  config.name(name)
+  config.plugin('webpackbar').tap((args) => {
+    args[0].name = name
     return args
   })
 }
 
+module.exports.modifyMpxPluginConfig = function (api, config, pluginConfig) {
+  config.plugin('mpx-webpack-plugin').tap((args) => {
+    Object.assign(args[0], pluginConfig)
+    return args
+  })
+  updateWebpackName(api, config)
+}
+
+module.exports.updateWebpackName = updateWebpackName
 module.exports.modifyConfig = modifyConfig
 module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
