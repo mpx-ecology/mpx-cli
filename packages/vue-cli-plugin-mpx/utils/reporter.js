@@ -1,4 +1,3 @@
-/* eslint-disable no-tabs */
 const { chalk } = require('@vue/cli-shared-utils')
 const ansiEscapes = require('ansi-escapes')
 const wrapAnsi = require('wrap-ansi')
@@ -55,12 +54,8 @@ class LogUpdate {
   }
 
   _onData (data) {
-    const str = String(data)
-    const lines = str.split('\n').length - 1
-    if (lines > 0) {
-      this.prevLineCount += lines
-      this.extraLines += data
-    }
+    this.write(ansiEscapes.eraseLines(this.prevLineCount))
+    this.prevLineCount = 0
   }
 
   listen () {
@@ -212,12 +207,11 @@ class FancyReporter {
         cb
       )
     } else {
-      logUpdate.render('\n' + renderedStates + '\n')
+      logUpdate.render(renderedStates + '\n')
     }
   }
 
   _renderState (state) {
-    if (state.details && state.details.includes('IdleFileCachePlugin')) return
     const color = colorize(state.color)
     let line1
     let line2
@@ -247,13 +241,16 @@ class FancyReporter {
         icon = CIRCLE_OPEN
       }
       line1 = color(`${icon} ${state.name}`)
-      line2 = chalk.grey('  ' + state.message) + '\n' + (state.result || '')
+      line2 = chalk.grey('  ' + state.message) + (state.result ? '\n' + state.result : '')
     }
     return line1 + '\n' + line2
   }
 }
 
 let reporter = null
+/**
+ * @returns {FancyReporter} - fancyReporter
+ */
 exports.getReporter = function () {
   if (reporter) return reporter
   return (reporter = new FancyReporter())

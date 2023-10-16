@@ -1,61 +1,14 @@
 const { hasProjectYarn, hasProjectPnpm } = require('@vue/cli-shared-utils')
 const { getReporter } = require('../../utils/reporter')
 const { extractErrorsFromStats } = require('../../utils/output')
-const { modifyMpxPluginConfig } = require('../../utils/webpack')
+const { resolveServeWebpackConfigByTarget } = require('../../config')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
 
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
   https: false
 }
-
-const resolveWebServeWebpackConfig = (api, options, args) => {
-  const validateWebpackConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
-  const webpack = require('webpack')
-  // resolve webpack config
-  const webpackConfig = api.resolveWebpackConfig()
-  // check for common config errors
-  validateWebpackConfig(webpackConfig, api, options)
-
-  // load user devServer options with higher priority than devServer
-  // in webpack config
-  webpackConfig.devServer = Object.assign(
-    webpackConfig.devServer || {},
-    options.devServer
-  )
-
-  // entry arg
-  const entry = args._[0]
-  if (entry) {
-    webpackConfig.entry = {
-      app: api.resolve(entry)
-    }
-  }
-
-  const { projectTargets } = require('@vue/cli-service/lib/util/targets')
-  const supportsIE = !!projectTargets
-  if (supportsIE) {
-    webpackConfig.plugins.push(
-      // must use undefined as name,
-      // to avoid dev server establishing an extra ws connection for the new entry
-      new webpack.EntryPlugin(__dirname, 'whatwg-fetch', {
-        name: undefined
-      })
-    )
-  }
-
-  // fixme: temporary fix to suppress dev server logging
-  // should be more robust to show necessary info but not duplicate errors
-  webpackConfig.infrastructureLogging = {
-    ...webpackConfig.infrastructureLogging,
-    level: 'none'
-  }
-  webpackConfig.stats = 'errors-only'
-
-  return webpackConfig
-}
-
-module.exports.resolveWebServeWebpackConfig = resolveWebServeWebpackConfig
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.serveWeb = async (api, options, args) => {
@@ -73,32 +26,15 @@ module.exports.serveWeb = async (api, options, args) => {
   const launchEditorMiddleware = require('launch-editor-middleware')
   const isAbsoluteUrl = require('@vue/cli-service/lib/util/isAbsoluteUrl')
 
-  // configs that only matters for dev server
-  api.chainWebpack((webpackConfig) => {
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      process.env.NODE_ENV !== 'test'
-    ) {
-      if (!webpackConfig.get('devtool')) {
-        webpackConfig.devtool('eval-cheap-module-source-map')
-      }
-
-      // https://github.com/webpack/webpack/issues/6642
-      // https://github.com/vuejs/vue-cli/issues/3539
-      webpackConfig.output.globalObject(
-        "(typeof self !== 'undefined' ? self : this)"
-      )
-    }
-    if (args.env) {
-      modifyMpxPluginConfig(api, webpackConfig, {
-        env: args.env
-      })
-    }
-  })
-
   // resolve webpack config
-  const webpackConfig = resolveWebServeWebpackConfig(api, options, args)
-  const projectDevServerOptions = webpackConfig.devServer
+  const target = getCurrentTarget()
+  const webpackConfig = resolveServeWebpackConfigByTarget(
+    api,
+    options,
+    target,
+    args
+  )
+  const projectDevServerOptions = webpackConfig.devServer || {}
 
   // resolve server options
   const protocol = 'http'
@@ -335,16 +271,16 @@ module.exports.serveWeb = async (api, options, args) => {
         result.push(logChunk.join('\n'))
       }
 
-      getReporter()._renderStates(stats.stats.map(v => [
+      getReporter()._renderStates([
         {
-          name: v.compilation.name,
+          name: stats.compilation.name,
           message: `Compiled ${status}`,
           color: hasErrors ? 'red' : 'green',
           progress: 100,
           hasErrors: hasErrors,
-          result: result.join('\n')
+          result: result.map(v => `  ${v}`).join('\n')
         }
-      ]))
+      ])
     })
 
     server.start().catch((err) => reject(err))

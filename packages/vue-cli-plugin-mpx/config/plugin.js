@@ -1,16 +1,15 @@
 const MpxWebpackPlugin = require('@mpxjs/webpack-plugin')
 const path = require('path')
+const { merge } = require('webpack-merge')
 
 /**
  * 插件配置
- * @param {import('@vue/cli-service').PluginAPI} api
- * @param {import('@vue/cli-service').ProjectOptions} options
- * @param {import('webpack-chain')} webpackConfig
+ * @param { import('@vue/cli-service').PluginAPI } api
+ * @param { import('webpack').Configuration } webpackConfig
  */
 module.exports.resolvePluginWebpackConfig = function resolvePluginWebpackConfig (
   api,
-  options,
-  wxWebpackConfig
+  webpackConfig
 ) {
   let pluginRoot = ''
   try {
@@ -20,17 +19,16 @@ module.exports.resolvePluginWebpackConfig = function resolvePluginWebpackConfig 
     pluginRoot = projectConfigJson.pluginRoot
   } catch (e) {}
 
-  wxWebpackConfig.entry = {
+  webpackConfig.entry = {
     plugin: MpxWebpackPlugin.getPluginEntry(
       api.resolve(`src/${pluginRoot}/plugin.json`)
     )
   }
-  wxWebpackConfig.output = {
+  webpackConfig.output = {
     path: api.resolve(
-      `${path.resolve(wxWebpackConfig.output.path, '../')}/${pluginRoot}`
+      `${path.resolve(webpackConfig.output.path, '../')}/${pluginRoot}`
     )
   }
-  wxWebpackConfig.name = 'plugin-compiler'
-
-  return wxWebpackConfig
+  webpackConfig.name = 'plugin-compiler'
+  return merge({}, webpackConfig)
 }

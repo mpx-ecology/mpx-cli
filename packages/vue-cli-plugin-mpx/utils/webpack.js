@@ -1,52 +1,7 @@
-const { merge } = require('webpack-merge')
-const { resolvePluginWebpackConfig } = require('../config/mp/plugin')
-const { resolveBaseRawWebpackConfig } = require('../config/mp/base')
 const { getReporter } = require('./reporter')
 const { extractResultFromStats, extractErrorsFromStats } = require('./output')
-const { getWebpackName } = require('./name')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
 
-/**
- * 获取基础配置通过构建目标，该方法会运行插件方法并增加默认配置
- * @param {import('@vue/cli-service').PluginAPI} api
- * @param {import('@vue/cli-service').ProjectOptions} options
- * @returns
- */
-function resolveWebpackConfigByTarget (
-  api,
-  options,
-  target,
-  resolveCustomConfig
-) {
-  // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
-  api.service.webpackRawConfigFns.splice(
-    api.service.webpackRawConfigFns.length - 1,
-    0,
-    resolveBaseRawWebpackConfig(api)
-  )
-  const webpackConfigs = []
-  const chainWebpackConfig = api.resolveChainableWebpackConfig() // 所有的插件的chainWebpack， 和vue.config.js里的chainWebpack
-  resolveCustomConfig && resolveCustomConfig(chainWebpackConfig, target)
-  const webpackConfig = api.resolveWebpackConfig(chainWebpackConfig)
-  webpackConfigs.push(webpackConfig)
-  // 小程序插件构建配置
-  if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {
-    webpackConfigs.push(
-      resolvePluginWebpackConfig(api, options, merge({}, webpackConfig))
-    )
-  }
-  return webpackConfigs
-}
-
-const modifyConfig = (config, fn) => {
-  if (Array.isArray(config)) {
-    config.forEach((c) => fn(c))
-  } else {
-    fn(config)
-  }
-}
-
-module.exports.handleWebpackDone = function (err, stats, target, api) {
+function handleWebpackDone (err, stats) {
   return new Promise((resolve, reject) => {
     if (err) return reject(err)
     const hasErrors = stats.hasErrors()
@@ -76,26 +31,4 @@ module.exports.handleWebpackDone = function (err, stats, target, api) {
   })
 }
 
-function updateWebpackName (api, config) {
-  const mpxWebpackPluginConfig = config
-    .plugin('mpx-webpack-plugin')
-    .get('args')[0]
-  const name = getWebpackName(api, getCurrentTarget(), mpxWebpackPluginConfig)
-  config.name(name)
-  config.plugin('webpackbar').tap((args) => {
-    args[0].name = name
-    return args
-  })
-}
-
-module.exports.modifyMpxPluginConfig = function (api, config, pluginConfig) {
-  config.plugin('mpx-webpack-plugin').tap((args) => {
-    Object.assign(args[0], pluginConfig)
-    return args
-  })
-  updateWebpackName(api, config)
-}
-
-module.exports.updateWebpackName = updateWebpackName
-module.exports.modifyConfig = modifyConfig
-module.exports.resolveWebpackConfigByTarget = resolveWebpackConfigByTarget
+module.exports.handleWebpackDone = handleWebpackDone

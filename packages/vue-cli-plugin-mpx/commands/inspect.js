@@ -1,9 +1,10 @@
 const { toString } = require('webpack-chain')
 const { highlight } = require('cli-highlight')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
-const { resolveMpBuildWebpackConfig } = require('./build/mp')
-const { resolveWebBuildWebpackConfig } = require('./build/web')
+const { resolveBuildWebpackConfig } = require('../config/base')
+const { resolveBuildWebpackConfigByTarget } = require('../config')
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.registerInspectCommand = function registerInspectCommand (
   api,
   options
@@ -15,13 +16,12 @@ module.exports.registerInspectCommand = function registerInspectCommand (
       usage: 'mpx-cli-service inspect'
     },
     async function inspect (args) {
-      const target = getCurrentTarget()
       const { verbose } = args
-      if (target.env) process.env.NODE_ENV = target.env
-      const res =
-        target.mode === 'web'
-          ? resolveWebBuildWebpackConfig(api, options, args)
-          : resolveMpBuildWebpackConfig(api, options, args)
+      const target = getCurrentTarget()
+      api.chainWebpack((config) =>
+        resolveBuildWebpackConfig(api, options, config, target, args)
+      )
+      const res = resolveBuildWebpackConfigByTarget(api, options, target, args)
       const output = toString(res, { verbose })
       console.log(highlight(output, { language: 'js' }))
     }
