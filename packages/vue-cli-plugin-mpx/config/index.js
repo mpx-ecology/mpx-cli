@@ -1,11 +1,5 @@
 const { resolveBaseRawWebpackConfig } = require('./base')
 const { resolvePluginWebpackConfig } = require('./plugin')
-
-module.exports.resolveBuildWebpackConfigByTarget =
-  resolveBuildWebpackConfigByTarget
-module.exports.resolveServeWebpackConfigByTarget =
-  resolveServeWebpackConfigByTarget
-
 /**
  * 获取构建模式基础配置
  * @param { import('@vue/cli-service').PluginAPI } api
@@ -62,3 +56,8 @@ function resolveServeWebpackConfigByTarget (api, options, target, args) {
   }
   return webpackConfigs
 }
+
+module.exports.resolveBuildWebpackConfigByTarget =
+  resolveBuildWebpackConfigByTarget
+module.exports.resolveServeWebpackConfigByTarget =
+  resolveServeWebpackConfigByTarget
