@@ -296,7 +296,8 @@ function resolveMpWebpackConfig (api, options, config, target) {
     }
   ])
 
-  config.optimization.minimizer('mpx-terser').use(TerserPlugin, [
+  // 和vue-cli保持相同的命名
+  config.optimization.minimizer('terser').use(TerserPlugin, [
     {
       // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
       terserOptions: {
