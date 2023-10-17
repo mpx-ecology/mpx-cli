@@ -58,6 +58,20 @@ module.exports = [
       }
     }
   },
+
+  {
+    name: 'needUtilityFirstCSS',
+    type: 'confirm',
+    message: '是否需要使用原子类',
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-utility-first-css`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
+  },
   {
     name: 'needUnitTest',
     message: '是否需要单元测试',
