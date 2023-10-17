@@ -18,7 +18,6 @@ function handleWebpackDone (err, stats) {
       stats.stats.map((v) => {
         return {
           ...v,
-          name: v.compilation.name,
           message: `Compiled ${status}`,
           color: hasErrors ? 'red' : 'green',
           progress: 100,

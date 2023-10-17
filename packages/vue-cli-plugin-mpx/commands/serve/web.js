@@ -273,7 +273,6 @@ module.exports.serveWeb = async (api, options, args) => {
 
       getReporter()._renderStates([
         {
-          name: stats.compilation.name,
           message: `Compiled ${status}`,
           color: hasErrors ? 'red' : 'green',
           progress: 100,

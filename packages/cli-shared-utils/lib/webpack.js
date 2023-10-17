@@ -29,7 +29,9 @@ function updateWebpackName (api, config) {
   const name = getWebpackName(api, getCurrentTarget(), mpxWebpackPluginConfig)
   config.name(name)
   config.plugin('webpackbar').tap((args) => {
-    args[0].name = name
+    const c = args[0]
+    c.name = name
+    c.reporter.name = c.name
     return args
   })
 }

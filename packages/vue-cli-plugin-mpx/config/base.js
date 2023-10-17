@@ -3,11 +3,11 @@ const path = require('path')
 const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const {
-  getWebpackName,
   modifyMpxPluginConfig,
   getMpxPluginOptions,
   MODE_CONFIG_FILES_MAP,
-  SUPPORT_MODE
+  SUPPORT_MODE,
+  updateWebpackName
 } = require('@mpxjs/cli-shared-utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -441,15 +441,10 @@ module.exports.resolveBaseConfig = function (api, options, config, target) {
 
   config.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [pluginConfig])
 
-  const name = getWebpackName(api, target, pluginConfig)
-
-  config.name(name)
-
   // fancy reporter
   config.plugin('webpackbar').use(WebpackBar, [
     {
       color: 'orange',
-      name: name,
       basic: false,
       reporter: getReporter()
     }
@@ -465,6 +460,8 @@ module.exports.resolveBaseConfig = function (api, options, config, target) {
   }
 
   transformEntry(api, options, config, target)
+
+  updateWebpackName(api, config)
 }
 
 /**
@@ -545,7 +542,7 @@ module.exports.resolveServeWebpackConfig = function (
   // should be more robust to show necessary info but not duplicate errors
   if (
     process.env.NODE_ENV !== 'production' &&
-      process.env.NODE_ENV !== 'test'
+    process.env.NODE_ENV !== 'test'
   ) {
     if (!config.get('devtool')) {
       config.devtool('eval-cheap-module-source-map')

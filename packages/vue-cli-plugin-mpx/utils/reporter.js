@@ -180,6 +180,10 @@ const formatRequest = (request) => {
 }
 
 class FancyReporter {
+  constructor (name) {
+    this.name = name || ''
+  }
+
   allDone (context) {
     if (process.send) {
       process.send({
@@ -218,7 +222,7 @@ class FancyReporter {
     if (state.progress >= 0 && state.progress < 100) {
       line1 = [
         color(BULLET),
-        color(state.name),
+        color(this.name),
         renderBar(state.progress, state.color),
         state.message,
         `(${state.progress || 0}%)`,
@@ -240,7 +244,7 @@ class FancyReporter {
       } else if (state.progress === -1) {
         icon = CIRCLE_OPEN
       }
-      line1 = color(`${icon} ${state.name}`)
+      line1 = color(`${icon} ${this.name}`)
       line2 = chalk.grey('  ' + state.message) + (state.result ? '\n' + state.result : '')
     }
     return line1 + '\n' + line2
