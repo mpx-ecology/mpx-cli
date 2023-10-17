@@ -45,7 +45,6 @@
     "lerna-changelog": "^2.2.0",
     "lint-staged": "^9.5.0",
     "minimist": "^1.2.8",
-    "ora": "^5.0.1",
     "release-it": "^14.13.1",
     "release-it-yarn-workspaces": "^2.0.1",
     "semver": "^7.3.4"
