@@ -22,7 +22,7 @@ function runServiceCommand (rawArgv, options = {}) {
   return execa.node(mpxCliServiceBinPath, [...rawArgv], options)
 }
 
-function merge (o1, o2) {
+function normalizeCommandArgs (o1, o2) {
   for (const key in o2) {
     if (o1[key] == null) {
       o1[key] = o2[key]
@@ -31,6 +31,6 @@ function merge (o1, o2) {
 }
 
 module.exports.runServiceCommand = runServiceCommand
-module.exports.merge = merge
+module.exports.normalizeCommandArgs = normalizeCommandArgs
 module.exports.removeArgv = removeArgv
 module.exports.makeMap = makeMap

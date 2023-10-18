@@ -4,7 +4,7 @@
  * @typedef { { mode: Mode, env: 'development' | 'production' } } Target
  */
 
-const { makeMap, runServiceCommand, removeArgv, merge } = require('./utils')
+const { makeMap, runServiceCommand, removeArgv, normalizeCommandArgs } = require('./utils')
 const {
   SUPPORT_MODE,
   MODE_CONFIG_FILES_MAP,
@@ -29,7 +29,7 @@ module.exports.DEFAULT_MODE = DEFAULT_MODE
 module.exports.runServiceCommand = runServiceCommand
 module.exports.makeMap = makeMap
 module.exports.removeArgv = removeArgv
-module.exports.merge = merge
+module.exports.normalizeCommandArgs = normalizeCommandArgs
 module.exports.getCurrentTarget = getCurrentTarget
 module.exports.getTargets = getTargets
 module.exports.parseTarget = parseTarget

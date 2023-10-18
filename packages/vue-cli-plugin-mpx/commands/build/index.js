@@ -1,7 +1,7 @@
 const {
   getCurrentTarget,
   SUPPORT_MODE,
-  merge
+  normalizeCommandArgs
 } = require('@mpxjs/cli-shared-utils')
 const webpack = require('webpack')
 const fs = require('fs-extra')
@@ -32,7 +32,7 @@ module.exports.registerBuildCommand = function (api, options) {
       }
     },
     function build (args, rawArgv) {
-      merge(args, defaults)
+      normalizeCommandArgs(args, defaults)
       if (args.clean) {
         fs.removeSync(options.outputDir)
       }

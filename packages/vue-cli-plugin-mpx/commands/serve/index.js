@@ -1,4 +1,4 @@
-const { getCurrentTarget, SUPPORT_MODE, merge } = require('@mpxjs/cli-shared-utils')
+const { getCurrentTarget, SUPPORT_MODE, normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
 const fs = require('fs-extra')
 const { serveWeb } = require('./web')
 const { serveMp } = require('./mp')
@@ -24,7 +24,7 @@ module.exports.registerServeCommand = function (api, options) {
       }
     },
     function build (args, rawArgv) {
-      merge(args, defaults)
+      normalizeCommandArgs(args, defaults)
       if (args.clean) {
         fs.removeSync(options.outputDir)
       }
