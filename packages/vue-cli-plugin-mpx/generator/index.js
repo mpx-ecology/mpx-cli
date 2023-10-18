@@ -37,6 +37,7 @@ module.exports = function (api, options) {
     vue: {
       // eslint-disable-next-line no-template-curly-in-string
       outputDir: '{outputDir}',
+      transpileDependencies: true,
       pluginOptions: {
         mpx: {
           plugin: {

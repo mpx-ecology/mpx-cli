@@ -29,28 +29,6 @@ function changeStyleVueRuleToMpx (config, name) {
 }
 
 /**
- * 编译依赖
- * @param { (string|RegExp) [] } transpileDependencies
- * @returns
- */
-function genTranspileDepRegex (transpileDependencies) {
-  const path = require('path')
-  const { isWindows } = require('@vue/cli-shared-utils')
-  const deps = transpileDependencies.map((dep) => {
-    if (typeof dep === 'string') {
-      const depPath = path.join('node_modules', dep, '/')
-      return isWindows
-        ? depPath.replace(/\\/g, '\\\\') // double escape for windows style path
-        : depPath
-    } else if (dep instanceof RegExp) {
-      return dep.source
-    }
-    return ''
-  })
-  return deps.length ? new RegExp(deps.join('|')) : null
-}
-
-/**
  * 获取 mpx webpack plugin 配置
  * @param { import('@vue/cli-service').PluginAPI } api
  * @param { import('@vue/cli-service').ProjectOptions } options
@@ -381,24 +359,6 @@ module.exports.resolveBaseConfig = function (api, options, config, target) {
     .pre()
     .use('mpx-wxs-pre-loader')
     .loader(require.resolve(MpxWebpackPlugin.wxsPreLoader().loader))
-
-  const transpileDepRegex = genTranspileDepRegex(
-    options.transpileDependencies || []
-  )
-
-  config.module
-    .rule('js')
-    .test(/\.js$/)
-    .include.add(
-      (filepath) => transpileDepRegex && transpileDepRegex.test(filepath)
-    )
-    .add((filepath) => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
-    .add(api.resolve('src'))
-    .add(/@mpxjs/)
-    .add(api.resolve('test'))
-    .end()
-    .use('babel-loader')
-    .loader(require.resolve('babel-loader'))
 
   config.resolve.extensions.add('.mpx').add('.js').add('.wxml').add('.ts')
 
