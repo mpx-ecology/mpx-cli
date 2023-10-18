@@ -146,7 +146,7 @@ function transformEntry (api, options, webpackConfig, target) {
  * @param { import('webpack-chain') } config
  * @param { import('@mpxjs/cli-shared-utils').Target } target
  */
-function resolveMpWebpackConfig (api, options, config, target) {
+function addMpWebpackConfig (api, options, config, target) {
   const mpxLoader = MpxWebpackPlugin.loader(
     resolveMpxLoaderConfig(api, options)
   )
@@ -319,7 +319,7 @@ function resolveMpWebpackConfig (api, options, config, target) {
  * @param { import('webpack-chain') } config
  * @param { import('@mpxjs/cli-shared-utils').Target } target
  */
-function resolveWebWebpackConfig (api, options, config, target) {
+function addWebWebpackConfig (api, options, config, target) {
   try {
     changeStyleVueRuleToMpx(config, 'css')
     changeStyleVueRuleToMpx(config, 'stylus')
@@ -367,7 +367,7 @@ function resolveWebWebpackConfig (api, options, config, target) {
  * @param { import('webpack-chain') } config
  * @param { import('@mpxjs/cli-shared-utils').Target } target
  */
-module.exports.resolveBaseConfig = function (api, options, config, target) {
+module.exports.addBaseConfig = function (api, options, config, target) {
   const isWeb = target.mode === 'web'
   config.module
     .rule('json')
@@ -455,9 +455,9 @@ module.exports.resolveBaseConfig = function (api, options, config, target) {
 
   if (isWeb) {
     // web版本在vue-cli内置的配置基础上进行调整
-    resolveWebWebpackConfig(api, options, config)
+    addWebWebpackConfig(api, options, config)
   } else {
-    resolveMpWebpackConfig(api, options, config, target)
+    addMpWebpackConfig(api, options, config, target)
   }
 
   transformEntry(api, options, config, target)
@@ -491,7 +491,7 @@ module.exports.resolveBaseRawWebpackConfig = function (api) {
  * @param { import('@mpxjs/cli-shared-utils').Target } target
  * @param {*} args
  */
-module.exports.resolveBuildWebpackConfig = function (
+module.exports.addBuildWebpackConfig = function (
   api,
   options,
   config,
@@ -523,7 +523,7 @@ module.exports.resolveBuildWebpackConfig = function (
  * @param { import('@mpxjs/cli-shared-utils').Target } target
  * @param {*} args
  */
-module.exports.resolveServeWebpackConfig = function (
+module.exports.addServeWebpackConfig = function (
   api,
   options,
   config,

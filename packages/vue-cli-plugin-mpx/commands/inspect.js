@@ -1,7 +1,7 @@
 const { toString } = require('webpack-chain')
 const { highlight } = require('cli-highlight')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
-const { resolveBuildWebpackConfig } = require('../config/base')
+const { addBuildWebpackConfig } = require('../config/base')
 const { resolveBuildWebpackConfigByTarget } = require('../config')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
@@ -19,7 +19,7 @@ module.exports.registerInspectCommand = function registerInspectCommand (
       const { verbose } = args
       const target = getCurrentTarget()
       api.chainWebpack((config) =>
-        resolveBuildWebpackConfig(api, options, config, target, args)
+        addBuildWebpackConfig(api, options, config, target, args)
       )
       const res = resolveBuildWebpackConfigByTarget(api, options, target, args)
       const output = toString(res, { verbose })

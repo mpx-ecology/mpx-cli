@@ -2,7 +2,7 @@ const { getCurrentTarget, SUPPORT_MODE, normalizeCommandArgs } = require('@mpxjs
 const fs = require('fs-extra')
 const { serveWeb } = require('./web')
 const { serveMp } = require('./mp')
-const { resolveServeWebpackConfig } = require('../../config/base')
+const { addServeWebpackConfig } = require('../../config/base')
 
 const defaults = {
   clean: true
@@ -30,7 +30,7 @@ module.exports.registerServeCommand = function (api, options) {
       }
       const target = getCurrentTarget()
       api.chainWebpack((config) => {
-        resolveServeWebpackConfig(api, options, config, target, args)
+        addServeWebpackConfig(api, options, config, target, args)
       })
       return target.mode === 'web'
         ? serveWeb(api, options, args)

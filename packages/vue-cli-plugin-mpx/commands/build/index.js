@@ -8,7 +8,7 @@ const fs = require('fs-extra')
 const { handleWebpackDone } = require('../../utils/webpack')
 const { symlinkTargetConfig } = require('../../utils/symlink')
 const { resolveBuildWebpackConfigByTarget } = require('../../config')
-const { resolveBuildWebpackConfig } = require('../../config/base')
+const { addBuildWebpackConfig } = require('../../config/base')
 
 const defaults = {
   clean: true
@@ -39,7 +39,7 @@ module.exports.registerBuildCommand = function (api, options) {
       const target = getCurrentTarget()
       // 根据命令参数添加动态配置
       api.chainWebpack((config) => {
-        resolveBuildWebpackConfig(api, options, config, target, args)
+        addBuildWebpackConfig(api, options, config, target, args)
       })
       // 根据目标获取构建配置
       const webpackConfig = resolveBuildWebpackConfigByTarget(

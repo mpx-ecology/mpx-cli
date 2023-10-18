@@ -1,4 +1,4 @@
-const { resolveBaseConfig } = require('./config/base')
+const { addBaseConfig } = require('./config/base')
 const { registerInspectCommand } = require('./commands/inspect')
 const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
@@ -38,7 +38,7 @@ module.exports = function (api, options) {
 
   // 注入基础配置
   api.chainWebpack((config) => {
-    resolveBaseConfig(api, options, config, target)
+    addBaseConfig(api, options, config, target)
   })
 }
 
