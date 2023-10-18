@@ -4,6 +4,7 @@ const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const path = require('path')
+const { resolveBabelConfig } = require('./config/babel')
 
 function normalizeOutputPath (api, options, target) {
   const { outputDir } = options
@@ -39,6 +40,7 @@ module.exports = function (api, options) {
   // 注入基础配置
   api.chainWebpack((config) => {
     resolveBaseConfig(api, options, config, target)
+    resolveBabelConfig(api, options, config, target)
   })
 }
 
