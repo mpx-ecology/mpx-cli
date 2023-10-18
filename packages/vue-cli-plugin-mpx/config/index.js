@@ -21,6 +21,18 @@ function addPluginConfig (api, options, target, webpackConfigs) {
 }
 
 /**
+ * 校验web的webpack配置
+ * @param {*} webpackConfigs
+ * @param {*} api
+ * @param {*} options
+ * @returns
+ */
+function validWebConfig (webpackConfigs, api, options) {
+  const validConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
+  return validConfig(webpackConfigs, api, options)
+}
+
+/**
  * 获取构建模式基础配置
  * @param { import('@vue/cli-service').PluginAPI } api
  * @param { import('@vue/cli-service').ProjectOptions } options
@@ -33,9 +45,8 @@ function resolveBuildWebpackConfigByTarget (api, options, target, args) {
   if (target.mode === 'web') {
     // web配置，使用vue-cli内置的方法获取配置 + mpx-cli 修改后的配置
     const resolveAppConfig = require('@vue/cli-service/lib/commands/build/resolveAppConfig')
-    const validConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
     webpackConfigs = [resolveAppConfig(api, args, options)]
-    validConfig(webpackConfigs, api, options)
+    validWebConfig(webpackConfigs, api, options)
   } else {
     // 小程序配置，使用mpx-cli内置的配置
     webpackConfigs = [api.resolveWebpackConfig()]
@@ -56,8 +67,7 @@ function resolveServeWebpackConfigByTarget (api, options, target, args) {
   addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api))
   const webpackConfigs = [api.resolveWebpackConfig()]
   if (target.mode === 'web') {
-    const validConfig = require('@vue/cli-service/lib/util/validateWebpackConfig')
-    validConfig(webpackConfigs, api, options)
+    validWebConfig(webpackConfigs, api, options)
     return webpackConfigs[0]
   }
   // 小程序插件构建配置
