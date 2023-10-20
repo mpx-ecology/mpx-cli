@@ -212,6 +212,7 @@ class FancyReporter {
       )
     } else {
       logUpdate.render(renderedStates + '\n')
+      cb && cb()
     }
   }
 
