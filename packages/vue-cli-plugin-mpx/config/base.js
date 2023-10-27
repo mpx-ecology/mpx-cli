@@ -388,7 +388,7 @@ module.exports.addBaseConfig = function (api, options, config, target) {
 
   config.module
     .rule('js')
-    .test(/\.js$/)
+    .test(/\.m?jsx?$/)
     .include.add(
       (filepath) => transpileDepRegex && transpileDepRegex.test(filepath)
     )
