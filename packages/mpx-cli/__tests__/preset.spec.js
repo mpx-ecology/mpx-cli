@@ -253,3 +253,28 @@ test('test-unocss', async () => {
   const pkg = require(path.resolve(cwd, name, 'package.json'))
   expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx-utility-first-css')
 })
+
+test('test-typescript', async () => {
+  const cwd = path.resolve(__dirname, '../../test')
+  const name = 'test-typescript'
+  await create(
+    name,
+    {
+      force: true,
+      git: false,
+      cwd
+    },
+    {
+      srcMode: 'wx',
+      appid: 'test',
+      description: 'test',
+      cross: true,
+      needTs: true,
+      plugins: {},
+      useConfigFiles: true
+    }
+  )
+
+  const pkg = require(path.resolve(cwd, name, 'package.json'))
+  expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx-typescript')
+})
