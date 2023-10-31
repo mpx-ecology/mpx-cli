@@ -14,7 +14,12 @@
       <%_ if(needTest) { _%>
       "jest"
       <%_ } _%>
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "exclude": [
     "build",
