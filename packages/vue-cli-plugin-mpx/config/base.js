@@ -400,7 +400,12 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     .use('babel-loader')
     .loader(require.resolve('babel-loader'))
 
-  config.resolve.extensions.add('.mpx').add('.js').add('.wxml').add('.ts')
+  config.resolve.extensions
+    .add('.mpx')
+    .add('.ts')
+    .add('.js')
+    .add('.wxml')
+    .add('.vue')
 
   config.resolve.modules.add('node_modules')
 
