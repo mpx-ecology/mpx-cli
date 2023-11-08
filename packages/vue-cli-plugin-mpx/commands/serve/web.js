@@ -160,6 +160,9 @@ module.exports.serveWeb = async (api, options, args) => {
           }
 
           return middlewares
+        },
+        headers: {
+          'Access-Control-Allow-Origin': '*'
         }
       }
     ),

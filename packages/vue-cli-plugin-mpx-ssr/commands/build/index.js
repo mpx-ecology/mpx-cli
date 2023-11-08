@@ -1,46 +1,36 @@
-const {
-  getCurrentTarget,
-  SUPPORT_MODE,
-  normalizeCommandArgs
-} = require('@mpxjs/cli-shared-utils')
-const webpack = require('webpack')
+const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
 const fs = require('fs-extra')
-const { handleWebpackDone } = require('../../utils/webpack')
-const { symlinkTargetConfig } = require('../../utils/symlink')
-const { resolveBuildWebpackConfigByTarget } = require('../../config')
-const { addBuildWebpackConfig } = require('../../config/base')
+const { addBuildWebpackConfig } = require('../../config/build.config')
+const { resolveBuildWebpackConfigByTarget } = require('@mpxjs/vue-cli-plugin-mpx/config')
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
+const { handleWebpackDone } = require('@mpxjs/vue-cli-plugin-mpx/utils/webpack')
+const webpack = require('webpack')
 
 const defaults = {
   clean: true
 }
 
-/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.registerBuildCommand = function (api, options) {
   api.registerCommand(
-    'build',
+    'build:ssr',
     {
       description: 'mpx production',
       usage: 'mpx-cli-service build',
       options: {
-        '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
-        '--watch': 'compile in watch mode',
-        '--mode': 'specify env mode (default: production)',
-        '--report': 'generate report.html to help analyze bundle content',
+        '--ssrMode': `compile for target environment, support client, server`,
         '--no-clean':
           'do not remove the dist directory contents before building the project',
-        '--env': 'custom define __mpx_env__'
       }
     },
-    function build (args, rawArgv) {
+    function build (args) {
       normalizeCommandArgs(args, defaults)
-      if (args.clean) {
-        fs.removeSync(options.outputDir)
-      }
-      const target = getCurrentTarget()
-      // 根据命令参数添加动态配置
+      // if (args.clean) {
+      //   fs.removeSync(options.outputDir)
+      // }
       api.chainWebpack((config) => {
-        addBuildWebpackConfig(api, options, config, target, args)
+        addBuildWebpackConfig(api, options, args, config)
       })
+      const target = getCurrentTarget()
       // 根据目标获取构建配置
       const webpackConfig = resolveBuildWebpackConfigByTarget(
         api,
@@ -52,10 +42,6 @@ module.exports.registerBuildCommand = function (api, options) {
         webpack(webpackConfig, (err, stats) => {
           handleWebpackDone(err, stats, target, api)
             .then((...res) => {
-              if (target !== 'web') {
-                // web版本不需要symlink
-                symlinkTargetConfig(api, target, webpackConfig[0])
-              }
               resolve(...res)
             })
             .catch(reject)

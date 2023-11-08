@@ -1,40 +1,43 @@
-const { getCurrentTarget, SUPPORT_MODE, normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
+const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
 const fs = require('fs-extra')
-const { serveWeb } = require('./web')
-const { serveMp } = require('./mp')
-const { addServeWebpackConfig } = require('../../config/base')
+const { serveWeb } = require('../../../vue-cli-plugin-mpx/commands/serve/web')
+const { serveServer } = require('./serveServer')
+const { addServeWebpackConfig } = require('../../config/serve.config')
 
 const defaults = {
   clean: true
 }
 
-/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.registerServeCommand = function (api, options) {
   api.registerCommand(
-    'serve',
+    'serve:ssr',
     {
       description: 'mpx development',
       usage: 'mpx-cli-service serve',
       options: {
-        '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
-        '--mode': 'specify env mode (default: development)',
+        '--ssrMode': `compile for target environment, support client, server`,
         '--no-clean':
           'do not remove the dist directory contents before building the project',
-        '--env': 'custom define __mpx_env__'
       }
     },
-    function build (args, rawArgv) {
+    function build (args) {
       normalizeCommandArgs(args, defaults)
       if (args.clean) {
         fs.removeSync(options.outputDir)
       }
-      const target = getCurrentTarget()
+      if (options.outputDir === 'dist') {
+        options.outputDir = 'dist/web'
+      }
+      const isServer = args.ssrMode === 'server'
+      options.publicPath = isServer ? '/' : 'http://localhost:8081/'
       api.chainWebpack((config) => {
-        addServeWebpackConfig(api, options, config, target, args)
+        addServeWebpackConfig(api, options, args, config)
       })
-      return target.mode === 'web'
-        ? serveWeb(api, options, args)
-        : serveMp(api, options, args)
+      if (!isServer) {
+        return serveWeb(api, options, args)
+      } else {
+        return serveServer(api, options, args)
+      }
     }
   )
 }

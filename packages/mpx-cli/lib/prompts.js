@@ -17,7 +17,7 @@ module.exports = [
     default: true
   },
   {
-    name: 'ssr',
+    name: 'needSSR',
     when: ({ srcMode }) => srcMode === 'wx',
     message: '是否需要 web ssr',
     type: 'confirm',
