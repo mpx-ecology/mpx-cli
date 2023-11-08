@@ -17,6 +17,20 @@ module.exports = [
     default: true
   },
   {
+    name: 'ssr',
+    when: ({ srcMode }) => srcMode === 'wx',
+    message: '是否需要 web ssr',
+    type: 'confirm',
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-ssr`]: {
+          version: '^1.0.0'
+        }
+      }
+    }
+  },
+  {
     name: 'cloudFunc',
     when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
     message: '是否需要使用小程序云开发能力',
