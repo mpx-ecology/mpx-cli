@@ -39,7 +39,7 @@ module.exports.addServeWebpackConfig = function (api, options = {}, args, config
     buildDependencies: {
       config: dependenciesConfig
     },
-    name: isServer ? 'serverBundleCache' : 'clientBundleCache',
+    name: isServer ? 'dev-serverBundleCache' : 'dev-clientBundleCache',
     cacheDirectory: path.resolve('.cache/')
   })
 

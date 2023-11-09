@@ -51,7 +51,7 @@ module.exports.addBuildWebpackConfig = function (api, options = {}, args, config
     buildDependencies: {
       config: dependenciesConfig
     },
-    name: isServer ? 'serverBundleCache' : 'clientBundleCache',
+    name: isServer ? 'build-serverBundleCache' : 'build-clientBundleCache',
     cacheDirectory: path.resolve('.cache/')
   })
 
