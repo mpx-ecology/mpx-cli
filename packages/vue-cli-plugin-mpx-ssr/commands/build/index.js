@@ -17,9 +17,9 @@ module.exports.registerBuildCommand = function (api, options) {
       description: 'mpx production',
       usage: 'mpx-cli-service build',
       options: {
-        '--ssrMode': `compile for target environment, support client, server`,
+        '--ssrMode': 'compile for target environment, support client, server',
         '--no-clean':
-          'do not remove the dist directory contents before building the project',
+          'do not remove the dist directory contents before building the project'
       }
     },
     function build (args) {

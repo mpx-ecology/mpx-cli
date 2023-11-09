@@ -1,5 +1,5 @@
 const {
-  transformMpxEntry,
+  transformMpxEntry
 } = require('@mpxjs/vue-cli-plugin-mpx')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')

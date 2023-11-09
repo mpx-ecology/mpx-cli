@@ -1,5 +1,5 @@
 const {
-  transformMpxEntry,
+  transformMpxEntry
 } = require('@mpxjs/vue-cli-plugin-mpx')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
@@ -10,7 +10,6 @@ module.exports.addBuildWebpackConfig = function (api, options = {}, args, config
   transformMpxEntry(api, options, config, true)
 
   config.target(isServer ? 'node' : 'web')
-
 
   config.output
     .libraryTarget(isServer ? 'commonjs2' : undefined)

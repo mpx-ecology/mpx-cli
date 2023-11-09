@@ -15,9 +15,9 @@ module.exports.registerServeCommand = function (api, options) {
       description: 'mpx development',
       usage: 'mpx-cli-service serve',
       options: {
-        '--ssrMode': `compile for target environment, support client, server`,
+        '--ssrMode': 'compile for target environment, support client, server',
         '--no-clean':
-          'do not remove the dist directory contents before building the project',
+          'do not remove the dist directory contents before building the project'
       }
     },
     function build (args) {
