@@ -8,12 +8,15 @@ const { createBundleRenderer } = require('vue-server-renderer')
 
 const axios = require('axios')
 
+const favicon = require('serve-favicon')
+
 const template = fs.readFileSync(path.resolve('public/index.ssr.html'), 'utf-8')
 
 const vueConfig = require('../vue.config.js')
 
 const app = express()
 
+app.use(favicon(path.resolve('public/favicon.ico')))
 
 const getRenderer = async () => {
   const clientPort = vueConfig.pluginOptions?.SSRClient?.port || 3000
