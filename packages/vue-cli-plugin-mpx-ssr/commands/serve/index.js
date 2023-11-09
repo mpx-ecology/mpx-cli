@@ -1,6 +1,6 @@
 const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
 const fs = require('fs-extra')
-const { serveWeb } = require('../../../vue-cli-plugin-mpx/commands/serve/web')
+const { serveWeb } = require('@mpxjs/vue-cli-plugin-mpx/commands/serve/web')
 const { serveServer } = require('./serveServer')
 const { addServeWebpackConfig } = require('../../config/serve.config')
 
