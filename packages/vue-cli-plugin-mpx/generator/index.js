@@ -38,6 +38,9 @@ module.exports = function (api, options) {
       // eslint-disable-next-line no-template-curly-in-string
       outputDir: '{outputDir}',
       pluginOptions: {
+        SSRClient: {
+          port: 8000
+        },
         mpx: {
           plugin: {
             srcMode: options.srcMode,
@@ -96,10 +99,10 @@ module.exports = function (api, options) {
       build: 'mpx-cli-service build'
     },
     dependencies: {
-      '@mpxjs/api-proxy': '^2.8.0',
-      '@mpxjs/core': '^2.8.0',
+      '@mpxjs/api-proxy': '^2.9.0',
+      '@mpxjs/core': '^2.9.0',
       '@mpxjs/store': '^2.8.0',
-      '@mpxjs/pinia': '^2.8.0',
+      '@mpxjs/pinia': '^2.9.0',
       '@mpxjs/utils': '^2.8.0',
       '@mpxjs/fetch': '^2.8.0',
       // web的相关
@@ -110,7 +113,7 @@ module.exports = function (api, options) {
       'vue-router': '^3.1.3'
     },
     devDependencies: {
-      '@mpxjs/webpack-plugin': '^2.8.0',
+      '@mpxjs/webpack-plugin': '^2.9.0',
       '@mpxjs/size-report': '^2.8.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
       autoprefixer: '^10.2.4',

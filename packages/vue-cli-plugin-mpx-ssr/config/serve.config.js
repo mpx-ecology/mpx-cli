@@ -46,7 +46,6 @@ module.exports.addServeWebpackConfig = function (api, options = {}, args, config
   config.output
     .libraryTarget(isServer ? 'commonjs2' : undefined)
 
-
   if (isServer) {
     config.optimization.splitChunks(false)
   }
