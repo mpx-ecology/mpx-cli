@@ -1,28 +1,24 @@
-// nodejs服务
 const express = require('express')
-const path = require('path')
-const { mfs } = require('@mpxjs/cli-shared-utils')
+const { getServerBundle } = require('@mpxjs/cli-shared-utils')
 const fs = require('fs')
-// 创建express实例和vue实例
-const app = express()
+const path = require('path')
+
 // 创建渲染器 获得一个createBundleRenderer
 const { createBundleRenderer } = require('vue-server-renderer')
 
-const template = fs.readFileSync('../public/index.ssr.html', 'utf-8') // ssr模板文件
 const axios = require('axios')
+
+const template = fs.readFileSync(path.resolve('public/index.ssr.html'), 'utf-8')
+
+const app = express()
+
 
 const getRenderer = async () => {
   const clientManifest = await axios.get(
     ' http://localhost:8081/vue-ssr-client-manifest.json'
   )
-  // const bundlePath = path.join(
-  //   // webpackConfig.output.path,
-  //   'dist/web',
-  //   'vue-ssr-server-bundle.json'
-  // )
-  const bundlePath = '/Users/didi/Documents/Work/Code/mpx-cli/packages/test/test-ssr/dist/web/vue-ssr-server-bundle.json'
-  const serverManifest = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
-  console.log('11111serverManifest')
+  const serverManifest = getServerBundle()
+
   return {
     clientManifest: clientManifest.data,
     serverManifest: serverManifest
@@ -30,7 +26,6 @@ const getRenderer = async () => {
 }
 
 const startServer = async () => {
-  // 前端请求返回数据
   app.get('*', async (req, res) => {
     try {
       const { clientManifest, serverManifest } = await getRenderer()

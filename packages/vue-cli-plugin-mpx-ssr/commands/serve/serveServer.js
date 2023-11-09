@@ -1,9 +1,9 @@
 const { resolveServeWebpackConfigByTarget } = require('@mpxjs/vue-cli-plugin-mpx/config')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
-const MemoryFS = require('memory-fs')
-const { mfs } = require('@mpxjs/cli-shared-utils')
 const webpack = require('webpack')
 const path = require('path')
+const MemoryFS = require('memory-fs')
+let { setServerBundle } = require('@mpxjs/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports.serveServer = async (api, options, args) => {
@@ -20,6 +20,7 @@ module.exports.serveServer = async (api, options, args) => {
   // create compiler
   const serverCompiler = webpack(webpackConfig)
 
+  const mfs = new MemoryFS()
 // 指定输出到的内存流中
   serverCompiler.outputFileSystem = mfs
 
@@ -31,18 +32,22 @@ module.exports.serveServer = async (api, options, args) => {
       stats = stats.toJson()
       stats.errors.forEach(error => console.error(error) )
       stats.warnings.forEach( warn => console.warn(warn) )
-      // const bundlePath = path.join(
-      //   // webpackConfig.output.path,
-      //   '/Users/didi/Documents/Work/Code/mpx-cli/packages/test/test-ssr/dist/web',
-      //   'vue-ssr-server-bundle.json'
-      // )
-      const bundlePath = '/Users/didi/Documents/Work/Code/mpx-cli/packages/test/test-ssr/dist/web/vue-ssr-server-bundle.json'
-      const serverManifest = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
-      global.a = 111111
-      console.log('11111serverManifest', serverManifest)
-      console.info('new bundle generated')
-      resolve('new bundle generated')
-    })
 
+      const bundlePath = path.join(webpackConfig.output.path, 'vue-ssr-server-bundle.json')
+
+      const serverManifest = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
+
+      setServerBundle(serverManifest)
+
+      console.info('new bundle generated')
+
+    })
+    try {
+      const devServerPath = path.resolve('server/dev.server')
+      require(devServerPath)
+    } catch (e) {
+      console.warn('can not find dev.server.js')
+    }
+    resolve()
   })
 }
