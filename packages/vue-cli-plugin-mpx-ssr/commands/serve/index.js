@@ -5,7 +5,8 @@ const { serveServer } = require('./serveServer')
 const { addServeWebpackConfig } = require('../../config/serve.config')
 
 const defaults = {
-  clean: true
+  clean: true,
+  port: 3000
 }
 
 module.exports.registerServeCommand = function (api, options) {
@@ -29,7 +30,8 @@ module.exports.registerServeCommand = function (api, options) {
         options.outputDir = 'dist/web'
       }
       const isServer = args.ssrMode === 'server'
-      options.publicPath = isServer ? '/' : 'http://localhost:8081/'
+      const SSRClient = options.pluginOptions?.SSRClient || {}
+      options.publicPath = isServer ? '/' : `http://localhost:${SSRClient.port || defaults.port}/`
       api.chainWebpack((config) => {
         addServeWebpackConfig(api, options, args, config)
       })

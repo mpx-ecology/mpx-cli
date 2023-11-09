@@ -9,6 +9,8 @@ const serverBundle = require('../dist/web/vue-ssr-server-bundle.json')
 const clientManifest = require('../dist/web/vue-ssr-client-manifest.json')
 const template = fs.readFileSync('../public/index.ssr.html', 'utf-8')
 
+app.use(express.static('../dist/web'))
+
 const startServer = async () => {
   // 前端请求返回数据
   app.get('*', async (req, res) => {

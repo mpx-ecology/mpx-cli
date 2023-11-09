@@ -10,12 +10,15 @@ const axios = require('axios')
 
 const template = fs.readFileSync(path.resolve('public/index.ssr.html'), 'utf-8')
 
+const vueConfig = require('../vue.config.js')
+
 const app = express()
 
 
 const getRenderer = async () => {
+  const clientPort = vueConfig.pluginOptions?.SSRClient?.port || 3000
   const clientManifest = await axios.get(
-    ' http://localhost:8081/vue-ssr-client-manifest.json'
+    `http://localhost:${clientPort}/vue-ssr-client-manifest.json`
   )
   const serverManifest = getServerBundle()
 
