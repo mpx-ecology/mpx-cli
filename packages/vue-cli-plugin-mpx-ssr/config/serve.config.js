@@ -13,6 +13,8 @@ module.exports.addServeWebpackConfig = function (api, options = {}, args, config
 
   config.target(isServer ? 'node' : 'web')
 
+  config.cache(false)
+
   config.output
     .libraryTarget(isServer ? 'commonjs2' : undefined)
   if (isServer) {

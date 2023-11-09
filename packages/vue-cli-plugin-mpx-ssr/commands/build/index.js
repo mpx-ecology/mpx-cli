@@ -1,5 +1,4 @@
 const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
-const fs = require('fs-extra')
 const { addBuildWebpackConfig } = require('../../config/build.config')
 const { resolveBuildWebpackConfigByTarget } = require('@mpxjs/vue-cli-plugin-mpx/config')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')

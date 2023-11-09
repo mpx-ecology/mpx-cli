@@ -4,7 +4,6 @@ module.exports = function (api, options) {
     scripts: {
       'serve:ssr': 'mpx-cli-service serve:ssr --ssrMode=client --targets=web',
       'serve:ssrserver': 'mpx-cli-service serve:ssr --ssrMode=server --targets=web',
-      'serve:service': 'cd server && cross-env WEBPACK_TARGET=node node dev.server.js',
       'build:ssr': 'mpx-cli-service build:ssr --ssrMode=client --targets=web && mpx-cli-service build:ssr --ssrMode=server --targets=web',
       'build:service': 'cd server && node server.js'
     },
