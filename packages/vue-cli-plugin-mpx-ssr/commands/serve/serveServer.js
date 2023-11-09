@@ -23,29 +23,28 @@ module.exports.serveServer = async (api, options, args) => {
   // 指定输出到的内存流中
   serverCompiler.outputFileSystem = mfs
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    serverCompiler.watch({}, (err, stats) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      stats = stats.toJson()
+      stats.errors.forEach(error => console.error(error))
+      stats.warnings.forEach(warn => console.warn(warn))
+
+      const bundlePath = path.join(webpackConfig.output.path, 'vue-ssr-server-bundle.json')
+
+      const serverManifest = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
+
+      setServerBundle(serverManifest)
+
+      console.info('new server bundle generated')
+    })
     try {
-      serverCompiler.watch({}, (err, stats) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-        stats = stats.toJson()
-        stats.errors.forEach(error => console.error(error))
-        stats.warnings.forEach(warn => console.warn(warn))
-
-        const bundlePath = path.join(webpackConfig.output.path, 'vue-ssr-server-bundle.json')
-
-        const serverManifest = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
-
-        setServerBundle(serverManifest)
-
-        console.info('new bundle generated')
-      })
-      const devServerPath = path.resolve('server/dev.server')
-      require(devServerPath)
+      require(path.resolve('server/dev.server'))
     } catch (e) {
-      console.warn('can not find dev.server.js')
+      reject(e)
     }
     resolve()
   })
