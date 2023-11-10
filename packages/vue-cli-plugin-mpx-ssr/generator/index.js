@@ -6,13 +6,7 @@ module.exports = function (api, options) {
       'build:ssr': 'mpx-cli-service build:ssr --ssrMode=client --targets=web && mpx-cli-service build:ssr --ssrMode=server --targets=web'
     },
     dependencies: {
-      'vue-server-renderer': '^2.7.14',
-      '@mpxjs/api-proxy': '^2.9.0',
-      '@mpxjs/core': '^2.9.0',
-      '@mpxjs/pinia': '^2.9.0'
-    },
-    devDependencies: {
-      '@mpxjs/webpack-plugin': '^2.9.0'
+      'vue-server-renderer': '^2.7.14'
     }
   })
 }

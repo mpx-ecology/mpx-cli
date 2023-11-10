@@ -54,5 +54,5 @@ module.exports.addServeWebpackConfig = function (api, options = {}, args, config
     .plugin(`${isServer ? 'server-plugin' : 'client-plugin'}`)
     .use(isServer ? VueSSRServerPlugin : VueSSRClientPlugin)
 
-  config.devServer.port(options.pluginOptions?.SSRClient?.port || 3000)
+  config.devServer.port(options.pluginOptions?.SSR?.devClientPort || 3000)
 }

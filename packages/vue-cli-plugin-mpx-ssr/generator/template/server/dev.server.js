@@ -19,7 +19,7 @@ const app = express()
 app.use(favicon(path.resolve('public/favicon.ico')))
 
 const getRenderer = async () => {
-  const clientPort = vueConfig.pluginOptions?.SSRClient?.port || 3000
+  const clientPort = vueConfig.pluginOptions?.SSR?.devClientPort || 3000
   const clientManifest = await axios.get(
     `http://localhost:${clientPort}/vue-ssr-client-manifest.json`
   )

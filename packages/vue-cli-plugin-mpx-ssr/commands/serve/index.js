@@ -30,8 +30,8 @@ module.exports.registerServeCommand = function (api, options) {
         options.outputDir = 'dist/web'
       }
       const isServer = args.ssrMode === 'server'
-      const SSRClient = options.pluginOptions?.SSRClient || {}
-      options.publicPath = isServer ? '/' : `http://localhost:${SSRClient.port || defaults.port}/`
+      const port = options.pluginOptions?.SSR?.devClientPort || defaults.port
+      options.publicPath = isServer ? '/' : `http://localhost:${port}/`
       api.chainWebpack((config) => {
         addServeWebpackConfig(api, options, args, config)
       })
