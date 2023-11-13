@@ -42,7 +42,7 @@ module.exports.serveServer = async (api, options, args) => {
       console.info('new server bundle generated')
     })
     try {
-      require(path.resolve('server/dev.server'))
+      require(api.resolve('server/dev.server'))
     } catch (e) {
       reject(e)
     }

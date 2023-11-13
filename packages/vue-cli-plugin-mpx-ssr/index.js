@@ -10,9 +10,5 @@ module.exports.defaultModes = {
   'serve:ssr': 'development',
   'build:ssr': 'production'
 }
-module.exports.defaultModes = {
-  serve: 'development',
-  build: 'production'
-}
 
-module.exports.after = ['vue-cli-plugin-mpx']
+module.exports.after = ['@mpxjs/vue-cli-plugin-mpx']

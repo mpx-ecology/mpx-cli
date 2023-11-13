@@ -26,9 +26,6 @@ module.exports.registerServeCommand = function (api, options) {
       if (args.clean) {
         fs.removeSync(options.outputDir)
       }
-      if (options.outputDir === 'dist') {
-        options.outputDir = 'dist/web'
-      }
       const isServer = args.ssrMode === 'server'
       const port = options.pluginOptions?.SSR?.devClientPort || defaults.port
       options.publicPath = isServer ? '/' : `http://localhost:${port}/`

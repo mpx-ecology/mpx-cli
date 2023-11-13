@@ -38,9 +38,6 @@ module.exports = function (api, options) {
       // eslint-disable-next-line no-template-curly-in-string
       outputDir: '{outputDir}',
       pluginOptions: {
-        SSRClient: {
-          port: 8000
-        },
         mpx: {
           plugin: {
             srcMode: options.srcMode,
@@ -59,6 +56,18 @@ module.exports = function (api, options) {
       configureWebpack (config) {}
     }
   })
+
+  if (options.needSSR) {
+    api.extendPackage({
+      vue: {
+        pluginOptions: {
+          SSR: {
+            devClientPort: 8000
+          }
+        }
+      }
+    })
+  }
 
   if (options.vueVersion !== '3') {
     api.extendPackage({

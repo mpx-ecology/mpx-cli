@@ -1,6 +1,3 @@
-const {
-  transformMpxEntry
-} = require('@mpxjs/vue-cli-plugin-mpx')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 const path = require('path')
@@ -8,15 +5,7 @@ const path = require('path')
 module.exports.addBuildWebpackConfig = function (api, options = {}, args, config) {
   const isServer = args.ssrMode === 'server'
 
-  transformMpxEntry(api, options, config, true)
-
   config.target(isServer ? 'node' : 'web')
-
-  config.cache({
-    type: 'filesystem',
-    name: isServer ? 'serverBundleCache' : 'clientBundleCache',
-    cacheDirectory: path.resolve('.cache/')
-  })
 
   config.output
     .libraryTarget(isServer ? 'commonjs2' : undefined)

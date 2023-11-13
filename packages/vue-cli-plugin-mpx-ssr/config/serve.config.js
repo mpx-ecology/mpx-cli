@@ -1,16 +1,9 @@
-const {
-  transformMpxEntry
-} = require('@mpxjs/vue-cli-plugin-mpx')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 const path = require('path')
 
 module.exports.addServeWebpackConfig = function (api, options = {}, args, config) {
   const isServer = args.ssrMode === 'server'
-
-  transformMpxEntry(api, options, config, true)
-
-  config.devtool('source-map')
 
   config.target(isServer ? 'node' : 'web')
 

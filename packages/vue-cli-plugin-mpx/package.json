@@ -57,7 +57,7 @@
     "webpackbar": "^5.0.0"
   },
   "peerDependencies": {
-    "@mpxjs/webpack-plugin": "^2.9.0",
+    "@mpxjs/webpack-plugin": "^2.7.0",
     "webpack": "^5.48.0"
   },
   "peerDependenciesMeta": {
