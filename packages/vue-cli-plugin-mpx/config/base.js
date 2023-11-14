@@ -425,7 +425,8 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     '@mpxjs/vue-cli-plugin-mpx-plugin-mode',
     '@mpxjs/vue-cli-plugin-mpx-typescript',
     '@mpxjs/vue-cli-plugin-mpx-eslint',
-    '@mpxjs/vue-cli-plugin-mpx-cloud-func'
+    '@mpxjs/vue-cli-plugin-mpx-cloud-func',
+    '@mpxjs/vue-cli-plugin-mpx-ssr'
   ])
 
   config.cache({

@@ -22,6 +22,7 @@ const {
   getWebpackName
 } = require('./webpack')
 const { getMpxPluginOptions } = require('./mpx')
+const { setServerBundle, getServerBundle } = require('./serverBundle')
 
 module.exports.SUPPORT_MODE = SUPPORT_MODE
 module.exports.MODE_CONFIG_FILES_MAP = MODE_CONFIG_FILES_MAP
@@ -40,3 +41,5 @@ module.exports.modifyMpxPluginConfig = modifyMpxPluginConfig
 module.exports.updateWebpackName = updateWebpackName
 module.exports.modifyConfig = modifyConfig
 module.exports.getWebpackName = getWebpackName
+module.exports.setServerBundle = setServerBundle
+module.exports.getServerBundle = getServerBundle
