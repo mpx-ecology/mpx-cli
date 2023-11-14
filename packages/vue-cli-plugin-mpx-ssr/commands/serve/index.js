@@ -16,7 +16,6 @@ module.exports.registerServeCommand = function (api, options) {
       usage: 'mpx-cli-service serve ssr'
     },
     async function build (args) {
-
       normalizeCommandArgs(args, defaults)
 
       const getBaseConfig = (ssrMode) => {
