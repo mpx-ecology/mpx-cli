@@ -46,9 +46,15 @@ function getTargets (args) {
   const inputTargets = args.targets
     ? args.targets.split(/[,|]/)
     : Object.keys(args)
-  const targets = inputTargets
-    .map((v) => parseTarget(v))
-    .filter((v) => supportedModeMap[v.mode])
+  const command = args._[0]
+  let targets = []
+  if (command === 'serve:ssr' || command === 'build:ssr') {
+    targets = [{ mode: 'web' }]
+  } else {
+    targets = inputTargets
+      .map((v) => parseTarget(v))
+      .filter((v) => supportedModeMap[v.mode])
+  }
   return targets.length ? targets : defaultTargets
 }
 

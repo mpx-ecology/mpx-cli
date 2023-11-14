@@ -1,5 +1,5 @@
 const express = require('express')
-const { getServerBundle } = require('@mpxjs/cli-shared-utils')
+const { getServerBundle } = require('@mpxjs/mpx-cli-service')
 const fs = require('fs')
 const path = require('path')
 

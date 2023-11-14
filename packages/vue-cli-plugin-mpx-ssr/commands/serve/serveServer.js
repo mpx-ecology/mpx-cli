@@ -1,5 +1,7 @@
 const { resolveServeWebpackConfigByTarget } = require('@mpxjs/vue-cli-plugin-mpx/config')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
+const { getReporter } = require('@mpxjs/vue-cli-plugin-mpx/utils/reporter')
+const { chalk } = require('@vue/cli-shared-utils')
 const webpack = require('webpack')
 const path = require('path')
 const MemoryFS = require('memory-fs')
@@ -39,7 +41,10 @@ module.exports.serveServer = async (api, options, args) => {
 
       setServerBundle(serverManifest)
 
-      console.info('new server bundle generated')
+      getReporter()._renderStates([{
+          message: `new server bundle generated`,
+          color: 'green'
+        }])
     })
     try {
       require(api.resolve('server/dev.server'))
