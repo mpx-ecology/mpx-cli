@@ -42,9 +42,9 @@ module.exports.serveServer = async (api, options, args) => {
       setServerBundle(serverManifest)
 
       getReporter()._renderStates([{
-          message: `new server bundle generated`,
-          color: 'green'
-        }])
+        message: 'new server bundle generated',
+        color: 'green'
+      }])
     })
     try {
       require(api.resolve('server/dev.server'))
