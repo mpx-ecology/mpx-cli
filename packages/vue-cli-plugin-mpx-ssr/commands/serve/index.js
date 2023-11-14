@@ -1,11 +1,10 @@
 const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
-const fs = require('fs-extra')
 const { serveWeb } = require('@mpxjs/vue-cli-plugin-mpx/commands/serve/web')
 const { serveServer } = require('./serveServer')
+const { addBaseWebpackConfig } = require('../../config/base.config')
 const { addServeWebpackConfig } = require('../../config/serve.config')
 
 const defaults = {
-  clean: true,
   port: 3000
 }
 
@@ -14,29 +13,38 @@ module.exports.registerServeCommand = function (api, options) {
     'serve:ssr',
     {
       description: 'mpx development',
-      usage: 'mpx-cli-service serve',
-      options: {
-        '--ssrMode': 'compile for target environment, support client, server',
-        '--no-clean':
-          'do not remove the dist directory contents before building the project'
-      }
+      usage: 'mpx-cli-service serve ssr'
     },
-    function build (args) {
+    async function build (args) {
+
       normalizeCommandArgs(args, defaults)
-      if (args.clean) {
-        fs.removeSync(options.outputDir)
+
+      const getBaseConfig = (ssrMode) => {
+        const isServer = ssrMode === 'server'
+        const port = options.pluginOptions?.SSR?.devClientPort || defaults.port
+        options.publicPath = isServer ? '/' : `http://localhost:${port}/`
+        api.chainWebpack((config) => {
+          addBaseWebpackConfig(api, options, args, config, { ssrMode })
+          addServeWebpackConfig(api, options, args, config, { ssrMode })
+        })
       }
-      const isServer = args.ssrMode === 'server'
-      const port = options.pluginOptions?.SSR?.devClientPort || defaults.port
-      options.publicPath = isServer ? '/' : `http://localhost:${port}/`
-      api.chainWebpack((config) => {
-        addServeWebpackConfig(api, options, args, config)
-      })
-      if (!isServer) {
-        return serveWeb(api, options, args)
-      } else {
-        return serveServer(api, options, args)
+
+      const buildService = (ssrMode) => {
+        return new Promise((resolve, reject) => {
+          getBaseConfig(ssrMode)
+          if (ssrMode === 'client') {
+            serveWeb(api, options, args).then((...res) => {
+              resolve(...res)
+            }).catch(reject)
+          } else {
+            serveServer(api, options, args).then((...res) => {
+              resolve(...res)
+            }).catch(reject)
+          }
+        })
       }
+
+      Promise.all([buildService('client'), buildService('server')])
     }
   )
 }
