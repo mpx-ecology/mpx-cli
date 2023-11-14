@@ -110,10 +110,10 @@ module.exports = function (api, options) {
     dependencies: {
       '@mpxjs/api-proxy': '^2.9.0',
       '@mpxjs/core': '^2.9.0',
-      '@mpxjs/store': '^2.8.0',
+      '@mpxjs/store': '^2.9.0',
       '@mpxjs/pinia': '^2.9.0',
-      '@mpxjs/utils': '^2.8.0',
-      '@mpxjs/fetch': '^2.8.0',
+      '@mpxjs/utils': '^2.9.0',
+      '@mpxjs/fetch': '^2.9.0',
       // web的相关
       pinia: '^2.0.14',
       'vue-demi': '^0.13.11',
@@ -123,8 +123,8 @@ module.exports = function (api, options) {
     },
     devDependencies: {
       '@mpxjs/webpack-plugin': '^2.9.0',
-      '@mpxjs/size-report': '^2.8.0',
-      '@mpxjs/babel-plugin-inject-page-events': '^2.8.0',
+      '@mpxjs/size-report': '^2.9.0',
+      '@mpxjs/babel-plugin-inject-page-events': '^2.9.0',
       autoprefixer: '^10.2.4',
       postcss: '^8.2.6',
       webpack: '^5.43.0'
