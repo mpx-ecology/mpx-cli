@@ -4,7 +4,7 @@
   "packages": [
     "packages/vue-cli-*",
     "packages/mpx-cli-service",
-    "packages/cli-share-utils"
+    "packages/cli-shared-utils"
   ],
   "changelog": {
     "repo": "mpx-ecology/mpx-cli",
