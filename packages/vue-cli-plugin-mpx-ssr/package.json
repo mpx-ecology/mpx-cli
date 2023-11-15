@@ -1,0 +1,31 @@
+{
+  "name": "@mpxjs/vue-cli-plugin-mpx-ssr",
+  "version": "2.1.0",
+  "description": " web ssr plugin for mpx-cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "memory-fs": "^0.5.0",
+    "fs-extra": "^9.1.0",
+    "@mpxjs/vue-cli-plugin-mpx": "^2.1.0",
+    "@mpxjs/cli-shared-utils": "^2.0.7"
+  },
+  "devDependencies": {
+    "axios": "^1.6.0",
+    "express": "^4.18.2",
+    "serve-favicon": "^2.5.0",
+    "vue-server-renderer": "^2.7.14"
+  },
+  "peerDependencies": {
+    "vue-server-renderer": "^2.7.14"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}

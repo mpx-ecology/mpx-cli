@@ -171,6 +171,7 @@ async function create (projectName, options, preset = null) {
       isPlugin: preset.isPlugin,
       cloudFunc: preset.cloudFunc,
       cross: preset.cross,
+      needSSR: preset.needSSR,
       name
     })
   })

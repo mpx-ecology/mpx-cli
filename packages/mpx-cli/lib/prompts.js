@@ -17,6 +17,20 @@ module.exports = [
     default: true
   },
   {
+    name: 'needSSR',
+    when: ({ srcMode }) => srcMode === 'wx',
+    message: '是否需要 web ssr',
+    type: 'confirm',
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-ssr`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
+  },
+  {
     name: 'cloudFunc',
     when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
     message: '是否需要使用小程序云开发能力',
@@ -53,6 +67,20 @@ module.exports = [
     preset: {
       plugins: {
         [`${prefix}-typescript`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
+  },
+
+  {
+    name: 'needUtilityFirstCSS',
+    type: 'confirm',
+    message: '是否需要使用原子类',
+    default: false,
+    preset: {
+      plugins: {
+        [`${prefix}-utility-first-css`]: {
           version: '^2.0.0'
         }
       }

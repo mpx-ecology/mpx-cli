@@ -1,29 +1,44 @@
-const applyBaseMpxConfig = require('./config/base')
+const { addBaseConfig } = require('./config/base')
 const { registerInspectCommand } = require('./commands/inspect')
-const { resolveMpWebpackConfig } = require('./config/mp/base')
-const { resolveWebWebpackConfig } = require('./config/web/base')
 const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
+const path = require('path')
+
+function normalizeOutputPath (api, options, target) {
+  const { outputDir } = options
+  // 如果是dist目录，则代表没有修改outputPath，采用默认拼target
+  options.outputDir = outputDir !== 'dist' ? outputDir : `dist/${target.mode}`
+  if (
+    target.mode === 'wx' &&
+    (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode'))
+  ) {
+    const projectConfigJson = require(api.resolve(
+      'static/wx/project.config.json'
+    ))
+    options.outputDir = path.join(
+      options.outputDir,
+      projectConfigJson.miniprogramRoot
+    )
+  }
+}
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = function (api, options) {
-  // register command
+  // 注册命令
   registerBuildCommand(api, options)
   registerServeCommand(api, options)
   registerInspectCommand(api, options)
 
+  // 获取当前的构建目标
+  const target = getCurrentTarget()
+
+  // 修正输出路径
+  normalizeOutputPath(api, options, target)
+
+  // 注入基础配置
   api.chainWebpack((config) => {
-    // 当前构建的目标
-    const currentTarget = getCurrentTarget()
-    // 公共配置
-    applyBaseMpxConfig(api, options, config)
-    // 修改环境配置
-    if (currentTarget.mode === 'web') {
-      resolveWebWebpackConfig(api, options, config)
-    } else {
-      resolveMpWebpackConfig(api, options, config, currentTarget)
-    }
+    addBaseConfig(api, options, config, target)
   })
 }
 

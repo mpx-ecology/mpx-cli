@@ -4,9 +4,9 @@ const { MODE_CONFIG_FILES_MAP } = require('@mpxjs/cli-shared-utils')
 
 /**
  * 为配置文件添加symlink，保证IDE修改配置文件也会同步到static下
- * @param {*} api
- * @param {*} target
- * @param {*} webpackConfig
+ * @param { import('@vue/cli-service').PluginAPI } api
+ * @param { import('@mpxjs/cli-shared-utils').Target } target
+ * @param { import('webpack').Configuration } webpackConfig
  */
 module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
   const targetConfigFiles = MODE_CONFIG_FILES_MAP[target.mode] || []
