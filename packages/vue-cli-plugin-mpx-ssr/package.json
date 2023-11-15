@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-ssr",
-  "version": "2.0.7",
+  "version": "2.1.0",
   "description": " web ssr plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "dependencies": {
     "memory-fs": "^0.5.0",
     "fs-extra": "^9.1.0",
-    "@mpxjs/vue-cli-plugin-mpx": "^2.0.7",
+    "@mpxjs/vue-cli-plugin-mpx": "^2.1.0",
     "@mpxjs/cli-shared-utils": "^2.0.7"
   },
   "devDependencies": {
