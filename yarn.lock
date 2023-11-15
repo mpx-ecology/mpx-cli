@@ -2834,9 +2834,9 @@
     write-file-atomic "^2.3.0"
 
 "@mpxjs/api-proxy@^2.9.0":
-  version "2.9.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@mpxjs/api-proxy/-/api-proxy-2.9.0-beta.3.tgz#09ee4d00f85f7be5125c90f34be8430b246e15e1"
-  integrity sha512-zyPy688UaSnGN3a8M9q/hVxEBdLr5UzgoBlL3t+Wb5/1YJAmzZUvqy/6TKDw9ZPEinCAqbwZmKb46WyOv7Y5HA==
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/api-proxy/-/api-proxy-2.9.0.tgz#9321cab072e0690a06b073e792c1ec5f96dbeb1e"
+  integrity sha512-CFm9hahDAac99rUBkz/eKIGzanVHF8PqSFYIosT+A6URKqJkr2ykg3HegH7wq10u+ULGXqncS52PJ4Rwm5D+Hw==
   dependencies:
     axios "^0.21.1"
 
@@ -2846,11 +2846,11 @@
   integrity sha512-f+gWxNzRwHcUtfJam+N8aoEcN70jj1nDvWpg0W0d4PPQdGtRm4oWUIAhc3Giy4EB+xx30G59DC/OpgdbuCxraQ==
 
 "@mpxjs/core@^2.9.0":
-  version "2.9.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@mpxjs/core/-/core-2.9.0-beta.4.tgz#b160346cc24331bc566ab187f181a6957419e677"
-  integrity sha512-xc+F5nE+3JwhzQku0IWX7eTjmEhLcbz9pC489W81S7osmbRaC9O7PfMYhHC1eVKU9RJywWS0qUKakp6AuJJk9w==
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/core/-/core-2.9.0.tgz#8de0ebdcfa48d9f9723d6c656f49f5d7f0bbd614"
+  integrity sha512-iQ3zkCpN97hDXcAQ6NkWHKRThmh3YfLtnf+AN7M0dKt2OnmYwALDVAWDmUTumAo87IROQIW07V1t9nYfE45eYg==
   dependencies:
-    "@mpxjs/utils" "^2.9.0-beta.4"
+    "@mpxjs/utils" "^2.9.0"
     lodash "^4.1.1"
     miniprogram-api-typings "^3.10.0"
 
@@ -2881,10 +2881,10 @@
     eslint-plugin-n "^15.2.4"
     eslint-plugin-promise "^6.0.0"
 
-"@mpxjs/fetch@^2.8.0":
-  version "2.8.6"
-  resolved "https://registry.yarnpkg.com/@mpxjs/fetch/-/fetch-2.8.6.tgz#d9794044cde138220daa63dc336f342797947e75"
-  integrity sha512-qvc0hIGFCWnwl5EDGX6+APguKNkxTb/dakx6I06h20h8/AIuSXdMTwuCiTvQr+Q2bTQqavXhNSlOKxbjQsHeeQ==
+"@mpxjs/fetch@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/fetch/-/fetch-2.9.0.tgz#b45c65b0f97db883a1376926e370468b2c7e6896"
+  integrity sha512-1GLLGmNp0PHp+PX4rrcs6wPllyYj03MWQm0yFpQ+Ql5yo87e0EjOShH8AMoVEkhoM8dWNxsuktK6A20yFHvYng==
   dependencies:
     path-to-regexp "^6.2.0"
 
@@ -2908,11 +2908,11 @@
   integrity sha512-skhU3IoBcXLWbkWDfXERh/TTsfCs5nuLFfELLMU+v5fnxAYLmw1UNyFrPqqwajjBytcTNKrtXrYKyJoesvh7mA==
 
 "@mpxjs/pinia@^2.9.0":
-  version "2.9.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@mpxjs/pinia/-/pinia-2.9.0-beta.4.tgz#e925448b21bbfddb10f255bee974c46028db4722"
-  integrity sha512-C9CQEYU7oPaf76Mg47fSuG89vFJqUIs4vckRbWxo0p0qQWf851RSfpSeYyikHgCojlhhB0yxZcZmZuf3uqR3PQ==
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/pinia/-/pinia-2.9.0.tgz#a99db7f3854c3660d431527f0e46ebdfeb93e1de"
+  integrity sha512-NdmS4AZX+JnTVJrgvVjuRC1IEvdVcqMJOp9q8W4hlJFsT1kdb55+eFG6qAAJ0Y6tPWjHANTRQqJDQHKPcfyxSw==
   dependencies:
-    "@mpxjs/utils" "^2.9.0-beta.4"
+    "@mpxjs/utils" "^2.9.0"
 
 "@mpxjs/size-report@^2.8.0":
   version "2.8.51"
@@ -2925,27 +2925,22 @@
     opener "^1.5.2"
     ws "^7.4.3"
 
-"@mpxjs/store@^2.8.0":
-  version "2.8.60"
-  resolved "https://registry.yarnpkg.com/@mpxjs/store/-/store-2.8.60.tgz#3b466ddcbea7eb868729bb4ebe0f1325a5b93b70"
-  integrity sha512-X121U1pRym7Uj3qUfFSoDtGwI5d/olEZ3rNNXNvmA/ef9+WKTRQxQpuOHLYPcHo4wl50nDdmkXXCZQMchPGXTQ==
+"@mpxjs/store@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/store/-/store-2.9.0.tgz#807608f6e349b5417eb496d35806070f2481529f"
+  integrity sha512-sFRT6Z9ma/V4L28kFgvRu3wu4b4Q8xnNlLFciA1WUzxHK2zEcrexL8eWeaf+aLun2+DFc481OcGwTUajDA8b+Q==
   dependencies:
-    "@mpxjs/utils" "^2.8.60"
+    "@mpxjs/utils" "^2.9.0"
 
-"@mpxjs/utils@^2.8.0", "@mpxjs/utils@^2.8.60":
-  version "2.8.60"
-  resolved "https://registry.yarnpkg.com/@mpxjs/utils/-/utils-2.8.60.tgz#5dc01805293aca1663e63795d1ac435ddaa150c4"
-  integrity sha512-9pTzmGRYlZrymDdzyEU1QqWism/IKQoBuSeCRxYM+w9jiFHI/ruQs6Rb3HXDkJa7qcPOJQWLB5ai39HAzCu7zQ==
-
-"@mpxjs/utils@^2.9.0-beta.4":
-  version "2.9.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@mpxjs/utils/-/utils-2.9.0-beta.4.tgz#6d1fb8cdee3590443fe6a109b4113b96616672b2"
-  integrity sha512-b/UyIQLYmqO7VqLiHSvE4zWAsaVoeSksOF9R07QpuPpDV5v2Z3fBPDm3XSOKHSJGUGDBIYLyWh6M+D4oi1hJYg==
+"@mpxjs/utils@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/utils/-/utils-2.9.0.tgz#5d03927e57e308625430fa813fbd03b5ed7e07c9"
+  integrity sha512-6yH52Tuz8S65hXSd3Qm+/jeojqpUfH3Tat5d1+mnUEQzx01z03QsjzdzbkAJKc8aUlj/jG/2MFp2AQhQP+wNFg==
 
 "@mpxjs/webpack-plugin@^2.9.0":
-  version "2.9.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@mpxjs/webpack-plugin/-/webpack-plugin-2.9.0-beta.4.tgz#eecaa24c58d99789e8e544e17c07aac026a6a38d"
-  integrity sha512-2YUdmNBVbobWxu3TfOK7sOKjBS+2F9/s1UVyRBkkGrvMyLeJX8Ri8meiXwM5Ob436oMAcUEYQOeMsIo3AOdvrg==
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@mpxjs/webpack-plugin/-/webpack-plugin-2.9.0.tgz#343d7453f8280d99579e49bced09ade5a8949629"
+  integrity sha512-9pkY7VF87fjYwD+YiFHWAo8+3+w4tD2eN5/sxEzHNq78kpXCjaSgsiu2ms0Al3V0lqR/wrUjaNF1cSilbCzHXQ==
   dependencies:
     "@babel/code-frame" "^7.16.0"
     "@babel/generator" "^7.16.0"

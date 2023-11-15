@@ -548,6 +548,7 @@ module.exports.addServeWebpackConfig = function (
   // fixme: temporary fix to suppress dev server logging
   // should be more robust to show necessary info but not duplicate errors
   if (
+    target.mode === 'web' &&
     process.env.NODE_ENV !== 'production' &&
     process.env.NODE_ENV !== 'test'
   ) {
