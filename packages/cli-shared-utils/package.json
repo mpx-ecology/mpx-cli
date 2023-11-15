@@ -3,7 +3,9 @@
   "version": "2.1.0",
   "description": "share utils for mpx-cli",
   "main": "lib/index.js",
-  "dependencies": {},
+  "dependencies": {
+    "execa": "^5.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
