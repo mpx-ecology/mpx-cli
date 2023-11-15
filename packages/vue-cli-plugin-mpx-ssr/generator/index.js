@@ -5,7 +5,7 @@ module.exports = function (api, options) {
       'serve:ssr': 'mpx-cli-service serve:ssr',
       'build:ssr': 'mpx-cli-service build:ssr'
     },
-    dependencies: {
+    devDependencies: {
       axios: '^1.6.0',
       express: '^4.18.2',
       'serve-favicon': '^2.5.0',
