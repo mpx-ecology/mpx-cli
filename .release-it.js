@@ -10,12 +10,13 @@ module.exports = {
   },
   plugins: {
     'release-it-yarn-workspaces': {
-      workspaces: ['packages/mpx-cli-service', 'packages/vue-cli-plugin-*'],
+      workspaces: ['packages/mpx-cli-service', 'packages/vue-cli-plugin-*', 'packages/cli-shared-utils'],
       additionalManifests: {
         versionUpdates: [
           'packages/mpx-cli-service/package.json',
           'packages/vue-cli-plugin-*/package.json',
-          'lerna.json'
+          'lerna.json',
+          'packages/cli-shared-utils/package.json'
         ]
       }
     }
