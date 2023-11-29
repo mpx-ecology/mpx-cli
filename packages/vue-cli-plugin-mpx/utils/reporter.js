@@ -89,8 +89,6 @@ class LogUpdate {
   }
 }
 
-const logUpdate = new LogUpdate()
-
 const common = {
   pointerSmall: '›',
   bullet: '●'
@@ -211,7 +209,7 @@ class FancyReporter {
         cb
       )
     } else {
-      logUpdate.render(renderedStates + '\n')
+      getLogUpdate().render(renderedStates + '\n')
       cb && cb()
     }
   }
@@ -233,7 +231,7 @@ class FancyReporter {
       line2 = state.request
         ? ' ' +
           chalk.grey(
-            ellipsisLeft(formatRequest(state.request), logUpdate.columns)
+            ellipsisLeft(formatRequest(state.request), getLogUpdate().columns)
           )
         : ''
     } else {
@@ -256,10 +254,21 @@ let reporter = null
 /**
  * @returns {FancyReporter} - fancyReporter
  */
-exports.getReporter = function () {
+function getReporter () {
   if (reporter) return reporter
   return (reporter = new FancyReporter())
 }
 
+let logUpdate = null
+/**
+ * @returns {LogUpdate} - LogUpdate
+ */
+function getLogUpdate () {
+  if (logUpdate) return logUpdate
+  return (logUpdate = new LogUpdate())
+}
+
+exports.getReporter = getReporter
+exports.getLogUpdate = getLogUpdate
 exports.LogUpdate = LogUpdate
 exports.FancyReporter = FancyReporter

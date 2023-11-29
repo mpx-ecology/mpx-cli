@@ -50,7 +50,7 @@ module.exports.registerBuildCommand = function (api, options) {
       )
       return new Promise((resolve, reject) => {
         webpack(webpackConfig, (err, stats) => {
-          handleWebpackDone(err, stats, target, api)
+          handleWebpackDone(err, stats, args.watch)
             .then((...res) => {
               if (target !== 'web') {
                 // web版本不需要symlink
