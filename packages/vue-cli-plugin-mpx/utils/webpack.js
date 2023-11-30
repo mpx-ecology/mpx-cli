@@ -19,7 +19,7 @@ function handleWebpackDone (err, stats, watch) {
           color: hasErrors ? 'red' : 'green',
           progress: 100,
           hasErrors: hasErrors,
-          result: extractResultFromStats(v)
+          result: extractResultFromStats(v).join('\n')
         }
       }),
       () => {
