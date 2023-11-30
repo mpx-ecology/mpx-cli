@@ -61,7 +61,7 @@ output.getErrors = (stats, severity) => {
  * @param {*} stats
  * @returns
  */
-function extractResultFromStats (stats, options) {
+function extractResultFromStats (stats, options = {}) {
   const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
   return statsArr.map((item) => {
     return item
