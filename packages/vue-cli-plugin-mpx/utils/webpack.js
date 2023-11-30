@@ -1,7 +1,7 @@
-const { getReporter } = require('./reporter')
+const { getReporter, getLogUpdate } = require('./reporter')
 const { extractResultFromStats, extractErrorsFromStats } = require('./output')
 
-function handleWebpackDone (err, stats) {
+function handleWebpackDone (err, stats, watch) {
   return new Promise((resolve, reject) => {
     if (err) return reject(err)
     const hasErrors = stats.hasErrors()
@@ -25,7 +25,15 @@ function handleWebpackDone (err, stats) {
           result: result.join('\n')
         }
       }),
-      () => (hasErrors ? reject(new Error('Build error')) : resolve(stats))
+      () => {
+        // 有错误，暂停监听log，让错误正常输出
+        getLogUpdate().stopListen()
+        if (hasErrors) {
+          !watch && reject(new Error('Build failed with errors.'))
+        } else {
+          resolve(stats)
+        }
+      }
     )
   })
 }

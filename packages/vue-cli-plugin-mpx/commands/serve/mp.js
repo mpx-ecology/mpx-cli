@@ -11,7 +11,7 @@ module.exports.serveMp = function serveMp (api, options, args) {
   const webpackConfigs = resolveServeWebpackConfigByTarget(api, options, target, args)
   return new Promise((resolve, reject) => {
     webpack(webpackConfigs).watch({}, (err, stats) => {
-      handleWebpackDone(err, stats, target, api)
+      handleWebpackDone(err, stats, true)
         .then((...res) => {
           symlinkTargetConfig(api, target, webpackConfigs[0])
           resolve(...res)
