@@ -1,5 +1,5 @@
 const { getReporter, getLogUpdate } = require('./reporter')
-const { extractResultFromStats, extractErrorsFromStats } = require('./output')
+const { extractResultFromStats } = require('./output')
 
 function handleWebpackDone (err, stats, watch) {
   return new Promise((resolve, reject) => {
@@ -11,9 +11,6 @@ function handleWebpackDone (err, stats, watch) {
       : hasWarnings
         ? 'with some warnings'
         : 'successfully'
-    const result = []
-    if (hasErrors) result.push(extractErrorsFromStats(stats))
-    if (!hasErrors) result.push(extractResultFromStats(stats))
     getReporter()._renderStates(
       stats.stats.map((v) => {
         return {
@@ -22,7 +19,7 @@ function handleWebpackDone (err, stats, watch) {
           color: hasErrors ? 'red' : 'green',
           progress: 100,
           hasErrors: hasErrors,
-          result: result.join('\n')
+          result: extractResultFromStats(v)
         }
       }),
       () => {

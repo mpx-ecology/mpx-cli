@@ -47,7 +47,10 @@ function extractErrorsFromStats (stats, type = 'errors') {
 
 output.getErrors = (stats, severity) => {
   output.capture()
-  friendlyErrorsWebpackPlugin.displayErrors(extractErrorsFromStats(stats), severity)
+  friendlyErrorsWebpackPlugin.displayErrors(
+    extractErrorsFromStats(stats),
+    severity
+  )
   const messages = output.capturedMessages
   output.endCapture()
   return messages.join('\n')
@@ -58,17 +61,19 @@ output.getErrors = (stats, severity) => {
  * @param {*} stats
  * @returns
  */
-function extractResultFromStats (stats) {
+function extractResultFromStats (stats, options) {
   const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats]
   return statsArr.map((item) => {
     return item
       .toString({
+        assets: true,
         colors: true,
         modules: false,
         children: false,
         chunks: false,
         chunkModules: false,
-        entrypoints: false
+        entrypoints: false,
+        ...options
       })
       .split('\n')
       .map((v) => `  ${v}`)

@@ -1,6 +1,6 @@
 const { hasProjectYarn, hasProjectPnpm } = require('@vue/cli-shared-utils')
 const { getReporter } = require('../../utils/reporter')
-const { extractErrorsFromStats } = require('../../utils/output')
+const { extractResultFromStats } = require('../../utils/output')
 const { resolveServeWebpackConfigByTarget } = require('../../config')
 const { getCurrentTarget } = require('@mpxjs/cli-shared-utils/lib')
 
@@ -185,12 +185,8 @@ module.exports.serveWeb = async (api, options, args) => {
         : hasWarnings
           ? 'with some warnings'
           : 'successfully'
-      const result = []
-      if (hasErrors) result.push(extractErrorsFromStats(stats))
 
-      if (hasWarnings) {
-        result.push(extractErrorsFromStats(stats, 'warnings'))
-      }
+      const result = []
 
       if (!hasErrors) {
         const networkUrl = publicUrl
@@ -271,8 +267,12 @@ module.exports.serveWeb = async (api, options, args) => {
           // signal for test to check HMR
           logChunk.push('App updated')
         }
-        result.push(logChunk.join('\n'))
+        result.push(logChunk.map(v => `  ${v}`).join('\n'))
       }
+
+      result.push('', extractResultFromStats(stats, {
+        assets: false
+      }))
 
       getReporter()._renderStates([
         {
@@ -280,7 +280,7 @@ module.exports.serveWeb = async (api, options, args) => {
           color: hasErrors ? 'red' : 'green',
           progress: 100,
           hasErrors: hasErrors,
-          result: result.map(v => `  ${v}`).join('\n')
+          result: result.join('\n')
         }
       ])
     })
