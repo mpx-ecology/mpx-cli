@@ -177,7 +177,7 @@ module.exports.serveWeb = async (api, options, args) => {
 
     // log instructions & open browser on first compilation complete
     let isFirstCompile = true
-    compiler.hooks.done.tap('vue-cli-service serve', (stats) => {
+    compiler.hooks.afterDone.tap('vue-cli-service serve', (stats) => {
       const hasErrors = stats.hasErrors()
       const hasWarnings = stats.hasWarnings()
       const status = hasErrors
