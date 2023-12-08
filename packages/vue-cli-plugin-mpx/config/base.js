@@ -226,6 +226,7 @@ function addMpWebpackConfig (api, options, config, target) {
   }
 
   createCSSRule('wxss', /\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
+  // stylus-loader 在 production 模式下会自动开启compress，这功能会把css中的注释删除，导致@mpx-if这些多态功能无法使用
   createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', {
     stylusOptions: {
       compress: false
