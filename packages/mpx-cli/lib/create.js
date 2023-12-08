@@ -191,6 +191,8 @@ async function create (projectName, options, preset = null) {
     })
   }
 
+  console.log(preset)
+
   await creator.create({
     ...options,
     preset: undefined,
