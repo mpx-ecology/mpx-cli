@@ -20,8 +20,5 @@ module.exports = function (api, options) {
 }
 
 module.exports.after = [
-  '@mpxjs/vue-cli-plugin-mpx',
-  '@mpxjs/vue-cli-plugin-mpx-mp',
-  '@mpxjs/webpack-plugin',
-  '@mpxjs/mpx-cli-service'
+  '@mpxjs/vue-cli-plugin-mpx'
 ]
