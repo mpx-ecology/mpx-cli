@@ -7,7 +7,7 @@ module.exports = function (api, options) {
   api.chainWebpack((config) => {
     config.module
       .rule('stylus')
-      .oneOf('mpx')
+      .oneOf('normal')
       .use('stylus-loader')
       .loader('stylus-loader')
       .options({
