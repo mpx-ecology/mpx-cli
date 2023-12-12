@@ -1,10 +1,23 @@
+const { modifyMpxPluginConfig } = require('@mpxjs/cli-shared-utils/lib')
+
 module.exports = function (api, options) {
   let importThemeFiles = []
   try {
     importThemeFiles = options.pluginOptions.themeFilePath || []
   } catch (e) {}
 
+  const { postCssVariables = {} } = options.pluginOptions || {}
   api.chainWebpack((config) => {
+    modifyMpxPluginConfig(api, config, {
+      postcssInlineConfig: {
+        plugins: [
+          require('postcss-css-variables')({
+            preserve: true,
+            ...postCssVariables
+          })
+        ]
+      }
+    })
     config.module
       .rule('stylus')
       .oneOf('normal')
@@ -19,6 +32,4 @@ module.exports = function (api, options) {
   })
 }
 
-module.exports.after = [
-  '@mpxjs/vue-cli-plugin-mpx'
-]
+module.exports.after = ['@mpxjs/vue-cli-plugin-mpx']
