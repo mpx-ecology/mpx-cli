@@ -6,11 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "postcss-css-variables": "^0.19.0"
   },
-  "peerDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
