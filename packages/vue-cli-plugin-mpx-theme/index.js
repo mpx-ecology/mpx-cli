@@ -1,12 +1,8 @@
 const { modifyMpxPluginConfig } = require('@mpxjs/cli-shared-utils/lib')
 
 module.exports = function (api, options) {
-  let importThemeFiles = []
-  try {
-    importThemeFiles = options.pluginOptions.themeFilePath || []
-  } catch (e) {}
+  const { postCssVariables = {}, themeFilePath = [] } = options.pluginOptions || {}
 
-  const { postCssVariables = {} } = options.pluginOptions || {}
   api.chainWebpack((config) => {
     modifyMpxPluginConfig(api, config, {
       postcssInlineConfig: {
@@ -18,6 +14,7 @@ module.exports = function (api, options) {
         ]
       }
     })
+
     config.module
       .rule('stylus')
       .oneOf('normal')
@@ -25,7 +22,7 @@ module.exports = function (api, options) {
       .loader('stylus-loader')
       .options({
         stylusOptions: {
-          import: importThemeFiles
+          import: themeFilePath
         }
       })
       .end()
