@@ -210,7 +210,7 @@ function addMpWebpackConfig (api, options, config, target) {
     let chain = config.module
       .rule(rule)
       .test(test)
-      .oneOf('mpx')
+      .oneOf('normal')
       .use('mpx-wxss-loader')
       .loader(require.resolve(wxssLoader.loader))
       .options(wxssLoader.options)
