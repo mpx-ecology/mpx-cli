@@ -343,6 +343,7 @@ function addWebWebpackConfig (api, options, config, target) {
     .loader(require.resolve(mpxLoader.loader))
     .options(mpxLoader.options)
 
+  // vue-cli-service css config 只有在production环境下才会添加该插件
   if (process.env.NODE_ENV === 'production') {
     config.plugin('extract-css').tap(([args]) => {
       args.ignoreOrder = true
