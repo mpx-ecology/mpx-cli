@@ -1,4 +1,15 @@
 
+## 2.1.6 (2023-12-27)
+
+#### :rocket: New Features
+* `vue-cli-plugin-mpx`
+  * [#85](https://github.com/mpx-ecology/mpx-cli/pull/85) feat: 增加mini-css-extract-plugin ignoreOrder选项为true ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 
 
 
