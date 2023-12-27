@@ -228,6 +228,7 @@ function addMpWebpackConfig (api, options, config, target) {
   createCSSRule('wxss', /\.(wxss|acss|css|qss|ttss|jxss|ddss)$/)
   createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', {
     stylusOptions: {
+      // stylus-loader在production模式下会开启compress，会把css中的注释删除，导致@mpx-if等功能无法使用
       compress: false
     }
   })
@@ -341,6 +342,13 @@ function addWebWebpackConfig (api, options, config, target) {
     .use('mpx-loader')
     .loader(require.resolve(mpxLoader.loader))
     .options(mpxLoader.options)
+
+  if (process.env.NODE_ENV === 'production') {
+    config.plugin('extract-css').tap(([args]) => {
+      args.ignoreOrder = true
+      return [args]
+    })
+  }
 
   // 直接更新 vue-cli-service 内部的 vue-loader options 配置
   config.module
