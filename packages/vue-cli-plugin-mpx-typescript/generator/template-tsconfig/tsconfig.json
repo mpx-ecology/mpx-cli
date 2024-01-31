@@ -4,6 +4,7 @@
     "module": "esnext",
     "baseUrl": "./",
     "noImplicitThis": true,
+    "noImplicitAny": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
     "lib": [

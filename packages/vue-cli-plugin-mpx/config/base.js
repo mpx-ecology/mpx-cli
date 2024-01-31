@@ -302,9 +302,11 @@ function addMpWebpackConfig (api, options, config, target) {
     {
       // terserOptions参考 https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
       terserOptions: {
-        // terser的默认行为会把某些对象方法转为箭头函数，导致ios9等不支持箭头函数的环境白屏，详情见 https://github.com/terser/terser#compress-options
         compress: {
-          arrows: false
+          // terser的默认行为会把某些对象方法转为箭头函数，导致ios9等不支持箭头函数的环境白屏，详情见 https://github.com/terser/terser#compress-options
+          arrows: false,
+          // terser默认会删除非标准directive,为保证skyline worklet的正常工作，需关闭该配置
+          directives: false
         }
       }
     }
