@@ -1,4 +1,15 @@
 
+## 2.1.7 (2024-01-31)
+
+#### :bug: Bug Fix
+* `vue-cli-plugin-mpx-typescript`, `vue-cli-plugin-mpx`
+  * [#86](https://github.com/mpx-ecology/mpx-cli/pull/86) fix: terser兼容skyline,ts默认开启any检测 ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 2.1.6 (2023-12-27)
 
 #### :rocket: New Features
