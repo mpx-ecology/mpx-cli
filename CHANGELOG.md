@@ -1,4 +1,15 @@
 
+## 2.1.8 (2024-03-01)
+
+#### :bug: Bug Fix
+* `mpx-cli`, `vue-cli-plugin-mpx`
+  * [#87](https://github.com/mpx-ecology/mpx-cli/pull/87) fix: cli依赖修复 ([@mater1996](https://github.com/mater1996))
+
+#### Committers: 1
+- Mater ([@mater1996](https://github.com/mater1996))
+
+
+
 ## 2.1.7 (2024-01-31)
 
 #### :bug: Bug Fix
