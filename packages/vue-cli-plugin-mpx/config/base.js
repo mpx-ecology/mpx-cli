@@ -20,6 +20,7 @@ const { getReporter } = require('../utils/reporter')
  * @param { string } name
  */
 function changeStyleVueRuleToMpx (config, name) {
+  config.module.rule(name).oneOfs.delete('vue-modules')
   const store = config.module.rule(name).oneOfs.store
   const value = store.get('vue')
   value.name = 'mpx'
