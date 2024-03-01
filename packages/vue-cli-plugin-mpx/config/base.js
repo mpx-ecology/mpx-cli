@@ -20,7 +20,10 @@ const { getReporter } = require('../utils/reporter')
  * @param { string } name
  */
 function changeStyleVueRuleToMpx (config, name) {
+  // 移除vue-modules规则，因为mpx在构建时会在resourceQuery携带filename，这会导致带有
+  // module命名的mpx文件命中vue-modules规则，导致样式编译错误
   config.module.rule(name).oneOfs.delete('vue-modules')
+  // 抹平web和mp配置的命名，方便一次修改
   const store = config.module.rule(name).oneOfs.store
   const value = store.get('vue')
   value.name = 'mpx'
