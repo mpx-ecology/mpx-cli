@@ -18,7 +18,7 @@ module.exports = [
   },
   {
     name: 'needSSR',
-    when: ({ srcMode }) => srcMode === 'wx',
+    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === true,
     message: '是否需要 web ssr',
     type: 'confirm',
     default: false,
@@ -60,6 +60,19 @@ module.exports = [
     }
   },
   {
+    name: 'needEslint',
+    type: 'confirm',
+    message: '是否需要eslint',
+    default: true,
+    preset: {
+      plugins: {
+        [`${prefix}-eslint`]: {
+          version: '^2.0.0'
+        }
+      }
+    }
+  },
+  {
     name: 'needTs',
     type: 'confirm',
     message: '是否需要typescript',
@@ -72,7 +85,6 @@ module.exports = [
       }
     }
   },
-
   {
     name: 'needUtilityFirstCSS',
     type: 'confirm',

@@ -5,7 +5,7 @@ const { serveMp } = require('./mp')
 const { addServeWebpackConfig } = require('../../config/base')
 
 const defaults = {
-  clean: true
+  clean: false
 }
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
@@ -19,7 +19,7 @@ module.exports.registerServeCommand = function (api, options) {
         '--targets': `compile for target platform, support ${SUPPORT_MODE}`,
         '--mode': 'specify env mode (default: development)',
         '--no-clean':
-          'do not remove the dist directory contents before building the project',
+          'do not remove the dist directory contents before building the project (default: true)',
         '--env': 'custom define __mpx_env__'
       }
     },

@@ -79,6 +79,31 @@ test('normal-nocross', async () => {
   expect(staticAliDir).toBe(false)
 })
 
+test('test-eslint', async () => {
+  const cwd = path.resolve(__dirname, '../../test')
+  const name = 'test-normal-eslint'
+  await create(
+    name,
+    {
+      force: true,
+      git: false,
+      cwd
+    },
+    {
+      srcMode: 'wx',
+      appid: 'test',
+      description: 'test',
+      cross: true,
+      plugins: {},
+      useConfigFiles: true,
+      needEslint: true
+    }
+  )
+
+  const pkg = require(path.resolve(cwd, name, 'package.json'))
+  expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx-eslint')
+})
+
 test('test-ts', async () => {
   const cwd = path.resolve(__dirname, '../../test')
   const name = 'test-ts'
@@ -278,6 +303,7 @@ test('test-typescript', async () => {
   const pkg = require(path.resolve(cwd, name, 'package.json'))
   expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx-typescript')
 })
+
 test('test-ssr', async () => {
   const cwd = path.resolve(__dirname, '../../test')
   const name = 'test-ssr'

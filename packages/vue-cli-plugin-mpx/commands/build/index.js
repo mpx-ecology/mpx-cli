@@ -27,7 +27,7 @@ module.exports.registerBuildCommand = function (api, options) {
         '--mode': 'specify env mode (default: production)',
         '--report': 'generate report.html to help analyze bundle content',
         '--no-clean':
-          'do not remove the dist directory contents before building the project',
+          'do not remove the dist directory contents before building the project (default: false)',
         '--env': 'custom define __mpx_env__'
       }
     },
