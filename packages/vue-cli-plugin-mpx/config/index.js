@@ -1,3 +1,4 @@
+const { default: merge } = require('webpack-merge')
 const { resolveBaseRawWebpackConfig } = require('./base')
 const { resolvePluginWebpackConfig } = require('./plugin')
 
@@ -16,7 +17,7 @@ function addRawConfigBeforeUserConfig (api, config) {
 
 function addPluginConfig (api, options, target, webpackConfigs) {
   if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {
-    webpackConfigs.push(resolvePluginWebpackConfig(api, webpackConfigs[0]))
+    webpackConfigs.push(resolvePluginWebpackConfig(api, merge({}, webpackConfigs[0])))
   }
 }
 
