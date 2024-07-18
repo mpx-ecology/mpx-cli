@@ -1,4 +1,4 @@
-const { default: merge } = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const { resolveBaseRawWebpackConfig } = require('./base')
 const { resolvePluginWebpackConfig } = require('./plugin')
 
