@@ -328,3 +328,28 @@ test('test-ssr', async () => {
   const pkg = require(path.resolve(cwd, name, 'package.json'))
   expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx-ssr')
 })
+
+test('test-rn', async () => {
+  const cwd = path.resolve(__dirname, '../../test')
+  const name = 'test-rn'
+  await create(
+    name,
+    {
+      force: true,
+      git: false,
+      cwd
+    },
+    {
+      srcMode: 'wx',
+      appid: 'test',
+      description: 'test',
+      needRn: true,
+      cross: true,
+      plugins: {},
+      useConfigFiles: true
+    }
+  )
+
+  const pkg = require(path.resolve(cwd, name, 'package.json'))
+  expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx')
+})

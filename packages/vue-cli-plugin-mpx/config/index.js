@@ -41,7 +41,7 @@ function validWebConfig (webpackConfigs, api, options) {
  */
 function resolveBuildWebpackConfigByTarget (api, options, target, args) {
   // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
-  addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api))
+  addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api, options, target))
   let webpackConfigs
   if (target.mode === 'web') {
     // web配置，使用vue-cli内置的方法获取配置 + mpx-cli 修改后的配置

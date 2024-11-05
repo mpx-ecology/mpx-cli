@@ -2,7 +2,7 @@ module.exports = function (api, options) {
   api.chainWebpack(webpackConfig => {
     webpackConfig.module
       .rule('ts')
-      .test(/\.ts$/)
+      .test(/\.(ts|tsx)$/)
       .use('babel-loader')
       .loader(require.resolve('babel-loader'))
       .end()

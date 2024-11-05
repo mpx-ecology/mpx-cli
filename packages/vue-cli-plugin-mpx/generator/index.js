@@ -127,7 +127,8 @@ module.exports = function (api, options) {
       '@mpxjs/babel-plugin-inject-page-events': '^2.9.0',
       autoprefixer: '^10.2.4',
       postcss: '^8.2.6',
-      webpack: '^5.43.0'
+      webpack: '^5.43.0',
+      process: '^0.11.10'
     },
     browserslist: ['ios >= 8', 'chrome >= 47']
   })

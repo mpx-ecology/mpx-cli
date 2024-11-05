@@ -172,6 +172,7 @@ async function create (projectName, options, preset = null) {
       cloudFunc: preset.cloudFunc,
       cross: preset.cross,
       needSSR: preset.needSSR,
+      needRn: preset.needRn,
       name
     })
   })

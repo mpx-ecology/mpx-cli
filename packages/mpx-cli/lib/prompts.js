@@ -17,6 +17,13 @@ module.exports = [
     default: true
   },
   {
+    name: 'needRn',
+    when: ({ srcMode }) => srcMode === 'wx',
+    message: '是否需要输出react-native',
+    type: 'confirm',
+    default: false
+  },
+  {
     name: 'needSSR',
     when: ({ srcMode, cross }) => srcMode === 'wx' && cross === true,
     message: '是否需要 web ssr',
