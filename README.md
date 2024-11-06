@@ -86,6 +86,8 @@ mpx-cli-service build --targets=wx,ali
 | QQ     | qq     |
 | 头条   | tt     |
 | 浏览器 | web    |
+| react-native(安卓) | android    |
+| react-native(IOS) | ios    |
 
 #### serve
 
