@@ -55,7 +55,11 @@ async function createRnProject (targetDir, options) {
       'ReactNativeProject',
       '--pm',
       pm.bin,
+      '--skip-install',
+      true,
       '--install-pods',
+      true,
+      'skip-git-init',
       true
     ],
     { stdio: 'inherit', cwd: targetDir }
