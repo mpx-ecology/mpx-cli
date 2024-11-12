@@ -132,4 +132,12 @@ module.exports = function (api, options) {
     },
     browserslist: ['ios >= 8', 'chrome >= 47']
   })
+
+  if (options.needRn) {
+    api.extendPackage({
+      scripts: {
+        'serve:ios': 'mpx-cli-service serve --targets=ios & cd ReactNativeProject && npm run ios'
+      }
+    })
+  }
 }

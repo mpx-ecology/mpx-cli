@@ -65,7 +65,7 @@ function resolveBuildWebpackConfigByTarget (api, options, target, args) {
  */
 function resolveServeWebpackConfigByTarget (api, options, target, args) {
   // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
-  addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api))
+  addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api, options, target))
   const webpackConfigs = [api.resolveWebpackConfig()]
   if (target.mode === 'web') {
     validWebConfig(webpackConfigs, api, options)
