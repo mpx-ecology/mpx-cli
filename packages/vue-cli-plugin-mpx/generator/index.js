@@ -145,7 +145,7 @@ module.exports = function (api, options) {
         'serve:ios': 'cd ReactNativeProject && npm run ios && cd .. && mpx-cli-service serve --targets=ios',
         'build:ios': 'mpx-cli-service build --targets=ios && cd ReactNativeProject && npm run bundle:ios',
         'serve:android': 'cd ReactNativeProject && npm run android && cd .. && mpx-cli-service build --targets=android',
-        'build:android': 'mpx-cli-service build --targets=android && cd ReactNativeProject && npm run bundle:android'
+        'build:android': 'mpx-cli-service build --targets=android'
       }
     })
   }

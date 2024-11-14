@@ -195,7 +195,7 @@ async function create (projectName, options, preset = null) {
     inlinePreset: JSON.stringify(preset)
   })
 
-  if (preset.needRn) {
+  if (!process.env.VUE_CLI_TEST && preset.needRn) {
     await createRnProject(targetDir, options)
   }
 }
