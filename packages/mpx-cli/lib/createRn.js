@@ -59,7 +59,7 @@ async function createRnProject (targetDir, options) {
       true,
       '--install-pods',
       true,
-      'skip-git-init',
+      '--skip-git-init',
       true
     ],
     { stdio: 'inherit', cwd: targetDir }
