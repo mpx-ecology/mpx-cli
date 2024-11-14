@@ -37,14 +37,14 @@ const RN_DEP = {
 }
 
 async function createRnProject (targetDir, options) {
-  const rnCwd = path.resolve(targetDir, 'ReactNativeProject')
+  const rnProjectPath = path.resolve(targetDir, 'ReactNativeProject')
   const packageManager =
     options.packageManager ||
     loadOptions().packageManager ||
     (hasYarn() ? 'yarn' : null) ||
     (hasPnpm3OrLater() ? 'pnpm' : 'npm')
   const pm = new PackageManager({
-    context: rnCwd,
+    context: rnProjectPath,
     forcePackageManager: packageManager
   })
   await execa(
@@ -70,9 +70,9 @@ async function createRnProject (targetDir, options) {
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
   await pm.install()
   if (process.platform === 'darwin') {
-    await execa('pod', ['install'], {
+    await execa('npx', ['install-expo-modules'], {
       stdio: 'inherit',
-      cwd: path.resolve(rnCwd, 'ios')
+      cwd: rnProjectPath
     })
   }
 }
