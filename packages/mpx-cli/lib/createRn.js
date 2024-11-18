@@ -68,8 +68,7 @@ async function createRnProject (targetDir, options) {
   const pkg = require(pkgPath)
   Object.assign(pkg.dependencies, RN_DEP)
   Object.assign(pkg.scripts, {
-    'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios',
-    'bundle:android': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios'
+    'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios'
   })
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
   await pm.install()
