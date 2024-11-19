@@ -174,12 +174,6 @@ function addMpWebpackConfig (api, options, config, target) {
   // alias config
   config.resolve.alias.set('@', api.resolve('src'))
 
-  // defind config
-  config.plugin('mpx-provide-plugin').use(webpack.ProvidePlugin, [
-    {
-      process: 'process/browser'
-    }
-  ])
   // 和vue-cli保持同名，方便一次性修改mp和web版本的define参数
   config.plugin('define').use(webpack.DefinePlugin, [resolveClientEnv(options)])
 
@@ -377,6 +371,54 @@ function addWebWebpackConfig (api, options, config, target) {
 }
 
 /**
+ * cli注入的基础RN配置
+ * @param { import('@vue/cli-service').PluginAPI } api
+ * @param { import('@vue/cli-service').ProjectOptions } options
+ * @param { import('webpack-chain') } config
+ * @param { import('@mpxjs/cli-shared-utils').Target } target
+ */
+function addRnWebpackConfig (api, options, config, target) {
+  config.resolve.extensions.add('.tsx').add('.jsx')
+  config.output.publicPath('/')
+  config.output.filename('[name].js')
+  config.optimization.splitChunks(false)
+  config.externals({
+    'react-native': 'react-native',
+    react: 'react',
+    '@react-native-masked-view/masked-view':
+        '@react-native-masked-view/masked-view',
+    'react-native-reanimated': 'react-native-reanimated',
+    'react-native-gesture-handler': 'react-native-gesture-handler',
+    'react-native-gesture-handler/DrawerLayout':
+        'react-native-gesture-handler/DrawerLayout',
+    'react-native-gesture-handler/Swipeable':
+        'react-native-gesture-handler/Swipeable',
+    '@ant-design/icons-react-native': '@ant-design/icons-react-native',
+    'react-native-safe-area-context': 'react-native-safe-area-context',
+    'react-native-collapsible': 'react-native-collapsible',
+    'react-native-modal-popover': 'react-native-modal-popover',
+    'react/jsx-runtime': 'react/jsx-runtime',
+    '@react-navigation/native': '@react-navigation/native',
+    '@react-navigation/native-stack': '@react-navigation/native-stack',
+    '@react-navigation/elements': '@react-navigation/elements',
+    '@react-native-async-storage/async-storage':
+        '@react-native-async-storage/async-storage',
+    '@react-native-clipboard/clipboard': '@react-native-clipboard/clipboard',
+    '@react-native-community/netinfo': '@react-native-community/netinfo',
+    'react-native-device-info': 'react-native-device-info',
+    'react-native-root-siblings': 'react-native-root-siblings',
+    'react-native-maps': 'react-native-maps',
+    '@ant-design/react-native': '@ant-design/react-native',
+    'expo-brightness': 'expo-brightness',
+    'expo-clipboard': 'expo-clipboard',
+    'react-native-webview': 'react-native-webview',
+    'react-native-get-location': 'react-native-get-location',
+    'react-native-linear-gradient': 'react-native-linear-gradient',
+    'react-native-haptic-feedback': 'react-native-haptic-feedback'
+  })
+}
+
+/**
  * cli注入的基础配置
  * @param { import('@vue/cli-service').PluginAPI } api
  * @param { import('@vue/cli-service').ProjectOptions } options
@@ -385,6 +427,8 @@ function addWebWebpackConfig (api, options, config, target) {
  */
 module.exports.addBaseConfig = function (api, options, config, target) {
   const isWeb = target.mode === 'web'
+  const isRn = (target.mode === 'android') | (target.mode === 'ios')
+
   config.module
     .rule('json')
     .test(/\.json$/)
@@ -482,6 +526,10 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     addMpWebpackConfig(api, options, config, target)
   }
 
+  if (isRn) {
+    addRnWebpackConfig(api, options, config, target)
+  }
+
   transformEntry(api, options, config, target)
 
   updateWebpackName(api, config)
@@ -490,9 +538,14 @@ module.exports.addBaseConfig = function (api, options, config, target) {
 /**
  * cli注入的基础配置以config方式
  * @param { import('@vue/cli-service').PluginAPI } api
+ * @returns { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
  */
-module.exports.resolveBaseRawWebpackConfig = function (api) {
-  return () => ({
+module.exports.resolveBaseRawWebpackConfig = function (api, options, target) {
+  const isRn = (target.mode === 'android') | (target.mode === 'ios')
+  /**
+   * @type { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
+   */
+  const config = {
     snapshot: {
       managedPaths: [api.resolve('node_modules/')]
     },
@@ -501,8 +554,23 @@ module.exports.resolveBaseRawWebpackConfig = function (api) {
     },
     infrastructureLogging: {
       level: 'none'
+    },
+    resolve: {
+      fallback: {
+        process: require.resolve('process/browser')
+      }
     }
-  })
+  }
+  if (isRn) {
+    config.externalsType = 'commonjs'
+    config.output = {
+      library: {
+        type: 'commonjs2',
+        export: 'default'
+      }
+    }
+  }
+  return () => config
 }
 
 /**

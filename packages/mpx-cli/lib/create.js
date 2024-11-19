@@ -17,6 +17,7 @@ const { clearConsole } = require('@vue/cli/lib/util/clearConsole')
 const merge = require('lodash.merge')
 const prompts = require('./prompts')
 const builtInPreset = require('./preset')
+const { createRnProject } = require('./createRn')
 
 async function resolvePreset (args = {}) {
   const { p, preset, c, clone } = args
@@ -81,14 +82,10 @@ async function create (projectName, options, preset = null) {
   preset.cssPreprocessor = 'stylus'
 
   // mpx cli 插件
-  preset.plugins = Object.assign(
-    {},
-    preset.plugins,
-    builtInPreset.plugins
-  )
+  preset.plugins = Object.assign({}, preset.plugins, builtInPreset.plugins)
 
   // 合并问答中的preset
-  prompts.forEach(v => {
+  prompts.forEach((v) => {
     if (preset[v.name]) {
       merge(preset, v.preset)
     }
@@ -172,6 +169,7 @@ async function create (projectName, options, preset = null) {
       cloudFunc: preset.cloudFunc,
       cross: preset.cross,
       needSSR: preset.needSSR,
+      needRn: preset.needRn,
       name
     })
   })
@@ -196,6 +194,10 @@ async function create (projectName, options, preset = null) {
     preset: undefined,
     inlinePreset: JSON.stringify(preset)
   })
+
+  if (!process.env.VUE_CLI_TEST && preset.needRn) {
+    await createRnProject(targetDir, options)
+  }
 }
 
 module.exports = function (...args) {

@@ -6,7 +6,15 @@
         "modules": false,
         "shippedProposals": true
       }
-    ]
+    ],
+    <%_ if (needRn) { _%>
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ],
+    <%_ } _%>
   ],
   "plugins": [
     [

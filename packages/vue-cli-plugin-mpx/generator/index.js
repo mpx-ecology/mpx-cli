@@ -32,6 +32,22 @@ module.exports = function (api, options) {
     require('./src')(api)
   }
 
+  const mpxPluginConfig = {
+    srcMode: options.srcMode,
+    hackResolveBuildDependencies: ({ files, resolveDependencies }) => {
+      const path = require('path')
+      const packageJSONPath = path.resolve('package.json')
+      if (files.has(packageJSONPath)) files.delete(packageJSONPath)
+      if (resolveDependencies.files.has(packageJSONPath)) {
+        resolveDependencies.files.delete(packageJSONPath)
+      }
+    }
+  }
+
+  if (options.needRn) {
+    mpxPluginConfig.projectName = 'ReactNativeProject'
+  }
+
   // 拓展 vue.config.js 当中有关 mpx.config.js 的配置
   api.extendPackage({
     vue: {
@@ -39,17 +55,7 @@ module.exports = function (api, options) {
       outputDir: '{outputDir}',
       pluginOptions: {
         mpx: {
-          plugin: {
-            srcMode: options.srcMode,
-            hackResolveBuildDependencies: ({ files, resolveDependencies }) => {
-              const path = require('path')
-              const packageJSONPath = path.resolve('package.json')
-              if (files.has(packageJSONPath)) files.delete(packageJSONPath)
-              if (resolveDependencies.files.has(packageJSONPath)) {
-                resolveDependencies.files.delete(packageJSONPath)
-              }
-            }
-          },
+          plugin: mpxPluginConfig,
           loader: {}
         }
       },
@@ -127,8 +133,20 @@ module.exports = function (api, options) {
       '@mpxjs/babel-plugin-inject-page-events': '^2.9.0',
       autoprefixer: '^10.2.4',
       postcss: '^8.2.6',
-      webpack: '^5.43.0'
+      webpack: '^5.43.0',
+      process: '^0.11.10'
     },
     browserslist: ['ios >= 8', 'chrome >= 47']
   })
+
+  if (options.needRn) {
+    api.extendPackage({
+      scripts: {
+        'serve:ios': 'cd ReactNativeProject && npm run ios && cd .. && mpx-cli-service serve --targets=ios',
+        'build:ios': 'mpx-cli-service build --targets=ios && cd ReactNativeProject && npm run bundle:ios',
+        'serve:android': 'cd ReactNativeProject && npm run android && cd .. && mpx-cli-service serve --targets=android',
+        'build:android': 'mpx-cli-service build --targets=android && cd ReactNativeProject && npm run bundle:android'
+      }
+    })
+  }
 }

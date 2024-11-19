@@ -1,6 +1,8 @@
 module.exports = function (api, options) {
-  api.render('./template')
-
+  const needRn = options.needRn
+  api.render('./template', {
+    needRn
+  })
   api.extendPackage({
     devDependencies: {
       '@babel/core': '^7.10.4',
@@ -9,4 +11,11 @@ module.exports = function (api, options) {
       '@babel/runtime-corejs3': '^7.10.4'
     }
   })
+  if (needRn) {
+    api.extendPackage({
+      devDependencies: {
+        '@babel/preset-react': '^7.24.7'
+      }
+    })
+  }
 }
