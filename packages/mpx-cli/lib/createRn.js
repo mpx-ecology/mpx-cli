@@ -71,12 +71,10 @@ async function createRnProject (targetDir, options) {
   })
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
   await pm.install()
-  if (process.platform === 'darwin') {
-    await execa('npx', ['install-expo-modules'], {
-      stdio: 'inherit',
-      cwd: rnProjectPath
-    })
-  }
+  await execa('npx', ['install-expo-modules'], {
+    stdio: 'inherit',
+    cwd: rnProjectPath
+  })
 }
 
 module.exports.createRnProject = createRnProject
