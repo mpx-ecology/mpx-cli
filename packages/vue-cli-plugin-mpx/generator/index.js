@@ -45,7 +45,16 @@ module.exports = function (api, options) {
   }
 
   if (options.needRn) {
-    mpxPluginConfig.projectName = 'ReactNativeProject'
+    mpxPluginConfig.rnConfig = {
+      projectName: 'ReactNativeProject'
+    }
+    api.extendPackage({
+      dependencies: {
+        react: '18.3.1',
+        'react-native': '0.75.2',
+        'react-native-reanimated': '3.15.0'
+      }
+    })
   }
 
   // 拓展 vue.config.js 当中有关 mpx.config.js 的配置

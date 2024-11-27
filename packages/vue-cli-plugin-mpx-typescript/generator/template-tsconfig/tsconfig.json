@@ -26,6 +26,9 @@
   "exclude": [
     "build",
     "dist",
-    "config"
+    "config",
+    <%_ if(needRn) { _%>
+    "ReactNativeProject"
+    <%_ } _%>
   ]
 }

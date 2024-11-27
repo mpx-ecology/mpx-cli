@@ -344,6 +344,7 @@ test('test-rn', async () => {
       appid: 'test',
       description: 'test',
       needRn: true,
+      needTs: true,
       cross: true,
       plugins: {},
       useConfigFiles: true

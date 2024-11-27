@@ -7,6 +7,7 @@ const PackageManager = require('@vue/cli/lib/util/ProjectPackageManager')
 const RN_DEP = {
   '@ant-design/icons-react-native': '^2.3.2',
   '@ant-design/react-native': '^5.2.2',
+  '@d11/react-native-fast-image': '^8.6.12',
   '@react-native-async-storage/async-storage': '^1.24.0',
   '@react-native-clipboard/clipboard': '^1.14.2',
   '@react-native-community/netinfo': '^11.3.2',
@@ -16,6 +17,7 @@ const RN_DEP = {
   '@react-navigation/elements': '^1.3.31',
   '@react-navigation/native': '^6.1.18',
   '@react-navigation/native-stack': '^6.11.0',
+  '@react-navigation/stack': '^6.0.0',
   expo: '^51.0.32',
   'expo-brightness': '~12.0.1',
   'expo-clipboard': '~6.0.3',

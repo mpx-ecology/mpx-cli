@@ -24,7 +24,10 @@
         "version": "^7.10.4"
       }
     ],
-    "@mpxjs/babel-plugin-inject-page-events"
+    "@mpxjs/babel-plugin-inject-page-events",
+    <%_ if (needRn) { _%>
+    "react-native-reanimated/plugin"
+    <%_ } _%>
   ],
   "sourceType": "unambiguous",
   "env": {

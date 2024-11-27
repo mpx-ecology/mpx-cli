@@ -10,7 +10,8 @@ module.exports = function (api, options) {
   }
 
   api.render('./template-tsconfig', {
-    needTest: !!options.needUnitTest || !!options.needE2ETest
+    needTest: !!options.needUnitTest || !!options.needE2ETest,
+    needRn: !!options.needRn
   })
 
   api.render((files) => delete files['jsconfig.json'])
