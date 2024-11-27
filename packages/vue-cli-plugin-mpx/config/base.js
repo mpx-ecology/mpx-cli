@@ -394,6 +394,7 @@ function addRnWebpackConfig (api, options, config, target) {
     'react-native-gesture-handler/Swipeable':
         'react-native-gesture-handler/Swipeable',
     '@ant-design/icons-react-native': '@ant-design/icons-react-native',
+    '@d11/react-native-fast-image': '@d11/react-native-fast-image',
     'react-native-safe-area-context': 'react-native-safe-area-context',
     'react-native-collapsible': 'react-native-collapsible',
     'react-native-modal-popover': 'react-native-modal-popover',
