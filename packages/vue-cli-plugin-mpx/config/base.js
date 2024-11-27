@@ -400,6 +400,7 @@ function addRnWebpackConfig (api, options, config, target) {
     'react/jsx-runtime': 'react/jsx-runtime',
     '@react-navigation/native': '@react-navigation/native',
     '@react-navigation/native-stack': '@react-navigation/native-stack',
+    '@react-navigation/stack': '@react-navigation/stack',
     '@react-navigation/elements': '@react-navigation/elements',
     '@react-native-async-storage/async-storage':
         '@react-native-async-storage/async-storage',

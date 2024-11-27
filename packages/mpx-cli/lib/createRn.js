@@ -16,6 +16,7 @@ const RN_DEP = {
   '@react-navigation/elements': '^1.3.31',
   '@react-navigation/native': '^6.1.18',
   '@react-navigation/native-stack': '^6.11.0',
+  '@react-navigation/stack': '^6.0.0',
   expo: '^51.0.32',
   'expo-brightness': '~12.0.1',
   'expo-clipboard': '~6.0.3',

@@ -7,14 +7,12 @@
         "shippedProposals": true
       }
     ],
-    <%_ if (needRn) { _%>
     [
       "@babel/preset-react",
       {
         "runtime": "automatic"
       }
     ],
-    <%_ } _%>
   ],
   "plugins": [
     [
@@ -25,9 +23,7 @@
       }
     ],
     "@mpxjs/babel-plugin-inject-page-events",
-    <%_ if (needRn) { _%>
     "react-native-reanimated/plugin"
-    <%_ } _%>
   ],
   "sourceType": "unambiguous",
   "env": {

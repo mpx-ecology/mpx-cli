@@ -13,9 +13,6 @@
       "dom.iterable"
     ],
     "types": [
-      <%_ if(needTest) { _%>
-      "jest"
-      <%_ } _%>
     ],
     "paths": {
       "@/*": [
@@ -27,8 +24,6 @@
     "build",
     "dist",
     "config",
-    <%_ if(needRn) { _%>
     "ReactNativeProject"
-    <%_ } _%>
   ]
 }
