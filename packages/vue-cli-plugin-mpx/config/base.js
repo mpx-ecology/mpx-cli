@@ -645,4 +645,9 @@ module.exports.addServeWebpackConfig = function (
     // https://github.com/vuejs/vue-cli/issues/3539
     config.output.globalObject("(typeof self !== 'undefined' ? self : this)")
   }
+  if (target.mode !== 'web') {
+    config.devServer.set('devMiddleware', {
+      writeToDisk: true
+    })
+  }
 }
