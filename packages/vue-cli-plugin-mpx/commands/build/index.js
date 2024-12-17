@@ -31,7 +31,7 @@ module.exports.registerBuildCommand = function (api, options) {
         '--env': 'custom define __mpx_env__'
       }
     },
-    function build (args, rawArgv) {
+    async function build (args, rawArgv) {
       normalizeCommandArgs(args, defaults)
       if (args.clean) {
         fs.removeSync(options.outputDir)
@@ -42,7 +42,7 @@ module.exports.registerBuildCommand = function (api, options) {
         addBuildWebpackConfig(api, options, config, target, args)
       })
       // 根据目标获取构建配置
-      const webpackConfig = resolveBuildWebpackConfigByTarget(
+      const webpackConfig = await resolveBuildWebpackConfigByTarget(
         api,
         options,
         target,

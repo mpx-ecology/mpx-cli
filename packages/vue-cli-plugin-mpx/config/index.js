@@ -39,18 +39,18 @@ function validWebConfig (webpackConfigs, api, options) {
  * @param { import('@vue/cli-service').ProjectOptions } options
  * @returns
  */
-function resolveBuildWebpackConfigByTarget (api, options, target, args) {
+async function resolveBuildWebpackConfigByTarget (api, options, target, args) {
   // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
   addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api, options, target))
   let webpackConfigs
   if (target.mode === 'web') {
     // web配置，使用vue-cli内置的方法获取配置 + mpx-cli 修改后的配置
     const resolveAppConfig = require('@vue/cli-service/lib/commands/build/resolveAppConfig')
-    webpackConfigs = [resolveAppConfig(api, args, options)]
+    webpackConfigs = [await resolveAppConfig(api, args, options)]
     validWebConfig(webpackConfigs, api, options)
   } else {
     // 小程序配置，使用mpx-cli内置的配置
-    webpackConfigs = [api.resolveWebpackConfig()]
+    webpackConfigs = [await api.resolveWebpackConfig()]
     // 小程序插件构建配置
     addPluginConfig(api, options, target, webpackConfigs)
   }
@@ -63,10 +63,10 @@ function resolveBuildWebpackConfigByTarget (api, options, target, args) {
  * @param { import('@vue/cli-service').ProjectOptions } options
  * @returns
  */
-function resolveServeWebpackConfigByTarget (api, options, target, args) {
+async function resolveServeWebpackConfigByTarget (api, options, target, args) {
   // 强制添加一个修改webpack配置的方法，因为webpack-chain不支持webpack5
   addRawConfigBeforeUserConfig(api, resolveBaseRawWebpackConfig(api, options, target))
-  const webpackConfigs = [api.resolveWebpackConfig()]
+  const webpackConfigs = [await api.resolveWebpackConfig()]
   if (target.mode === 'web') {
     validWebConfig(webpackConfigs, api, options)
     return webpackConfigs[0]
