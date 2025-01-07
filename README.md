@@ -9,6 +9,7 @@
   - [使用](#%E4%BD%BF%E7%94%A8)
   - [基础](#%E5%9F%BA%E7%A1%80)
     - [CLI 命令](#cli-%E5%91%BD%E4%BB%A4)
+      - [create](#create)
       - [build](#build)
       - [serve](#serve)
   - [开发](#%E5%BC%80%E5%8F%91)
@@ -56,6 +57,26 @@ npm run build
 ## 基础
 
 ### CLI 命令
+
+#### create
+
+```sh
+用法: mpx create [options] <app-name>
+
+选项:
+
+  -p, --preset <presetName>       使用已保存或远程预设
+  -d, --default                   使用默认预设
+  -i, --inlinePreset <json>       使用行内预设
+  -m, --packageManager <command>  在安装依赖项时使用指定的npm管理器
+  -r, --registry <url>            在安装依赖项时使用指定的npm源（仅适用于npm）
+  -g, --git [message]             使用初始提交消息强制git初始化
+  -n, --no-git                    跳过git初始化
+  -f, --force                     如果目标目录存在，则覆盖该目录
+  --merge                         合并目标目录（如果存在）
+  -c, --clone                     使用git克隆获取远程预置
+  -x, --proxy <proxyUrl>          创建项目时使用指定的代理
+```
 
 #### build
 

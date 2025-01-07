@@ -49,6 +49,7 @@ async function createRnProject (targetDir, options) {
     context: rnProjectPath,
     forcePackageManager: packageManager
   })
+  if (pm.bin === 'pnpm') throw new Error('暂不支持pnpm创建，请切换npm或yarn。eg: mpx create -m npm')
   await execa(
     'npx',
     [
