@@ -52,7 +52,7 @@ module.exports.registerBuildCommand = function (api, options) {
         webpack(webpackConfig, (err, stats) => {
           handleWebpackDone(err, stats, args.watch)
             .then((...res) => {
-              if (target !== 'web') {
+              if (target !== 'web' && !options.disabledDefaultLinkFile) {
                 // web版本不需要symlink
                 symlinkTargetConfig(api, target, webpackConfig[0])
               }
