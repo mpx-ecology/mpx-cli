@@ -115,6 +115,8 @@ module.exports = function (api, options) {
       }
       files['vue.config.js'] = lines.join('\n')
     }
+    files['mpx.config.js'] = files['vue.config.js']
+    delete files['vue.config.js']
   })
 
   api.extendPackage({
