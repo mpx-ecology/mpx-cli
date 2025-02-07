@@ -22,7 +22,7 @@
       - [postcss](#postcss)
     - [template 相关](#template-%E7%9B%B8%E5%85%B3)
   - [配置](#%E9%85%8D%E7%BD%AE)
-    - [vue.config.js](#vueconfigjs)
+    - [mpx.config.js](#mpxconfigjs)
   - [mpx-cli 插件 1.0 升级到 2.0](#mpx-cli-%E6%8F%92%E4%BB%B6-10-%E5%8D%87%E7%BA%A7%E5%88%B0-20)
   - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
   - [cli 相关介绍](#cli-%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D)
@@ -128,12 +128,12 @@ mpx-cli-service build --targets=wx,ali
 
 #### mpx 编译构建配置
 
-新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `vue.config.js` 来进行管理。
+新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `mpx.config.js` 来进行管理。
 
-有关 `mpx` 相关的 webpack 插件、loader 等在 `vue.config.js` 当中 `pluginOptions.mpx` 进行相关的配置：
+有关 `mpx` 相关的 webpack 插件、loader 等在 `mpx.config.js` 当中 `pluginOptions.mpx` 进行相关的配置：
 
 ```javascript
-// vue.config.js
+// mpx.config.js
 module.exports = {
   pluginOptions: {
     mpx: {
@@ -170,7 +170,7 @@ module.exports = {
 - `MPX_CURRENT_TARGET_ENV` : 'development' | 'production'
 
 ```javascript
-// vue.config.js
+// mpx.config.js
 module.exports = {
   chainWebpack: (config) => {
     if (process.env.MPX_CLI_MODE === 'mp') {
@@ -254,9 +254,9 @@ npm install -D pug pug-plain-loader
 
 ## 配置
 
-### vue.config.js
+### mpx.config.js
 
-以下表格为 `vue.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli 官方配置](https://cli.vuejs.org/config/#configuration-reference)：
+以下表格为 `mpx.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli 官方配置](https://cli.vuejs.org/config/#configuration-reference)：
 
 注：`yes` 表示在对应环境支持配置，`no` 表示在对应环境不支持配置。
 
@@ -286,10 +286,10 @@ npm install -D pug pug-plain-loader
 | pwa                        | yes | no     | -                                                             |
 | pluginOptions              | yes | yes    | -                                                             |
 
-可通过 `vue.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
+可通过 `mpx.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
 
 ```javascript
-// vue.config.js
+// mpx.config.js
 module.exports = {
   configureWebpack: {
     plugins: [new MyOwnWebpackPlugin()]
