@@ -26,12 +26,12 @@ npm install @mpxjs/cli@3.x -g
 
 > v3兼容了v2的所有配置，如果没有特殊修改，则不需要进行配置迁移。
 
-- `config/devServer.js`迁移到`vue.config.js`下的`devServer`
-- `config/mpxPlugin.conf.js`迁移到`vue.config.js`下的`pluginOptions.mpx.plugin`
-- `config/mpxLoader.conf.js`迁移到`vue.config.js`下的`pluginOptions.mpx.loader`
+- `config/devServer.js`迁移到`mpx.config.js`下的`devServer`
+- `config/mpxPlugin.conf.js`迁移到`mpx.config.js`下的`pluginOptions.mpx.plugin`
+- `config/mpxLoader.conf.js`迁移到`mpx.config.js`下的`pluginOptions.mpx.loader`
 
 ```js
-// vue.config.js
+// mpx.config.js
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   pluginOptions: {
@@ -54,7 +54,7 @@ module.exports = defineConfig({
 ## 新增自定义配置/修改已有配置参数
 
 ```js
-// vue.config.js
+// mpx.config.js
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
@@ -82,7 +82,7 @@ module.exports = defineConfig({
 <img src="./docs/assets/1666074957603.jpg" width="800"/>
 
 v3版本相对于v2版本的目录结构更加清晰。
-- 移除了`config/build`的配置目录，将其统一到了插件配置当中，可以通过`vue.config.js`修改。
+- 移除了`config/build`的配置目录，将其统一到了插件配置当中，可以通过`mpx.config.js`修改。
 - `index.html`移动到`public`目录下。
 - 增加`jsconfig.json`,让类型提示更加友好。
 
@@ -100,7 +100,7 @@ v3版本的配置依靠插件化，将v2版本的文件配置整合到了各个�
 - vue-cli-plugin-mpx-typescript ts配置
 - vue-cli-plugin-mpx-web web构建配置以及命令
 
-除此之外，也可以使用统一的`vue.config.js`来自定义配置，或者将配置抽离到插件当中，来进行统一的管理。
+除此之外，也可以使用统一的`mpx.config.js`来自定义配置，或者将配置抽离到插件当中，来进行统一的管理。
 
 
 ### 2. 模板
