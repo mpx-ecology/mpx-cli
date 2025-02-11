@@ -53,9 +53,11 @@ async function createRnProject (targetDir, options) {
   await execa(
     'npx',
     [
-      '@react-native-community/cli',
+      '@react-native-community/cli@^14.0.0',
       'init',
       'ReactNativeProject',
+      '--version',
+      '0.75.2',
       '--pm',
       pm.bin,
       '--skip-install',
