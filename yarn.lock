@@ -2899,7 +2899,7 @@
     execa "^5.0.0"
 
 "@mpxjs/cli@file:/Users/mater/Project/didi/open-source/mpx-cli/packages/mpx-cli":
-  version "3.4.5"
+  version "3.4.6"
   resolved "file:packages/mpx-cli"
   dependencies:
     "@types/inquirer" "^8.1.3"
@@ -2977,7 +2977,7 @@
   version "2.1.22"
   resolved "file:packages/mpx-cli-service"
   dependencies:
-    "@mpxjs/cli-shared-utils" "^2.1.18"
+    "@mpxjs/cli-shared-utils" "^2.1.22"
     "@vue/cli-service" "^5.0.0"
     "@vue/cli-shared-utils" "^5.0.4"
     minimist "^1.2.5"
@@ -3057,8 +3057,8 @@
   version "2.1.22"
   resolved "file:packages/vue-cli-plugin-mpx-ssr"
   dependencies:
-    "@mpxjs/cli-shared-utils" "^2.1.18"
-    "@mpxjs/vue-cli-plugin-mpx" "^2.1.18"
+    "@mpxjs/cli-shared-utils" "^2.1.22"
+    "@mpxjs/vue-cli-plugin-mpx" "^2.1.22"
     fs-extra "^9.1.0"
     memory-fs "^0.5.0"
 
@@ -3092,7 +3092,7 @@
   version "2.1.22"
   resolved "file:packages/vue-cli-plugin-mpx"
   dependencies:
-    "@mpxjs/cli-shared-utils" "^2.1.18"
+    "@mpxjs/cli-shared-utils" "^2.1.22"
     "@soda/friendly-errors-webpack-plugin" "^1.8.0"
     "@vue/cli-shared-utils" "^5.0.4"
     "@vue/vue-loader-v15" "npm:vue-loader@^15.9.7"
