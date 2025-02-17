@@ -24,23 +24,23 @@ module.exports.registerBuildCommand = function (api, options) {
         fs.removeSync(options.outputDir)
       }
 
-      const getBaseConfig = (ssrMode) => {
+      const getBaseConfig = async (ssrMode) => {
         api.chainWebpack((config) => {
           addBaseWebpackConfig(api, options, args, config, { ssrMode })
           addBuildWebpackConfig(api, options, args, config, { ssrMode })
         })
         const target = getCurrentTarget()
         // 根据目标获取构建配置
-        const webpackConfig = resolveBuildWebpackConfigByTarget(api, options, target, args)
+        const webpackConfig = await resolveBuildWebpackConfigByTarget(api, options, target, args)
         return {
           webpackConfig,
           target
         }
       }
 
-      const buildService = (ssrMode) => {
+      const buildService = async (ssrMode) => {
+        const { webpackConfig, target } = await getBaseConfig(ssrMode)
         return new Promise((resolve, reject) => {
-          const { webpackConfig, target } = getBaseConfig(ssrMode)
           webpack(webpackConfig, (err, stats) => {
             handleWebpackDone(err, stats, target, api)
               .then((...res) => {
