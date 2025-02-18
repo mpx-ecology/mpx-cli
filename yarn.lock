@@ -2899,7 +2899,7 @@
     execa "^5.0.0"
 
 "@mpxjs/cli@file:/Users/mater/Project/didi/open-source/mpx-cli/packages/mpx-cli":
-  version "3.4.6"
+  version "3.4.7"
   resolved "file:packages/mpx-cli"
   dependencies:
     "@types/inquirer" "^8.1.3"
