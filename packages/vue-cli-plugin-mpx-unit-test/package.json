@@ -14,7 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@mpxjs/mpx-jest": "^0.0.9",
+    "@mpxjs/mpx-jest": "^0.0.32",
     "@mpxjs/miniprogram-simulate": "^1.4.8",
     "babel-jest": "^25.3.0",
     "jest": "^27.4.5",
