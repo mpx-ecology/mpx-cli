@@ -42,8 +42,8 @@ module.exports.registerServeCommand = function (api, options) {
           }
         })
       }
-
-      Promise.all([buildService('client'), buildService('server')])
+      await buildService('client')
+      await buildService('server')
     }
   )
 }
