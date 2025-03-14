@@ -3,7 +3,6 @@ const { getServerBundle } = require('@mpxjs/cli-shared-utils')
 const Config = require('webpack-chain')
 const PluginAPI = require('@vue/cli-service/lib/PluginAPI')
 
-process.env.CI = 't'
 process.env.VUE_CLI_SERVICE_CONFIG_PATH = 'mpx.config.js'
 
 Service.prototype.resolveChainableWebpackConfig = function () {

@@ -517,7 +517,8 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     {
       color: 'orange',
       basic: false,
-      reporter: getReporter()
+      reporter: getReporter(),
+      reporters: null
     }
   ])
 

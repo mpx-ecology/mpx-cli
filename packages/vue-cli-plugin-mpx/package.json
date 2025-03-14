@@ -27,7 +27,9 @@
     "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.8.0",
     "webpackbar": "^5.0.0",
-    "wrap-ansi": "^5.1.0"
+    "wrap-ansi": "^5.1.0",
+    "consola": "^2.15.3",
+    "std-env": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

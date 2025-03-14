@@ -2,6 +2,8 @@ const { chalk } = require('@vue/cli-shared-utils')
 const ansiEscapes = require('ansi-escapes')
 const wrapAnsi = require('wrap-ansi')
 const originalWrite = Symbol('webpackbarWrite')
+const consola = require('consola')
+const stdEnv = require('std-env')
 
 class LogUpdate {
   constructor () {
@@ -250,12 +252,30 @@ class FancyReporter {
   }
 }
 
+class SimpleReporter {
+  start (context) {
+    consola.info(`Compiling ${context.state.name}`)
+  }
+
+  change (context, { shortPath }) {
+    consola.debug(`${shortPath} changed.`, `Rebuilding ${context.state.name}`)
+  }
+
+  done (context) {
+    const { hasError, message, name } = context.state
+    consola[hasError ? 'error' : 'success'](`${name}: ${message}`)
+  }
+}
+
 let reporter = null
 /**
  * @returns {FancyReporter} - fancyReporter
  */
 function getReporter () {
   if (reporter) return reporter
+  if (stdEnv.isMinimal) {
+    return (reporter = new SimpleReporter())
+  }
   return (reporter = new FancyReporter())
 }
 
