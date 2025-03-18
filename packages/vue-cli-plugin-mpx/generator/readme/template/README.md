@@ -1,6 +1,6 @@
 # <%= pkgName %>
 
-## Project setup
+## Project setup 哈哈哈哈哈😂
 
 ```javascript
 // development
