@@ -430,7 +430,7 @@ function addRnWebpackConfig (api, options, config, target) {
  */
 module.exports.addBaseConfig = function (api, options, config, target) {
   const isWeb = target.mode === 'web'
-  const isRn = (target.mode === 'android') | (target.mode === 'ios')
+  const isRn = (target.mode === 'android') || (target.mode === 'ios') || (target.mode === 'harmony')
 
   config.module
     .rule('json')
@@ -546,7 +546,7 @@ module.exports.addBaseConfig = function (api, options, config, target) {
  * @returns { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
  */
 module.exports.resolveBaseRawWebpackConfig = function (api, options, target) {
-  const isRn = (target.mode === 'android') | (target.mode === 'ios')
+  const isRn = (target.mode === 'android') || (target.mode === 'ios') || (target.mode === 'harmony')
   /**
    * @type { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
    */
