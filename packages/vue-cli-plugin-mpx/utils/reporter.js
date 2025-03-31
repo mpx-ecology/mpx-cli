@@ -265,6 +265,10 @@ class SimpleReporter {
     const { hasError, message, name } = context.state
     consola[hasError ? 'error' : 'success'](`${name}: ${message}`)
   }
+
+  _renderStates () {
+    // do nothing
+  }
 }
 
 let reporter = null
