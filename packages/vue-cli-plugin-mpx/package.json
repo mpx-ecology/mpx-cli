@@ -40,7 +40,6 @@
     "@mpxjs/api-proxy": "^2.9.69",
     "@mpxjs/babel-plugin-inject-page-events": "^2.8.0",
     "@mpxjs/core": "^2.9.69",
-    "@mpxjs/eslint-config": "^1.0.5",
     "@mpxjs/fetch": "^2.9.69",
     "@mpxjs/mpx-cli-service": "^2.1.28",
     "@mpxjs/pinia": "^2.9.69",

@@ -4,13 +4,9 @@ module.exports = function (api, options = {}) {
       lint: 'eslint --ext .js,.ts,.mpx src/'
     },
     devDependencies: {
-      eslint: '^7.0.0'
+      eslint: '^9.0.0',
+      '@mpxjs/eslint-config': '2.0.0'
     }
-  }
-  if (!options.needTs) {
-    deps.devDependencies['@mpxjs/eslint-config'] = '^1.0.5'
-  } else {
-    deps.devDependencies['@mpxjs/eslint-config-ts'] = '^1.0.5'
   }
   api.extendPackage(deps)
   api.render('./template', {

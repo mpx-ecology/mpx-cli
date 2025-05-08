@@ -29,6 +29,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@mpxjs/eslint-config": "2.0.0",
     "@vue/cli-test-utils": "5.0.8",
     "@vue/eslint-config-standard": "^6.1.0",
     "babel-jest": "^27.0.6",
