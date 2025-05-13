@@ -17,7 +17,8 @@ module.exports = function (api, options, webpackConfig) {
         extensions,
         // ESlint options
         failOnWarning,
-        failOnError
+        failOnError,
+        cache: false
       }
 
       webpackConfig
