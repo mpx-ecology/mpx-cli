@@ -5,7 +5,7 @@ module.exports = function (api, options = {}) {
     },
     devDependencies: {
       eslint: '^9.0.0',
-      '@mpxjs/eslint-config': '2.0.0'
+      '@mpxjs/eslint-config': '^2.0.3'
     }
   }
   api.extendPackage(deps)
