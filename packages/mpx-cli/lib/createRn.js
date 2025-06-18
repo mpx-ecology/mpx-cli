@@ -21,8 +21,8 @@ const RN_DEP = {
   expo: '^51.0.32',
   'expo-brightness': '~12.0.1',
   'expo-clipboard': '~6.0.3',
-  react: '18.3.1',
-  'react-native': '0.75.2',
+  react: '18.2.0',
+  'react-native': '0.74.3',
   'react-native-collapsible': '^1.6.1',
   'react-native-device-info': '^11.1.0',
   'react-native-gesture-handler': '^2.18.1',
@@ -49,12 +49,15 @@ async function createRnProject (targetDir, options) {
     context: rnProjectPath,
     forcePackageManager: packageManager
   })
+  if (pm.bin === 'pnpm') throw new Error('暂不支持pnpm创建，请切换npm或yarn。eg: mpx create -m npm')
   await execa(
     'npx',
     [
-      '@react-native-community/cli',
+      '@react-native-community/cli@^13.0.0',
       'init',
       'ReactNativeProject',
+      '--version',
+      '0.74.3',
       '--pm',
       pm.bin,
       '--skip-install',

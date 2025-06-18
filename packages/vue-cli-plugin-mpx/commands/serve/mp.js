@@ -9,7 +9,7 @@ const { createDevServer } = require('./utils')
 module.exports.serveMp = async function serveMp (api, options, args) {
   const target = getCurrentTarget()
   // 小程序构建配置
-  const webpackConfigs = resolveServeWebpackConfigByTarget(
+  const webpackConfigs = await resolveServeWebpackConfigByTarget(
     api,
     options,
     target,
@@ -40,7 +40,9 @@ module.exports.serveMp = async function serveMp (api, options, args) {
     compiler.hooks.done.tap('vue-cli-service serve', (stats) => {
       handleWebpackDone(null, stats, true)
         .then((...res) => {
-          symlinkTargetConfig(api, target, webpackConfigs[0])
+          if (!options.disabledDefaultLinkFile) {
+            symlinkTargetConfig(api, target, webpackConfigs[0])
+          }
           resolve(...res)
         })
         .catch(reject)

@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-eslint",
-  "version": "2.1.18",
+  "version": "2.1.32",
   "description": "eslint plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "eslint-webpack-plugin": "^3.1.1"
+    "eslint-webpack-plugin": "^5.0.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",

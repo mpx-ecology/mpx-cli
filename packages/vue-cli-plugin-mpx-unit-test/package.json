@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-unit-test",
-  "version": "2.1.18",
+  "version": "2.1.32",
   "description": "unit-test for mpx-cli",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@mpxjs/mpx-jest": "^0.0.9",
+    "@mpxjs/mpx-jest": "^0.0.32",
     "@mpxjs/miniprogram-simulate": "^1.4.8",
     "babel-jest": "^25.3.0",
     "jest": "^27.4.5",

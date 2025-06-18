@@ -29,13 +29,17 @@ module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
       )
     }
   })
-  const isRn = (target.mode === 'android') | (target.mode === 'ios')
-  if (isRn) {
-    const targetOutputFile = path.resolve(outputPath, 'app.js')
-    const rnInputFile = path.resolve(
-      process.cwd(),
-      'ReactNativeProject/index.js'
-    )
-    fs.copyFileSync(targetOutputFile, rnInputFile)
+  try {
+    const isRn = (target.mode === 'android') | (target.mode === 'ios')
+    if (isRn) {
+      const targetOutputFile = path.resolve(outputPath, 'app.js')
+      const rnInputFile = path.resolve(
+        process.cwd(),
+        'ReactNativeProject/index.js'
+      )
+      fs.copyFileSync(targetOutputFile, rnInputFile)
+    }
+  } catch (error) {
+
   }
 }

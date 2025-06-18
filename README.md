@@ -9,6 +9,7 @@
   - [使用](#%E4%BD%BF%E7%94%A8)
   - [基础](#%E5%9F%BA%E7%A1%80)
     - [CLI 命令](#cli-%E5%91%BD%E4%BB%A4)
+      - [create](#create)
       - [build](#build)
       - [serve](#serve)
   - [开发](#%E5%BC%80%E5%8F%91)
@@ -21,7 +22,7 @@
       - [postcss](#postcss)
     - [template 相关](#template-%E7%9B%B8%E5%85%B3)
   - [配置](#%E9%85%8D%E7%BD%AE)
-    - [vue.config.js](#vueconfigjs)
+    - [mpx.config.js](#mpxconfigjs)
   - [mpx-cli 插件 1.0 升级到 2.0](#mpx-cli-%E6%8F%92%E4%BB%B6-10-%E5%8D%87%E7%BA%A7%E5%88%B0-20)
   - [开发插件](#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
   - [cli 相关介绍](#cli-%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D)
@@ -56,6 +57,26 @@ npm run build
 ## 基础
 
 ### CLI 命令
+
+#### create
+
+```sh
+用法: mpx create [options] <app-name>
+
+选项:
+
+  -p, --preset <presetName>       使用已保存或远程预设
+  -d, --default                   使用默认预设
+  -i, --inlinePreset <json>       使用行内预设
+  -m, --packageManager <command>  在安装依赖项时使用指定的npm管理器
+  -r, --registry <url>            在安装依赖项时使用指定的npm源（仅适用于npm）
+  -g, --git [message]             使用初始提交消息强制git初始化
+  -n, --no-git                    跳过git初始化
+  -f, --force                     如果目标目录存在，则覆盖该目录
+  --merge                         合并目标目录（如果存在）
+  -c, --clone                     使用git克隆获取远程预置
+  -x, --proxy <proxyUrl>          创建项目时使用指定的代理
+```
 
 #### build
 
@@ -107,12 +128,12 @@ mpx-cli-service build --targets=wx,ali
 
 #### mpx 编译构建配置
 
-新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `vue.config.js` 来进行管理。
+新版的 `@mpxjs/cli` 整体是基于 `@vue/cli` 的架构设计开发的。因此有关 `mpx` 编译构建相关的配置统一使用 `mpx.config.js` 来进行管理。
 
-有关 `mpx` 相关的 webpack 插件、loader 等在 `vue.config.js` 当中 `pluginOptions.mpx` 进行相关的配置：
+有关 `mpx` 相关的 webpack 插件、loader 等在 `mpx.config.js` 当中 `pluginOptions.mpx` 进行相关的配置：
 
 ```javascript
-// vue.config.js
+// mpx.config.js
 module.exports = {
   pluginOptions: {
     mpx: {
@@ -149,7 +170,7 @@ module.exports = {
 - `MPX_CURRENT_TARGET_ENV` : 'development' | 'production'
 
 ```javascript
-// vue.config.js
+// mpx.config.js
 module.exports = {
   chainWebpack: (config) => {
     if (process.env.MPX_CLI_MODE === 'mp') {
@@ -233,9 +254,9 @@ npm install -D pug pug-plain-loader
 
 ## 配置
 
-### vue.config.js
+### mpx.config.js
 
-以下表格为 `vue.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli 官方配置](https://cli.vuejs.org/config/#configuration-reference)：
+以下表格为 `mpx.config.js` 当中 `web` 侧和 `小程序` 侧支持的字段一览表，具体每个字段的配置功能请参见 [@vue/cli 官方配置](https://cli.vuejs.org/config/#configuration-reference)：
 
 注：`yes` 表示在对应环境支持配置，`no` 表示在对应环境不支持配置。
 
@@ -265,10 +286,10 @@ npm install -D pug pug-plain-loader
 | pwa                        | yes | no     | -                                                             |
 | pluginOptions              | yes | yes    | -                                                             |
 
-可通过 `vue.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
+可通过 `mpx.config.js` 中提供的 `chainWebpack` 或 `configureWebpack` 字段进行配置，具体使用规则请参见[@vue/cli](https://cli.vuejs.org/guide/webpack.html#simple-configuration)：
 
 ```javascript
-// vue.config.js
+// mpx.config.js
 module.exports = {
   configureWebpack: {
     plugins: [new MyOwnWebpackPlugin()]

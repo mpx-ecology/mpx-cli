@@ -12,14 +12,14 @@ const favicon = require('serve-favicon')
 
 const template = fs.readFileSync(path.resolve('public/index.ssr.html'), 'utf-8')
 
-const vueConfig = require('../vue.config.js')
+const mpxConfig = require('../mpx.config.js')
 
 const app = express()
 
 app.use(favicon(path.resolve('public/favicon.ico')))
 
 const getRenderer = async () => {
-  const clientPort = vueConfig.pluginOptions?.SSR?.devClientPort || 3000
+  const clientPort = mpxConfig.pluginOptions?.SSR?.devClientPort || 3000
   const clientManifest = await axios.get(
     `http://localhost:${clientPort}/vue-ssr-client-manifest.json`
   )

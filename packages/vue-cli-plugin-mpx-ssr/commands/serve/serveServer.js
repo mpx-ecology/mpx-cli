@@ -11,7 +11,7 @@ const { setServerBundle } = require('@mpxjs/cli-shared-utils')
 module.exports.serveServer = async (api, options, args) => {
   // resolve webpack config
   const target = getCurrentTarget()
-  const webpackConfig = resolveServeWebpackConfigByTarget(
+  const webpackConfig = await resolveServeWebpackConfigByTarget(
     api,
     options,
     target,

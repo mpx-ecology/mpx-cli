@@ -31,7 +31,9 @@ function updateWebpackName (api, config) {
   config.plugin('webpackbar').tap((args) => {
     const c = args[0]
     c.name = name
-    c.reporter.name = c.name
+    if (c.reporter) {
+      c.reporter.name = c.name
+    }
     return args
   })
 }

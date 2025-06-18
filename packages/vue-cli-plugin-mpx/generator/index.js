@@ -3,6 +3,7 @@ module.exports = function (api, options) {
   require('./static')(api, options)
   require('./babel')(api, options)
   require('./readme')(api, options)
+  require('./vscode')(api, options)
 
   // 删除 @vue/cli-service 默认生成的文件内容
   api.render(function (files) {
@@ -115,6 +116,8 @@ module.exports = function (api, options) {
       }
       files['vue.config.js'] = lines.join('\n')
     }
+    files['mpx.config.js'] = files['vue.config.js']
+    delete files['vue.config.js']
   })
 
   api.extendPackage({

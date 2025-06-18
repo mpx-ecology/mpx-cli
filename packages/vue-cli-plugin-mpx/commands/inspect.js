@@ -21,7 +21,7 @@ module.exports.registerInspectCommand = function registerInspectCommand (
       api.chainWebpack((config) =>
         addBuildWebpackConfig(api, options, config, target, args)
       )
-      const res = resolveBuildWebpackConfigByTarget(api, options, target, args)
+      const res = await resolveBuildWebpackConfigByTarget(api, options, target, args)
       const output = toString(res, { verbose })
       console.log(highlight(output, { language: 'js' }))
     }

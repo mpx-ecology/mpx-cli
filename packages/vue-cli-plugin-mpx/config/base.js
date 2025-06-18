@@ -416,7 +416,8 @@ function addRnWebpackConfig (api, options, config, target) {
     'react-native-webview': 'react-native-webview',
     'react-native-get-location': 'react-native-get-location',
     'react-native-linear-gradient': 'react-native-linear-gradient',
-    'react-native-haptic-feedback': 'react-native-haptic-feedback'
+    'react-native-haptic-feedback': 'react-native-haptic-feedback',
+    'react-native-svg/css': 'react-native-svg/css'
   })
 }
 
@@ -429,7 +430,7 @@ function addRnWebpackConfig (api, options, config, target) {
  */
 module.exports.addBaseConfig = function (api, options, config, target) {
   const isWeb = target.mode === 'web'
-  const isRn = (target.mode === 'android') | (target.mode === 'ios')
+  const isRn = (target.mode === 'android') || (target.mode === 'ios') || (target.mode === 'harmony')
 
   config.module
     .rule('json')
@@ -457,6 +458,7 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     .add((filepath) => /\.mpx\.js/.test(filepath)) // 处理 mpx 转 web 的情况，vue-loader 会将 script block fake 出一个 .mpx.js 路径，用以 loader 的匹配
     .add(api.resolve('src'))
     .add(/@mpxjs/)
+    .add(/axios/)
     .add(api.resolve('test'))
     .end()
     .use('babel-loader')
@@ -515,7 +517,8 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     {
       color: 'orange',
       basic: false,
-      reporter: getReporter()
+      reporter: getReporter(),
+      reporters: null
     }
   ])
 
@@ -543,7 +546,7 @@ module.exports.addBaseConfig = function (api, options, config, target) {
  * @returns { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
  */
 module.exports.resolveBaseRawWebpackConfig = function (api, options, target) {
-  const isRn = (target.mode === 'android') | (target.mode === 'ios')
+  const isRn = (target.mode === 'android') || (target.mode === 'ios') || (target.mode === 'harmony')
   /**
    * @type { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
    */
