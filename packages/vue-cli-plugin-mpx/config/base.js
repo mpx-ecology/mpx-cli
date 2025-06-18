@@ -652,6 +652,7 @@ module.exports.addServeWebpackConfig = function (
     config.devServer.set('devMiddleware', {
       writeToDisk: true
     })
+    config.devServer.set('webSocketServer', false)
     config.devServer.hot(false)
   }
 }
