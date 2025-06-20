@@ -20,8 +20,18 @@ module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
     }
     try {
       const targetConfigFile = path.resolve(outputPath, v)
-      if (fs.existsSync(targetConfigFile)) fs.unlinkSync(targetConfigFile)
-      fs.linkSync(api.resolve(`static/${target.mode}/${v}`), targetConfigFile)
+      // 监听该文件变动，同步static下
+      const chokidar = require('chokidar')
+      chokidar
+        .watch(targetConfigFile, { ignoreInitial: true })
+        .on('all', (event, path) => {
+          fs.copyFileSync(
+            api.resolve(`static/${target.mode}/${v}`),
+            path.resolve(outputPath, v)
+          )
+        })
+      // if (fs.existsSync(targetConfigFile)) fs.unlinkSync(targetConfigFile)
+      // fs.linkSync(api.resolve(`static/${target.mode}/${v}`), targetConfigFile)
     } catch (error) {
       fs.copyFileSync(
         api.resolve(`static/${target.mode}/${v}`),
@@ -39,7 +49,5 @@ module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
       )
       fs.copyFileSync(targetOutputFile, rnInputFile)
     }
-  } catch (error) {
-
-  }
+  } catch (error) {}
 }
