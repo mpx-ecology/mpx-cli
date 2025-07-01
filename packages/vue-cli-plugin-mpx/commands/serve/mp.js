@@ -9,6 +9,9 @@ module.exports.serveMp = async function serveMp (api, options, args) {
   const target = getCurrentTarget()
   // 小程序构建配置
   const webpackConfigs = await resolveServeWebpackConfigByTarget(api, options, target, args)
+  // 最终配置支持异步修改
+  await api.runAfterResolveWebpackCallBack(webpackConfigs)
+  // 运行webpack
   return new Promise((resolve, reject) => {
     webpack(webpackConfigs).watch({}, (err, stats) => {
       handleWebpackDone(err, stats, true)
