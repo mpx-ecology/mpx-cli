@@ -34,6 +34,8 @@ module.exports.serveWeb = async (api, options, args) => {
     target,
     args
   )
+  // 最终配置支持异步修改
+  await api.runAfterResolveWebpackCallBack(webpackConfig)
   const projectDevServerOptions = webpackConfig.devServer || {}
 
   // resolve server options
