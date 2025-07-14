@@ -28,6 +28,17 @@ PluginAPI.prototype.resolveWebpackConfig = async function (chainableConfig) {
   return res
 }
 
+PluginAPI.prototype.registerAfterResolveWebpackConfigCb = function (cb) {
+  this.service.afterResolveWebpackCbs = this.afterResolveWebpackCbs || []
+  this.service.afterResolveWebpackCbs.push(cb)
+}
+
+PluginAPI.prototype.runAfterResolveWebpackCallBack = async function (...args) {
+  const afterResolveWebpackCbs = this.service.afterResolveWebpackCbs
+  if (!afterResolveWebpackCbs || afterResolveWebpackCbs.length === 0) return
+  await Promise.all(this.service.afterResolveWebpackCbs.map(fn => fn(...args)))
+}
+
 module.exports = Service
 
 module.exports.getServerBundle = getServerBundle

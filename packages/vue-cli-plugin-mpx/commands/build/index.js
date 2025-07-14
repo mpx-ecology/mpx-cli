@@ -48,6 +48,8 @@ module.exports.registerBuildCommand = function (api, options) {
         target,
         args
       )
+      // 最终配置支持异步修改
+      await api.runAfterResolveWebpackCallBack(webpackConfig)
       return new Promise((resolve, reject) => {
         webpack(webpackConfig, (err, stats) => {
           handleWebpackDone(err, stats, args.watch)

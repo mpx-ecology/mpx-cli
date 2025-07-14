@@ -12,7 +12,7 @@ function handleWebpackDone (err, stats, watch) {
         ? 'with some warnings'
         : 'successfully'
     getReporter()._renderStates(
-      stats.stats.map((v) => {
+      (stats.stats || []).map((v) => {
         return {
           ...v,
           message: `Compiled ${status}`,
