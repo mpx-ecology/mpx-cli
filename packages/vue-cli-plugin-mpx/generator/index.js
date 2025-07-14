@@ -52,8 +52,8 @@ module.exports = function (api, options) {
     api.extendPackage({
       dependencies: {
         react: '18.3.1',
-        'react-native': '0.75.2',
-        'react-native-reanimated': '3.15.0'
+        'react-native': '0.77.2',
+        'react-native-reanimated': '3.16.7'
       }
     })
   }

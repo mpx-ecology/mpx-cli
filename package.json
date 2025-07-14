@@ -48,6 +48,7 @@
     "minimist": "^1.2.8",
     "release-it": "^14.13.1",
     "release-it-yarn-workspaces": "^2.0.1",
-    "semver": "^7.3.4"
+    "semver": "^7.3.4",
+    "@react-native-async-storage/async-storage": "2.2.0"
   }
 }
