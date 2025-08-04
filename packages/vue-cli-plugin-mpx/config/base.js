@@ -381,7 +381,6 @@ function addRnWebpackConfig (api, options, config, target) {
   config.resolve.extensions.add('.tsx').add('.jsx')
   config.output.publicPath('/')
   config.output.filename('[name].js')
-  config.optimization.splitChunks(false)
   config.externals({
     'react-native': 'react-native',
     react: 'react',
