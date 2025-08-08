@@ -1,6 +1,5 @@
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
-const webpack = require('webpack')
 
 module.exports.addBaseWebpackConfig = function (api, options = {}, args, config, compilerConfig) {
   const isServer = compilerConfig.ssrMode === 'server'
