@@ -5,6 +5,8 @@ const webpack = require('webpack')
 module.exports.addBaseWebpackConfig = function (api, options = {}, args, config, compilerConfig) {
   const isServer = compilerConfig.ssrMode === 'server'
 
+  process.env.MPX_SSR_BUILD_MODE = compilerConfig.ssrMode
+
   config.target(isServer ? 'node' : 'web')
 
   config.output
@@ -17,10 +19,4 @@ module.exports.addBaseWebpackConfig = function (api, options = {}, args, config,
   config
     .plugin(`${isServer ? 'server-plugin' : 'client-plugin'}`)
     .use(isServer ? VueSSRServerPlugin : VueSSRClientPlugin)
-
-  // 添加环境变量标识是否为 server 构建
-  config.plugin('define').use(webpack.DefinePlugin, [{
-    'SSR_BUILD_MODE': JSON.stringify(compilerConfig.ssrMode)
-  }])
-
 }
