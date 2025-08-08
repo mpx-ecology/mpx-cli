@@ -4,6 +4,8 @@ const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 module.exports.addBaseWebpackConfig = function (api, options = {}, args, config, compilerConfig) {
   const isServer = compilerConfig.ssrMode === 'server'
 
+  process.env.MPX_SSR_BUILD_MODE = compilerConfig.ssrMode
+
   config.target(isServer ? 'node' : 'web')
 
   config.output
