@@ -126,12 +126,12 @@ module.exports = function (api, options) {
       build: 'mpx-cli-service build'
     },
     dependencies: {
-      '@mpxjs/api-proxy': '^2.9.0',
-      '@mpxjs/core': '^2.9.0',
-      '@mpxjs/store': '^2.9.0',
-      '@mpxjs/pinia': '^2.9.0',
-      '@mpxjs/utils': '^2.9.0',
-      '@mpxjs/fetch': '^2.9.0',
+      '@mpxjs/api-proxy': '^2.10.0',
+      '@mpxjs/core': '^2.10.0',
+      '@mpxjs/store': '^2.10.0',
+      '@mpxjs/pinia': '^2.10.0',
+      '@mpxjs/utils': '^2.10.0',
+      '@mpxjs/fetch': '^2.10.0',
       // web的相关
       pinia: '^2.0.14',
       'vue-demi': '^0.14.6',
@@ -140,8 +140,8 @@ module.exports = function (api, options) {
       'vue-router': '^3.1.3'
     },
     devDependencies: {
-      '@mpxjs/webpack-plugin': '^2.9.0',
-      '@mpxjs/size-report': '^2.9.0',
+      '@mpxjs/webpack-plugin': '^2.10.0',
+      '@mpxjs/size-report': '^2.10.0',
       '@mpxjs/babel-plugin-inject-page-events': '^2.9.0',
       autoprefixer: '^10.2.4',
       postcss: '^8.2.6',
