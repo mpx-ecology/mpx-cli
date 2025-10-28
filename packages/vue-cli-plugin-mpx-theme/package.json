@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-theme",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "mpx theme plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
