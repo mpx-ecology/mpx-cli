@@ -1,6 +1,6 @@
 
 /**
- * @typedef { 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd' | 'web' | 'android' | 'ios' } Mode
+ * @typedef { 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd'  | 'ks' | 'web' | 'android' | 'ios' } Mode
  * @typedef { { mode: Mode, env: 'development' | 'production' } } Target
  */
 
