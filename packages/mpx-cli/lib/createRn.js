@@ -23,9 +23,6 @@ const RN_DEP = {
   'react-native-screens': '^4.8.0',
   'react-native-webview': '^13.13.2',
   'react-native-safe-area-context': '^4.10.9',
-  expo: '^51.0.32',
-  'expo-brightness': '~12.0.1',
-  'expo-clipboard': '~6.0.3',
   react: '18.3.1',
   'react-native': '0.77.2'
 }
@@ -68,10 +65,6 @@ async function createRnProject (targetDir, options) {
   })
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
   await pm.install()
-  await execa('npx', ['install-expo-modules'], {
-    stdio: 'inherit',
-    cwd: rnProjectPath
-  })
 }
 
 module.exports.createRnProject = createRnProject
