@@ -78,6 +78,8 @@ npm run build
   -x, --proxy <proxyUrl>          创建项目时使用指定的代理
 ```
 
+> RN项目不支持pnpm，请在创建输出到RN项目时指定 mpx create -m npm 来创建项目
+
 #### build
 
 ```sh
