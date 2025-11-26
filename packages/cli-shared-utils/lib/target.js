@@ -8,7 +8,7 @@ const { makeMap } = require('./utils')
 /**
  * @type { Mode[] }
  */
-const SUPPORT_MODE = ['wx', 'ali', 'swan', 'qq', 'tt', 'dd', 'ks', 'web', 'tenon', 'android', 'ios', 'harmony']
+const SUPPORT_MODE = ['wx', 'ali', 'swan', 'qq', 'tt', 'dd', 'ks', 'web', 'tenon', 'android', 'ios', 'harmony', 'jd']
 
 /**
  * @type { Object.<Mode, string[]> }
@@ -25,7 +25,8 @@ const MODE_CONFIG_FILES_MAP = {
   tenon: [],
   ios: [],
   android: [],
-  harmony: []
+  harmony: [],
+  jd: []
 }
 
 const DEFAULT_MODE = 'wx'

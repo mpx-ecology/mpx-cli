@@ -257,17 +257,57 @@ class SimpleReporter {
     consola.info(`Compiling ${context.state.name}`)
   }
 
-  change (context, { shortPath }) {
-    consola.debug(`${shortPath} changed.`, `Rebuilding ${context.state.name}`)
+  allDone (context) {
+    if (process.send) {
+      process.send({
+        status: 'done',
+        message: ''
+      })
+    }
   }
 
-  done (context) {
-    const { hasError, message, name } = context.state
-    consola[hasError ? 'error' : 'success'](`${name}: ${message}`)
+  progress (context) {
+    if (Date.now() - lastRender > 50) {
+      this._renderStates(context.statesArray)
+    }
   }
 
-  _renderStates () {
-    // do nothing
+  _renderStates (statesArray, cb) {
+    lastRender = Date.now()
+    const renderedStates = statesArray.map((c) => this._renderState(c)).join('')
+    if (renderedStates && process.send) {
+      process.send(
+        {
+          status: 'progress',
+          message: renderedStates
+        },
+        cb
+      )
+    } else {
+      getLogUpdate().render(renderedStates + '\n')
+      cb && cb()
+    }
+  }
+
+  _renderState (state) {
+    const color = colorize(state.color)
+    let line1
+    let line2
+    if (state.progress >= 0 && state.progress < 100) {
+      return
+    } else {
+      let icon = ' '
+      if (state.hasErrors) {
+        icon = CROSS
+      } else if (state.progress === 100) {
+        icon = TICK
+      } else if (state.progress === -1) {
+        icon = CIRCLE_OPEN
+      }
+      line1 = color(`${icon} ${this.name}`)
+      line2 = chalk.grey('  ' + state.message) + (state.result ? '\n' + state.result : '')
+    }
+    return line1 + '\n' + line2
   }
 }
 
