@@ -9,7 +9,7 @@ const {
   log,
   stopSpinner,
   hasYarn,
-  hasPnpm3OrLater,
+  hasPnpm3OrLater
 } = require('@vue/cli-shared-utils')
 const { loadOptions } = require('@vue/cli/lib/options')
 const Creator = require('@vue/cli/lib/Creator')
