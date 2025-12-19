@@ -10,8 +10,8 @@ const {
   stopSpinner,
   hasYarn,
   hasPnpm3OrLater,
-  loadOptions
 } = require('@vue/cli-shared-utils')
+const { loadOptions } = require('@vue/cli/lib/options')
 const Creator = require('@vue/cli/lib/Creator')
 const loadRemotePreset = require('@vue/cli/lib/util/loadRemotePreset')
 const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
