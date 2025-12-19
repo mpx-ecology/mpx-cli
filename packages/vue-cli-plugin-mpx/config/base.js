@@ -472,7 +472,7 @@ module.exports.addBaseConfig = function (api, options, config, target) {
 
   config.resolve.modules.add('node_modules')
 
-  const dependenciesConfig = [api.resolve('vue.config.js')]
+  const dependenciesConfig = [api.resolve('mpx.config.js')]
 
   const addDepConfig = (names = []) => {
     names.forEach((name) => {

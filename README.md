@@ -79,6 +79,18 @@ npm run build
 ```
 
 > RN项目不支持pnpm，请在创建输出到RN项目时指定 mpx create -m npm 来创建项目
+>
+> @achrinza/node-ipc包在engine-strict模式下不兼容node23，可映射到修复包node-ipc-compat@1.0.0，针对不同包管理器(pnpm/npm)在package.json中添加如下对应代码，我们已自动化处理，无需手动添加。
+> ```json
+> "pnpm": {
+>   "overrides": {
+>     "@achrinza/node-ipc": "npm:node-ipc-compat@1.0.0"
+>   }
+> },
+> "overrides": {
+>   "@achrinza/node-ipc": "npm:node-ipc-compat@1.0.0"
+> } 
+> ```
 
 #### build
 
