@@ -338,7 +338,7 @@ function addWebWebpackConfig (api, options, config, target) {
     .rule('mpx')
     .test(/\.mpx$/)
     .use('vue-loader')
-    .loader(require.resolve('@vue/vue-loader-v15'))
+    .loader(require('module').Module.createRequire(require.resolve('@vue/cli-service')).resolve('@vue/vue-loader-v15'))
     .end()
     .use('mpx-loader')
     .loader(require.resolve(mpxLoader.loader))
