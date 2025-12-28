@@ -52,7 +52,7 @@ module.exports.registerBuildCommand = function (api, options) {
       await api.runAfterResolveWebpackCallBack(webpackConfig)
       return new Promise((resolve, reject) => {
         webpack(webpackConfig, (err, stats) => {
-          handleWebpackDone(err, stats, args.watch)
+          handleWebpackDone(err, stats, args.watch, options)
             .then((...res) => {
               if (target !== 'web' && !options.disabledDefaultLinkFile) {
                 // web版本不需要symlink

@@ -67,7 +67,7 @@ function extractResultFromStats (stats, options = {}) {
     return item
       .toString({
         assets: true,
-        colors: true,
+        colors: !process.env.CI,
         modules: false,
         children: false,
         chunks: false,
