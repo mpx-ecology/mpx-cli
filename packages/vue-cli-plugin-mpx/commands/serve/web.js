@@ -274,7 +274,7 @@ module.exports.serveWeb = async (api, options, args) => {
 
       result.push('', extractResultFromStats(stats, {
         assets: false,
-        ...(options.pluginOptions?.mpx?.plugin?.stats || {})
+        ...(options.pluginOptions?.mpx?.stats || {})
       }))
 
       getReporter()._renderStates([
