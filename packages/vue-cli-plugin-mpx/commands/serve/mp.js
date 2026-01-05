@@ -14,7 +14,7 @@ module.exports.serveMp = async function serveMp (api, options, args) {
   // 运行webpack
   return new Promise((resolve, reject) => {
     webpack(webpackConfigs).watch({}, (err, stats) => {
-      handleWebpackDone(err, stats, true)
+      handleWebpackDone(err, stats, true, options)
         .then((...res) => {
           if (!options.disabledDefaultLinkFile) {
             symlinkTargetConfig(api, target, webpackConfigs[0])

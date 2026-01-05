@@ -1,8 +1,7 @@
-const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
+const { normalizeCommandArgs, getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const { addBaseWebpackConfig } = require('../../config/base.config')
 const { addBuildWebpackConfig } = require('../../config/build.config')
 const { resolveBuildWebpackConfigByTarget } = require('@mpxjs/vue-cli-plugin-mpx/config')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const { handleWebpackDone } = require('@mpxjs/vue-cli-plugin-mpx/utils/webpack')
 const webpack = require('webpack')
 const fs = require('fs-extra')
@@ -42,7 +41,8 @@ module.exports.registerBuildCommand = function (api, options) {
         const { webpackConfig, target } = await getBaseConfig(ssrMode)
         return new Promise((resolve, reject) => {
           webpack(webpackConfig, (err, stats) => {
-            handleWebpackDone(err, stats, target, api)
+            // todo：此处target应该是一个布尔值，判断是否watch, 直接把target和api替换掉有问题嘛，当前只将api换为了options
+            handleWebpackDone(err, stats, target, options)
               .then((...res) => {
                 resolve(...res)
               })

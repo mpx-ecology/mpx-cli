@@ -338,7 +338,7 @@ function addWebWebpackConfig (api, options, config, target) {
     .rule('mpx')
     .test(/\.mpx$/)
     .use('vue-loader')
-    .loader(require.resolve('@vue/vue-loader-v15'))
+    .loader(require('module').Module.createRequire(require.resolve('@vue/cli-service')).resolve('@vue/vue-loader-v15'))
     .end()
     .use('mpx-loader')
     .loader(require.resolve(mpxLoader.loader))
@@ -472,7 +472,7 @@ module.exports.addBaseConfig = function (api, options, config, target) {
 
   config.resolve.modules.add('node_modules')
 
-  const dependenciesConfig = [api.resolve('vue.config.js')]
+  const dependenciesConfig = [api.resolve('mpx.config.js')]
 
   const addDepConfig = (names = []) => {
     names.forEach((name) => {

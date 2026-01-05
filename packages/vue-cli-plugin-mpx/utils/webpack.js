@@ -1,7 +1,8 @@
 const { getReporter, getLogUpdate } = require('./reporter')
 const { extractResultFromStats } = require('./output')
 
-function handleWebpackDone (err, stats, watch) {
+function handleWebpackDone (err, stats, watch, options = {}) {
+  const statsOptions = options.pluginOptions?.mpx?.stats || {}
   return new Promise((resolve, reject) => {
     if (err) return reject(err)
     const hasErrors = stats.hasErrors()
@@ -19,7 +20,7 @@ function handleWebpackDone (err, stats, watch) {
           color: hasErrors ? 'red' : 'green',
           progress: 100,
           hasErrors: hasErrors,
-          result: extractResultFromStats(v).join('\n')
+          result: extractResultFromStats(v, statsOptions).join('\n')
         }
       }),
       () => {

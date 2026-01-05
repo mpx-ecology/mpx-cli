@@ -7,8 +7,11 @@ const {
   exit,
   error,
   log,
-  stopSpinner
+  stopSpinner,
+  hasYarn,
+  hasPnpm3OrLater
 } = require('@vue/cli-shared-utils')
+const { loadOptions } = require('@vue/cli/lib/options')
 const Creator = require('@vue/cli/lib/Creator')
 const loadRemotePreset = require('@vue/cli/lib/util/loadRemotePreset')
 const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
@@ -175,6 +178,35 @@ async function create (projectName, options, preset = null) {
   })
 
   const creator = new Creator(name, targetDir, getPromptModules())
+
+  const packageManager =
+    options.packageManager ||
+    loadOptions().packageManager ||
+    (hasYarn() ? 'yarn' : null) ||
+    (hasPnpm3OrLater() ? 'pnpm' : 'npm')
+
+  // @achrinza/node-ipc与node23不兼容，需要映射到修复包node-ipc-compat@1.0.0
+  creator.on('creation', ({ event }) => {
+    if (event === 'plugins-install' || event === 'deps-install') {
+      try {
+        const pkgPath = path.resolve(targetDir, 'package.json')
+        const pkg = fs.readJsonSync(pkgPath)
+        // 根据包管理器类型写入对应的 overrides 配置，yarn无需处理
+        if (packageManager === 'pnpm') {
+          pkg.pnpm = {
+            overrides: {
+              '@achrinza/node-ipc': 'npm:node-ipc-compat@1.0.0'
+            }
+          }
+        } else if (packageManager === 'npm') {
+          pkg.overrides = {
+            '@achrinza/node-ipc': 'npm:node-ipc-compat@1.0.0'
+          }
+        }
+        fs.writeJsonSync(pkgPath, pkg, { spaces: 2 })
+      } catch (e) {}
+    }
+  })
 
   if (process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG) {
     // 单测下，link bin文件到源码
