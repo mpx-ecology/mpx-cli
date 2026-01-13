@@ -32,7 +32,7 @@ class LogUpdate {
   }
 
   get columns () {
-    return (process.stderr.columns || 80) - 2
+    return 10000
   }
 
   write (data) {
