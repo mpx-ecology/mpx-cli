@@ -274,6 +274,7 @@ module.exports.serveWeb = async (api, options, args) => {
 
       result.push('', extractResultFromStats(stats, {
         assets: false,
+        ...webpackConfig.stats,
         ...(options.pluginOptions?.mpx?.stats || {})
       }))
 

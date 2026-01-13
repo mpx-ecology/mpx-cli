@@ -42,21 +42,21 @@ module.exports.registerBuildCommand = function (api, options) {
         addBuildWebpackConfig(api, options, config, target, args)
       })
       // 根据目标获取构建配置
-      const webpackConfig = await resolveBuildWebpackConfigByTarget(
+      const webpackConfigs = await resolveBuildWebpackConfigByTarget(
         api,
         options,
         target,
         args
       )
       // 最终配置支持异步修改
-      await api.runAfterResolveWebpackCallBack(webpackConfig)
+      await api.runAfterResolveWebpackCallBack(webpackConfigs)
       return new Promise((resolve, reject) => {
-        webpack(webpackConfig, (err, stats) => {
-          handleWebpackDone(err, stats, args.watch, options)
+        webpack(webpackConfigs, (err, stats) => {
+          handleWebpackDone(err, stats, args.watch, options, webpackConfigs[0])
             .then((...res) => {
               if (target !== 'web' && !options.disabledDefaultLinkFile) {
                 // web版本不需要symlink
-                symlinkTargetConfig(api, target, webpackConfig[0])
+                symlinkTargetConfig(api, target, webpackConfigs[0])
               }
               resolve(...res)
             })
