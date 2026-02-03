@@ -20,11 +20,34 @@ const RN_DEP = {
   'react-native-haptic-feedback': '^2.3.3',
   'react-native-linear-gradient': '^2.8.3',
   'react-native-reanimated': '3.16.7',
-  'react-native-screens': '^4.8.0',
+  'react-native-screens': '~4.18.0',
   'react-native-webview': '^13.13.2',
   'react-native-safe-area-context': '^4.10.9',
   react: '18.3.1',
   'react-native': '0.77.2'
+}
+
+const RN_SCRIPTS = {
+  'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios',
+  'bundle:android': 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/'
+}
+
+function updateJsonFile (filePath, updater) {
+  const config = require(filePath)
+  updater(config)
+  fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
+}
+
+function updateJsModule (filePath, updater) {
+  const config = require(filePath)
+  updater(config)
+  fs.writeFileSync(filePath, `module.exports = ${JSON.stringify(config, null, 2)};`)
+}
+
+function addArrayItem (arr, item) {
+  if (!arr.includes(item)) {
+    arr.push(item)
+  }
 }
 
 async function createRnProject (targetDir, options) {
@@ -56,14 +79,21 @@ async function createRnProject (targetDir, options) {
     ],
     { stdio: 'inherit', cwd: targetDir }
   )
+
   const pkgPath = path.resolve(targetDir, 'ReactNativeProject', 'package.json')
-  const pkg = require(pkgPath)
-  Object.assign(pkg.dependencies, RN_DEP)
-  Object.assign(pkg.scripts, {
-    'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios',
-    'bundle:android': 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/'
+  updateJsonFile(pkgPath, pkg => {
+    Object.assign(pkg.dependencies, RN_DEP)
+    Object.assign(pkg.scripts, RN_SCRIPTS)
   })
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+
+  const babelConfigPath = path.resolve(targetDir, 'ReactNativeProject', 'babel.config.js')
+  updateJsModule(babelConfigPath, config => {
+    if (!config.plugins) {
+      config.plugins = []
+    }
+    addArrayItem(config.plugins, 'react-native-reanimated/plugin')
+  })
+
   await pm.install()
 }
 
