@@ -95,7 +95,7 @@ module.exports = [
   {
     name: 'needUtilityFirstCSS',
     type: 'confirm',
-    message: '是否需要使用原子CSS',
+    message: '是否需要使用原子 CSS',
     default: false,
     preset: {
       plugins: {
@@ -120,7 +120,7 @@ module.exports = [
   },
   {
     name: 'needE2ETest',
-    message: '是否需要使用E2E测试',
+    message: '是否需要使用 E2E 测试',
     type: 'confirm',
     default: false,
     preset: {
