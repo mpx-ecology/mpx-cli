@@ -123,7 +123,11 @@ module.exports = function (api, options) {
   api.extendPackage({
     scripts: {
       serve: 'mpx-cli-service serve',
-      build: 'mpx-cli-service build'
+      build: 'mpx-cli-service build',
+      'serve:ali': 'mpx-cli-service serve --targets=ali',
+      'build:ali': 'mpx-cli-service build --targets=ali',
+      'serve:web': 'mpx-cli-service serve --targets=web',
+      'build:web': 'mpx-cli-service build --targets=web'
     },
     dependencies: {
       '@mpxjs/api-proxy': '^2.10.0',
