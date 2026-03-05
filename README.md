@@ -118,8 +118,10 @@ mpx-cli-service build --targets=wx,ali
 | 微信   | wx     |
 | 阿里   | ali    |
 | 百度   | swan   |
-| QQ     | qq     |
 | 头条   | tt     |
+| QQ     | qq     |
+| 京东   | jd     |
+| 快手   | ks     |
 | 浏览器 | web    |
 | react-native(安卓) | android    |
 | react-native(IOS) | ios    |

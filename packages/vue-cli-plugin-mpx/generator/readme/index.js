@@ -3,6 +3,6 @@ module.exports = function (api, options) {
     ...options,
     pkgName: (api.generator.pkg && api.generator.pkg.name) || 'mpx-project',
     cross: !!options.cross,
-    transWeb: !!options.transWeb
+    needRn: !!options.needRn
   })
 }
