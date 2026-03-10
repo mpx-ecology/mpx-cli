@@ -23,6 +23,8 @@ const RN_DEP = {
   'react-native-screens': '~4.18.0',
   'react-native-webview': '^13.13.2',
   'react-native-safe-area-context': '^4.10.9',
+  'react-native-ble-manager': '^12.4.4',
+  'react-native-wifi-reborn': '^4.13.6',
   react: '18.3.1',
   'react-native': '0.77.2'
 }
