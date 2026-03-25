@@ -9,12 +9,13 @@ const { merge } = require('webpack-merge')
  */
 module.exports.resolvePluginWebpackConfig = function resolvePluginWebpackConfig (
   api,
-  webpackConfig
+  webpackConfig,
+  target
 ) {
   let pluginRoot = ''
   try {
     const projectConfigJson = require(api.resolve(
-      'static/wx/project.config.json'
+      `static/${target.mode}/${target.configFile}`
     ))
     pluginRoot = projectConfigJson.pluginRoot
   } catch (e) {}

@@ -7,7 +7,8 @@ const {
   getMpxPluginOptions,
   MODE_CONFIG_FILES_MAP,
   SUPPORT_MODE,
-  updateWebpackName
+  updateWebpackName,
+  SUPPORT_PLUGIN_MODE
 } = require('@mpxjs/cli-shared-utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -120,10 +121,13 @@ function transformEntry (api, options, webpackConfig, target) {
   // 通过 cli 生成的默认的入口文件
   let basePath = 'src/app.mpx'
 
-  if (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode')) {
+  if (
+    SUPPORT_PLUGIN_MODE.includes(target.mode) &&
+    (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode'))
+  ) {
     try {
       const projectConfigJson = require(api.resolve(
-        'static/wx/project.config.json'
+        `static/${target.mode}/${target.configFile}`
       ))
       basePath = `src/${projectConfigJson.miniprogramRoot}/app.mpx`
     } catch (e) {}
@@ -257,12 +261,12 @@ function addMpWebpackConfig (api, options, config, target) {
     .end()
 
   if (
-    target.mode === 'wx' &&
+    SUPPORT_PLUGIN_MODE.includes(target.mode) &&
     (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode'))
   ) {
     try {
       const projectConfigJson = require(api.resolve(
-        'static/wx/project.config.json'
+        `static/${target.mode}/${target.configFile}`
       ))
       subDir =
         projectConfigJson.cloudfunctionRoot || projectConfigJson.pluginRoot
@@ -338,14 +342,21 @@ function addWebWebpackConfig (api, options, config, target) {
     .rule('mpx')
     .test(/\.mpx$/)
     .use('vue-loader')
-    .loader(require('module').Module.createRequire(require.resolve('@vue/cli-service')).resolve('@vue/vue-loader-v15'))
+    .loader(
+      require('module')
+        .Module.createRequire(require.resolve('@vue/cli-service'))
+        .resolve('@vue/vue-loader-v15')
+    )
     .end()
     .use('mpx-loader')
     .loader(require.resolve(mpxLoader.loader))
     .options(mpxLoader.options)
 
   // vue-cli-service css config 只有在production环境下才会添加该插件
-  if (process.env.NODE_ENV === 'production' && config.plugins.get('extract-css')) {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    config.plugins.get('extract-css')
+  ) {
     config.plugin('extract-css').tap(([args]) => {
       args.ignoreOrder = true
       return [args]
@@ -385,13 +396,13 @@ function addRnWebpackConfig (api, options, config, target) {
     'react-native': 'react-native',
     react: 'react',
     '@react-native-masked-view/masked-view':
-        '@react-native-masked-view/masked-view',
+      '@react-native-masked-view/masked-view',
     'react-native-reanimated': 'react-native-reanimated',
     'react-native-gesture-handler': 'react-native-gesture-handler',
     'react-native-gesture-handler/DrawerLayout':
-        'react-native-gesture-handler/DrawerLayout',
+      'react-native-gesture-handler/DrawerLayout',
     'react-native-gesture-handler/Swipeable':
-        'react-native-gesture-handler/Swipeable',
+      'react-native-gesture-handler/Swipeable',
     '@ant-design/icons-react-native': '@ant-design/icons-react-native',
     '@d11/react-native-fast-image': '@d11/react-native-fast-image',
     'react-native-safe-area-context': 'react-native-safe-area-context',
@@ -403,7 +414,7 @@ function addRnWebpackConfig (api, options, config, target) {
     '@react-navigation/stack': '@react-navigation/stack',
     '@react-navigation/elements': '@react-navigation/elements',
     '@react-native-async-storage/async-storage':
-        '@react-native-async-storage/async-storage',
+      '@react-native-async-storage/async-storage',
     '@react-native-clipboard/clipboard': '@react-native-clipboard/clipboard',
     '@react-native-community/netinfo': '@react-native-community/netinfo',
     'react-native-device-info': 'react-native-device-info',
@@ -429,7 +440,10 @@ function addRnWebpackConfig (api, options, config, target) {
  */
 module.exports.addBaseConfig = function (api, options, config, target) {
   const isWeb = target.mode === 'web'
-  const isRn = (target.mode === 'android') || (target.mode === 'ios') || (target.mode === 'harmony')
+  const isRn =
+    target.mode === 'android' ||
+    target.mode === 'ios' ||
+    target.mode === 'harmony'
 
   config.module
     .rule('json')
@@ -521,7 +535,11 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     }
   ])
 
-  config.devtool(process.env.NODE_ENV === 'production' && !options.productionSourceMap ? false : 'source-map')
+  config.devtool(
+    process.env.NODE_ENV === 'production' && !options.productionSourceMap
+      ? false
+      : 'source-map'
+  )
 
   if (isWeb) {
     // web版本在vue-cli内置的配置基础上进行调整
@@ -545,7 +563,10 @@ module.exports.addBaseConfig = function (api, options, config, target) {
  * @returns { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
  */
 module.exports.resolveBaseRawWebpackConfig = function (api, options, target) {
-  const isRn = (target.mode === 'android') || (target.mode === 'ios') || (target.mode === 'harmony')
+  const isRn =
+    target.mode === 'android' ||
+    target.mode === 'ios' ||
+    target.mode === 'harmony'
   /**
    * @type { import('@vue/cli-service').ProjectOptions['configureWebpack'] }
    */

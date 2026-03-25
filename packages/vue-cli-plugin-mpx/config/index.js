@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge')
 const { resolveBaseRawWebpackConfig } = require('./base')
 const { resolvePluginWebpackConfig } = require('./plugin')
+const { SUPPORT_PLUGIN_MODE } = require('@mpxjs/cli-shared-utils')
 
 /**
  * 强制添加一个修改webpack最终配置的方法
@@ -16,8 +17,10 @@ function addRawConfigBeforeUserConfig (api, config) {
 }
 
 function addPluginConfig (api, options, target, webpackConfigs) {
-  if (target.mode === 'wx' && api.hasPlugin('mpx-plugin-mode')) {
-    webpackConfigs.push(resolvePluginWebpackConfig(api, merge({}, webpackConfigs[0])))
+  if (SUPPORT_PLUGIN_MODE.includes(target.mode) && api.hasPlugin('mpx-plugin-mode')) {
+    webpackConfigs.push(
+      resolvePluginWebpackConfig(api, merge({}, webpackConfigs[0]), target)
+    )
   }
 }
 

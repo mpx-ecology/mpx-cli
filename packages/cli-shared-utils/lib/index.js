@@ -7,6 +7,7 @@
 const { makeMap, runServiceCommand, removeArgv, normalizeCommandArgs } = require('./utils')
 const {
   SUPPORT_MODE,
+  SUPPORT_PLUGIN_MODE,
   MODE_CONFIG_FILES_MAP,
   DEFAULT_MODE,
   getCurrentTarget,
@@ -25,6 +26,7 @@ const { getMpxPluginOptions } = require('./mpx')
 const { setServerBundle, getServerBundle } = require('./serverBundle')
 
 module.exports.SUPPORT_MODE = SUPPORT_MODE
+module.exports.SUPPORT_PLUGIN_MODE = SUPPORT_PLUGIN_MODE
 module.exports.MODE_CONFIG_FILES_MAP = MODE_CONFIG_FILES_MAP
 module.exports.DEFAULT_MODE = DEFAULT_MODE
 module.exports.runServiceCommand = runServiceCommand

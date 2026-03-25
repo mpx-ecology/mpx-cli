@@ -1,11 +1,13 @@
+const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = function (api, options) {
+  const target = getCurrentTarget()
   let cloudFuncContext = 'src/functions'
   let cloudFuncDist = 'functions'
   try {
     const projectConfigJson = require(api.resolve(
-      'static/wx/project.config.json'
+      `static/${target.mode}/${target.configFile}`
     ))
     cloudFuncContext = `src/${projectConfigJson.cloudfunctionRoot}`
     cloudFuncDist = projectConfigJson.cloudfunctionRoot

@@ -10,6 +10,8 @@ const { makeMap } = require('./utils')
  */
 const SUPPORT_MODE = ['wx', 'ali', 'swan', 'qq', 'tt', 'dd', 'ks', 'web', 'tenon', 'android', 'ios', 'harmony', 'jd']
 
+const SUPPORT_PLUGIN_MODE = ['wx', 'ali']
+
 /**
  * @type { Object.<Mode, string[]> }
  */
@@ -101,6 +103,10 @@ function getCurrentTarget () {
     mode: process.env.MPX_CURRENT_TARGET_MODE,
     env: process.env.MPX_CURRENT_TARGET_ENV
   }
+  const configFileList = MODE_CONFIG_FILES_MAP[currentTarget.mode]
+  if (configFileList && configFileList.length) {
+    currentTarget.configFile = configFileList[0]
+  }
   return currentTarget
 }
 
@@ -112,3 +118,4 @@ module.exports.rawTarget = rawTarget
 module.exports.SUPPORT_MODE = SUPPORT_MODE
 module.exports.MODE_CONFIG_FILES_MAP = MODE_CONFIG_FILES_MAP
 module.exports.DEFAULT_MODE = DEFAULT_MODE
+module.exports.SUPPORT_PLUGIN_MODE = SUPPORT_PLUGIN_MODE

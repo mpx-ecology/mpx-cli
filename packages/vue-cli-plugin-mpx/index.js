@@ -2,7 +2,7 @@ const { addBaseConfig } = require('./config/base')
 const { registerInspectCommand } = require('./commands/inspect')
 const { registerBuildCommand } = require('./commands/build')
 const { registerServeCommand } = require('./commands/serve')
-const { getCurrentTarget } = require('@mpxjs/cli-shared-utils')
+const { getCurrentTarget, SUPPORT_PLUGIN_MODE } = require('@mpxjs/cli-shared-utils')
 const path = require('path')
 
 function normalizeOutputPath (api, options, target) {
@@ -10,11 +10,11 @@ function normalizeOutputPath (api, options, target) {
   // 如果是dist目录，则代表没有修改outputPath，采用默认拼target
   options.outputDir = outputDir !== 'dist' ? outputDir : `dist/${target.mode}`
   if (
-    target.mode === 'wx' &&
+    SUPPORT_PLUGIN_MODE.includes(target.mode) &&
     (api.hasPlugin('mpx-cloud-func') || api.hasPlugin('mpx-plugin-mode'))
   ) {
     const projectConfigJson = require(api.resolve(
-      'static/wx/project.config.json'
+      `static/${target.mode}/${target.configFile}`
     ))
     options.outputDir = path.join(
       options.outputDir,
