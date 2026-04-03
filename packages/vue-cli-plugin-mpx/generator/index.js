@@ -53,7 +53,9 @@ module.exports = function (api, options) {
       dependencies: {
         react: '18.3.1',
         'react-native': '0.77.2',
-        'react-native-reanimated': '3.16.7'
+        'react-native-reanimated': '3.16.7',
+        'react-native-ble-manager': '^12.4.4',
+        'react-native-wifi-reborn': '^4.13.6'
       }
     })
   }

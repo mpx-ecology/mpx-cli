@@ -477,12 +477,10 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     .use('babel-loader')
     .loader(require.resolve('babel-loader'))
 
-  config.resolve.extensions
-    .add('.mpx')
-    .add('.ts')
-    .add('.js')
-    .add('.wxml')
-    .add('.vue')
+  const extensions = ['.vue', '.wxml', '.js', '.ts', '.mpx']
+  extensions.forEach(v => {
+    config.resolve.extensions.prepend(v)
+  })
 
   config.resolve.modules.add('node_modules')
 

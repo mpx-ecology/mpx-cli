@@ -8,10 +8,6 @@ const RN_DEP = {
   '@d11/react-native-fast-image': '^8.6.12',
   '@react-native-async-storage/async-storage': '^2.2.0',
   '@react-native-community/netinfo': '^11.3.2',
-  '@react-native-masked-view/masked-view': '^0.3.1',
-  '@react-native/assets-registry': '^0.77.2',
-  '@react-native/gradle-plugin': '^0.77.2',
-  '@react-navigation/elements': '^2.5.1',
   '@react-navigation/native': '^7.1.13',
   '@react-navigation/native-stack': '^7.2.1',
   'react-native-device-info': '^13.2.0',
@@ -26,7 +22,8 @@ const RN_DEP = {
   'react-native-ble-manager': '^12.4.4',
   'react-native-wifi-reborn': '^4.13.6',
   react: '18.3.1',
-  'react-native': '0.77.2'
+  'react-native': '0.77.2',
+  'react-native-video': '^6.11.0'
 }
 
 const RN_SCRIPTS = {
