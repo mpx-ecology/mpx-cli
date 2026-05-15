@@ -1,5 +1,5 @@
 const Service = require('@vue/cli-service')
-const { getServerBundle } = require('@mpxjs/cli-shared-utils')
+const sharedUtils = require('@mpxjs/cli-shared-utils')
 const Config = require('webpack-chain')
 const PluginAPI = require('@vue/cli-service/lib/PluginAPI')
 
@@ -41,4 +41,4 @@ PluginAPI.prototype.runAfterResolveWebpackCallBack = async function (...args) {
 
 module.exports = Service
 
-module.exports.getServerBundle = getServerBundle
+module.exports.sharedUtils = sharedUtils
