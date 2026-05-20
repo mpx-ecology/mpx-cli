@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-e2e-test",
-  "version": "2.2.27",
+  "version": "2.2.28",
   "description": "e2e plugin for mpx",
   "main": "index.js",
   "scripts": {
