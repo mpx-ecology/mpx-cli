@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-utility-first-css",
-  "version": "2.2.24",
+  "version": "2.2.25",
   "description": "utility-first css plugin for mpx-cli",
   "main": "index.js",
   "scripts": {
