@@ -411,7 +411,7 @@ function addRnWebpackConfig (api, options, config, target) {
     'react-native-haptic-feedback': 'react-native-haptic-feedback',
     'react-native-svg/css': 'react-native-svg/css',
     'react-native-vision-camera': 'react-native-vision-camera',
-    'react-native-ble-manager': 'react-native-ble-manager',
+    'react-native-ble-manager': 'react-native-ble-manager'
   })
 }
 
