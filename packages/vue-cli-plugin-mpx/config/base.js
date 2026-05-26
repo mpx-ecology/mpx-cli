@@ -161,11 +161,6 @@ function addMpWebpackConfig (api, options, config, target) {
   const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
   const wxssLoader = MpxWebpackPlugin.wxssLoader()
   const mpxPluginOptions = getMpxPluginOptions(options)
-  const mpxUrlLoader = MpxWebpackPlugin.urlLoader(
-    mpxPluginOptions.urlLoader || {
-      name: 'img/[name][hash].[ext]'
-    }
-  )
 
   let subDir = ''
 
@@ -180,16 +175,6 @@ function addMpWebpackConfig (api, options, config, target) {
 
   // 和vue-cli保持同名，方便一次性修改mp和web版本的define参数
   config.plugin('define').use(webpack.DefinePlugin, [resolveClientEnv(options)])
-
-  // assets rules
-  config.module.rules.delete('svg')
-  config.module.rules.delete('images')
-  config.module
-    .rule('images')
-    .test(/\.(png|jpe?g|gif|svg)$/)
-    .use('mpx-url-loader')
-    .loader(require.resolve(mpxUrlLoader.loader))
-    .options(mpxUrlLoader.options)
 
   // mpx rules
 
@@ -376,9 +361,6 @@ function addWebWebpackConfig (api, options, config, target) {
         }
       })
     )
-
-  // 对于 svg 交给 mpx-url-loader 处理，去掉 vue-cli 配置的 svg 规则
-  config.module.rules.delete('svg')
 }
 
 /**
@@ -520,6 +502,21 @@ module.exports.addBaseConfig = function (api, options, config, target) {
     forceDisableBuiltInLoader: isWeb,
     ...resolveMpxWebpackPluginConf(api, options)
   }
+
+  const mpxUrlLoader = MpxWebpackPlugin.urlLoader(
+    mpxOptions.urlLoader || {
+      name: 'img/[name][hash].[ext]'
+    }
+  )
+
+  config.module.rules.delete('svg')
+  config.module.rules.delete('images')
+  config.module
+    .rule('images')
+    .test(/\.(png|jpe?g|gif|svg)$/)
+    .use('mpx-url-loader')
+    .loader(require.resolve(mpxUrlLoader.loader))
+    .options(mpxUrlLoader.options)
 
   config.plugin('mpx-webpack-plugin').use(MpxWebpackPlugin, [pluginConfig])
 
