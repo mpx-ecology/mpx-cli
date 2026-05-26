@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-unit-test",
-  "version": "2.2.28",
+  "version": "2.2.29",
   "description": "unit-test for mpx-cli",
   "main": "index.js",
   "scripts": {
