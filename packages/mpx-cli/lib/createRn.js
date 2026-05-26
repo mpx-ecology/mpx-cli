@@ -23,7 +23,8 @@ const RN_DEP = {
   'react-native-wifi-reborn': '^4.13.6',
   react: '18.3.1',
   'react-native': '0.77.2',
-  'react-native-video': '^6.11.0'
+  'react-native-video': '^6.11.0',
+  'react-native-vision-camera': '^5.0.10',
 }
 
 const RN_SCRIPTS = {
