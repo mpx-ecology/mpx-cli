@@ -1,5 +1,6 @@
 const os = require('os')
 const path = require('path')
+const { Buffer } = require('buffer')
 const fs = require('fs-extra')
 const execa = require('execa')
 const { SourceMapConsumer, SourceMapGenerator } = require('source-map')
@@ -8,8 +9,12 @@ const {
   composeMpxSourceMapFiles
 } = require('../lib/rn/compose-mpx-sourcemap')
 const {
+  createMpxSourcemapMiddleware
+} = require('../lib/rn/metro-mpx-sourcemap-middleware')
+const {
   applyRnPackageConfig,
-  copyRnSourcemapScript
+  copyRnSourcemapScript,
+  writeRnMetroConfig
 } = require('../lib/createRn')
 
 function createMap ({ file, mappings, sourcesContent = {} }) {
@@ -43,6 +48,61 @@ async function generatedMappingForLine (map, line) {
       }
     })
     return result
+  })
+}
+
+function writeMapFile (filePath, map) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true })
+  fs.writeFileSync(filePath, JSON.stringify(map), 'utf8')
+}
+
+function runMiddlewareRequest ({ url, method = 'GET', body, mpxMapPath, warn = function () {}, contentType = 'application/json' }) {
+  return new Promise((resolve, reject) => {
+    const middleware = (req, res) => {
+      res.setHeader('Content-Type', contentType)
+      res.setHeader('Content-Length', Buffer.byteLength(body))
+      res.end(body)
+    }
+    const enhancedMiddleware = createMpxSourcemapMiddleware({ mpxMapPath, warn })(middleware)
+    const chunks = []
+    const headers = {}
+    const res = {
+      statusCode: 200,
+      setHeader (name, value) {
+        headers[name.toLowerCase()] = String(value)
+      },
+      getHeader (name) {
+        return headers[name.toLowerCase()]
+      },
+      removeHeader (name) {
+        delete headers[name.toLowerCase()]
+      },
+      writeHead (statusCode, nextHeaders) {
+        this.statusCode = statusCode
+        Object.keys(nextHeaders || {}).forEach((name) => {
+          this.setHeader(name, nextHeaders[name])
+        })
+      },
+      write (chunk) {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)))
+      },
+      end (chunk) {
+        if (chunk) {
+          chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)))
+        }
+        resolve({
+          body: Buffer.concat(chunks).toString(),
+          headers,
+          statusCode: this.statusCode
+        })
+      }
+    }
+
+    try {
+      enhancedMiddleware({ method, url }, res, reject)
+    } catch (error) {
+      reject(error)
+    }
   })
 }
 
@@ -176,6 +236,220 @@ describe('compose-mpx-sourcemap', () => {
   })
 })
 
+describe('metro-mpx-sourcemap-middleware', () => {
+  test('composes Metro .map responses with the latest Mpx app.js.map', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mpx-rn-dev-map-'))
+    const mpxMapPath = path.join(tempDir, 'app.js.map')
+    const metroOnlySource = 'node_modules/react-native/index.js'
+    const mpxSource = 'src/pages/index.mpx'
+    const metroMap = createMap({
+      file: 'index.bundle',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 1, column: 0 },
+          source: path.join(tempDir, 'app.js')
+        },
+        {
+          generated: { line: 2, column: 0 },
+          original: { line: 4, column: 1 },
+          source: metroOnlySource
+        }
+      ],
+      sourcesContent: {
+        [path.join(tempDir, 'app.js')]: 'require("./app")',
+        [metroOnlySource]: 'module.exports = require("react-native")'
+      }
+    })
+    const mpxMap = createMap({
+      file: 'app.js',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 7, column: 3 },
+          source: mpxSource
+        }
+      ],
+      sourcesContent: {
+        [mpxSource]: '<template><view /></template>'
+      }
+    })
+    writeMapFile(mpxMapPath, mpxMap)
+
+    const result = await runMiddlewareRequest({
+      url: '/index.bundle.map?platform=ios&dev=true',
+      body: JSON.stringify(metroMap),
+      mpxMapPath
+    })
+    const composedMap = JSON.parse(result.body)
+
+    expect(composedMap.sources).toContain(mpxSource)
+    expect(composedMap.sources).toContain(metroOnlySource)
+    expect(composedMap.sources).not.toContain(path.join(tempDir, 'app.js'))
+    expect(result.headers['content-type']).toBe('application/json')
+    expect(Number(result.headers['content-length'])).toBe(Buffer.byteLength(result.body))
+  })
+
+  test('passes through non sourcemap requests unchanged', async () => {
+    const body = 'console.log("bundle")'
+    const result = await runMiddlewareRequest({
+      url: '/index.bundle?platform=ios&dev=true',
+      body,
+      mpxMapPath: path.resolve(__dirname, 'missing-app.js.map'),
+      contentType: 'application/javascript'
+    })
+
+    expect(result.body).toBe(body)
+    expect(result.headers['content-type']).toBe('application/javascript')
+  })
+
+  test('returns original Metro map and warns when app.js.map cannot be read', async () => {
+    const warnings = []
+    const metroMap = createMap({
+      file: 'index.bundle',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 1, column: 0 },
+          source: 'app.js'
+        }
+      ]
+    })
+
+    const result = await runMiddlewareRequest({
+      url: '/index.bundle.map?platform=android&dev=true',
+      body: JSON.stringify(metroMap),
+      mpxMapPath: path.resolve(__dirname, 'missing-app.js.map'),
+      warn: (message) => warnings.push(message)
+    })
+
+    expect(JSON.parse(result.body).sources).toEqual(metroMap.sources)
+    expect(warnings.length).toBe(1)
+    expect(warnings[0]).toMatch(/Mpx sourcemap not found/)
+  })
+
+  test('returns original Metro map and warns when app.js.map is invalid', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mpx-rn-invalid-map-'))
+    const mpxMapPath = path.join(tempDir, 'app.js.map')
+    const warnings = []
+    const metroMap = createMap({
+      file: 'index.bundle',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 1, column: 0 },
+          source: 'app.js'
+        }
+      ]
+    })
+    fs.writeFileSync(mpxMapPath, '{ invalid', 'utf8')
+
+    const result = await runMiddlewareRequest({
+      url: '/index.bundle.map?platform=android&dev=true',
+      body: JSON.stringify(metroMap),
+      mpxMapPath,
+      warn: (message) => warnings.push(message)
+    })
+
+    expect(JSON.parse(result.body).sources).toEqual(metroMap.sources)
+    expect(warnings.length).toBe(1)
+    expect(warnings[0]).toMatch(/Failed to parse Mpx sourcemap/)
+  })
+
+  test('returns original Metro map and warns when Metro map response is invalid', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mpx-rn-invalid-response-'))
+    const mpxMapPath = path.join(tempDir, 'app.js.map')
+    const warnings = []
+    const mpxMap = createMap({
+      file: 'app.js',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 1, column: 0 },
+          source: 'src/app.mpx'
+        }
+      ]
+    })
+    writeMapFile(mpxMapPath, mpxMap)
+
+    const result = await runMiddlewareRequest({
+      url: '/index.bundle.map?platform=ios&dev=true',
+      body: '{ invalid',
+      mpxMapPath,
+      warn: (message) => warnings.push(message)
+    })
+
+    expect(result.body).toBe('{ invalid')
+    expect(warnings.length).toBe(1)
+  })
+
+  test('rewrites app.js symbolicated frames to original Mpx source frames', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mpx-rn-symbolicate-'))
+    const mpxMapPath = path.join(tempDir, 'app.js.map')
+    const mpxSource = 'src/pages/index.mpx'
+    const mpxMap = createMap({
+      file: 'app.js',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 9, column: 4 },
+          source: mpxSource,
+          name: 'mounted'
+        }
+      ]
+    })
+    writeMapFile(mpxMapPath, mpxMap)
+
+    const result = await runMiddlewareRequest({
+      url: '/symbolicate',
+      method: 'POST',
+      body: JSON.stringify({
+        symbolicatedStack: [
+          {
+            file: path.join(tempDir, 'app.js'),
+            lineNumber: 1,
+            column: 0,
+            methodName: 'render'
+          },
+          {
+            file: path.join(tempDir, 'app.js'),
+            lineNumber: 99,
+            column: 0,
+            methodName: 'unmapped'
+          },
+          {
+            file: 'node_modules/react-native/index.js',
+            lineNumber: 2,
+            column: 1,
+            methodName: 'require'
+          }
+        ]
+      }),
+      mpxMapPath
+    })
+    const symbolicated = JSON.parse(result.body)
+
+    expect(symbolicated.symbolicatedStack[0]).toMatchObject({
+      file: mpxSource,
+      lineNumber: 9,
+      column: 4,
+      methodName: 'mounted'
+    })
+    expect(symbolicated.symbolicatedStack[1]).toMatchObject({
+      file: path.join(tempDir, 'app.js'),
+      lineNumber: 99,
+      column: 0,
+      methodName: 'unmapped'
+    })
+    expect(symbolicated.symbolicatedStack[2]).toMatchObject({
+      file: 'node_modules/react-native/index.js',
+      lineNumber: 2,
+      column: 1,
+      methodName: 'require'
+    })
+  })
+})
+
 describe('RN project sourcemap generation config', () => {
   test('adds sourcemap dependencies and bundle scripts to RN package.json', () => {
     const pkg = {
@@ -200,7 +474,21 @@ describe('RN project sourcemap generation config', () => {
     copyRnSourcemapScript(tempDir)
 
     const targetPath = path.join(tempDir, 'scripts/compose-mpx-sourcemap.js')
+    const middlewarePath = path.join(tempDir, 'scripts/metro-mpx-sourcemap-middleware.js')
     expect(fs.existsSync(targetPath)).toBe(true)
+    expect(fs.existsSync(middlewarePath)).toBe(true)
     expect(fs.readFileSync(targetPath, 'utf8')).toContain('composeMpxSourceMap')
+    expect(fs.readFileSync(middlewarePath, 'utf8')).toContain('enhanceMiddleware')
+  })
+
+  test('writes metro config with Mpx sourcemap middleware enabled', () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mpx-rn-metro-config-'))
+
+    writeRnMetroConfig(tempDir)
+
+    const metroConfigPath = path.join(tempDir, 'metro.config.js')
+    const metroConfig = fs.readFileSync(metroConfigPath, 'utf8')
+    expect(metroConfig).toContain("require('./scripts/metro-mpx-sourcemap-middleware')")
+    expect(metroConfig).toContain('enhanceMiddleware')
   })
 })

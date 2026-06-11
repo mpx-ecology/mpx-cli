@@ -233,6 +233,8 @@ if (require.main === module) {
 module.exports = {
   composeMpxSourceMap,
   composeMpxSourceMapFiles,
+  isGeneratedSource,
+  normalizeSourcePath,
   parseArgs,
   runCli
 }

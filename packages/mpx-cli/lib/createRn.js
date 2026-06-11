@@ -36,7 +36,28 @@ const RN_SCRIPTS = {
   'bundle:android': 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --sourcemap-output android/app/src/main/assets/index.android.bundle.map && node ./scripts/compose-mpx-sourcemap.js --metro-map android/app/src/main/assets/index.android.bundle.map --mpx-map ./app.js.map --output android/app/src/main/assets/index.android.bundle.map'
 }
 
-const RN_SOURCEMAP_SCRIPT = path.resolve(__dirname, 'rn/compose-mpx-sourcemap.js')
+const RN_SOURCEMAP_SCRIPTS = [
+  'compose-mpx-sourcemap.js',
+  'metro-mpx-sourcemap-middleware.js'
+].map((file) => path.resolve(__dirname, 'rn', file))
+
+const RN_METRO_CONFIG = `const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const {enhanceMiddleware} = require('./scripts/metro-mpx-sourcemap-middleware');
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('@react-native/metro-config').MetroConfig}
+ */
+const config = {
+  server: {
+    enhanceMiddleware
+  }
+};
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+`
 
 function updateJsonFile (filePath, updater) {
   const config = require(filePath)
@@ -66,9 +87,15 @@ function applyRnPackageConfig (pkg) {
 }
 
 function copyRnSourcemapScript (rnProjectPath) {
-  const dest = path.resolve(rnProjectPath, 'scripts/compose-mpx-sourcemap.js')
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
-  fs.copyFileSync(RN_SOURCEMAP_SCRIPT, dest)
+  const scriptDir = path.resolve(rnProjectPath, 'scripts')
+  fs.mkdirSync(scriptDir, { recursive: true })
+  RN_SOURCEMAP_SCRIPTS.forEach((src) => {
+    fs.copyFileSync(src, path.resolve(scriptDir, path.basename(src)))
+  })
+}
+
+function writeRnMetroConfig (rnProjectPath) {
+  fs.writeFileSync(path.resolve(rnProjectPath, 'metro.config.js'), RN_METRO_CONFIG)
 }
 
 async function createRnProject (targetDir, options) {
@@ -113,6 +140,7 @@ async function createRnProject (targetDir, options) {
   })
 
   copyRnSourcemapScript(rnProjectPath)
+  writeRnMetroConfig(rnProjectPath)
 
   await pm.install()
 }
@@ -120,3 +148,4 @@ async function createRnProject (targetDir, options) {
 module.exports.createRnProject = createRnProject
 module.exports.applyRnPackageConfig = applyRnPackageConfig
 module.exports.copyRnSourcemapScript = copyRnSourcemapScript
+module.exports.writeRnMetroConfig = writeRnMetroConfig
