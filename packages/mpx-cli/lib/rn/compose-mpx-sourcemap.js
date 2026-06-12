@@ -152,8 +152,7 @@ async function composeMpxSourceMapFiles (options) {
   const composedMap = await composeMpxSourceMap({
     metroMap,
     mpxMap,
-    generatedSource: options.generatedSource,
-    onWarn: options.onWarn
+    generatedSource: options.generatedSource
   })
   const tempPath = `${outputPath}.${process.pid}.${Date.now()}.tmp`
 
@@ -218,8 +217,7 @@ async function runCli (argv) {
       metroMapPath: options.metroMapPath,
       mpxMapPath: options.mpxMapPath,
       outputPath: options.outputPath,
-      generatedSource: options.generatedSource,
-      onWarn: (message) => console.warn(`[mpx sourcemap] ${message}`)
+      generatedSource: options.generatedSource
     })
   } catch (error) {
     if (!options.allowFailure) {

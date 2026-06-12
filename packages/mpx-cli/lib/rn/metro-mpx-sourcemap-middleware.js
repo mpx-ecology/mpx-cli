@@ -125,13 +125,12 @@ async function traceFrameToMpxSource (frame, mpxMap, generatedSource) {
   }
 }
 
-async function composeMapResponse (body, mpxMap, warn, generatedSource) {
+async function composeMapResponse (body, mpxMap, generatedSource) {
   const metroMap = JSON.parse(body)
   const composedMap = await composeMpxSourceMap({
     metroMap,
     mpxMap,
-    generatedSource,
-    onWarn: (message) => warnOnce(warn, message)
+    generatedSource
   })
   return JSON.stringify(composedMap)
 }
@@ -166,7 +165,7 @@ function createMpxSourcemapMiddleware (options = {}) {
         try {
           const mpxMap = readMpxMap(mpxMapPath)
           if (isMapRequest) {
-            return await composeMapResponse(body, mpxMap, warn, generatedSource)
+            return await composeMapResponse(body, mpxMap, generatedSource)
           }
           return await composeSymbolicateResponse(body, mpxMap, generatedSource)
         } catch (error) {

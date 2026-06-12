@@ -171,8 +171,7 @@ describe('compose-mpx-sourcemap', () => {
     expect(metroMapping.name).toBe('init')
   })
 
-  test('keeps untraced app.js fallback mappings without warning when some mappings trace successfully', async () => {
-    const warnings = []
+  test('keeps untraced app.js fallback mappings when some mappings trace successfully', async () => {
     const mpxSource = 'webpack://app/src/pages/index.mpx'
     const appSource = '/project/ReactNativeProject/app.js'
     const metroMap = createMap({
@@ -213,11 +212,9 @@ describe('compose-mpx-sourcemap', () => {
     const composedMap = await composeMpxSourceMap({
       metroMap,
       mpxMap,
-      generatedSource: 'app.js',
-      onWarn: (message) => warnings.push(message)
+      generatedSource: 'app.js'
     })
 
-    expect(warnings).toEqual([])
     const tracedMapping = await generatedMappingForLine(composedMap, 1)
     expect(tracedMapping.source).toBe(mpxSource)
     expect(tracedMapping.originalLine).toBe(8)
