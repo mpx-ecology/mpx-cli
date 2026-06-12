@@ -72,7 +72,6 @@ async function composeMpxSourceMap (options) {
   const metroMap = options.metroMap
   const mpxMap = options.mpxMap
   const generatedSource = options.generatedSource || 'app.js'
-  const onWarn = options.onWarn || function () {}
   const sourceContentBySource = new Map()
   const generator = new SourceMapGenerator({ file: metroMap.file })
   const metroConsumer = await createConsumer(metroMap)
@@ -92,7 +91,6 @@ async function composeMpxSourceMap (options) {
       if (mapping.originalLine == null || mapping.originalColumn == null) {
         addMapping(generator, mapping)
         recordSourceContent(sourceContentBySource, metroConsumer, mapping.source)
-        onWarn(`Cannot trace ${generatedSource} mapping without original position at generated ${mapping.generatedLine}:${mapping.generatedColumn}`)
         return
       }
 
@@ -104,7 +102,6 @@ async function composeMpxSourceMap (options) {
       if (original.source == null || original.line == null || original.column == null) {
         addMapping(generator, mapping)
         recordSourceContent(sourceContentBySource, metroConsumer, mapping.source)
-        onWarn(`Cannot trace ${generatedSource} mapping ${mapping.originalLine}:${mapping.originalColumn} through Mpx sourcemap`)
         return
       }
 
@@ -194,6 +191,8 @@ function parseArgs (argv) {
     } else if (arg === '--generated-source') {
       options.generatedSource = value
       i++
+    } else if (arg === '--allow-failure') {
+      options.allowFailure = true
     } else if (arg === '--help' || arg === '-h') {
       options.help = true
     } else {
@@ -202,7 +201,7 @@ function parseArgs (argv) {
   }
 
   if (options.help || !options.metroMapPath || !options.mpxMapPath) {
-    throw new Error('Usage: node ./scripts/compose-mpx-sourcemap.js --metro-map <metro.map> --mpx-map <app.js.map> [--output <output.map>] [--generated-source app.js]')
+    throw new Error('Usage: node ./scripts/compose-mpx-sourcemap.js --metro-map <metro.map> --mpx-map <app.js.map> [--output <output.map>] [--generated-source app.js] [--allow-failure]')
   }
 
   if (!options.outputPath) {
@@ -214,13 +213,21 @@ function parseArgs (argv) {
 
 async function runCli (argv) {
   const options = parseArgs(argv)
-  await composeMpxSourceMapFiles({
-    metroMapPath: options.metroMapPath,
-    mpxMapPath: options.mpxMapPath,
-    outputPath: options.outputPath,
-    generatedSource: options.generatedSource,
-    onWarn: (message) => console.warn(`[mpx sourcemap] ${message}`)
-  })
+  try {
+    await composeMpxSourceMapFiles({
+      metroMapPath: options.metroMapPath,
+      mpxMapPath: options.mpxMapPath,
+      outputPath: options.outputPath,
+      generatedSource: options.generatedSource,
+      onWarn: (message) => console.warn(`[mpx sourcemap] ${message}`)
+    })
+  } catch (error) {
+    if (!options.allowFailure) {
+      throw error
+    }
+    console.warn(`[mpx sourcemap] ${error.message}`)
+    console.warn('[mpx sourcemap] Compose failed; keep Metro sourcemap')
+  }
 }
 
 if (require.main === module) {

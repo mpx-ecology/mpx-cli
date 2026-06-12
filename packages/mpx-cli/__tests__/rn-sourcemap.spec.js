@@ -171,6 +171,65 @@ describe('compose-mpx-sourcemap', () => {
     expect(metroMapping.name).toBe('init')
   })
 
+  test('keeps untraced app.js fallback mappings without warning when some mappings trace successfully', async () => {
+    const warnings = []
+    const mpxSource = 'webpack://app/src/pages/index.mpx'
+    const appSource = '/project/ReactNativeProject/app.js'
+    const metroMap = createMap({
+      file: 'main.jsbundle',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 1, column: 10 },
+          source: appSource,
+          name: 'render'
+        },
+        {
+          generated: { line: 2, column: 0 },
+          original: { line: 1, column: 0 },
+          source: appSource,
+          name: 'bootstrap'
+        }
+      ],
+      sourcesContent: {
+        [appSource]: 'var context = this; render();'
+      }
+    })
+    const mpxMap = createMap({
+      file: 'app.js',
+      mappings: [
+        {
+          generated: { line: 1, column: 10 },
+          original: { line: 8, column: 2 },
+          source: mpxSource,
+          name: 'render'
+        }
+      ],
+      sourcesContent: {
+        [mpxSource]: '<template><view /></template>'
+      }
+    })
+
+    const composedMap = await composeMpxSourceMap({
+      metroMap,
+      mpxMap,
+      generatedSource: 'app.js',
+      onWarn: (message) => warnings.push(message)
+    })
+
+    expect(warnings).toEqual([])
+    const tracedMapping = await generatedMappingForLine(composedMap, 1)
+    expect(tracedMapping.source).toBe(mpxSource)
+    expect(tracedMapping.originalLine).toBe(8)
+    expect(tracedMapping.originalColumn).toBe(2)
+
+    const fallbackMapping = await generatedMappingForLine(composedMap, 2)
+    expect(fallbackMapping.source).toBe(appSource)
+    expect(fallbackMapping.originalLine).toBe(1)
+    expect(fallbackMapping.originalColumn).toBe(0)
+    expect(fallbackMapping.name).toBe('bootstrap')
+  })
+
   test('fails when Metro map has no app.js mapping', async () => {
     const metroMap = createMap({
       file: 'main.jsbundle',
@@ -233,6 +292,40 @@ describe('compose-mpx-sourcemap', () => {
     ])).rejects.toMatchObject({
       exitCode: 1
     })
+  })
+
+  test('CLI can keep Metro sourcemap and exit zero when compose fails', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mpx-rn-cli-fallback-'))
+    const scriptPath = path.resolve(__dirname, '../lib/rn/compose-mpx-sourcemap.js')
+    const metroMapPath = path.join(tempDir, 'index.android.bundle.map')
+    const metroMap = createMap({
+      file: 'index.android.bundle',
+      mappings: [
+        {
+          generated: { line: 1, column: 0 },
+          original: { line: 1, column: 0 },
+          source: 'app.js'
+        }
+      ],
+      sourcesContent: {
+        'app.js': 'require("./app")'
+      }
+    })
+    writeMapFile(metroMapPath, metroMap)
+
+    const result = await execa.node(scriptPath, [
+      '--metro-map',
+      metroMapPath,
+      '--mpx-map',
+      path.join(tempDir, 'missing-app.js.map'),
+      '--output',
+      metroMapPath,
+      '--allow-failure'
+    ])
+
+    expect(result.exitCode).toBe(0)
+    expect(result.stderr).toMatch(/keep Metro sourcemap/)
+    expect(JSON.parse(fs.readFileSync(metroMapPath, 'utf8')).sources).toEqual(metroMap.sources)
   })
 })
 
@@ -463,9 +556,17 @@ describe('RN project sourcemap generation config', () => {
     expect(pkg.devDependencies).toHaveProperty('source-map', '^0.7.6')
     expect(pkg.devDependencies).not.toHaveProperty('@jridgewell/remapping')
     expect(pkg.scripts['bundle:ios']).toContain('--sourcemap-output ./ios/main.jsbundle.map')
-    expect(pkg.scripts['bundle:ios']).toContain('node ./scripts/compose-mpx-sourcemap.js')
+    expect(pkg.scripts['bundle:ios']).toContain('npm run compose-sourcemap:ios')
+    expect(pkg.scripts['bundle:ios']).not.toContain('node ./scripts/compose-mpx-sourcemap.js')
     expect(pkg.scripts['bundle:android']).toContain('--sourcemap-output android/app/src/main/assets/index.android.bundle.map')
-    expect(pkg.scripts['bundle:android']).toContain('node ./scripts/compose-mpx-sourcemap.js')
+    expect(pkg.scripts['bundle:android']).toContain('npm run compose-sourcemap:android')
+    expect(pkg.scripts['bundle:android']).not.toContain('node ./scripts/compose-mpx-sourcemap.js')
+    expect(pkg.scripts['compose-sourcemap:ios']).toContain('node ./scripts/compose-mpx-sourcemap.js')
+    expect(pkg.scripts['compose-sourcemap:ios']).toContain('--metro-map ./ios/main.jsbundle.map')
+    expect(pkg.scripts['compose-sourcemap:ios']).toContain('--allow-failure')
+    expect(pkg.scripts['compose-sourcemap:android']).toContain('node ./scripts/compose-mpx-sourcemap.js')
+    expect(pkg.scripts['compose-sourcemap:android']).toContain('--metro-map android/app/src/main/assets/index.android.bundle.map')
+    expect(pkg.scripts['compose-sourcemap:android']).toContain('--allow-failure')
   })
 
   test('copies compose script into generated RN project', () => {

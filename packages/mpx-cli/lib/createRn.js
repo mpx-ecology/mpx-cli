@@ -32,8 +32,10 @@ const RN_DEV_DEP = {
 }
 
 const RN_SCRIPTS = {
-  'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios --sourcemap-output ./ios/main.jsbundle.map && node ./scripts/compose-mpx-sourcemap.js --metro-map ./ios/main.jsbundle.map --mpx-map ./app.js.map --output ./ios/main.jsbundle.map',
-  'bundle:android': 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --sourcemap-output android/app/src/main/assets/index.android.bundle.map && node ./scripts/compose-mpx-sourcemap.js --metro-map android/app/src/main/assets/index.android.bundle.map --mpx-map ./app.js.map --output android/app/src/main/assets/index.android.bundle.map'
+  'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios --sourcemap-output ./ios/main.jsbundle.map && npm run compose-sourcemap:ios',
+  'bundle:android': 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --sourcemap-output android/app/src/main/assets/index.android.bundle.map && npm run compose-sourcemap:android',
+  'compose-sourcemap:ios': 'node ./scripts/compose-mpx-sourcemap.js --metro-map ./ios/main.jsbundle.map --mpx-map ./app.js.map --output ./ios/main.jsbundle.map --allow-failure',
+  'compose-sourcemap:android': 'node ./scripts/compose-mpx-sourcemap.js --metro-map android/app/src/main/assets/index.android.bundle.map --mpx-map ./app.js.map --output android/app/src/main/assets/index.android.bundle.map --allow-failure'
 }
 
 const RN_SOURCEMAP_SCRIPTS = [
