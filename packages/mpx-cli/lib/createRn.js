@@ -1,4 +1,4 @@
-const { hasYarn, hasPnpm3OrLater, execa } = require('@vue/cli-shared-utils')
+const { hasYarn, execa, chalk } = require('@vue/cli-shared-utils')
 const path = require('path')
 const fs = require('fs-extra')
 const { loadOptions } = require('@vue/cli/lib/options')
@@ -102,16 +102,20 @@ function writeRnMetroConfig (rnProjectPath) {
 
 async function createRnProject (targetDir, options) {
   const rnProjectPath = path.resolve(targetDir, 'ReactNativeProject')
-  const packageManager =
-    options.packageManager ||
-    loadOptions().packageManager ||
-    (hasYarn() ? 'yarn' : null) ||
-    (hasPnpm3OrLater() ? 'pnpm' : 'npm')
+
+  const defaultPm = (hasYarn() ? 'yarn' : null) || 'npm'
+  let packageManager = options.packageManager || loadOptions().packageManager || defaultPm
+
+  if (packageManager === 'pnpm') {
+    console.warn(chalk.yellow(`ReactNative暂不支持使用pnpm创建，已自动切换为${defaultPm}`))
+    packageManager = defaultPm
+  }
+
   const pm = new PackageManager({
     context: rnProjectPath,
     forcePackageManager: packageManager
   })
-  if (pm.bin === 'pnpm') throw new Error('暂不支持pnpm创建，请切换npm或yarn。eg: mpx create -m npm')
+
   await execa(
     'npx',
     [
