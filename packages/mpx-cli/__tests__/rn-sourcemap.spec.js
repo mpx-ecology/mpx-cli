@@ -540,8 +540,8 @@ describe('metro-mpx-sourcemap-middleware', () => {
   })
 })
 
-describe('RN project sourcemap generation config', () => {
-  test('adds sourcemap dependencies and bundle scripts to RN package.json', () => {
+describe('RN project generation config', () => {
+  test('adds native and sourcemap dependencies and bundle scripts to RN package.json', () => {
     const pkg = {
       dependencies: {},
       devDependencies: {},
@@ -550,6 +550,8 @@ describe('RN project sourcemap generation config', () => {
 
     applyRnPackageConfig(pkg)
 
+    expect(pkg.dependencies).toHaveProperty('react-native-nitro-image', '^0.15.1')
+    expect(pkg.dependencies).toHaveProperty('react-native-nitro-modules', '^0.36.5')
     expect(pkg.devDependencies).toHaveProperty('source-map', '^0.7.6')
     expect(pkg.devDependencies).not.toHaveProperty('@jridgewell/remapping')
     expect(pkg.scripts['bundle:ios']).toContain('--sourcemap-output ./ios/main.jsbundle.map')

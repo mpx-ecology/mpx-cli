@@ -15,6 +15,8 @@ const RN_DEP = {
   'react-native-get-location': '^5.0.0',
   'react-native-haptic-feedback': '^2.3.3',
   'react-native-linear-gradient': '^2.8.3',
+  'react-native-nitro-image': '^0.15.1',
+  'react-native-nitro-modules': '^0.36.5',
   'react-native-reanimated': '3.16.7',
   'react-native-screens': '~4.18.0',
   'react-native-webview': '^13.13.2',
