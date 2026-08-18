@@ -11,7 +11,8 @@ module.exports = function (api, options) {
 
   api.render('./template-tsconfig', {
     needTest: !!options.needUnitTest || !!options.needE2ETest,
-    needRn: !!options.needRn
+    needRn: !!options.needRn,
+    rnProjectName: options.rnProjectName || 'ReactNativeProject'
   })
 
   api.render((files) => delete files['jsconfig.json'])

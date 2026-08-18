@@ -543,13 +543,26 @@ describe('metro-mpx-sourcemap-middleware', () => {
 describe('RN project sourcemap generation config', () => {
   test('adds sourcemap dependencies and bundle scripts to RN package.json', () => {
     const pkg = {
-      dependencies: {},
+      dependencies: {
+        react: '18.3.1',
+        'react-native': '0.77.2',
+        'react-native-reanimated': '3.16.7',
+        'react-native-ble-manager': '^12.4.4',
+        'react-native-wifi-reborn': '^4.13.6'
+      },
       devDependencies: {},
       scripts: {}
     }
 
     applyRnPackageConfig(pkg)
 
+    expect(pkg.dependencies).toHaveProperty('react', '18.3.1')
+    expect(pkg.dependencies).toHaveProperty('react-native', '0.77.2')
+    expect(pkg.dependencies).toHaveProperty('react-native-reanimated', '3.16.7')
+    expect(pkg.dependencies).toHaveProperty('react-native-ble-manager', '^12.4.4')
+    expect(pkg.dependencies).toHaveProperty('react-native-wifi-reborn', '^4.13.6')
+    expect(pkg.dependencies).toHaveProperty('react-native-svg', '^15.8.0')
+    expect(pkg.dependencies).toHaveProperty('react-native-vision-camera', '^4.7.3')
     expect(pkg.devDependencies).toHaveProperty('source-map', '^0.7.6')
     expect(pkg.devDependencies).not.toHaveProperty('@jridgewell/remapping')
     expect(pkg.scripts['bundle:ios']).toContain('--sourcemap-output ./ios/main.jsbundle.map')

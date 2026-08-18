@@ -17,7 +17,7 @@ module.exports.serveMp = async function serveMp (api, options, args) {
       handleWebpackDone(err, stats, true, options, webpackConfigs[0])
         .then((...res) => {
           if (!options.disabledDefaultLinkFile) {
-            symlinkTargetConfig(api, target, webpackConfigs[0])
+            symlinkTargetConfig(api, target, webpackConfigs[0], options)
           }
           resolve(...res)
         })

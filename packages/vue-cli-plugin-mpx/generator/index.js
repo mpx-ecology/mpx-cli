@@ -1,4 +1,6 @@
 module.exports = function (api, options) {
+  const rnProjectName = options.rnProjectName || 'ReactNativeProject'
+
   require('./base')(api, options)
   require('./static')(api, options)
   require('./babel')(api, options)
@@ -47,15 +49,12 @@ module.exports = function (api, options) {
 
   if (options.needRn) {
     mpxPluginConfig.rnConfig = {
-      projectName: 'ReactNativeProject'
+      projectName: rnProjectName
     }
     api.extendPackage({
       dependencies: {
-        react: '18.3.1',
-        'react-native': '0.77.2',
         'react-native-reanimated': '3.16.7',
-        'react-native-ble-manager': '^12.4.4',
-        'react-native-wifi-reborn': '^4.13.6'
+        promise: '^8.3.0'
       }
     })
   }
@@ -160,10 +159,10 @@ module.exports = function (api, options) {
   if (options.needRn) {
     api.extendPackage({
       scripts: {
-        'serve:ios': 'cd ReactNativeProject && npm run ios && cd .. && mpx-cli-service serve --targets=ios',
-        'build:ios': 'mpx-cli-service build --targets=ios && cd ReactNativeProject && npm run bundle:ios',
-        'serve:android': 'cd ReactNativeProject && npm run android && cd .. && mpx-cli-service serve --targets=android',
-        'build:android': 'mpx-cli-service build --targets=android && cd ReactNativeProject && npm run bundle:android'
+        'serve:ios': `cd ${rnProjectName} && npm run ios && cd .. && mpx-cli-service serve --targets=ios`,
+        'build:ios': `mpx-cli-service build --targets=ios && cd ${rnProjectName} && npm run bundle:ios`,
+        'serve:android': `cd ${rnProjectName} && npm run android && cd .. && mpx-cli-service serve --targets=android`,
+        'build:android': `mpx-cli-service build --targets=android && cd ${rnProjectName} && npm run bundle:android`
       }
     })
   }

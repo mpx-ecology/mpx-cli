@@ -22,8 +22,9 @@ function copyDirSync (src, dest) {
  * @param { import('@vue/cli-service').PluginAPI } api
  * @param { import('@mpxjs/cli-shared-utils').Target } target
  * @param { import('webpack').Configuration } webpackConfig
+ * @param { object } options
  */
-module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
+module.exports.symlinkTargetConfig = function (api, target, webpackConfig, options) {
   const targetConfigFiles = MODE_CONFIG_FILES_MAP[target.mode] || []
   let outputPath = webpackConfig.output.path
   targetConfigFiles.forEach((v) => {
@@ -47,7 +48,9 @@ module.exports.symlinkTargetConfig = function (api, target, webpackConfig) {
   try {
     const isRn = (target.mode === 'android') | (target.mode === 'ios') | (target.mode === 'harmony')
     if (isRn) {
-      const rnProjectPath = path.resolve(process.cwd(), 'ReactNativeProject')
+      const mpxOptions = options && options.pluginOptions && options.pluginOptions.mpx
+      const rnConfig = mpxOptions && mpxOptions.plugin && mpxOptions.plugin.rnConfig
+      const rnProjectPath = path.resolve(process.cwd(), (rnConfig && rnConfig.projectName) || 'ReactNativeProject')
       const items = fs.readdirSync(outputPath)
       items.forEach((item) => {
         const src = path.resolve(outputPath, item)

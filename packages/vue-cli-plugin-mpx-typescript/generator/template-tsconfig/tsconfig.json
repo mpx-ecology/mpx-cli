@@ -28,7 +28,7 @@
     "dist",
     "config",
     <%_ if(needRn) { _%>
-    "ReactNativeProject"
+    "<%= rnProjectName %>"
     <%_ } _%>
   ]
 }
