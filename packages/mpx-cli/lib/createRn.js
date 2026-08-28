@@ -21,10 +21,11 @@ const RN_DEP = {
   'react-native-safe-area-context': '^4.10.9',
   'react-native-ble-manager': '^12.4.4',
   'react-native-wifi-reborn': '^4.13.6',
+  'react-native-svg': '^15.8.0',
   react: '18.3.1',
   'react-native': '0.77.2',
   'react-native-video': '^6.11.0',
-  'react-native-vision-camera': '^5.0.10'
+  'react-native-vision-camera': '^4.7.3'
 }
 
 const RN_DEV_DEP = {
@@ -42,6 +43,8 @@ const RN_SOURCEMAP_SCRIPTS = [
   'compose-mpx-sourcemap.js',
   'metro-mpx-sourcemap-middleware.js'
 ].map((file) => path.resolve(__dirname, 'rn', file))
+
+const RN_PROJECT_NAME_REGEXP = /^[A-Z_][0-9A-Z_]*$/i
 
 const RN_METRO_CONFIG = `const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const {enhanceMiddleware} = require('./scripts/metro-mpx-sourcemap-middleware');
@@ -100,8 +103,22 @@ function writeRnMetroConfig (rnProjectPath) {
   fs.writeFileSync(path.resolve(rnProjectPath, 'metro.config.js'), RN_METRO_CONFIG)
 }
 
-async function createRnProject (targetDir, options) {
-  const rnProjectPath = path.resolve(targetDir, 'ReactNativeProject')
+function validateRnProjectName (name) {
+  if (typeof name !== 'string' || !RN_PROJECT_NAME_REGEXP.test(name)) {
+    return 'React Native 项目名称必须以字母或 _ 开头，且只能包含字母、数字或 _'
+  }
+  if (name.toLowerCase() === 'react') {
+    return 'React Native 项目名称不能为 React'
+  }
+  return true
+}
+
+async function createRnProject (targetDir, options, rnProjectName = path.basename(targetDir)) {
+  const validationResult = validateRnProjectName(rnProjectName)
+  if (validationResult !== true) {
+    throw new Error(validationResult)
+  }
+  const rnProjectPath = path.resolve(targetDir, rnProjectName)
 
   const defaultPm = (hasYarn() ? 'yarn' : null) || 'npm'
   let packageManager = options.packageManager || loadOptions().packageManager || defaultPm
@@ -121,7 +138,7 @@ async function createRnProject (targetDir, options) {
     [
       '@react-native-community/cli@^19.0.0',
       'init',
-      'ReactNativeProject',
+      rnProjectName,
       '--version',
       '0.77.2',
       '--pm',
@@ -134,10 +151,10 @@ async function createRnProject (targetDir, options) {
     { stdio: 'inherit', cwd: targetDir }
   )
 
-  const pkgPath = path.resolve(targetDir, 'ReactNativeProject', 'package.json')
+  const pkgPath = path.resolve(rnProjectPath, 'package.json')
   updateJsonFile(pkgPath, applyRnPackageConfig)
 
-  const babelConfigPath = path.resolve(targetDir, 'ReactNativeProject', 'babel.config.js')
+  const babelConfigPath = path.resolve(rnProjectPath, 'babel.config.js')
   updateJsModule(babelConfigPath, config => {
     if (!config.plugins) {
       config.plugins = []
@@ -152,6 +169,8 @@ async function createRnProject (targetDir, options) {
 }
 
 module.exports.createRnProject = createRnProject
+module.exports.validateRnProjectName = validateRnProjectName
+module.exports.RN_DEP = RN_DEP
 module.exports.applyRnPackageConfig = applyRnPackageConfig
 module.exports.copyRnSourcemapScript = copyRnSourcemapScript
 module.exports.writeRnMetroConfig = writeRnMetroConfig

@@ -20,9 +20,12 @@ const loadLocalPreset = require('@vue/cli/lib/util/loadLocalPreset')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { clearConsole } = require('@vue/cli/lib/util/clearConsole')
 const merge = require('lodash.merge')
-const prompts = require('./prompts')
+const createPrompts = require('./prompts')
 const builtInPreset = require('./preset')
-const { createRnProject } = require('./createRn')
+const {
+  createRnProject,
+  validateRnProjectName
+} = require('./createRn')
 const MpxCliPromptsKey = 'mpxCliPrompts'
 const PnpmShamefullyHoistConfigRegExp = /^shamefully-(hoist|flatten)=.*$/gm
 
@@ -255,7 +258,13 @@ async function resolveCliPreset (options) {
  * @returns
  */
 async function create (projectName, options, preset = null) {
+  const cwd = options.cwd || process.cwd()
+  const inCurrent = projectName === '.'
+  const name = inCurrent ? path.relative('../', cwd) : projectName
+  const targetDir = path.resolve(cwd, projectName || '.')
+
   // resolve preset
+  const prompts = createPrompts(name)
   let promptList = prompts
   if (!preset) {
     const cliPreset = await resolveCliPreset(options)
@@ -279,15 +288,18 @@ async function create (projectName, options, preset = null) {
     }
   })
 
+  if (preset.needRn) {
+    preset.rnProjectName = preset.rnProjectName || name
+    const validationResult = validateRnProjectName(preset.rnProjectName)
+    if (validationResult !== true) {
+      throw new Error(validationResult)
+    }
+  }
+
   // 设置代理
   if (options.proxy) {
     process.env.HTTP_PROXY = options.proxy
   }
-
-  const cwd = options.cwd || process.cwd()
-  const inCurrent = projectName === '.'
-  const name = inCurrent ? path.relative('../', cwd) : projectName
-  const targetDir = path.resolve(cwd, projectName || '.')
 
   const result = validateProjectName(name)
   if (!result.validForNewPackages) {
@@ -358,6 +370,7 @@ async function create (projectName, options, preset = null) {
       cross: preset.cross,
       needSSR: preset.needSSR,
       needRn: preset.needRn,
+      rnProjectName: preset.rnProjectName,
       name
     })
   })
@@ -419,7 +432,7 @@ async function create (projectName, options, preset = null) {
   })
 
   if (!process.env.VUE_CLI_TEST && preset.needRn) {
-    await createRnProject(targetDir, options)
+    await createRnProject(targetDir, options, preset.rnProjectName)
   }
 }
 

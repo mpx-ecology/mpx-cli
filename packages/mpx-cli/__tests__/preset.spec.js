@@ -344,6 +344,7 @@ test('test-rn', async () => {
       appid: 'test',
       description: 'test',
       needRn: true,
+      rnProjectName: 'CustomRnProject',
       needTs: true,
       cross: true,
       plugins: {},
@@ -353,4 +354,14 @@ test('test-rn', async () => {
 
   const pkg = require(path.resolve(cwd, name, 'package.json'))
   expect(pkg.devDependencies).toHaveProperty('@mpxjs/vue-cli-plugin-mpx')
+  expect(pkg.dependencies).not.toHaveProperty('react')
+  expect(pkg.dependencies).not.toHaveProperty('react-native')
+  expect(pkg.dependencies).toHaveProperty('react-native-reanimated', '3.16.7')
+  expect(pkg.dependencies).toHaveProperty('promise', '^8.3.0')
+  expect(pkg.dependencies).not.toHaveProperty('react-native-ble-manager')
+  expect(pkg.dependencies).not.toHaveProperty('react-native-wifi-reborn')
+  expect(pkg.scripts['serve:ios']).toContain('cd CustomRnProject')
+  const mpxConfig = require(path.resolve(cwd, name, 'mpx.config.js'))
+  expect(mpxConfig.pluginOptions.mpx.plugin.rnConfig.projectName).toBe('CustomRnProject')
+  expect(fs.readFileSync(path.resolve(cwd, name, 'tsconfig.json'), 'utf8')).toContain('"CustomRnProject"')
 })

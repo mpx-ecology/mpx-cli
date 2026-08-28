@@ -56,7 +56,7 @@ module.exports.registerBuildCommand = function (api, options) {
             .then((...res) => {
               if (target !== 'web' && !options.disabledDefaultLinkFile) {
                 // web版本不需要symlink
-                symlinkTargetConfig(api, target, webpackConfigs[0])
+                symlinkTargetConfig(api, target, webpackConfigs[0], options)
               }
               resolve(...res)
             })

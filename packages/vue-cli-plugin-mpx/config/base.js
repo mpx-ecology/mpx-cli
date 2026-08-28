@@ -14,6 +14,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const resolveClientEnv = require('@vue/cli-service/lib/util/resolveClientEnv')
 const { getReporter } = require('../utils/reporter')
+const { RN_EXTERNALS } = require('./rnExternals')
 
 /**
  * 强制改chain-webpack的vue style loader use的名字
@@ -374,45 +375,7 @@ function addRnWebpackConfig (api, options, config, target) {
   config.resolve.extensions.add('.tsx').add('.jsx')
   config.output.publicPath('/')
   config.output.filename('[name].js')
-  config.externals({
-    'react-native': 'react-native',
-    react: 'react',
-    '@react-native-masked-view/masked-view':
-      '@react-native-masked-view/masked-view',
-    'react-native-reanimated': 'react-native-reanimated',
-    'react-native-gesture-handler': 'react-native-gesture-handler',
-    'react-native-gesture-handler/DrawerLayout':
-      'react-native-gesture-handler/DrawerLayout',
-    'react-native-gesture-handler/Swipeable':
-      'react-native-gesture-handler/Swipeable',
-    '@ant-design/icons-react-native': '@ant-design/icons-react-native',
-    '@d11/react-native-fast-image': '@d11/react-native-fast-image',
-    'react-native-safe-area-context': 'react-native-safe-area-context',
-    'react-native-collapsible': 'react-native-collapsible',
-    'react-native-modal-popover': 'react-native-modal-popover',
-    'react/jsx-runtime': 'react/jsx-runtime',
-    '@react-navigation/native': '@react-navigation/native',
-    '@react-navigation/native-stack': '@react-navigation/native-stack',
-    '@react-navigation/stack': '@react-navigation/stack',
-    '@react-navigation/elements': '@react-navigation/elements',
-    '@react-native-async-storage/async-storage':
-      '@react-native-async-storage/async-storage',
-    '@react-native-clipboard/clipboard': '@react-native-clipboard/clipboard',
-    '@react-native-community/netinfo': '@react-native-community/netinfo',
-    'react-native-device-info': 'react-native-device-info',
-    'react-native-root-siblings': 'react-native-root-siblings',
-    'react-native-maps': 'react-native-maps',
-    '@ant-design/react-native': '@ant-design/react-native',
-    'expo-brightness': 'expo-brightness',
-    'expo-clipboard': 'expo-clipboard',
-    'react-native-webview': 'react-native-webview',
-    'react-native-get-location': 'react-native-get-location',
-    'react-native-linear-gradient': 'react-native-linear-gradient',
-    'react-native-haptic-feedback': 'react-native-haptic-feedback',
-    'react-native-svg/css': 'react-native-svg/css',
-    'react-native-vision-camera': 'react-native-vision-camera',
-    'react-native-ble-manager': 'react-native-ble-manager'
-  })
+  config.externals(RN_EXTERNALS)
 }
 
 /**

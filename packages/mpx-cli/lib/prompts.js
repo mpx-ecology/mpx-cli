@@ -1,6 +1,7 @@
 const prefix = '@mpxjs/vue-cli-plugin-mpx'
+const { validateRnProjectName } = require('./createRn')
 
-module.exports = [
+const prompts = [
   {
     name: 'srcMode',
     type: 'list',
@@ -22,6 +23,13 @@ module.exports = [
     message: '是否需要跨平台输出 React Native',
     type: 'confirm',
     default: false
+  },
+  {
+    name: 'rnProjectName',
+    when: ({ srcMode, needRn }) => srcMode === 'wx' && needRn === true,
+    message: '请输入 React Native 项目名称',
+    type: 'input',
+    validate: validateRnProjectName
   },
   {
     name: 'needSSR',
@@ -146,3 +154,9 @@ module.exports = [
     default: 'touristappid'
   }
 ]
+
+module.exports = function createPrompts (defaultRnProjectName) {
+  return prompts.map((prompt) => prompt.name === 'rnProjectName'
+    ? { ...prompt, default: defaultRnProjectName }
+    : prompt)
+}
