@@ -1,5 +1,6 @@
 const { defineConfig } = require('unocss')
-const presetMpx = require('@mpxjs/unocss-base')
+const presetMpxModule = require('@mpxjs/unocss-base')
+const presetMpx = presetMpxModule.default || presetMpxModule
 
 module.exports = defineConfig({
   content: {
