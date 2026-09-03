@@ -1,6 +1,6 @@
 {
   "name": "@mpxjs/vue-cli-plugin-mpx-plugin-mode",
-  "version": "2.2.31",
+  "version": "2.2.32",
   "description": "",
   "main": "index.js",
   "scripts": {
