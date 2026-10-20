@@ -9,8 +9,10 @@ npm run serve
 // 开发构建，跨平台输出支付宝小程序
 npm run serve:ali
 
+<%_ if (needWeb) { _%>
 // 开发构建，跨平台输出 Web
 npm run serve:web
+<%_ } _%>
 <%_ if (needRn) { _%>
 
 // 开发构建，跨平台输出React Native
@@ -22,17 +24,23 @@ npm run serve:android
 npm run serve -- --targets={target}
 
 // 开发构建，同时输出多平台产物
-npm run serve -- --targets=wx,ali,web
+npm run serve -- --targets=wx,ali<%= needWeb ? ",web" : "" %>
 
 // 生产构建，默认输出微信小程序
 npm run build
 
 // 生产构建，跨平台输出
 npm run build:ali
+<%_ if (needWeb) { _%>
 npm run build:web
+<%_ } _%>
 <%_ if (needRn) { _%>
 npm run build:ios
 npm run build:android
 <%_ } _%>
-npm run build -- --targets=wx,ali,web
+npm run build -- --targets=wx,ali<%= needWeb ? ",web" : "" %>
 ```
+
+<%_ if (needRn) { _%>
+原生宿主目录：`<%= rnProjectName %>/`。
+<%_ } _%>

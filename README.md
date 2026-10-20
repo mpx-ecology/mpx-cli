@@ -78,6 +78,12 @@ npm run build
   -x, --proxy <proxyUrl>          创建项目时使用指定的代理
 ```
 
+创建微信源码项目时，`needWeb` 控制是否生成 Web 依赖、脚本和页面模板，默认关闭；`needRn` 独立控制 React Native。旧 `cross` 选项已废弃，preset 请改用 `needWeb`。
+
+只有选择 Web 后才显示 SSR 问题；未启用 `needWeb` 时，preset 中的 `needSSR: true` 也不生效，不会自动开启 Web。选择 Web 或 RN 后不再询问云开发和小程序插件模式。
+
+普通微信源码项目默认生成其他小程序平台的静态配置，与是否选择 Web 无关；云开发、插件模式仅生成当前源码平台配置。RN 项目另生成 `static/ios`、`static/android` 和 `static/harmony`。
+
 > RN项目不支持pnpm，请在创建输出到RN项目时指定 mpx create -m npm 来创建项目
 >
 > @achrinza/node-ipc包在engine-strict模式下不兼容node23，可映射到修复包node-ipc-compat@1.0.0，针对不同包管理器(pnpm/npm)在package.json中添加如下对应代码，我们已自动化处理，无需手动添加。

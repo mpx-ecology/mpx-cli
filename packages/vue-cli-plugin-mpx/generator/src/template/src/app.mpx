@@ -1,13 +1,41 @@
-<script>
+<script<% if (needTs) { %> lang="ts"<% } %>>
 import mpx, { createApp } from '@mpxjs/core'
 import apiProxy from '@mpxjs/api-proxy'
+<%_ if (needSSR) { _%>
+import { createPinia } from '@mpxjs/pinia'
+<%_ } _%>
 
 mpx.use(apiProxy, { usePromise: true })
 
+<%_ if (needSSR) { _%>
+mpx.config.webRouteConfig = {
+  mode: 'history'
+}
+
+<%_ } _%>
 createApp({
   onLaunch() {
     //
+  }<%= needSSR ? ',' : '' %>
+<%_ if (needSSR) { _%>
+  onAppInit() {
+    const pinia = createPinia()
+    return {
+      pinia
+    }
+  },
+  onSSRAppCreated({ pinia, router, app, context }<% if (needTs) { %>: any<% } %>) {
+    return new Promise((resolve, reject) => {
+      router.push(context.url)
+      router.onReady(() => {
+        context.rendered = () => {
+          context.state = pinia.state.value
+        }
+        resolve(app)
+      }, reject)
+    })
   }
+<%_ } _%>
 })
 </script>
 

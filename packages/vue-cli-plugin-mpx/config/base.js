@@ -464,7 +464,6 @@ module.exports.addBaseConfig = function (api, options, config, target) {
   const pluginConfig = {
     mode: target.mode,
     srcMode: mpxOptions.srcMode,
-    forceDisableBuiltInLoader: isWeb,
     ...resolveMpxWebpackPluginConf(api, options)
   }
 

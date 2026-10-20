@@ -1,7 +1,7 @@
 const { normalizeCommandArgs } = require('@mpxjs/cli-shared-utils')
 const { serveWeb } = require('@mpxjs/vue-cli-plugin-mpx/commands/serve/web')
 const { serveServer } = require('./serveServer')
-const { addBaseWebpackConfig } = require('../../config/base.config')
+const withCompilerConfig = require('../../config/withCompilerConfig')
 const { addServeWebpackConfig } = require('../../config/serve.config')
 
 const defaults = {
@@ -18,30 +18,12 @@ module.exports.registerServeCommand = function (api, options) {
     async function build (args) {
       normalizeCommandArgs(args, defaults)
 
-      const getBaseConfig = (ssrMode) => {
+      const buildService = (ssrMode) => withCompilerConfig(api, options, args, ssrMode, addServeWebpackConfig, async () => {
         const isServer = ssrMode === 'server'
         const port = options.pluginOptions?.SSR?.devClientPort || defaults.port
         options.publicPath = isServer ? '/' : `http://localhost:${port}/`
-        api.chainWebpack((config) => {
-          addBaseWebpackConfig(api, options, args, config, { ssrMode })
-          addServeWebpackConfig(api, options, args, config, { ssrMode })
-        })
-      }
-
-      const buildService = (ssrMode) => {
-        return new Promise((resolve, reject) => {
-          getBaseConfig(ssrMode)
-          if (ssrMode === 'client') {
-            serveWeb(api, options, args).then((...res) => {
-              resolve(...res)
-            }).catch(reject)
-          } else {
-            serveServer(api, options, args).then((...res) => {
-              resolve(...res)
-            }).catch(reject)
-          }
-        })
-      }
+        return isServer ? serveServer(api, options, args) : serveWeb(api, options, args)
+      })
       await buildService('client')
       await buildService('server')
     }

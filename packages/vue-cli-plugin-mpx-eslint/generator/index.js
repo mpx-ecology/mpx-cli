@@ -1,4 +1,8 @@
+const path = require('path')
+const extendDocs = require('@mpxjs/vue-cli-plugin-mpx/generator/utils/extendDocs')
+
 module.exports = function (api, options = {}) {
+  extendDocs(api, path.join(__dirname, 'docs'))
   const deps = {
     scripts: {
       lint: 'eslint --ext .js,.ts,.mpx src/'
@@ -13,3 +17,5 @@ module.exports = function (api, options = {}) {
     needTs: !!options.needTs
   })
 }
+
+module.exports.after = ['@mpxjs/vue-cli-plugin-mpx']

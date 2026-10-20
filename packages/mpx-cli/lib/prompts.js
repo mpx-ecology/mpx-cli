@@ -11,11 +11,11 @@ const prompts = [
     default: 'wx'
   },
   {
-    name: 'cross',
+    name: 'needWeb',
     when: ({ srcMode }) => srcMode === 'wx',
-    message: '是否需要跨平台输出其他小程序和 Web',
+    message: '是否需要输出 Web',
     type: 'confirm',
-    default: true
+    default: false
   },
   {
     name: 'needRn',
@@ -33,7 +33,7 @@ const prompts = [
   },
   {
     name: 'needSSR',
-    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === true,
+    when: ({ srcMode, needWeb }) => srcMode === 'wx' && needWeb === true,
     message: '是否需要使用 Web SSR',
     type: 'confirm',
     default: false,
@@ -47,7 +47,7 @@ const prompts = [
   },
   {
     name: 'cloudFunc',
-    when: ({ srcMode, cross }) => srcMode === 'wx' && cross === false,
+    when: ({ srcMode, needWeb, needRn }) => srcMode === 'wx' && !needWeb && !needRn,
     message: '是否需要使用小程序云开发能力',
     type: 'confirm',
     default: false,
@@ -61,7 +61,7 @@ const prompts = [
   },
   {
     name: 'isPlugin',
-    when: ({ srcMode, cross, cloudFunc }) => srcMode === 'wx' && cross === false && cloudFunc === false,
+    when: ({ srcMode, needWeb, needRn, cloudFunc }) => srcMode === 'wx' && !needWeb && !needRn && !cloudFunc,
     type: 'confirm',
     message:
       '是否是小程序插件项目?（不清楚请选 No ！什么是插件项目请看微信官方文档！）',

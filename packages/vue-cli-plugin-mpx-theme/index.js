@@ -20,11 +20,13 @@ module.exports = function (api, options) {
       .oneOf('normal')
       .use('stylus-loader')
       .loader('stylus-loader')
-      .options({
+      .tap((options = {}) => ({
+        ...options,
         stylusOptions: {
+          ...options.stylusOptions,
           import: themeFilePath
         }
-      })
+      }))
       .end()
   })
 }
