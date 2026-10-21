@@ -149,9 +149,9 @@ const prompts = [
   {
     name: 'appid',
     when: ({ srcMode }) => srcMode === 'wx' || srcMode === 'dd',
-    required: true,
-    message: '请输入小程序的Appid',
-    default: 'touristappid'
+    required: false,
+    message: '请输入小程序的 AppID（可稍后配置）',
+    default: ''
   }
 ]
 

@@ -26,17 +26,23 @@
 ## 微信小程序
 
 1. 执行 `npm run serve -- --targets=wx`，等待编译成功。
-2. 微信开发者工具导入 `dist/wx`，确认测试 AppID；项目配置来源为 `static/wx/project.config.json`。
+2. 用微信开发者工具导入 `dist/wx`。已有 AppID 时，在 `static/wx/project.config.json` 中填写当前账号有权限的有效 AppID，并重新构建；没有 AppID 时，创建项目可留空，在工具导入界面点击“测试号”获取临时 AppID 后继续导入。
 <%_ if (cloudFunc || isPlugin) { _%>
 3. 工具导入目录仍为 `dist/wx`，由项目配置中的 `miniprogramRoot` 指向内部小程序目录，不要只导入 `dist/wx/miniprogram`。
 <%_ } _%>
+- 使用测试号后，将工具提供的 AppID 回填到 `static/wx/project.config.json` 并重新构建，避免后续构建覆盖工具对 `dist/wx/project.config.json` 的修改。测试号与已移除的游客 AppID 不同，不使用游客 AppID 占位。
 - 从应用配置中的首页测试页面进入、返回、视图和交互，检查 Console/Network。需要真机结论时另外预览验证，并记录基础库、工具及微信版本。
 <%_ if (cloudFunc) { _%>
 - 云函数源码位于 `src/functions/`；测试前配置实际云环境，核对函数部署版本、调用参数、返回值和错误日志。
 <%_ } _%>
 <%_ if (isPlugin) { _%>
-- 插件源码位于 `src/plugin/`；通过开发者工具的插件调试模式和宿主小程序验证导出组件、接口与调用行为。
+- 插件源码位于 `src/plugin/`；确认 `src/miniprogram/app.mpx` 中的插件 `provider` 为有效的插件 AppID，再通过开发者工具的插件调试模式和宿主小程序验证导出组件、接口与调用行为。
 <%_ } _%>
+
+### AppID 或基础库异常
+
+- 遇到 `WAWorker.js`、`WAServiceMainContext.js` 等基础库堆栈报错时，先记录开发者工具版本、基础库版本、AppID 模式和完整错误，再检查是否包含应用代码堆栈。
+- 先核对 AppID 是否有效及当前账号是否有权限，修改 `static/wx/project.config.json` 后重新构建并重开项目；若仍报错，再结合工具和基础库版本定位，不能将所有基础库报错都归因于 AppID。
 <%_ } _%>
 <%_ if (miniModes.includes('ali')) { _%>
 
@@ -45,6 +51,11 @@
 1. 执行 `npm run serve -- --targets=ali`，等待编译成功。
 2. 支付宝开发者工具导入 `dist/ali`，确认项目设置已启用 `component2`，再编译运行。模板的 `static/ali/mini.project.json` 默认包含 `component2: true`。
 3. 使用真实测试小程序进行关联和真机预览；检查路由、事件参数、样式、字体和图片。微信专属 API 不能作为支付宝端的通过标准。
+
+### 编译完成但模拟器空白
+
+- 确认导入的是当前项目的 `dist/ali`，并检查 `component2` 配置及开发者工具自身日志。
+- 曾观察到 `TinySimulatorRenderer` 的 `appendChild`、`width` 初始化异常，重启开发者工具并重开项目后恢复。恢复后仍需确认页面实际显示、触发 `onReady`，并检查应用 Console；若异常持续，保留工具版本和日志继续定位。
 <%_ } _%>
 <%_ const otherMiniModes = miniModes.filter(mode => mode !== 'wx' && mode !== 'ali'); _%>
 <%_ if (otherMiniModes.length) { _%>
@@ -107,10 +118,25 @@
 5. 检查系统返回键、键盘遮挡、安全区、字体及修改功能。设备无法连接 Metro 时检查端口；USB 调试可执行 `adb -s <设备序列号> reverse tcp:8081 tcp:8081`。
 
 两端共用原生宿主目录和 Metro，编译产物分别同步到宿主的 `mpx-build/ios/`、`mpx-build/android/`，由 `mpx-entry.ios.js`、`mpx-entry.android.js` 选择对应产物。两端 Mpx watcher 可以同时运行，也可以只启动需要测试的一端；不要同时启动同一端的多个 watcher。根目录的 `serve:ios/android` 包含原生 App 构建；日常复用已安装 App 时使用上述仅 Mpx 编译命令。`build:ios/android` 还会执行宿主的 JS bundle 打包，生成 IPA/APK 需另行使用原生工程构建工具。
+
+## RN 排错
+
+### 编译成功但页面仍是旧内容
+
+1. 按“源码 → `dist/<平台>` → `<%= rnProjectName %>/mpx-build/<平台>` → Metro → App”逐层核对。使用自定义输出目录时，以实际配置为准。
+2. 确认本轮 Mpx 编译完成，比较输出目录与宿主目录中 `app.js` 的内容或哈希；检查 `mpx-entry.ios.js`、`mpx-entry.android.js` 是否引用各自平台目录。
+3. 确认 Metro 从当前宿主目录启动，App 连接的是该 Metro；检查实际端口和进程，避免连接到其他项目或旧进程。重新加载或重启 App 后，确认源码修改确实可见。
+
+### Android 能启动但无法加载开发更新
+
+- App 能显示页面时，仍需检查是否加载了 APK 内嵌的旧 bundle。查看设备日志中的 Metro 连接失败信息，并确认本机 Metro 正常运行。
+- 模拟器默认地址 `10.0.2.2:8081` 无法连接时，可执行 `adb -s <设备序列号> reverse tcp:8081 tcp:8081`，同时将该 App 的开发服务器地址设为 `localhost:8081`，再重新加载。仅配置 reverse 不会改变 App 原本连接的地址；使用其他 Metro 端口时，两处配置应同步调整。
+- 通过源码中的可识别修改确认 App 已加载开发产物，并记录采用的连接方式。
 <%_ } _%>
 
 ## 校验与交付
 
 - 至少覆盖本次修改涉及的页面/组件：首次进入、交互更新、路由返回、资源加载、边界输入和错误处理；跨端改动应在受影响的各端分别构建和运行。
+- 验证开发更新时，可临时加入可识别的文本，等待增量编译完成，必要时重新编译、刷新或 Reload，确认目标端实际显示更新；随后恢复源码并重新验证。仅看到初始页面不足以证明加载的是最新产物。
 - 编译通过不等于运行通过，模拟器通过不等于真机通过；无可用环境时记录未验证项目和具体阻塞原因。
 - 交付时记录目标平台、执行命令、设备/工具版本、实际操作及结果、日志或截图位置。不要将历史测试结果写成本次结论。

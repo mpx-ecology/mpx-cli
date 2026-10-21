@@ -7,6 +7,9 @@
 - [@mpxjs/cli](#mpxjscli)
   - [安装](#%E5%AE%89%E8%A3%85)
   - [使用](#%E4%BD%BF%E7%94%A8)
+    - [平台选择与项目结构](#平台选择与项目结构)
+    - [Web 与 SSR](#web-与-ssr)
+    - [React Native](#react-native)
   - [基础](#%E5%9F%BA%E7%A1%80)
     - [CLI 命令](#cli-%E5%91%BD%E4%BB%A4)
       - [create](#create)
@@ -45,14 +48,90 @@ cd project-name
 npm run build
 ```
 
-相关命令
+生成项目的基础命令：
 
-```json
-{
-  "serve": "mpx-cli-service serve", // 开发模式
-  "build": "mpx-cli-service build" // 构建模式
-}
+```sh
+npm run serve                         # 开发构建，持续监听
+npm run build                         # 生产构建
+npm run serve -- --targets=ali         # 指定支付宝目标
+npm run build -- --targets=wx,ali      # 同时构建多个目标
 ```
+
+默认目标为微信（`wx`）；其他源码模式请显式指定 `--targets`。默认产物目录为 `dist/<目标>`，可在 `mpx.config.js` 中修改。
+
+### 平台选择与项目结构
+
+创建项目时先选择源码模式，仅微信源码（`srcMode: 'wx'`）支持跨平台输出。Web、RN 的生成逻辑均由核心插件 `@mpxjs/vue-cli-plugin-mpx` 提供，无需安装独立的 Web 或 RN 插件。
+
+| 选项 | 默认值 | 作用 |
+| --- | --- | --- |
+| `needWeb` | `false` | 生成 Web 依赖、构建脚本和 `public/index.html` |
+| `needRn` | `false` | 生成 RN 配置、构建脚本，并创建原生宿主 |
+| `rnProjectName` | 项目名称 | RN 宿主目录及注册名称；只能包含字母、数字、下划线，不能以数字开头，也不能为 `React` |
+| `needSSR` | `false` | 同时启用 Web 时，添加 SSR 插件、服务端模板和应用生命周期 |
+| `needTs` | `true` | 生成 TypeScript 应用入口、页面、组件及配置 |
+| `needEslint` | `true` | 添加 ESLint 配置和 `lint` 脚本 |
+
+原子 CSS、单元测试和端到端测试可按需选择。选择 Web 或 RN 后，不再询问云开发和小程序插件模式。
+
+普通微信源码项目默认生成其他小程序平台的静态配置，与是否选择 Web 无关；云开发、插件模式只生成当前源码平台的静态配置。RN 项目另生成 `static/ios`、`static/android` 和 `static/harmony`。
+
+普通项目的应用入口位于 `src/app.mpx`，页面和组件分别位于 `src/pages/`、`src/components/`；云开发和插件模式使用各自模板。项目会生成根 `README.md` 和 `AGENTS.md`，记录所选平台的构建、运行和验证方法。
+
+### Web 与 SSR
+
+选择 Web 后可执行：
+
+```sh
+npm run serve:web
+npm run build:web
+```
+
+同时选择 SSR 后可执行：
+
+```sh
+npm run serve:ssr              # 启动客户端开发构建和 SSR 服务
+npm run build:ssr              # 构建客户端与服务端产物
+cd server
+node build.server.js          # 按默认模板启动生产 SSR 服务
+```
+
+开发客户端端口由 `mpx.config.js` 的 `pluginOptions.SSR.devClientPort` 配置，生成值为 `8000`；模板中的 SSR 服务端口为 `8091`。默认构建产物位于 `dist/web`，包含客户端 manifest 和服务端 bundle。修改输出目录或部署路径时，应同步调整 `server/build.server.js`。
+
+### React Native
+
+选择 RN 后，CLI 会在项目内创建 React Native `0.77.2` 宿主，目录名由 `rnProjectName` 决定。Mpx 项目可以使用 npm、Yarn 或 pnpm；原生宿主不使用 pnpm，选择 pnpm 时宿主安装会自动切换到本机可用的 Yarn 或 npm。
+
+日常开发先在项目根目录启动对应平台的 Mpx 编译：
+
+```sh
+npm run serve -- --targets=ios
+# Android 使用 npm run serve -- --targets=android
+```
+
+首次运行 iOS 时，在另一终端进入实际宿主目录，安装 Pods 并构建 App：
+
+```sh
+cd <rnProjectName>
+bundle install
+cd ios
+bundle exec pod install
+cd ..
+npm run ios
+```
+
+Android 在宿主目录执行 `npm run android`。如果已安装开发版 App，且原生依赖和配置未变，可在宿主执行 `npm start` 后打开或 Reload App；已有 Metro 时直接复用。iOS 需要 Xcode，Android 需要相应的 JDK、SDK 和设备环境。
+
+根目录的 `serve:ios`、`serve:android` 脚本会先运行宿主的原生构建命令，再启动 Mpx 编译。生产构建使用：
+
+```sh
+npm run build:ios
+npm run build:android
+```
+
+这些脚本完成 Mpx 编译和宿主 JS bundle 打包；IPA/APK 需通过原生工程构建。两端产物分别同步到宿主的 `mpx-build/ios/`、`mpx-build/android/`，由 `mpx-entry.ios.js`、`mpx-entry.android.js` 选择，支持两端 Mpx watcher 同时运行。
+
+宿主的 `metro.config.js` 从核心插件加载 sourcemap 中间件；bundle 脚本调用 `compose-mpx-sourcemap` 合成 Metro 与 Mpx sourcemap，失败时保留 Metro 原始映射。详见[核心插件 RN sourcemap 说明](packages/vue-cli-plugin-mpx/README.md#rn-sourcemap)。
 
 ## 基础
 
@@ -69,7 +148,7 @@ npm run build
   -d, --default                   使用默认预设
   -i, --inlinePreset <json>       使用行内预设
   -m, --packageManager <command>  在安装依赖项时使用指定的npm管理器
-  -r, --registry <url>            在安装依赖项时使用指定的npm源（仅适用于npm）
+  -r, --registry <url>            在安装依赖项时使用指定的源
   -g, --git [message]             使用初始提交消息强制git初始化
   -n, --no-git                    跳过git初始化
   -f, --force                     如果目标目录存在，则覆盖该目录
@@ -78,25 +157,25 @@ npm run build
   -x, --proxy <proxyUrl>          创建项目时使用指定的代理
 ```
 
-创建微信源码项目时，`needWeb` 控制是否生成 Web 依赖、脚本和页面模板，默认关闭；`needRn` 独立控制 React Native。旧 `cross` 选项已废弃，preset 请改用 `needWeb`。
+预设可通过 `--preset` 指定本地文件、目录或远程仓库，也可通过 `--inlinePreset` 传入 JSON。旧 `cross` 选项已废弃，请改用 `needWeb`；`needWeb` 与 `needRn` 独立控制平台功能。
 
-只有选择 Web 后才显示 SSR 问题；未启用 `needWeb` 时，preset 中的 `needSSR: true` 也不生效，不会自动开启 Web。选择 Web 或 RN 后不再询问云开发和小程序插件模式。
+只有选择 Web 后才显示 SSR 问题；未启用 `needWeb` 时，预设中的 `needSSR: true` 也不生效。非微信源码模式下，Web、RN 和 SSR 选项均不生效。
 
-普通微信源码项目默认生成其他小程序平台的静态配置，与是否选择 Web 无关；云开发、插件模式仅生成当前源码平台配置。RN 项目另生成 `static/ios`、`static/android` 和 `static/harmony`。
+预设值会合并到交互答案中。需要隐藏问题时，可通过 `mpxCliPrompts.remove` 指定问题名；移除问题不会取消预设已启用的功能。例如：
 
-> RN项目不支持pnpm，请在创建输出到RN项目时指定 mpx create -m npm 来创建项目
->
-> @achrinza/node-ipc包在engine-strict模式下不兼容node23，可映射到修复包node-ipc-compat@1.0.0，针对不同包管理器(pnpm/npm)在package.json中添加如下对应代码，我们已自动化处理，无需手动添加。
-> ```json
-> "pnpm": {
->   "overrides": {
->     "@achrinza/node-ipc": "npm:node-ipc-compat@1.0.0"
->   }
-> },
-> "overrides": {
->   "@achrinza/node-ipc": "npm:node-ipc-compat@1.0.0"
-> } 
-> ```
+```json
+{
+  "srcMode": "wx",
+  "needWeb": true,
+  "needSSR": true,
+  "needRn": false,
+  "mpxCliPrompts": {
+    "remove": ["srcMode", "needWeb", "needSSR", "needRn"]
+  }
+}
+```
+
+CLI 会为 npm 项目在 `package.json` 中配置 `@achrinza/node-ipc` 的兼容包 override；pnpm 项目则写入 `pnpm-workspace.yaml` 的 `overrides`、`allowBuilds`，并在传入 `--registry` 时写入 `.npmrc`。无需手动添加 `shamefully-hoist`；Yarn 不自动配置该 override。
 
 #### build
 
@@ -128,9 +207,14 @@ mpx-cli-service build --targets=wx,ali
 | QQ     | qq     |
 | 京东   | jd     |
 | 快手   | ks     |
+| 滴滴   | dd     |
 | 浏览器 | web    |
-| react-native(安卓) | android    |
-| react-native(IOS) | ios    |
+| React Native（Android） | android |
+| React Native（iOS） | ios |
+| Harmony 构建目标 | harmony |
+| Tenon 构建目标 | tenon |
+
+目标列表表示编译器支持的目标；Web/RN 需要在创建时启用对应功能。CLI 自动创建的 RN 宿主和快捷脚本面向 iOS、Android，其他目标需自行准备运行环境。
 
 #### serve
 
@@ -139,8 +223,8 @@ mpx-cli-service build --targets=wx,ali
 
 选项:
 
-  --targets    编译到小程序目标(默认值: wx)
-  --mode       指定环境模式 (默认值：production)
+  --targets    编译目标 (默认值: wx)
+  --mode       指定环境模式 (默认值：development)
   --env        自定义 __mpx_env__
 ```
 
@@ -180,16 +264,16 @@ module.exports = {
 }
 ```
 
-注：通过 `@mpxjs/cli` 初始化的项目提供了开箱即用的配置(在[插件内部](https://github.com/mpx-ecology/mpx-cli/blob/master/packages/vue-cli-plugin-mpx/utils/resolveMpxWebpackPluginConf.js#L6-L59)设置了默认的配置)，如果开发过程中有一些其他的配置需求，参见 [mpx 官方文档](https://www.mpxjs.cn/api/compile.html#mpxwebpackplugin-options)。
+注：通过 `@mpxjs/cli` 初始化的项目提供了开箱即用的配置（在[核心插件配置](packages/vue-cli-plugin-mpx/config/base.js)中设置默认值）。更多配置参见 [mpx 官方文档](https://www.mpxjs.cn/api/compile.html#mpxwebpackplugin-options)。
 
 #### 根据不同的构建目标配置
 
 可根据构建平台和开发环境进行选择性的配置，在构建过程中暴露出来的环境变量包括：
 
-- `MPX_CLI_MODE`: 'mp' | 'web'
+- `MPX_CLI_MODE`: 'mp' | 'web'，RN 等非 Web 目标也使用 'mp'
 - `NODE_ENV`：'development' | 'production'
-- `MPX_CURRENT_TARGET_MODE`: 'wx' | 'ali' | 'swan' | 'qq' | 'tt' | 'dd' | 'web'
-- `MPX_CURRENT_TARGET_ENV` : 'development' | 'production'
+- `MPX_CURRENT_TARGET_MODE`: 当前构建目标，对应上表的 target
+- `MPX_CURRENT_TARGET_ENV`: 使用 `--targets=wx:development` 等 `目标:环境` 语法时设置的环境值，同时作为该目标的 `--mode`
 
 ```javascript
 // mpx.config.js
@@ -211,7 +295,7 @@ module.exports = {
 
 #### 调试 webpack 配置
 
-可以使用 `mpx inspect` 以及 `mpx inspect` 调试 webpack 配置。
+可以使用 `mpx inspect` 查看 webpack 配置。
 
 可以将其输出重定向到一个文件以便进行查阅。
 
@@ -353,11 +437,16 @@ module.exports = {
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | @mpxjs/cli                            | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fcli.svg)](https://badge.fury.io/js/%40mpxjs%2Fcli)                                                       | mpx-cli                                              |
 | @mpxjs/mpx-cli-service                | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fmpx-cli-service.svg)](https://badge.fury.io/js/%40mpxjs%2Fmpx-cli-service)                               | mpx-cli 服务                                         |
+| @mpxjs/cli-shared-utils | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fcli-shared-utils.svg)](https://badge.fury.io/js/%40mpxjs%2Fcli-shared-utils) | 构建目标、命令调用和 SSR 状态等共享工具 |
 | @mpxjs/vue-cli-plugin-mpx             | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx)                         | mpx-cli 核心插件，包含基础配置，文件模板等           |
 | @mpxjs/vue-cli-plugin-mpx-eslint      | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-eslint)           | eslint 插件，包含 eslint 相关配置                    |
 | @mpxjs/vue-cli-plugin-mpx-cloud-func  | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-cloud-func)   | 云函数编译构建插件                                   |
-| @mpxjs/vue-cli-plugin-mpx-mp          | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-mp)                   | 小程序插件，包含小程序构建，开发命令，以及相关配置等 |
-| @mpxjs/vue-cli-plugin-mpx-web         | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-web)                 | web 插件，包含 web 构建，开发命令，以及相关配置等    |
+| @mpxjs/vue-cli-plugin-mpx-ssr         | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-ssr.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-ssr)                 | Web SSR 构建、开发服务和服务端模板 |
 | @mpxjs/vue-cli-plugin-mpx-unit-test   | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-unit-test)     | 单测插件，包含单元测试相关配置                       |
 | @mpxjs/vue-cli-plugin-mpx-plugin-mode | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-plugin-mode.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-plugin-mode) | 小程序插件模式插件，包含小程序插件的 js，ts 模板等   |
 | @mpxjs/vue-cli-plugin-mpx-typescript  | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-typescript.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-typescript)   | ts 插件，包含小程序 ts 模板以及相关配置等            |
+| @mpxjs/vue-cli-plugin-mpx-e2e-test | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-e2e-test.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-e2e-test) | 端到端测试配置和模板 |
+| @mpxjs/vue-cli-plugin-mpx-utility-first-css | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-utility-first-css.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-utility-first-css) | UnoCSS 原子 CSS 配置 |
+| @mpxjs/vue-cli-plugin-mpx-theme | [![npm version](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-theme.svg)](https://badge.fury.io/js/%40mpxjs%2Fvue-cli-plugin-mpx-theme) | Stylus 主题配置 |
+
+小程序、Web 和 RN 的基础生成及构建能力均在核心插件内维护；SSR、TypeScript、ESLint 和测试等功能由对应插件扩展。重新调用核心生成器时会保留已有应用源码；配置扩展优先保留 `mpx.config.js` 中已有值，对无法安全合并的动态结构会报错。已有 Babel 配置也会保留，启用 RN 时请按生成器提示检查 React preset 和 Reanimated 插件。
