@@ -161,7 +161,6 @@ function addMpWebpackConfig (api, options, config, target) {
   )
   const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
   const wxssLoader = MpxWebpackPlugin.wxssLoader()
-  const mpxPluginOptions = getMpxPluginOptions(options)
 
   let subDir = ''
 
