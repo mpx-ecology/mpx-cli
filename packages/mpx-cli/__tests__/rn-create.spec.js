@@ -38,6 +38,7 @@ describe('React Native project name', () => {
         }
       })
       fs.writeFileSync(path.resolve(rnProjectPath, 'babel.config.js'), 'module.exports = {}')
+      fs.writeFileSync(path.resolve(rnProjectPath, 'Gemfile'), "source 'https://rubygems.org'\ngem 'cocoapods', '>= 1.13'\n")
     })
   })
 
@@ -82,8 +83,26 @@ describe('React Native project name', () => {
     expect(dependencies).toHaveProperty('react-native-reanimated', '3.16.7')
     expect(dependencies).toHaveProperty('react-native-ble-manager', '^12.4.4')
     expect(dependencies).toHaveProperty('react-native-wifi-reborn', '^4.13.6')
-    expect(dependencies).toHaveProperty('react-native-svg', '^15.8.0')
+    expect(dependencies).toHaveProperty('react-native-svg', '15.8.0')
+    expect(dependencies).toHaveProperty('react-native-gesture-handler', '2.23.0')
+    expect(dependencies).toHaveProperty('react-native-screens', '4.5.0')
     expect(dependencies).toHaveProperty('react-native-vision-camera', '^4.7.3')
+    const gemfile = fs.readFileSync(path.resolve(targetDir, 'CustomRnProject/Gemfile'), 'utf8')
+    expect(gemfile).toBe("source 'https://rubygems.org'\ngem 'cocoapods', '>= 1.13'\n\ngem 'nkf'\n")
+    expect(fs.existsSync(path.resolve(targetDir, 'CustomRnProject/scripts'))).toBe(false)
     expect(mockInstall).toHaveBeenCalledTimes(1)
+  })
+
+  test('preserves an nkf dependency already supplied by the RN template', async () => {
+    const init = mockExeca.getMockImplementation()
+    mockExeca.mockImplementationOnce(async (...args) => {
+      await init(...args)
+      fs.appendFileSync(path.resolve(targetDir, 'CustomRnProject/Gemfile'), 'gem "nkf", "~> 0.2"\n')
+    })
+
+    await createRnProject(targetDir, { packageManager: 'npm' }, 'CustomRnProject')
+
+    const gemfile = fs.readFileSync(path.resolve(targetDir, 'CustomRnProject/Gemfile'), 'utf8')
+    expect(gemfile).toBe('source \'https://rubygems.org\'\ngem \'cocoapods\', \'>= 1.13\'\ngem "nkf", "~> 0.2"\n')
   })
 })

@@ -16,7 +16,7 @@ test('test-theme', async () => {
       srcMode: 'wx',
       appid: 'test',
       description: 'test',
-      cross: true,
+      needWeb: true,
       plugins: {
         '@mpxjs/vue-cli-plugin-mpx-theme': {
           version: '2.1.4'

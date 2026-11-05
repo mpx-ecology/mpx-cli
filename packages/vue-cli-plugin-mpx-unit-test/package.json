@@ -19,5 +19,8 @@
     "babel-jest": "^25.3.0",
     "jest": "^27.4.5",
     "@types/jest": "^27.5.1"
+  },
+  "peerDependencies": {
+    "@mpxjs/vue-cli-plugin-mpx": "^2.2.32"
   }
 }

@@ -1,5 +1,5 @@
 const { normalizeCommandArgs, getCurrentTarget } = require('@mpxjs/cli-shared-utils')
-const { addBaseWebpackConfig } = require('../../config/base.config')
+const withCompilerConfig = require('../../config/withCompilerConfig')
 const { addBuildWebpackConfig } = require('../../config/build.config')
 const { resolveBuildWebpackConfigByTarget } = require('@mpxjs/vue-cli-plugin-mpx/config')
 const { handleWebpackDone } = require('@mpxjs/vue-cli-plugin-mpx/utils/webpack')
@@ -17,41 +17,31 @@ module.exports.registerBuildCommand = function (api, options) {
       description: 'mpx production',
       usage: 'mpx-cli-service build ssr'
     },
-    function build (args) {
+    async function build (args) {
       normalizeCommandArgs(args, defaults)
       if (args.clean) {
         fs.removeSync(options.outputDir)
       }
 
-      const getBaseConfig = async (ssrMode) => {
-        api.chainWebpack((config) => {
-          addBaseWebpackConfig(api, options, args, config, { ssrMode })
-          addBuildWebpackConfig(api, options, args, config, { ssrMode })
-        })
+      const buildService = (ssrMode) => withCompilerConfig(api, options, args, ssrMode, addBuildWebpackConfig, async () => {
         const target = getCurrentTarget()
         // 根据目标获取构建配置
         const webpackConfig = await resolveBuildWebpackConfigByTarget(api, options, target, args)
-        return {
-          webpackConfig,
-          target
-        }
-      }
-
-      const buildService = async (ssrMode) => {
-        const { webpackConfig, target } = await getBaseConfig(ssrMode)
         return new Promise((resolve, reject) => {
           webpack(webpackConfig, (err, stats) => {
-            // todo：此处target应该是一个布尔值，判断是否watch, 直接把target和api替换掉有问题嘛，当前只将api换为了options
-            handleWebpackDone(err, stats, target, options)
+            handleWebpackDone(err, stats, false, options, webpackConfig[0])
               .then((...res) => {
                 resolve(...res)
               })
               .catch(reject)
           })
         })
-      }
+      })
 
-      return Promise.all([buildService('client'), buildService('server')])
+      // 两端临时使用同一个 Service 的配置状态，前一端恢复后再启动后一端。
+      const client = await buildService('client')
+      const server = await buildService('server')
+      return [client, server]
     }
   )
 }

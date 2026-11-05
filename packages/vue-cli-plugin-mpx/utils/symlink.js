@@ -51,19 +51,9 @@ module.exports.symlinkTargetConfig = function (api, target, webpackConfig, optio
       const mpxOptions = options && options.pluginOptions && options.pluginOptions.mpx
       const rnConfig = mpxOptions && mpxOptions.plugin && mpxOptions.plugin.rnConfig
       const rnProjectPath = path.resolve(process.cwd(), (rnConfig && rnConfig.projectName) || 'ReactNativeProject')
-      const items = fs.readdirSync(outputPath)
-      items.forEach((item) => {
-        const src = path.resolve(outputPath, item)
-        const dest = path.resolve(rnProjectPath, item)
-        const stat = fs.statSync(src)
-        if (stat.isDirectory()) {
-          copyDirSync(src, dest)
-        } else {
-          fs.copyFileSync(src, dest)
-        }
-      })
-      const rnEntryFile = path.resolve(rnProjectPath, 'index.js')
-      fs.writeFileSync(rnEntryFile, "require('./app.js');\n")
+      copyDirSync(outputPath, path.resolve(rnProjectPath, 'mpx-build', target.mode))
+      fs.writeFileSync(path.resolve(rnProjectPath, `mpx-entry.${target.mode}.js`), `require('./mpx-build/${target.mode}/app.js');\n`)
+      fs.writeFileSync(path.resolve(rnProjectPath, 'index.js'), "require('./mpx-entry');\n")
     }
   } catch (error) {
 

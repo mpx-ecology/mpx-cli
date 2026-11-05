@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const fs = require('fs')
 const path = require('path')
 const { SourceMapConsumer, SourceMapGenerator } = require('source-map')
@@ -200,7 +198,7 @@ function parseArgs (argv) {
   }
 
   if (options.help || !options.metroMapPath || !options.mpxMapPath) {
-    throw new Error('Usage: node ./scripts/compose-mpx-sourcemap.js --metro-map <metro.map> --mpx-map <app.js.map> [--output <output.map>] [--generated-source app.js] [--allow-failure]')
+    throw new Error('Usage: compose-mpx-sourcemap --metro-map <metro.map> --mpx-map <app.js.map> [--output <output.map>] [--generated-source app.js] [--allow-failure]')
   }
 
   if (!options.outputPath) {
@@ -226,13 +224,6 @@ async function runCli (argv) {
     console.warn(`[mpx sourcemap] ${error.message}`)
     console.warn('[mpx sourcemap] Compose failed; keep Metro sourcemap')
   }
-}
-
-if (require.main === module) {
-  runCli(process.argv.slice(2)).catch((error) => {
-    console.error(`[mpx sourcemap] ${error.message}`)
-    process.exitCode = 1
-  })
 }
 
 module.exports = {

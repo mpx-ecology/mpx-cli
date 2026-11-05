@@ -4,10 +4,10 @@ const { Buffer } = require('buffer')
 const { SourceMapConsumer } = require('source-map')
 const {
   composeMpxSourceMap,
-  isGeneratedSource
+  isGeneratedSource,
+  normalizeSourcePath
 } = require('./compose-mpx-sourcemap')
 
-const DEFAULT_MPX_MAP_PATH = path.resolve(__dirname, '../app.js.map')
 const warnedMessages = new Set()
 
 function defaultWarn (message) {
@@ -125,8 +125,26 @@ async function traceFrameToMpxSource (frame, mpxMap, generatedSource) {
   }
 }
 
-async function composeMapResponse (body, mpxMap, generatedSource) {
+function platformGeneratedSource (source) {
+  const match = normalizeSourcePath(source).match(/(?:^|\/)(mpx-build\/(?:ios|android|harmony)\/app\.js)$/)
+  return match && match[1]
+}
+
+function resolveMpxMap (source, options, mapCache) {
+  const generatedSource = options.generatedSource || platformGeneratedSource(source) || 'app.js'
+  const mpxMapPath = options.mpxMapPath || path.resolve(options.projectRoot || process.cwd(), `${generatedSource}.map`)
+  if (mapCache && mapCache.has(mpxMapPath)) {
+    return { mpxMap: mapCache.get(mpxMapPath), generatedSource }
+  }
+  const mpxMap = readMpxMap(mpxMapPath)
+  if (mapCache) mapCache.set(mpxMapPath, mpxMap)
+  return { mpxMap, generatedSource }
+}
+
+async function composeMapResponse (body, options) {
   const metroMap = JSON.parse(body)
+  const source = (metroMap.sources || []).find(platformGeneratedSource)
+  const { mpxMap, generatedSource } = resolveMpxMap(source, options)
   const composedMap = await composeMpxSourceMap({
     metroMap,
     mpxMap,
@@ -135,21 +153,34 @@ async function composeMapResponse (body, mpxMap, generatedSource) {
   return JSON.stringify(composedMap)
 }
 
-async function composeSymbolicateResponse (body, mpxMap, generatedSource) {
+async function composeSymbolicateResponse (body, options) {
   const response = JSON.parse(body)
-  if (!response || !Array.isArray(response.symbolicatedStack)) {
-    throw new Error('Metro symbolicate response does not contain symbolicatedStack')
+  const stackKey = response && Array.isArray(response.stack) ? 'stack' : 'symbolicatedStack'
+  if (!response || !Array.isArray(response[stackKey])) {
+    throw new Error('Metro symbolicate response does not contain a stack')
   }
 
-  response.symbolicatedStack = await Promise.all(
-    response.symbolicatedStack.map((frame) => traceFrameToMpxSource(frame, mpxMap, generatedSource))
+  const originalStack = response[stackKey]
+  const mapCache = new Map()
+  const hasPlatformSource = originalStack.some((frame) => frame && platformGeneratedSource(frame.file))
+  response[stackKey] = await Promise.all(
+    originalStack.map((frame) => {
+      if (hasPlatformSource && (!frame || !platformGeneratedSource(frame.file))) return frame
+      if (!frame || !isGeneratedSource(frame.file, options.generatedSource || 'app.js')) return frame
+      const { mpxMap, generatedSource } = resolveMpxMap(frame.file, options, mapCache)
+      return traceFrameToMpxSource(frame, mpxMap, generatedSource)
+    })
   )
+  // Metro's code frame refers to generated JS; do not show it beside a remapped Mpx frame.
+  if (response.codeFrame && originalStack.some((frame, index) =>
+    frame && frame.file === response.codeFrame.fileName && frame.file !== response[stackKey][index].file
+  )) {
+    response.codeFrame = null
+  }
   return JSON.stringify(response)
 }
 
 function createMpxSourcemapMiddleware (options = {}) {
-  const mpxMapPath = options.mpxMapPath || DEFAULT_MPX_MAP_PATH
-  const generatedSource = options.generatedSource || 'app.js'
   const warn = options.warn || defaultWarn
 
   return function enhanceMiddleware (middleware) {
@@ -163,11 +194,10 @@ function createMpxSourcemapMiddleware (options = {}) {
 
       interceptResponseBody(res, async (body) => {
         try {
-          const mpxMap = readMpxMap(mpxMapPath)
           if (isMapRequest) {
-            return await composeMapResponse(body, mpxMap, generatedSource)
+            return await composeMapResponse(body, options)
           }
-          return await composeSymbolicateResponse(body, mpxMap, generatedSource)
+          return await composeSymbolicateResponse(body, options)
         } catch (error) {
           warnOnce(warn, error.message)
           return body

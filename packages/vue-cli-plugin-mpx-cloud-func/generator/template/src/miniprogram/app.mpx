@@ -33,7 +33,7 @@ createApp({
 <!--    plugins: {-->
 <!--      'myPlugin': {-->
 <!--        'version': 'dev',-->
-<!--        'provider': 'touristappid'-->
+<!--        'provider': '<%= appid %>'-->
 <!--      }-->
 <!--    }-->
 <!--  }-->

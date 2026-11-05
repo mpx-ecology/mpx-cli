@@ -161,7 +161,6 @@ function addMpWebpackConfig (api, options, config, target) {
   )
   const wxmlLoader = MpxWebpackPlugin.wxmlLoader()
   const wxssLoader = MpxWebpackPlugin.wxssLoader()
-  const mpxPluginOptions = getMpxPluginOptions(options)
 
   let subDir = ''
 
@@ -464,7 +463,6 @@ module.exports.addBaseConfig = function (api, options, config, target) {
   const pluginConfig = {
     mode: target.mode,
     srcMode: mpxOptions.srcMode,
-    forceDisableBuiltInLoader: isWeb,
     ...resolveMpxWebpackPluginConf(api, options)
   }
 

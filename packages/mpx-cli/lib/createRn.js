@@ -11,17 +11,17 @@ const RN_DEP = {
   '@react-navigation/native': '^7.1.13',
   '@react-navigation/native-stack': '^7.2.1',
   'react-native-device-info': '^13.2.0',
-  'react-native-gesture-handler': '^2.23.0',
+  'react-native-gesture-handler': '2.23.0',
   'react-native-get-location': '^5.0.0',
   'react-native-haptic-feedback': '^2.3.3',
   'react-native-linear-gradient': '^2.8.3',
   'react-native-reanimated': '3.16.7',
-  'react-native-screens': '~4.18.0',
+  'react-native-screens': '4.5.0',
   'react-native-webview': '^13.13.2',
   'react-native-safe-area-context': '^4.10.9',
   'react-native-ble-manager': '^12.4.4',
   'react-native-wifi-reborn': '^4.13.6',
-  'react-native-svg': '^15.8.0',
+  'react-native-svg': '15.8.0',
   react: '18.3.1',
   'react-native': '0.77.2',
   'react-native-video': '^6.11.0',
@@ -29,25 +29,20 @@ const RN_DEP = {
 }
 
 const RN_DEV_DEP = {
-  'source-map': '^0.7.6'
+  '@mpxjs/vue-cli-plugin-mpx': require('./preset').plugins['@mpxjs/vue-cli-plugin-mpx'].version
 }
 
 const RN_SCRIPTS = {
   'bundle:ios': 'react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios --sourcemap-output ./ios/main.jsbundle.map && npm run compose-sourcemap:ios',
   'bundle:android': 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --sourcemap-output android/app/src/main/assets/index.android.bundle.map && npm run compose-sourcemap:android',
-  'compose-sourcemap:ios': 'node ./scripts/compose-mpx-sourcemap.js --metro-map ./ios/main.jsbundle.map --mpx-map ./app.js.map --output ./ios/main.jsbundle.map --allow-failure',
-  'compose-sourcemap:android': 'node ./scripts/compose-mpx-sourcemap.js --metro-map android/app/src/main/assets/index.android.bundle.map --mpx-map ./app.js.map --output android/app/src/main/assets/index.android.bundle.map --allow-failure'
+  'compose-sourcemap:ios': 'compose-mpx-sourcemap --metro-map ./ios/main.jsbundle.map --mpx-map ./mpx-build/ios/app.js.map --generated-source mpx-build/ios/app.js --output ./ios/main.jsbundle.map --allow-failure',
+  'compose-sourcemap:android': 'compose-mpx-sourcemap --metro-map android/app/src/main/assets/index.android.bundle.map --mpx-map ./mpx-build/android/app.js.map --generated-source mpx-build/android/app.js --output android/app/src/main/assets/index.android.bundle.map --allow-failure'
 }
-
-const RN_SOURCEMAP_SCRIPTS = [
-  'compose-mpx-sourcemap.js',
-  'metro-mpx-sourcemap-middleware.js'
-].map((file) => path.resolve(__dirname, 'rn', file))
 
 const RN_PROJECT_NAME_REGEXP = /^[A-Z_][0-9A-Z_]*$/i
 
 const RN_METRO_CONFIG = `const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
-const {enhanceMiddleware} = require('./scripts/metro-mpx-sourcemap-middleware');
+const {createMpxSourcemapMiddleware} = require('@mpxjs/vue-cli-plugin-mpx/utils/metro-mpx-sourcemap-middleware');
 
 /**
  * Metro configuration
@@ -57,7 +52,7 @@ const {enhanceMiddleware} = require('./scripts/metro-mpx-sourcemap-middleware');
  */
 const config = {
   server: {
-    enhanceMiddleware
+    enhanceMiddleware: createMpxSourcemapMiddleware({projectRoot: __dirname})
   }
 };
 
@@ -89,14 +84,6 @@ function applyRnPackageConfig (pkg) {
   Object.assign(pkg.dependencies, RN_DEP)
   Object.assign(pkg.devDependencies, RN_DEV_DEP)
   Object.assign(pkg.scripts, RN_SCRIPTS)
-}
-
-function copyRnSourcemapScript (rnProjectPath) {
-  const scriptDir = path.resolve(rnProjectPath, 'scripts')
-  fs.mkdirSync(scriptDir, { recursive: true })
-  RN_SOURCEMAP_SCRIPTS.forEach((src) => {
-    fs.copyFileSync(src, path.resolve(scriptDir, path.basename(src)))
-  })
 }
 
 function writeRnMetroConfig (rnProjectPath) {
@@ -162,7 +149,13 @@ async function createRnProject (targetDir, options, rnProjectName = path.basenam
     addArrayItem(config.plugins, 'react-native-reanimated/plugin')
   })
 
-  copyRnSourcemapScript(rnProjectPath)
+  // Ruby 4 不再内置 kconv，xcodeproj 仍需要通过 nkf 提供它。
+  const gemfilePath = path.resolve(rnProjectPath, 'Gemfile')
+  const gemfile = fs.readFileSync(gemfilePath, 'utf8')
+  if (!/^\s*gem\s+['"]nkf['"]/m.test(gemfile)) {
+    fs.appendFileSync(gemfilePath, "\ngem 'nkf'\n")
+  }
+
   writeRnMetroConfig(rnProjectPath)
 
   await pm.install()
@@ -172,5 +165,4 @@ module.exports.createRnProject = createRnProject
 module.exports.validateRnProjectName = validateRnProjectName
 module.exports.RN_DEP = RN_DEP
 module.exports.applyRnPackageConfig = applyRnPackageConfig
-module.exports.copyRnSourcemapScript = copyRnSourcemapScript
 module.exports.writeRnMetroConfig = writeRnMetroConfig

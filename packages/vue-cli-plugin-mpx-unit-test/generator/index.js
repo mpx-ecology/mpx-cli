@@ -1,4 +1,8 @@
+const path = require('path')
+const extendDocs = require('@mpxjs/vue-cli-plugin-mpx/generator/utils/extendDocs')
+
 module.exports = function (api, options = {}) {
+  extendDocs(api, path.join(__dirname, 'docs'))
   const needTs = !!options.needTs
   api.extendPackage({
     scripts: {
@@ -28,3 +32,5 @@ module.exports = function (api, options = {}) {
     needTs
   })
 }
+
+module.exports.after = ['@mpxjs/vue-cli-plugin-mpx']

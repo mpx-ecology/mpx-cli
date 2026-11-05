@@ -275,18 +275,26 @@ async function create (projectName, options, preset = null) {
     merge(preset, cliPreset)
   }
   delete preset[MpxCliPromptsKey]
+  preset.needWeb = preset.srcMode === 'wx' && !!preset.needWeb
+  preset.needRn = preset.srcMode === 'wx' && !!preset.needRn
+  preset.needSSR = preset.needWeb && !!preset.needSSR
   // css preprocessor
   preset.cssPreprocessor = 'stylus'
 
   // mpx cli 插件
   preset.plugins = Object.assign({}, preset.plugins, builtInPreset.plugins)
 
-  // 合并问答中的preset
-  promptList.forEach((v) => {
+  // remove 只隐藏交互问题；仍按最终选项合并内置 preset，并保留 modify/add 的配置。
+  const presetPrompts = new Map(promptList.map(prompt => [prompt.name, prompt]))
+  prompts.forEach(prompt => {
+    if (!presetPrompts.has(prompt.name)) presetPrompts.set(prompt.name, prompt)
+  })
+  presetPrompts.forEach((v) => {
     if (preset[v.name]) {
       merge(preset, v.preset)
     }
   })
+  if (!preset.needSSR) delete preset.plugins['@mpxjs/vue-cli-plugin-mpx-ssr']
 
   if (preset.needRn) {
     preset.rnProjectName = preset.rnProjectName || name
@@ -362,12 +370,13 @@ async function create (projectName, options, preset = null) {
       srcMode: preset.srcMode,
       appid: preset.appid,
       description: preset.description,
+      needEslint: preset.needEslint,
       needE2ETest: preset.needE2ETest,
       needUnitTest: preset.needUnitTest,
       needTs: preset.needTs,
       isPlugin: preset.isPlugin,
       cloudFunc: preset.cloudFunc,
-      cross: preset.cross,
+      needWeb: preset.needWeb,
       needSSR: preset.needSSR,
       needRn: preset.needRn,
       rnProjectName: preset.rnProjectName,
